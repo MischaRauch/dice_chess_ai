@@ -7,10 +7,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ExampleMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="460.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ExampleMenuController">
    <children>
-      <VBox alignment="CENTER" layoutX="239.0" prefHeight="200.0" prefWidth="100.0" spacing="15.0" style="-fx-background-color: #ecf0f1; -fx-background-radius: 5px;" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="75.0">
+      <VBox alignment="CENTER" layoutX="239.0" prefHeight="200.0" prefWidth="100.0" spacing="15.0" style="-fx-background-color: #ecf0f1; -fx-background-radius: 5px;" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="75.0">
          <children>
             <Label text="Dice Chess">
                <font>
@@ -22,7 +21,7 @@
                   <Font name="Monotype Corsiva" size="27.0" />
                </font>
             </Label>
-            <Button fx:id="NewGameBtn" mnemonicParsing="false" onAction="#newGame" style="-fx-background-color: #2ecc71;" text="New Game">
+            <Button fx:id="newGameBtn" mnemonicParsing="false" onAction="#newGame" style="-fx-background-color: #2ecc71;" text="New Game">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

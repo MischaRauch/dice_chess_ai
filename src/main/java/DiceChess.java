@@ -1,5 +1,24 @@
-public class DiceChess {
-    public static void main(String[] args) {
-        System.out.println("Dice Chess!");
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class DiceChess extends Application {
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/exampleMenu.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Dice Chess");
+        stage.show();
     }
+
+    public static void main(String[] args) {
+        launch();
+    }
+
 }
