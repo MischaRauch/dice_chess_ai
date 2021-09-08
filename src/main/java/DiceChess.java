@@ -13,7 +13,7 @@ public class DiceChess extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("fxml/exampleMenu.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Dice Chess!!!!!!!!!");
+        stage.setTitle("Dice Chess!");
         stage.show();
     }
 
