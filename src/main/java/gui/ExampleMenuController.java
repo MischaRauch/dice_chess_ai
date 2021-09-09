@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,6 +21,13 @@ import java.io.IOException;
  * method instead. Generally static controllers don't have constructors anyways though.
  */
 public class ExampleMenuController {
+
+//    @FXML
+//    ImageView imageview0;
+//    Image myImage = new Image(getClass().getResourceAsStream("Group 4 Project 2.1.jpg"));
+//    public void displayImage() {
+//        imageview0.setImage(myImage);
+//    }
 
     @FXML
     private Button newGameBtn;
