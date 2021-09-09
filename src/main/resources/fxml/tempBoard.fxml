@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -11,6 +13,158 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_tower_r" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_tower.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_knight_r" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_knight.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_bishop_r" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_bishop.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_king" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_king.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_queen" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_queen.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_bishop_l" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_bishop.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_knight_l" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_knight.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_tower_l" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_tower.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_pawn_8" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_pawn_7" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_pawn_6" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_pawn_5" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_pawn_4" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_pawn_3" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="b_pawn_2" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="b_pawn_1" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
                   <Pane prefHeight="200.0" prefWidth="200.0" />
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
                   <Pane prefHeight="200.0" prefWidth="200.0" />
@@ -59,50 +213,138 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_pawn_1" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_pawn_2" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_pawn_3" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_pawn_4" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_pawn_5" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_pawn_6" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_pawn_7" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_pawn_8" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_pawn.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" />
-                  <Pane prefHeight="200.0" prefWidth="200.0" />
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_tower_l" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_tower.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_knight_l" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_knight.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_bishop_l" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_bishop.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_queen" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_queen.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_king" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_king.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_bishop_r" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_bishop.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;">
+                     <children>
+                        <ImageView fx:id="w_knight_r" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_knight.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="w_tower_r" fitHeight="63.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pieces/w_tower.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
                </children>
             </HBox>
          </children>
