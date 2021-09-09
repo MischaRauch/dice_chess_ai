@@ -2,8 +2,14 @@ package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Here's an example of a basic JavaFX controller for an FXML file. The @FXML tags indicated this are fields to be injected
@@ -21,8 +27,12 @@ public class ExampleMenuController {
     private Label messageLabel;
 
     @FXML
-    void newGame(ActionEvent event) {
+    void newGame(ActionEvent event) throws IOException {
         messageLabel.setText("dice chess yay!");
+        Stage stage = (Stage) newGameBtn.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/tempBoard.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
     }
 
     @FXML
@@ -30,7 +40,8 @@ public class ExampleMenuController {
         //this method gets automagically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
-
     }
+
+
 
 }
