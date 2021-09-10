@@ -50,7 +50,7 @@ public class GameboardController {
 
         guiBoard.setOnKeyPressed(event -> {
             if (event.getCode().isDigitKey())
-                loadBoard(openingMoves[Integer.parseInt(event.getCode().getChar())]);
+                loadBoard(openingMoves[Integer.parseInt(event.getCode().getChar())]); //use numbers 0-3 to load board states
         });
     }
 
