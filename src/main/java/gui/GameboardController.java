@@ -12,6 +12,8 @@ public class GameboardController {
     void initialize() {
         //create all pieces
         //set event handlers
+        //can access gridpane cells using row and column indices
+        //indices start at 1 since row 0 and column 0 are used to display rank and file
     }
 
 }
