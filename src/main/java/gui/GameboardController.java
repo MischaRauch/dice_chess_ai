@@ -66,10 +66,10 @@ public class GameboardController {
     /**
      * should be much sophisticated later with proper graphics and cool event handlers, but we gotta start somewhere
      * Maybe have a dedicated PieceFactory class or something in the future, idk
-     * @param p
-     * @param row
-     * @param col
-     * @return
+     * @param p char representing the piece
+     * @param row i
+     * @param col j
+     * @return JavaFX Scene Node specifically a VBox possibly containing a Label
      */
     public VBox createPiece(char p, int row, int col) {
         Label piece = new Label(p + "");
@@ -96,8 +96,8 @@ public class GameboardController {
 
     /**
      * Should probably be part of a GameState object rather than here
-     * @param fenDiceBoard
-     * @return
+     * @param fenDiceBoard String in FEN-dice notation (which i invented)
+     * @return char matrix representing board. Row and Col with 0 index are empty
      */
     public char[][] parseFENd(String fenDiceBoard) {
         //chess board has starts with index 1 so to keep things simple leave index 0 empty
@@ -112,6 +112,7 @@ public class GameboardController {
         String halfmoveClock = info[11];
         String fullmoveNumber = info[12];
         int roll = Integer.parseInt(info[13]);
+        diceRoll.setText(roll+"");
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();
