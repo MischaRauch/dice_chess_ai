@@ -70,15 +70,7 @@
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="5" GridPane.rowIndex="1" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <children>
-            <Label text="♟">
-               <font>
-                  <Font size="48.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
+      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="6" GridPane.rowIndex="2" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="8" GridPane.rowIndex="2" />
@@ -98,15 +90,7 @@
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="8" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="6" GridPane.rowIndex="8" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="8" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.rowIndex="7">
-         <children>
-            <Label text="♙">
-               <font>
-                  <Font size="48.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
+      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.rowIndex="7" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="3" GridPane.rowIndex="7" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="5" GridPane.rowIndex="7" />
       <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="7" GridPane.rowIndex="7" />
