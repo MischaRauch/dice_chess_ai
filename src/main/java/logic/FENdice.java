@@ -12,19 +12,6 @@ public class FENdice {
 
     String fenDiceBoard = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1"; //last number is dice roll
 
-    String[][] board = {
-            {" ", "A", " B", "C", " D", " E", "F", " G", " H"},
-            {"8", bPiece[3], bPiece[1], bPiece[2], bPiece[4], bPiece[5], bPiece[2],bPiece[1],bPiece[3]},
-            {"7", bPiece[0], bPiece[0], bPiece[0], bPiece[0], bPiece[0], bPiece[0], bPiece[0], bPiece[0]},
-            {"6", " ", " ", " ", " ", " ", " ", " ", " "},
-            {"5", " ", " ", " ", " ", " ", " ", " ", " "},
-            {"4", " ", " ", " ", " ", " ", " ", " ", " "},
-            {"3", " ", " ", " ", " ", " ", " ", " ", " "},
-            {"2", wPiece[0], wPiece[0], wPiece[0], wPiece[0], wPiece[0], wPiece[0], wPiece[0], wPiece[0]},
-            {"1", wPiece[3], wPiece[1], wPiece[2], wPiece[5], wPiece[4],  wPiece[2], wPiece[1] ,wPiece[3]},
-
-    };
-
     public FENdice() {
         pieceMap.put('p', "♟");
         pieceMap.put('n', "♞");
