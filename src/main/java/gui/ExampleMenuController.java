@@ -39,7 +39,7 @@ public class ExampleMenuController {
     void newGame(ActionEvent event) throws IOException {
         messageLabel.setText("dice chess yay!");
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/tempBoard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
