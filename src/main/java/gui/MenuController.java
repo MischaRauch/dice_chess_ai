@@ -20,13 +20,6 @@ import java.io.IOException;
  */
 public class MenuController {
 
-//    @FXML
-//    ImageView imageview0;
-//    Image myImage = new Image(getClass().getResourceAsStream("Group 4 Project 2.1.jpg"));
-//    public void displayImage() {
-//        imageview0.setImage(myImage);
-//    }
-
     @FXML
     private Button newGameBtn;
 
@@ -44,7 +37,7 @@ public class MenuController {
 
     @FXML
     void initialize() {
-        //this method gets automagically called after the FXMLLoader loads the fxml file into this controller class
+        //this method gets automatically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
     }

@@ -8,4 +8,8 @@ public class BlackDice extends Dice {
         this.possibleRolls = possibleRolls;
     }
 
+    @Override
+    public int[] getDiceNumbers() {
+        return possibleRolls;
+    }
 }

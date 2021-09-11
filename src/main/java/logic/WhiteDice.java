@@ -7,4 +7,9 @@ public class WhiteDice extends Dice {
     public WhiteDice(int[] possibleRolls) {
         this.possibleRolls = possibleRolls;
     }
+
+    @Override
+    public int[] getDiceNumbers() {
+        return possibleRolls;
+    }
 }

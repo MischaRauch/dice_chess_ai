@@ -26,4 +26,5 @@ public abstract class Dice {
         return true;
     }
 
+    public abstract int[] getDiceNumbers();
 }

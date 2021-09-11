@@ -46,18 +46,19 @@ public class GameboardController {
     @FXML
     void initialize() {
         ///TODO implement dice color usage
-//        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
-//        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
+        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
+        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
 
         //create all pieces
         //set event handlers
         //can access gridpane cells using row and column indices
         //indices start at 1 since row 0 and column 0 are used to display rank and file
         String[] openingMoves = {
-                "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1",   //initial state
-                "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 1",
-                "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2 1",
-                "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2 5"
+                "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1 0",   //initial state
+                "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1 0 1",
+                "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2 1 0",
+                "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2 0 5",
+                "rn1qk1nr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2 3 0" // white has no bishops
         };
 
         loadBoard(openingMoves[0]);
@@ -104,7 +105,7 @@ public class GameboardController {
             piece.setTextFill(Color.BLACK);
         } else {
             //black cells: row + col % 2 == 1
-            tile.setStyle("-fx-background-color: #6b8ea2");
+            tile.setStyle("-fx-background-color: #000000");
             piece.setTextFill(Color.WHITE);
         }
 
@@ -150,9 +151,10 @@ public class GameboardController {
         String fullmoveNumber = info[12];
 
         ///TODO need to run a check if number rolled is valid
-        int roll = Integer.parseInt(info[13]);
-        diceRollB.setText(roll+"");
-        diceRollW.setText(roll+"");
+        int rollW = Integer.parseInt(info[13]);
+        diceRollB.setText(rollW+"");
+        int rollB = Integer.parseInt(info[13]);
+        diceRollW.setText(rollB+"");
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();
@@ -167,7 +169,7 @@ public class GameboardController {
             }
         }
 
-        return  board;
+        return board;
     }
 
 }
