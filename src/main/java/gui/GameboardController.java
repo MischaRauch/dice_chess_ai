@@ -15,6 +15,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+
+
 import logic.Dice;
 
 
@@ -81,15 +86,20 @@ public class GameboardController {
         tile.setAlignment(Pos.CENTER);
         tile.getChildren().add(piece);
 
+        LoadChessImages loadChessImages = new LoadChessImages();
+        ImageView view = loadChessImages.loadImage(piece, p);
+        piece.setGraphic(view);
+
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
             tile.setStyle("-fx-background-color: #ffffff");
             piece.setTextFill(Color.BLACK);
         } else {
             //black cells: row + col % 2 == 1
-            tile.setStyle("-fx-background-color: #000000");
+            tile.setStyle("-fx-background-color: #6b8ea2");
             piece.setTextFill(Color.WHITE);
         }
+
 
         //for inspiration lol
         tile.setOnMouseClicked(event -> {
@@ -106,6 +116,7 @@ public class GameboardController {
                 }
             }
         });
+
 
         return tile;
     }
