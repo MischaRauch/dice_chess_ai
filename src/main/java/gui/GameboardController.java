@@ -43,11 +43,12 @@ public class GameboardController {
         diceRollW.setText(Dice.roll() + "");
     }
 
-
     @FXML
     void initialize() {
-        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
-        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
+        ///TODO implement dice color usage
+//        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
+//        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
+
         //create all pieces
         //set event handlers
         //can access gridpane cells using row and column indices
