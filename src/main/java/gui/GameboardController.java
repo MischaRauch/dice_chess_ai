@@ -1,25 +1,14 @@
 package gui;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.Effect;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-
-
 import logic.Dice;
 
 
@@ -28,6 +17,8 @@ public class GameboardController {
     @FXML
     private GridPane guiBoard;
 
+    /// TODO Add a individual dice for each side black and white to keep track of available rolls
+    // alternatively we can update FEN but there are many problems with this
     @FXML
     private Button diceRollButton;
 
@@ -86,9 +77,10 @@ public class GameboardController {
         tile.setAlignment(Pos.CENTER);
         tile.getChildren().add(piece);
 
-        LoadChessImages loadChessImages = new LoadChessImages();
-        ImageView view = loadChessImages.loadImage(piece, p);
-        piece.setGraphic(view);
+        ///TODO make LoadChessImages class
+//        LoadChessImages loadChessImages = new LoadChessImages();
+//        ImageView view = loadChessImages.loadImage(piece, p);
+//        piece.setGraphic(view);
 
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
@@ -134,12 +126,14 @@ public class GameboardController {
 
         String[] info = fenDiceBoard.split("/|\\s"); //either split on "/" or on " " (whitespace)
 
-        //need a proper data structure to store this stuff, maybe like a GameState object
+        ///TODO need a proper data structure to store this stuff, maybe like a GameState object
         String activeColor = info[8];
         String castling = info[9];
         String enPassant = info[10];
         String halfmoveClock = info[11];
         String fullmoveNumber = info[12];
+
+        ///TODO need to run a check if number rolled is valid
         int roll = Integer.parseInt(info[13]);
         diceRoll.setText(roll+"");
 

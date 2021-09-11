@@ -7,8 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,7 +18,7 @@ import java.io.IOException;
  * The constructor of a controller class gets called before any of the @FXML fields get populated, so use the @FXML initialize
  * method instead. Generally static controllers don't have constructors anyways though.
  */
-public class ExampleMenuController {
+public class MenuController {
 
 //    @FXML
 //    ImageView imageview0;
