@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.Effect;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -89,10 +91,26 @@ public class GameboardController {
             piece.setTextFill(Color.WHITE);
         }
 
-        tile.setOnMouseClicked(event -> piece.setTextFill(Color.GREEN));
+        //for inspiration lol
+        tile.setOnMouseClicked(event -> {
+            if (Character.isLetter(piece.getText().charAt(0))) {
+                //here would be a good place to check if it matches roll number
+                if (selectedPiece == null) {
+                    selectedPiece = piece;
+                }
+            } else {
+                if (selectedPiece != null) {
+                    piece.setText(selectedPiece.getText());
+                    selectedPiece.setText(" ");
+                    selectedPiece = null;
+                }
+            }
+        });
 
         return tile;
     }
+
+    Label selectedPiece = null;
 
     /**
      * Should probably be part of a GameState object rather than here
