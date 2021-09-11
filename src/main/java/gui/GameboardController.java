@@ -9,7 +9,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import logic.BlackDice;
 import logic.Dice;
+import logic.WhiteDice;
 
 
 public class GameboardController {
@@ -20,19 +22,32 @@ public class GameboardController {
     /// TODO Add a individual dice for each side black and white to keep track of available rolls
     // alternatively we can update FEN but there are many problems with this
     @FXML
-    private Button diceRollButton;
+    private Button diceRollButtonB;
 
     @FXML
-    private Label diceRoll;
+    private Label diceRollB;
 
     @FXML
-    void roll(ActionEvent event) {
-        diceRoll.setText(Dice.roll() + "");
+    private Button diceRollButtonW;
+
+    @FXML
+    private Label diceRollW;
+
+    @FXML
+    void rollB(ActionEvent event) {
+        diceRollB.setText(Dice.roll() + "");
+    }
+
+    @FXML
+    void rollW(ActionEvent event) {
+        diceRollW.setText(Dice.roll() + "");
     }
 
 
     @FXML
     void initialize() {
+        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
+        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
         //create all pieces
         //set event handlers
         //can access gridpane cells using row and column indices
@@ -135,7 +150,8 @@ public class GameboardController {
 
         ///TODO need to run a check if number rolled is valid
         int roll = Integer.parseInt(info[13]);
-        diceRoll.setText(roll+"");
+        diceRollB.setText(roll+"");
+        diceRollW.setText(roll+"");
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();
