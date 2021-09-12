@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -95,9 +96,9 @@ public class GameboardController {
         tile.getChildren().add(piece);
 
         ///TODO make LoadChessImages class
-//        LoadChessImages loadChessImages = new LoadChessImages();
-//        ImageView view = loadChessImages.loadImage(piece, p);
-//        piece.setGraphic(view);
+        LoadChessImages loadChessImages = new LoadChessImages();
+        ImageView view = loadChessImages.loadImage(piece, p);
+        piece.setGraphic(view);
 
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
@@ -105,7 +106,8 @@ public class GameboardController {
             piece.setTextFill(Color.BLACK);
         } else {
             //black cells: row + col % 2 == 1
-            tile.setStyle("-fx-background-color: #000000");
+            //tile.setStyle("-fx-background-color: #000000");
+            tile.setStyle("-fx-background-color: #6b8ea2");
             piece.setTextFill(Color.WHITE);
         }
 
