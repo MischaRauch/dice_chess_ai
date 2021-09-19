@@ -88,7 +88,10 @@ public class GameboardController {
      * @return JavaFX Scene Node specifically a VBox possibly containing a Label
      */
     public VBox createPiece(char p, int row, int col) {
-        Label piece = new Label(p + "");
+        LoadChessImages loadChessImages = new LoadChessImages();
+        ImageView view = loadChessImages.loadImage(p);
+
+        Label piece = new Label(p+" ",view);
         piece.setFont(Font.font(42));
 
         VBox tile = new VBox();
@@ -96,23 +99,21 @@ public class GameboardController {
         tile.getChildren().add(piece);
 
         ///TODO make LoadChessImages class
-        LoadChessImages loadChessImages = new LoadChessImages();
-        ImageView view = loadChessImages.loadImage(piece, p);
-        piece.setGraphic(view);
+        //piece.setGraphic(view);
 
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
-            tile.setStyle("-fx-background-color: #ffffff");
+            tile.setStyle("-fx-background-color: #908a8a");
             piece.setTextFill(Color.BLACK);
         } else {
             //black cells: row + col % 2 == 1
             //tile.setStyle("-fx-background-color: #000000");
-            tile.setStyle("-fx-background-color: #6b8ea2");
+            tile.setStyle("-fx-background-color: #a9632f");
             piece.setTextFill(Color.WHITE);
         }
 
 
-        //for inspiration lol
+        // for inspiration lol
         tile.setOnMouseClicked(event -> {
             if (Character.isLetter(piece.getText().charAt(0))) {
                 //here would be a good place to check if it matches roll number
@@ -122,12 +123,13 @@ public class GameboardController {
             } else {
                 if (selectedPiece != null) {
                     piece.setText(selectedPiece.getText());
+                    piece.setGraphic(loadChessImages.loadImage(selectedPiece.getText().charAt(0)));
                     selectedPiece.setText(" ");
+                    selectedPiece.setGraphic(null);
                     selectedPiece = null;
                 }
             }
         });
-
 
         return tile;
     }

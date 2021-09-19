@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 
 
 public class LoadChessImages {
-    public ImageView loadImage(Label piece, char p) {
+    public ImageView loadImage(char p) {
         ImageView view = new ImageView();
         if (p == 'p') {
             Image img = new Image("pieces/b_pawn.png");
