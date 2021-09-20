@@ -67,6 +67,7 @@ public class Board0x88 {
         }
     }
 
+    //its moving the mirrored piece and idk whyyyyyyyy
     public void movePiece(String origin, String destination) {
         //format like file + rank (e.g.: b6, e4, etc)
         int originFile = ((int) origin.charAt(0)) - 97; //char value of 'a' is 97
@@ -74,14 +75,13 @@ public class Board0x88 {
         int originBoardIndex = originRank * 16 + originFile;
 
         System.out.println(board[originBoardIndex]);
+
         int destFile = ((int) destination.charAt(0)) - 97;; //char value of 'a' is 97
         int destRank = Character.getNumericValue(destination.charAt(1)) - 1;
         int destBoardIndex = destRank * 16 + destFile;
+
         System.out.println(board[destBoardIndex]);
 
-        //Piece temp = Piece.EMPTY;
-
-        //temp = board[destBoardIndex];
         board[destBoardIndex] = board[originBoardIndex];
         board[originBoardIndex] = Piece.EMPTY;
 
