@@ -12,7 +12,10 @@ public class Board0x88 {
         b.loadFromFEN(openingFEN);
         b.printBoard(false);
 
-        b.movePiece("a1", "h3");
+        b.movePiece("e2", "e4");
+        b.movePiece("b8", "c6");
+        b.movePiece("b2", "b4");
+        b.movePiece("c6", "b4");
     }
 
 
@@ -31,14 +34,13 @@ public class Board0x88 {
         }
     }
 
-    static Map<Character, Piece> charPieceMap = new HashMap<>();
 
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     static String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
 
-    Piece[] board = new Piece[128];
-
-    public Board0x88() {
+    static Map<Integer, Integer> boardIndexMap = new HashMap<>();
+    static Map<Character, Piece> charPieceMap = new HashMap<>();
+    static {
         charPieceMap.put('P', Piece.WHITE_PAWN);
         charPieceMap.put('N', Piece.WHITE_KNIGHT);
         charPieceMap.put('B', Piece.WHITE_BISHOP);
@@ -52,6 +54,42 @@ public class Board0x88 {
         charPieceMap.put('q', Piece.BLACK_QUEEN);
         charPieceMap.put('k', Piece.BLACK_KING);
         charPieceMap.put('o', Piece.OFF_BOARD);
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                boardIndexMap.put(i * 16 + j, (112 + j) - i * 16);
+            }
+        }
+
+    }
+
+    Piece[] board;
+    String FEN;
+
+    public Board0x88(String FEN) {
+        board = new Piece[128];
+        this.FEN = FEN;
+        loadFromFEN(FEN);
+    }
+
+    public Board0x88() {
+        this(openingFEN);
+    }
+
+    public void movePiece(String origin, String destination) {
+        //format like file + rank (e.g.: b6, e4, etc)
+        int originFile = ((int) origin.charAt(0)) - 97; //char value of 'a' is 97
+        int originRank = Character.getNumericValue(origin.charAt(1)) - 1;
+        int originBoardIndex = originRank * 16 + originFile;
+
+        int destFile = ((int) destination.charAt(0)) - 97;; //char value of 'a' is 97
+        int destRank = Character.getNumericValue(destination.charAt(1)) - 1;
+        int destBoardIndex = destRank * 16 + destFile;
+
+        board[boardIndexMap.get(destBoardIndex)] = board[boardIndexMap.get(originBoardIndex)];
+        board[boardIndexMap.get(originBoardIndex)] = Piece.EMPTY;
+
+        printBoard(false);
     }
 
     public void createEmptyBoard() {
@@ -67,46 +105,19 @@ public class Board0x88 {
         }
     }
 
-    //its moving the mirrored piece and idk whyyyyyyyy
-    public void movePiece(String origin, String destination) {
-        //format like file + rank (e.g.: b6, e4, etc)
-        int originFile = ((int) origin.charAt(0)) - 97; //char value of 'a' is 97
-        int originRank = Character.getNumericValue(origin.charAt(1)) - 1;
-        int originBoardIndex = originRank * 16 + originFile;
-
-        System.out.println(board[originBoardIndex]);
-
-        int destFile = ((int) destination.charAt(0)) - 97;; //char value of 'a' is 97
-        int destRank = Character.getNumericValue(destination.charAt(1)) - 1;
-        int destBoardIndex = destRank * 16 + destFile;
-
-        System.out.println(board[destBoardIndex]);
-
-        board[destBoardIndex] = board[originBoardIndex];
-        board[originBoardIndex] = Piece.EMPTY;
-
-        printBoard(false);
-    }
-
-
-
-
-
-
-
     public void printBoard(boolean full) {
         final int MAX_FILE = full ? 16 : 8;
-        String files = "　　A　B　C　D　E　F　G　H  ";
+        String files = "　　　A　B　C　D　E　F　G　H  \n";
         System.out.println(files);
         for (int rank = 0; rank < 8; rank++) {
-            System.out.print(" " + (8 - rank) + " ");
+            System.out.print(" " + (8 - rank) + " 　");
             for (int file = 0; file < MAX_FILE; file++) {
                 int tile = rank * 16 + file; // this converts to board index
                 System.out.print(board[tile].getType() + " ");
             }
-            System.out.println((8 - rank) + " ");
+            System.out.println("　"+ (8 - rank) + " ");
         }
-        System.out.println(files);
+        System.out.println("\n"+files + "\n\n");
     }
 
 
