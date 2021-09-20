@@ -6,9 +6,39 @@ import java.util.Map;
 
 public class Board0x88 {
 
+    public static void main(String[] args) {
+        Board0x88 b = new Board0x88();
+        b.createEmptyBoard();
+        b.loadFromFEN(openingFEN);
+        b.printBoard(false);
+
+        b.movePiece("a1", "h3");
+    }
+
+
+    enum Piece {
+        EMPTY('　'), WHITE_PAWN('♟'), WHITE_KNIGHT('♞'), WHITE_BISHOP('♝'), WHITE_ROOK('♜'), WHITE_QUEEN('♛'), WHITE_KING('♚'),
+        BLACK_PAWN('♙'), BLACK_KNIGHT('♘'), BLACK_BISHOP('♗'), BLACK_ROOK('♖'), BLACK_QUEEN('♕'), BLACK_KING('♔'), OFF_BOARD('o');
+
+        char type;
+
+        Piece(char type) {
+            this.type = type;
+        }
+
+        public char getType() {
+            return type;
+        }
+    }
+
     static Map<Character, Piece> charPieceMap = new HashMap<>();
 
-    public static void main(String[] args) {
+    static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    static String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
+
+    Piece[] board = new Piece[128];
+
+    public Board0x88() {
         charPieceMap.put('P', Piece.WHITE_PAWN);
         charPieceMap.put('N', Piece.WHITE_KNIGHT);
         charPieceMap.put('B', Piece.WHITE_BISHOP);
@@ -22,50 +52,6 @@ public class Board0x88 {
         charPieceMap.put('q', Piece.BLACK_QUEEN);
         charPieceMap.put('k', Piece.BLACK_KING);
         charPieceMap.put('o', Piece.OFF_BOARD);
-
-        System.out.println("white chess king    ♔\n" +
-                "white chess queen ♕\n" +
-                "white chess rook ♖\n" +
-                "white chess bishop ♗\n" +
-                "white chess knight ♘\n" +
-                "white chess pawn ♙\n" +
-                "\n" +
-                "black chess king ♚\n" +
-                "black chess queen ♛\n" +
-                "black chess rook ♜\n" +
-                "black chess bishop ♝\n" +
-                "black chess knight ♞\n" +
-                "black chess pawn ♟");
-
-        Board0x88 b = new Board0x88();
-    }
-
-//    enum Piece {
-//        EMPTY, WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING,
-//        BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING, OFF_BOARD
-//    }
-
-    enum Piece {
-        EMPTY(' '), WHITE_PAWN('P'), WHITE_KNIGHT('N'), WHITE_BISHOP('B'), WHITE_ROOK('R'), WHITE_QUEEN('Q'), WHITE_KING('K'),
-        BLACK_PAWN('p'), BLACK_KNIGHT('n'), BLACK_BISHOP('b'), BLACK_ROOK('r'), BLACK_QUEEN('q'), BLACK_KING('k'), OFF_BOARD('o');
-
-        char type;
-
-        Piece(char type) {
-            this.type = type;
-        }
-
-        public char getType() {
-            return type;
-        }
-    }
-
-    Piece[] board = new Piece[128];
-
-    public Board0x88() {
-        createEmptyBoard();
-        loadFromFEN(tricky);
-        printBoard(false);
     }
 
     public void createEmptyBoard() {
@@ -81,20 +67,49 @@ public class Board0x88 {
         }
     }
 
-    public void printBoard(boolean full) {
-        final int MAX_FILE = full ? 16 : 8;
+    public void movePiece(String origin, String destination) {
+        //format like file + rank (e.g.: b6, e4, etc)
+        int originFile = ((int) origin.charAt(0)) - 97; //char value of 'a' is 97
+        int originRank = Character.getNumericValue(origin.charAt(1)) - 1;
+        int originBoardIndex = originRank * 16 + originFile;
 
-        for (int rank = 0; rank < 8; rank++) {
-            for (int file = 0; file < MAX_FILE; file++) {
-                int tile = rank * 16 + file; // this converts to board index
-                System.out.print(board[tile] + " ");
-            }
-            System.out.println();
-        }
+        System.out.println(board[originBoardIndex]);
+        int destFile = ((int) destination.charAt(0)) - 97;; //char value of 'a' is 97
+        int destRank = Character.getNumericValue(destination.charAt(1)) - 1;
+        int destBoardIndex = destRank * 16 + destFile;
+        System.out.println(board[destBoardIndex]);
+
+        //Piece temp = Piece.EMPTY;
+
+        //temp = board[destBoardIndex];
+        board[destBoardIndex] = board[originBoardIndex];
+        board[originBoardIndex] = Piece.EMPTY;
+
+        printBoard(false);
     }
 
-    String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-    String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
+
+
+
+
+
+
+    public void printBoard(boolean full) {
+        final int MAX_FILE = full ? 16 : 8;
+        String files = "　　A　B　C　D　E　F　G　H  ";
+        System.out.println(files);
+        for (int rank = 0; rank < 8; rank++) {
+            System.out.print(" " + (8 - rank) + " ");
+            for (int file = 0; file < MAX_FILE; file++) {
+                int tile = rank * 16 + file; // this converts to board index
+                System.out.print(board[tile].getType() + " ");
+            }
+            System.out.println((8 - rank) + " ");
+        }
+        System.out.println(files);
+    }
+
+
 
     public void loadFromFEN(String FEN) {
         String[] info = FEN.split("/|\\s"); //either split on "/" or on " " (whitespace)
@@ -114,8 +129,6 @@ public class Board0x88 {
                 }
             }
         }
-
     }
-
 
 }
