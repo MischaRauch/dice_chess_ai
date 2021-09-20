@@ -34,15 +34,25 @@ public class GameboardController {
     @FXML
     private Label diceRollW;
 
+    public boolean whiteTurn = true;
+
     @FXML
     void rollB(ActionEvent event) {
-        diceRollB.setText(Dice.roll() + "");
+        LoadChessImages aid = new LoadChessImages();
+        diceRollB.setText("");
+        diceRollB.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
+        whiteTurn = true;
     }
 
     @FXML
     void rollW(ActionEvent event) {
-        diceRollW.setText(Dice.roll() + "");
+
+        diceRollW.setText("");
+        LoadChessImages aid = new LoadChessImages();
+        diceRollW.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
+        whiteTurn = false;
     }
+
 
     @FXML
     void initialize() {
@@ -103,12 +113,12 @@ public class GameboardController {
 
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
-            tile.setStyle("-fx-background-color: #908a8a");
+            tile.setStyle("-fx-background-color: #d5a47d");
             piece.setTextFill(Color.BLACK);
         } else {
             //black cells: row + col % 2 == 1
             //tile.setStyle("-fx-background-color: #000000");
-            tile.setStyle("-fx-background-color: #a9632f");
+            tile.setStyle("-fx-background-color: #98501a");
             piece.setTextFill(Color.WHITE);
         }
 
@@ -144,7 +154,7 @@ public class GameboardController {
     public char[][] parseFENd(String fenDiceBoard) {
         //chess board has starts with index 1 so to keep things simple leave index 0 empty
         char[][] board = new char[9][9];
-
+        LoadChessImages loadChessImages = new LoadChessImages();
         String[] info = fenDiceBoard.split("/|\\s"); //either split on "/" or on " " (whitespace)
 
         ///TODO need a proper data structure to store this stuff, maybe like a GameState object
@@ -156,9 +166,13 @@ public class GameboardController {
 
         ///TODO need to run a check if number rolled is valid
         int rollW = Integer.parseInt(info[13]);
-        diceRollB.setText(rollW+"");
+        // diceRollB.setText(rollW+"");
+        //diceRollB.setGraphic(loadChessImages.loadImage(loadChessImages.whichPiece(rollW, whiteTurn)));
+        whiteTurn = false;
         int rollB = Integer.parseInt(info[13]);
-        diceRollW.setText(rollB+"");
+        // diceRollW.setText(rollB+"");
+        //diceRollW.setGraphic(loadChessImages.loadImage(loadChessImages.whichPiece(rollW, whiteTurn)));
+        whiteTurn = true;
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();
