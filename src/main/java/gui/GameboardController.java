@@ -136,7 +136,7 @@ public class GameboardController {
 
     /**
      * Should probably be part of a GameState object rather than here
-     * @param fenDiceBoard String in FEN-dice notation (which i invented)
+     * @param fenDiceBoard String in FEN-dice notation
      * @return char matrix representing board. Row and Col with 0 index are empty
      */
     public char[][] parseFENd(String fenDiceBoard) {
