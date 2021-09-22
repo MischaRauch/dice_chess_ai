@@ -30,6 +30,10 @@ public enum Square {
             squareMap.put(s.squareNumber, s);
     }
 
+    static Square getSquare(int rank, int file) {
+        return squareMap.getOrDefault(rank*16+file, INVALID);
+    }
+
     public int getSquareNumber() {
         return squareNumber;
     }

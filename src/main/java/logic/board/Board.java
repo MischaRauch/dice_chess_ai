@@ -24,6 +24,9 @@ public abstract class Board {
         System.out.println("Piece on square above A1: " + afterVariousMoves.getPieceAt(Square.a1.getSquareAbove()));
         System.out.println("Square number of square above A1: " + Square.a1.getSquareAbove().getSquareNumber());
         System.out.println("Board index of square above A1: " + Square.a1.getSquareAbove().getBoardIndex());
+
+        System.out.println("Get square (3, 4) by coordinate (0-indexed): " + Square.getSquare(3, 4));
+        System.out.println("Piece at square (3, 4) by coordinate (0-indexed): " + afterVariousMoves.getPieceAt(Square.getSquare(3, 4)));
     }
 
     public abstract boolean isEmpty(String square);
