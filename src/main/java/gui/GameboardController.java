@@ -34,15 +34,25 @@ public class GameboardController {
     @FXML
     private Label diceRollW;
 
+    public boolean whiteTurn = true;
+
     @FXML
     void rollB(ActionEvent event) {
-        diceRollB.setText(Dice.roll() + "");
+        LoadChessImages aid = new LoadChessImages();
+        diceRollB.setText("");
+        diceRollB.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
+        whiteTurn = true;
     }
 
     @FXML
     void rollW(ActionEvent event) {
-        diceRollW.setText(Dice.roll() + "");
+
+        diceRollW.setText("");
+        LoadChessImages aid = new LoadChessImages();
+        diceRollW.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
+        whiteTurn = false;
     }
+
 
     @FXML
     void initialize() {
@@ -88,7 +98,10 @@ public class GameboardController {
      * @return JavaFX Scene Node specifically a VBox possibly containing a Label
      */
     public VBox createPiece(char p, int row, int col) {
-        Label piece = new Label(p + "");
+        LoadChessImages loadChessImages = new LoadChessImages();
+        ImageView view = loadChessImages.loadImage(p);
+
+        Label piece = new Label(p+" ",view);
         piece.setFont(Font.font(42));
 
         VBox tile = new VBox();
@@ -96,23 +109,21 @@ public class GameboardController {
         tile.getChildren().add(piece);
 
         ///TODO make LoadChessImages class
-        LoadChessImages loadChessImages = new LoadChessImages();
-        ImageView view = loadChessImages.loadImage(piece, p);
-        piece.setGraphic(view);
+        //piece.setGraphic(view);
 
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
-            tile.setStyle("-fx-background-color: #ffffff");
+            tile.setStyle("-fx-background-color: #d5a47d");
             piece.setTextFill(Color.BLACK);
         } else {
             //black cells: row + col % 2 == 1
             //tile.setStyle("-fx-background-color: #000000");
-            tile.setStyle("-fx-background-color: #6b8ea2");
+            tile.setStyle("-fx-background-color: #98501a");
             piece.setTextFill(Color.WHITE);
         }
 
 
-        //for inspiration lol
+        // for inspiration lol
         tile.setOnMouseClicked(event -> {
             if (Character.isLetter(piece.getText().charAt(0))) {
                 //here would be a good place to check if it matches roll number
@@ -122,12 +133,13 @@ public class GameboardController {
             } else {
                 if (selectedPiece != null) {
                     piece.setText(selectedPiece.getText());
+                    piece.setGraphic(loadChessImages.loadImage(selectedPiece.getText().charAt(0)));
                     selectedPiece.setText(" ");
+                    selectedPiece.setGraphic(null);
                     selectedPiece = null;
                 }
             }
         });
-
 
         return tile;
     }
@@ -142,7 +154,7 @@ public class GameboardController {
     public char[][] parseFENd(String fenDiceBoard) {
         //chess board has starts with index 1 so to keep things simple leave index 0 empty
         char[][] board = new char[9][9];
-
+        LoadChessImages loadChessImages = new LoadChessImages();
         String[] info = fenDiceBoard.split("/|\\s"); //either split on "/" or on " " (whitespace)
 
         ///TODO need a proper data structure to store this stuff, maybe like a GameState object
@@ -154,9 +166,13 @@ public class GameboardController {
 
         ///TODO need to run a check if number rolled is valid
         int rollW = Integer.parseInt(info[13]);
-        diceRollB.setText(rollW+"");
+        // diceRollB.setText(rollW+"");
+        //diceRollB.setGraphic(loadChessImages.loadImage(loadChessImages.whichPiece(rollW, whiteTurn)));
+        whiteTurn = false;
         int rollB = Integer.parseInt(info[13]);
-        diceRollW.setText(rollB+"");
+        // diceRollW.setText(rollB+"");
+        //diceRollW.setGraphic(loadChessImages.loadImage(loadChessImages.whichPiece(rollW, whiteTurn)));
+        whiteTurn = true;
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();

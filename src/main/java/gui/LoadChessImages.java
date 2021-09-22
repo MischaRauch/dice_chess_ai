@@ -2,66 +2,42 @@ package gui;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Label;
-
 
 public class LoadChessImages {
-    public ImageView loadImage(Label piece, char p) {
-        ImageView view = new ImageView();
-        if (p == 'p') {
-            Image img = new Image("pieces/b_pawn.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'P') {
-            Image img = new Image("pieces/w_pawn.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'r') {
-            Image img = new Image("pieces/b_rook.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'R') {
-            Image img = new Image("pieces/w_rook.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'n') {
-            Image img = new Image("pieces/b_knight.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'N') {
-            Image img = new Image("pieces/w_knight.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'b') {
-            Image img = new Image("pieces/b_bishop.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'B') {
-            Image img = new Image("pieces/w_bishop.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'q') {
-            Image img = new Image("pieces/b_queen.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'Q') {
-            Image img = new Image("pieces/w_queen.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'k') {
-            Image img = new Image("pieces/b_king.png");
-            view = new ImageView(img);
-        }
-        else if ( p == 'K') {
-            Image img = new Image("pieces/w_king.png");
-            view = new ImageView(img);
-        }
 
-        else {
-            return view;
+    char[] charOfPieces = {'p','P','r','R','n','N','b','B','q','Q','k','K'};
+    String[] imgOfChars = {"pieces/b_pawn.png", "pieces/w_pawn.png", "pieces/b_rook.png", "pieces/w_rook.png",
+            "pieces/b_knight.png", "pieces/w_knight.png", "pieces/b_bishop.png", "pieces/w_bishop.png",
+            "pieces/b_queen.png", "pieces/w_queen.png", "pieces/b_king.png", "pieces/w_king.png" };
+
+    char[] whichChar = {'p', 'n', 'b', 'r', 'q', 'k'};
+
+    public ImageView loadImage(char p) {
+        ImageView view;
+
+        for (int i=0; i< charOfPieces.length; i++) {
+            if (p == charOfPieces[i]) {
+                Image img = new Image(imgOfChars[i]);
+                view = new ImageView(img);
+                view.setFitHeight(80);
+                view.setPreserveRatio(true);
+                return view;
+            }
         }
-        view.setFitHeight(80);
-        view.setPreserveRatio(true);
-        return view;
+        return null;
+    }
+
+    public char whichPiece(int diceRoll, boolean whiteTurn) {
+        for (int i=0; i < whichChar.length; i++) {
+            if (diceRoll == i) {
+                if (whiteTurn) {
+                    return Character.toUpperCase(whichChar[i]);
+                }
+                return whichChar[i];
+            }
+        }
+        return ' ';
     }
 }
+
+
