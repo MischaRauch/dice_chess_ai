@@ -6,17 +6,6 @@ import java.util.Map;
 
 public class Board0x88 extends Board {
 
-    public static void main(String[] args) {
-
-        Board b = new Board0x88(openingFEN);
-        Board0x88 afterVariousMoves = (Board0x88) b.movePiece("e2", "e4")
-                .movePiece("b8", "c6")
-                .movePiece("b2", "b4")
-                .movePiece("c6", "b4");
-
-        System.out.println(afterVariousMoves.isFriendly("b4", Side.BLACK));
-    }
-
     static Map<Integer, Integer> boardIndexMap = new HashMap<>();
 
     static String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";

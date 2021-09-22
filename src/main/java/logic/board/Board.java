@@ -2,6 +2,18 @@ package logic.board;
 
 public abstract class Board {
 
+    public static void main(String[] args) {
+
+        Board b = new Board0x88(Board0x88.openingFEN);
+        Board afterVariousMoves = b.movePiece("e2", "e4")
+                .movePiece("b8", "c6")
+                .movePiece("b2", "b4")
+                .movePiece("c6", "b4");
+
+        System.out.println(afterVariousMoves.isFriendly("b4", Side.BLACK));
+        System.out.println(afterVariousMoves.getPieceAt("f2").isFriendly(Side.BLACK));
+    }
+
     public abstract boolean isEmpty(String square);
 
     public abstract boolean isOffBoard(int squareNumber);
