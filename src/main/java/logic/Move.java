@@ -7,7 +7,6 @@ public class Move {
     int endPos;
     char piece;
 
-
     public Move(int diceRoll, int startPos, int endPos, char piece) {
         this.diceRoll = diceRoll;
         this.startPos = startPos;
