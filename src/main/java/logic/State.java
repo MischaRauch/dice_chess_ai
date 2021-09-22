@@ -11,6 +11,7 @@ public class State {
     public State(Board board) {
         this.board = board;
     }
+
     public State(String FEN) {
         this.board = board;
     }

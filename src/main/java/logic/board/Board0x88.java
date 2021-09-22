@@ -1,39 +1,10 @@
-package logic;
+package logic.board;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Board0x88 {
-
-    public static void main(String[] args) {
-        Board0x88 b = new Board0x88();
-        b.createEmptyBoard();
-        b.loadFromFEN(openingFEN);
-        b.printBoard(false);
-
-        b.movePiece("e2", "e4");
-        b.movePiece("b8", "c6");
-        b.movePiece("b2", "b4");
-        b.movePiece("c6", "b4");
-    }
-
-
-    enum Piece {
-        EMPTY('　'), WHITE_PAWN('♟'), WHITE_KNIGHT('♞'), WHITE_BISHOP('♝'), WHITE_ROOK('♜'), WHITE_QUEEN('♛'), WHITE_KING('♚'),
-        BLACK_PAWN('♙'), BLACK_KNIGHT('♘'), BLACK_BISHOP('♗'), BLACK_ROOK('♖'), BLACK_QUEEN('♕'), BLACK_KING('♔'), OFF_BOARD('o');
-
-        char type;
-
-        Piece(char type) {
-            this.type = type;
-        }
-
-        public char getType() {
-            return type;
-        }
-    }
-
 
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     static String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
