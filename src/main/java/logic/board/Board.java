@@ -3,8 +3,9 @@ package logic.board;
 public abstract class Board {
 
     public static void main(String[] args) {
-
+        //for testing purposes
         Board b = new Board0x88(Board0x88.openingFEN);
+
         Board afterVariousMoves = b.movePiece("e2", "e4")
                 .movePiece("b8", "c6")
                 .movePiece("b2", "b4")
@@ -12,13 +13,28 @@ public abstract class Board {
 
         System.out.println(afterVariousMoves.isFriendly("b4", Side.BLACK));
         System.out.println(afterVariousMoves.getPieceAt("f2").isFriendly(Side.BLACK));
+
+        System.out.println(afterVariousMoves.isEmpty(Square.b2));
+        System.out.println(afterVariousMoves.isEmpty("b2"));
+
+        Move move = new Move(Piece.WHITE_PAWN, Square.c2, Square.c3, 1, Side.WHITE);
+        afterVariousMoves.movePiece(move.origin, move.destination);
+
+        System.out.println("Square above A1: " + Square.a1.getSquareAbove());
+        System.out.println("Piece on square above A1: " + afterVariousMoves.getPieceAt(Square.a1.getSquareAbove()));
+        System.out.println("Square number of square above A1: " + Square.a1.getSquareAbove().getSquareNumber());
+        System.out.println("Board index of square above A1: " + Square.a1.getSquareAbove().getBoardIndex());
     }
 
     public abstract boolean isEmpty(String square);
 
+    public abstract boolean isEmpty(Square square);
+
     public abstract boolean isOffBoard(int squareNumber);
 
     public abstract Piece getPieceAt(String square);
+
+    public abstract Piece getPieceAt(Square square);
 
     public abstract String getSquareAbove(String square);
 
@@ -37,6 +53,8 @@ public abstract class Board {
     }
 
     public abstract Board movePiece(String origin, String destination);
+
+    public abstract Board movePiece(Square origin, Square destination);
 
     public abstract Board loadFromFEN(String FEN);
 

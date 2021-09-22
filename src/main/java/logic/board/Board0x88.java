@@ -79,6 +79,11 @@ public class Board0x88 extends Board {
     }
 
     @Override
+    public boolean isEmpty(Square square) {
+        return board[square.getBoardIndex()] == Piece.EMPTY;
+    }
+
+    @Override
     public boolean isOffBoard(int squareNumber) {
         return (squareNumber & 0x88) != 0;
     }
@@ -86,6 +91,11 @@ public class Board0x88 extends Board {
     @Override
     public Piece getPieceAt(String square) {
         return board[boardIndexMap.get(getSquareNumber(square))];
+    }
+
+    @Override
+    public Piece getPieceAt(Square square) {
+        return board[square.getBoardIndex()];
     }
 
     @Override
@@ -134,6 +144,18 @@ public class Board0x88 extends Board {
     }
 
     @Override
+    public Board movePiece(Square origin, Square destination) {
+        Board0x88 boardAfterMove = new Board0x88(board);
+
+        boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
+        boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;
+
+        boardAfterMove.printBoard(false);
+
+        return boardAfterMove;
+    }
+
+    @Override
     public Board loadFromFEN(String FEN) {
         return new Board0x88(FEN);
     }
@@ -143,6 +165,7 @@ public class Board0x88 extends Board {
         final int MAX_FILE = full ? 16 : 8;
         String files = "　　　A　B　C　D　E　F　G　H  \n";
         System.out.println(files);
+
         for (int rank = 0; rank < 8; rank++) {
             System.out.print(" " + (8 - rank) + " 　");
             for (int file = 0; file < MAX_FILE; file++) {
