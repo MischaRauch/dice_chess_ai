@@ -22,6 +22,7 @@ public class GameboardController {
 
     /// TODO Add a individual dice for each side black and white to keep track of available rolls
     // alternatively we can update FEN but there are many problems with this
+
     @FXML
     private Button diceRollButtonB;
 
@@ -57,8 +58,6 @@ public class GameboardController {
     @FXML
     void initialize() {
         ///TODO implement dice color usage
-        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
-        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
 
         //create all pieces
         //set event handlers
@@ -78,6 +77,7 @@ public class GameboardController {
             if (event.getCode().isDigitKey())
                 loadBoard(openingMoves[Integer.parseInt(event.getCode().getChar())]); //use numbers 0-3 to load board states
         });
+
     }
 
     public void loadBoard(String fenD) {
@@ -141,6 +141,7 @@ public class GameboardController {
             }
         });
 
+
         return tile;
     }
 
@@ -148,7 +149,7 @@ public class GameboardController {
 
     /**
      * Should probably be part of a GameState object rather than here
-     * @param fenDiceBoard String in FEN-dice notation (which i invented)
+     * @param fenDiceBoard String in FEN-dice notation
      * @return char matrix representing board. Row and Col with 0 index are empty
      */
     public char[][] parseFENd(String fenDiceBoard) {

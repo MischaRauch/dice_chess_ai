@@ -1,43 +1,56 @@
 package logic;
 
+import logic.board.Board;
+import logic.board.Piece;
+import logic.board.Square;
+
+import java.util.EnumSet;
+
 public class State {
 
-    Board board;
-    // castleing rights
-    // en passant square
-    // player turn
-    //
+    enum CastlingRights {
+        WHITE_QUEEN_SIDE, //ordinal 0
+        WHITE_KING_SIDE,  //ordinal 1
+        BLACK_QUEEN_SIDE,
+        BLACK_KING_SIDE
+    }
 
-    public State(Board board) {
+    EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
+
+    EnumSet<Piece> availableWhitePieces = EnumSet.of(Piece.WHITE_KING,Piece.WHITE_PAWN, Piece.WHITE_BISHOP, Piece.WHITE_KNIGHT, Piece.BLACK_ROOK, Piece.WHITE_QUEEN);
+    EnumSet<Piece> availableBlackPieces = EnumSet.of(Piece.BLACK_KING,Piece.BLACK_PAWN, Piece.BLACK_BISHOP, Piece.BLACK_KNIGHT, Piece.BLACK_ROOK, Piece.BLACK_QUEEN);
+
+    public Board board;
+    public int diceRoll;
+    public Side color;
+
+    public State(Board board, int diceRoll, Side color) {
         this.board = board;
-    }
-    public State(String FEN) {
-        this.board = board;
-    }
+        this.diceRoll = diceRoll;
+        this.color = color;
 
-    public Board getBoard() {
-        return board;
-    }
+        Square[] squares = board.getRank(2);
 
-    public void loadFEDandUpdateBoard(String FEN) {
-        // update current board using FEN state
-    }
-
-    public void updateBoard(char piece,int startPos, int endPos) {
-        //
-    }
-
-    public int getPiecePos(char piece) {
-        int pos = 0;
-        return pos;
+        for (Square s : squares) {
+            board.getSquareAbove(s);
+            s.getSquareAbove();
+        }
     }
 
 
-    public String returnFEN() {
-        return "FEN here";
+    public State applyMove(Move move) {
+        //extract castling en passant dice roll
+        Board newBoard = board.movePiece(move.origin, move.destination);
+        int newRoll = Dice.roll();      //idk about this stuff
+        Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
+
+        //update castling rights
+        //update available pieces sets
+
+        return new State(newBoard, newRoll, nextTurn);
     }
+
+
 
 
 }
-
-
