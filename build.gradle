@@ -12,10 +12,11 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml']
 }
 
+mainClassName = 'DiceChess'
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
-mainClassName = 'DiceChess'
 
 repositories {
     mavenCentral()
