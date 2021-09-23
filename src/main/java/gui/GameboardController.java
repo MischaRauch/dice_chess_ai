@@ -99,8 +99,8 @@ public class GameboardController {
         LoadChessImages loadChessImages = new LoadChessImages();
         ImageView view = loadChessImages.loadImage(p);
 
-        Label piece = new Label(p+" ",view);
-        piece.setFont(Font.font(42));
+        Label piece = new Label(p+"",view);
+        piece.setFont(Font.font(1));
 
         VBox tile = new VBox();
         tile.setAlignment(Pos.CENTER);
