@@ -21,6 +21,7 @@ public class GameboardController {
 
     /// TODO Add a individual dice for each side black and white to keep track of available rolls
     // alternatively we can update FEN but there are many problems with this
+
     @FXML
     private Button diceRollButtonB;
 

@@ -21,7 +21,7 @@ public abstract class Board {
         System.out.println(afterVariousMoves.isEmpty(Square.b2));
 
         Move move = new Move(Piece.WHITE_PAWN, Square.c2, Square.c3, 1, Side.WHITE);
-        afterVariousMoves.movePiece(move.origin, move.destination);
+        afterVariousMoves.movePiece(move.getOrigin(), move.getDestination());
 
         System.out.println("Square above A1: " + afterVariousMoves.getSquareAbove(Square.a1));
         System.out.println("Piece on square above A1: " + afterVariousMoves.getPieceAt(Square.a1.getSquareAbove()));

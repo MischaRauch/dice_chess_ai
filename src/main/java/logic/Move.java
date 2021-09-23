@@ -10,26 +10,6 @@ public class Move {
     Square destination;
     int diceRoll;
 
-    public Piece getPiece() {
-        return piece;
-    }
-
-    public Square getOrigin() {
-        return origin;
-    }
-
-    public Square getDestination() {
-        return destination;
-    }
-
-    public int getDiceRoll() {
-        return diceRoll;
-    }
-
-    public Side getColor() {
-        return color;
-    }
-
     Side color;
     Validity status;
 
@@ -57,6 +37,26 @@ public class Move {
 
     public void setInvalid() {
         this.status = Validity.VALID;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    public Square getOrigin() {
+        return origin;
+    }
+
+    public Square getDestination() {
+        return destination;
+    }
+
+    public int getDiceRoll() {
+        return diceRoll;
+    }
+
+    public Side getColor() {
+        return color;
     }
 
     public enum Validity {
