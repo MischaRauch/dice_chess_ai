@@ -35,8 +35,10 @@ public class Board0x88 extends Board {
     public Board0x88(String FEN) {
         this();
         loadFromFEN(FEN);
+        printBoard();
     }
 
+    //easy cloning of board
     public Board0x88(Piece[] board) {
         this.board = Arrays.copyOf(board, board.length);
     }
@@ -104,7 +106,7 @@ public class Board0x88 extends Board {
         return rank * 16 + file;
     }
 
-    @Override
+
     public void printBoard(boolean full) {
         final int MAX_FILE = full ? 16 : 8;
         String files = "　　　A　B　C　D　E　F　G　H  \n";
@@ -119,5 +121,31 @@ public class Board0x88 extends Board {
             System.out.println("　"+ (8 - rank) + " ");
         }
         System.out.println("\n"+files + "\n\n");
+    }
+
+    @Override
+    public void printBoard() {
+        String files = "\n　 　　A　B　C　D　E　F　G　H  \n";
+        System.out.println(files);
+
+        int rank = 8;
+        Piece prev = Piece.OFF_BOARD;
+        for (Piece p : board) {
+            if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD) {
+                System.out.print("　" + rank-- + "　 ");
+            }
+
+            if (p != Piece.OFF_BOARD)
+                System.out.print(p.getType() + " ");
+
+            if (prev != Piece.OFF_BOARD && p == Piece.OFF_BOARD) {
+                System.out.println("　" + rank + " ");
+            }
+
+            prev = p;
+
+        }
+
+        System.out.println(files + "\n");
     }
 }

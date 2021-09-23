@@ -8,7 +8,7 @@ public abstract class Board {
     public static void main(String[] args) {
         //for testing purposes
         Board b = new Board0x88(Board0x88.openingFEN);
-        b.printBoard(false);
+        b.printBoard();
 
         Board afterVariousMoves = b.movePiece(Square.c2, Square.c3)
                 .movePiece(Square.b8, Square.c6)
@@ -32,7 +32,7 @@ public abstract class Board {
         System.out.println("Piece at square (7, 3) by coordinate (0-indexed): " + afterVariousMoves.getPieceAt(Square.getSquare(7, 3)));
 
         Board c = new Board0x88();
-        c.printBoard(true);
+        c.printBoard();
     }
 
 
@@ -77,7 +77,7 @@ public abstract class Board {
 
     public abstract Board loadFromFEN(String FEN);
 
-    public abstract void printBoard(boolean full);
+    public abstract void printBoard();
 
 
 }
