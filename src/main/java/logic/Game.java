@@ -4,9 +4,9 @@ import java.util.LinkedList;
 
 public class Game {
 
-    LinkedList<State> states;
+    LinkedList<State> states; //TODO: what is this for?
 
-    LinkedList<State> prebiousStA;
+    LinkedList<State> previousStates;
 
     State currentState;
 
@@ -24,12 +24,12 @@ public class Game {
 
     public Move makeMove(Move move) {
         if (evaluator.isLegalMove(move, currentState)) {
+
             State newState = currentState.applyMove(move);
 
-            prevstates.add(currentState);
+            previousStates.add(currentState);
             currentState = newState;
             move.setStatus(Move.Validity.VALID);
-
 
         } else {
             move.setInvalid();

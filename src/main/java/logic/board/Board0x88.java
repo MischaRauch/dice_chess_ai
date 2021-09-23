@@ -42,7 +42,7 @@ public class Board0x88 extends Board {
     }
 
     @Override
-    public Board0x88 loadFromFEN(String FEN) {
+    public Board loadFromFEN(String FEN) {
         //This splits the FEN String into an array of Strings; the first 8 (0-7) indices contain
         //the FEN encoding of that rank. The rest of the indices are not used for the board
 
@@ -80,21 +80,6 @@ public class Board0x88 extends Board {
     @Override
     public Piece getPieceAt(Square square) {
         return board[square.getBoardIndex()];
-    }
-
-    @Override
-    public Board movePiece(String origin, String destination) {
-        int originSquare = getSquareNumber(origin);
-        int destinationSquare = getSquareNumber(destination);
-
-        Board0x88 result = new Board0x88(board);
-
-        result.board[boardIndexMap.get(destinationSquare)] = result.board[boardIndexMap.get(originSquare)];
-        result.board[boardIndexMap.get(originSquare)] = Piece.EMPTY;
-
-        result.printBoard(false);
-
-        return result;
     }
 
     @Override
