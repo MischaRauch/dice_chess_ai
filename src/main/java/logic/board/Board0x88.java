@@ -35,7 +35,6 @@ public class Board0x88 extends Board {
     public Board0x88(String FEN) {
         this();
         loadFromFEN(FEN);
-        printBoard();
     }
 
     //easy cloning of board
@@ -91,22 +90,35 @@ public class Board0x88 extends Board {
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
         boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;
 
-        boardAfterMove.printBoard(false);
+        boardAfterMove.printBoard();
 
         return boardAfterMove;
     }
 
-    public int getSquareNumber(String square) {
-        int file = ((int) square.charAt(0)) - 97; //char value of 'a' is 97
-        int rank = Character.getNumericValue(square.charAt(1)) - 1;
-        return getSquareNumber(rank, file);
+    @Override
+    public void printBoard() {
+        String files = "\n　 　　A　B　C　D　E　F　G　H  \n";
+        System.out.println(files);
+
+        int rank = 8;
+        Piece prev = Piece.OFF_BOARD;
+
+        for (Piece p : board) {
+            if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD)
+                System.out.print("　" + rank-- + "　 ");
+
+            if (p != Piece.OFF_BOARD)
+                System.out.print(p.getType() + " ");
+
+            if (prev != Piece.OFF_BOARD && p == Piece.OFF_BOARD)
+                System.out.println("　" + rank + " ");
+
+            prev = p;
+        }
+        System.out.println(files + "\n");
     }
 
-    public int getSquareNumber(int rank, int file) {
-        return rank * 16 + file;
-    }
-
-
+    //idk if we still need this
     public void printBoard(boolean full) {
         final int MAX_FILE = full ? 16 : 8;
         String files = "　　　A　B　C　D　E　F　G　H  \n";
@@ -121,31 +133,5 @@ public class Board0x88 extends Board {
             System.out.println("　"+ (8 - rank) + " ");
         }
         System.out.println("\n"+files + "\n\n");
-    }
-
-    @Override
-    public void printBoard() {
-        String files = "\n　 　　A　B　C　D　E　F　G　H  \n";
-        System.out.println(files);
-
-        int rank = 8;
-        Piece prev = Piece.OFF_BOARD;
-        for (Piece p : board) {
-            if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD) {
-                System.out.print("　" + rank-- + "　 ");
-            }
-
-            if (p != Piece.OFF_BOARD)
-                System.out.print(p.getType() + " ");
-
-            if (prev != Piece.OFF_BOARD && p == Piece.OFF_BOARD) {
-                System.out.println("　" + rank + " ");
-            }
-
-            prev = p;
-
-        }
-
-        System.out.println(files + "\n");
     }
 }
