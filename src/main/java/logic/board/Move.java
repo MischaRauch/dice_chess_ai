@@ -27,7 +27,15 @@ public class Move {
         this.status = status;
     }
 
-    enum Validity {
+    public void setValid() {
+        this.status = Validity.VALID;
+    }
+
+    public void setInvalid() {
+        this.status = Validity.VALID;
+    }
+
+    public enum Validity {
         VALID,
         INVALID,
         PROCESSING

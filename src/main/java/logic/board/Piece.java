@@ -34,6 +34,10 @@ public enum Piece {
         return type;
     }
 
+    public Side getColor() {
+        return color;
+    }
+
     public boolean isFriendly(Side side) {
         return color == side;
     }

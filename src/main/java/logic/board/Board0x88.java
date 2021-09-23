@@ -21,24 +21,31 @@ public class Board0x88 extends Board {
     }
 
     Piece[] board;
-    String FEN;
 
     public Board0x88() {
         board = new Piece[128];
+        for (int i = 0x00; i < board.length; i++) {
+            if ((i & 0x88) == 0)
+                board[i] = Piece.EMPTY;
+            else
+                board[i] = Piece.OFF_BOARD;
+        }
+    }
+
+    public Board0x88(String FEN) {
+        this();
+        loadFromFEN(FEN);
     }
 
     public Board0x88(Piece[] board) {
         this.board = Arrays.copyOf(board, board.length);
     }
 
-    public Board0x88(String FEN) {
-        this();
-        this.FEN = FEN;
-
-        Arrays.fill(board, Piece.OFF_BOARD);
-
+    @Override
+    public Board0x88 loadFromFEN(String FEN) {
         //This splits the FEN String into an array of Strings; the first 8 (0-7) indices contain
         //the FEN encoding of that rank. The rest of the indices are not used for the board
+
         String[] info = FEN.split("/|\\s"); //either split on "/" or on " " (whitespace)
 
         for (int rank = 0; rank < 8; rank++) {
@@ -48,39 +55,21 @@ public class Board0x88 extends Board {
 
             for (char c : rankSequence) {
                 if (Character.isDigit(c)) {
-                    //digits in the FEN rank sequence represent empty square offsets
-                    for (int i = 0; i < Character.getNumericValue(c); i++) {
-                        int tile = rank * 16 + (file + i);
-                        board[tile] = Piece.EMPTY;
-                    }
                     file += Character.getNumericValue(c);
                 } else {
-                    int tile = rank * 16 + file;
-                    board[tile] = Piece.getPieceFromChar(c);
+                    int square = rank * 16 + file;
+                    board[square] = Piece.getPieceFromChar(c);
                     file++;
                 }
             }
         }
-    }
 
-    public int getSquareNumber(String square) {
-        int file = ((int) square.charAt(0)) - 97; //char value of 'a' is 97
-        int rank = Character.getNumericValue(square.charAt(1)) - 1;
-        return rank * 16 + file;
-    }
-
-    public int getSquareNumber(int rank, int file) {
-        return rank * 16 + file;
-    }
-
-    @Override
-    public boolean isEmpty(String square) {
-        return getPieceAt(square) == Piece.EMPTY;
+        return this;
     }
 
     @Override
     public boolean isEmpty(Square square) {
-        return board[square.getBoardIndex()] == Piece.EMPTY;
+        return getPieceAt(square) == Piece.EMPTY;
     }
 
     @Override
@@ -89,43 +78,8 @@ public class Board0x88 extends Board {
     }
 
     @Override
-    public Piece getPieceAt(String square) {
-        return board[boardIndexMap.get(getSquareNumber(square))];
-    }
-
-    @Override
     public Piece getPieceAt(Square square) {
         return board[square.getBoardIndex()];
-    }
-
-    @Override
-    public String getSquareAbove(String square) {
-        return null;
-    }
-
-    @Override
-    public String getSquareBelow(String square) {
-        return null;
-    }
-
-    @Override
-    public String[] getRank(int rank) {
-        return new String[0];
-    }
-
-    @Override
-    public String[] getFile(String file) {
-        return new String[0];
-    }
-
-    @Override
-    public String[] getDiagonals(String square) {
-        return new String[0];
-    }
-
-    @Override
-    public boolean isFriendly(String square, Side side) {
-        return board[boardIndexMap.get(getSquareNumber(square))].isFriendly(side);
     }
 
     @Override
@@ -155,9 +109,14 @@ public class Board0x88 extends Board {
         return boardAfterMove;
     }
 
-    @Override
-    public Board loadFromFEN(String FEN) {
-        return new Board0x88(FEN);
+    public int getSquareNumber(String square) {
+        int file = ((int) square.charAt(0)) - 97; //char value of 'a' is 97
+        int rank = Character.getNumericValue(square.charAt(1)) - 1;
+        return getSquareNumber(rank, file);
+    }
+
+    public int getSquareNumber(int rank, int file) {
+        return rank * 16 + file;
     }
 
     @Override
