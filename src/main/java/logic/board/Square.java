@@ -25,6 +25,7 @@ public enum Square {
     }
 
     static Map<Integer, Square> squareMap = new HashMap<>();
+
     static {
         for (Square s : Square.values())
             squareMap.put(s.squareNumber, s);

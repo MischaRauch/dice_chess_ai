@@ -1,10 +1,14 @@
 package logic.board;
 
+import logic.Move;
+import logic.Side;
+
 public abstract class Board {
 
     public static void main(String[] args) {
         //for testing purposes
         Board b = new Board0x88(Board0x88.openingFEN);
+
 
         Board afterVariousMoves = b.movePiece("e2", "e4")
                 .movePiece("b8", "c6")
@@ -29,6 +33,7 @@ public abstract class Board {
 
         Board c = new Board0x88();
     }
+
 
     public abstract boolean isEmpty(Square square);
 

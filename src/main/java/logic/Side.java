@@ -1,4 +1,4 @@
-package logic.board;
+package logic;
 
 public enum Side {
     WHITE,

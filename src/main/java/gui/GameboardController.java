@@ -10,9 +10,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import logic.BlackDice;
 import logic.Dice;
-import logic.WhiteDice;
+import logic.board.Piece;
 
 
 public class GameboardController {
@@ -47,8 +46,6 @@ public class GameboardController {
     @FXML
     void initialize() {
         ///TODO implement dice color usage
-        WhiteDice whiteDice = new WhiteDice(new int[]{1,2,3,4,5,6});
-        BlackDice blackDice = new BlackDice(new int[]{1,2,3,4,5,6});
 
         //create all pieces
         //set event handlers
@@ -68,6 +65,7 @@ public class GameboardController {
             if (event.getCode().isDigitKey())
                 loadBoard(openingMoves[Integer.parseInt(event.getCode().getChar())]); //use numbers 0-3 to load board states
         });
+
     }
 
     public void loadBoard(String fenD) {
@@ -79,6 +77,8 @@ public class GameboardController {
         }
     }
 
+
+
     /**
      * should be much sophisticated later with proper graphics and cool event handlers, but we gotta start somewhere
      * Maybe have a dedicated PieceFactory class or something in the future, idk
@@ -89,6 +89,7 @@ public class GameboardController {
      */
     public VBox createPiece(char p, int row, int col) {
         Label piece = new Label(p + "");
+
         piece.setFont(Font.font(42));
 
         VBox tile = new VBox();

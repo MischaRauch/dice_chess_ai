@@ -1,18 +1,15 @@
 package logic;
 
-import logic.board.GameState;
-import logic.board.Board;
-import logic.board.Piece;
-
-import java.util.EnumSet;
 import java.util.LinkedList;
-import logic.board.Move;
 
 public class Game {
 
     LinkedList<State> states;
-    LinkedList<GameState> prevstates;
-    GameState currentState;
+
+    LinkedList<State> prevstates;
+
+    State currentState;
+
     String[] boardFENConfig;
     LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
 
@@ -23,10 +20,13 @@ public class Game {
 
     public Move makeMove(Move move) {
         if (evaluator.isLegalMove(move, currentState)) {
-            GameState newGameState = currentState.applyMove(move);
+            State newState = currentState.applyMove(move);
+
             prevstates.add(currentState);
-            currentState = newGameState;
+            currentState = newState;
             move.setStatus(Move.Validity.VALID);
+
+
         } else {
             move.setInvalid();
         }

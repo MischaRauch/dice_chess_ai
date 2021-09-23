@@ -1,6 +1,6 @@
 package logic;
 
-public abstract class Dice {
+public class Dice {
 
     /**
      * Need to only return valid piece types. We need some way to check if the number returned is valid
@@ -26,5 +26,4 @@ public abstract class Dice {
         return true;
     }
 
-    public abstract int[] getDiceNumbers();
 }

@@ -1,5 +1,7 @@
 package logic.board;
 
+import logic.Side;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,17 +1,20 @@
 package logic;
 
-import logic.board.GameState;
-import logic.board.Move;
+import logic.board.*;
 
 public class LegalMoveEvaluator {
 
 
-
     public boolean isLegalMove(Move move, State state) {
-        return true;
-    }
+        Board board = state.board;
+        if (move.getPiece() == Piece.WHITE_PAWN) {
+            Square above = board.getSquareAbove(move.getOrigin());
+            if (board.isEmpty(above)) {
+                //nlbbalsblabalb
+            }
 
-    public boolean isLegalMove(Move move, GameState state) {
+        }
+
         return true;
     }
 
