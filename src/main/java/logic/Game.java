@@ -1,5 +1,7 @@
 package logic;
 
+import logic.enums.Validity;
+
 import java.util.LinkedList;
 
 public class Game {
@@ -29,12 +31,13 @@ public class Game {
 
             previousStates.add(currentState);
             currentState = newState;
-            move.setStatus(Move.Validity.VALID);
+            move.setStatus(Validity.VALID);
 
         } else {
             move.setInvalid();
         }
 
+        //send back to GameboardConroller with updated validity flag
         return move;
     }
 

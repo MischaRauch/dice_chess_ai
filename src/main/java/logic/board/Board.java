@@ -1,7 +1,9 @@
 package logic.board;
 
 import logic.Move;
-import logic.Side;
+import logic.enums.Side;
+import logic.enums.Piece;
+import logic.enums.Square;
 
 public abstract class Board {
 
@@ -47,12 +49,12 @@ public abstract class Board {
 
     //not sure if this belongs in Square enum or here. Right noe its in both plsces
     public Square getSquareAbove(Square square) {
-        return Square.getSquare(square.squareNumber + 16);
+        return Square.getSquare(square.getSquareNumber() + 16);
     }
 
     //not sure if this belongs in Square enum or here. Right noe its in both plsces
     public Square getSquareBelow(Square square) {
-        return Square.getSquare(square.squareNumber - 16);
+        return Square.getSquare(square.getSquareNumber() - 16);
     }
 
     public Square[] getRank(int rank) {

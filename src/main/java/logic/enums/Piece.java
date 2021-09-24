@@ -1,6 +1,4 @@
-package logic.board;
-
-import logic.Side;
+package logic.enums;
 
 import java.util.HashMap;
 import java.util.Map;

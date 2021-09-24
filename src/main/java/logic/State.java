@@ -1,19 +1,14 @@
 package logic;
 
 import logic.board.Board;
-import logic.board.Piece;
-import logic.board.Square;
+import logic.enums.CastlingRights;
+import logic.enums.Piece;
+import logic.enums.Side;
+import logic.enums.Square;
 
 import java.util.EnumSet;
 
 public class State {
-
-    enum CastlingRights {
-        WHITE_QUEEN_SIDE, //ordinal 0
-        WHITE_KING_SIDE,  //ordinal 1
-        BLACK_QUEEN_SIDE,
-        BLACK_KING_SIDE
-    }
 
     EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
 

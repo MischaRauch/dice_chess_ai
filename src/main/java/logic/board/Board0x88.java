@@ -1,5 +1,8 @@
 package logic.board;
 
+import logic.enums.Piece;
+import logic.enums.Square;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

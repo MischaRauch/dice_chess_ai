@@ -1,4 +1,4 @@
-package logic.board;
+package logic.enums;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,11 +31,11 @@ public enum Square {
             squareMap.put(s.squareNumber, s);
     }
 
-    static Square getSquare(int rank, int file) {
+    public static Square getSquare(int rank, int file) {
         return squareMap.getOrDefault(rank * 16 + file, INVALID);
     }
 
-    static Square getSquare(int squareNumber) {
+    public static Square getSquare(int squareNumber) {
         return squareMap.getOrDefault(squareNumber, INVALID);
     }
 

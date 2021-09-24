@@ -1,6 +1,8 @@
 package logic;
 
 import logic.board.*;
+import logic.enums.Piece;
+import logic.enums.Side;
 
 public class LegalMoveEvaluator {
 

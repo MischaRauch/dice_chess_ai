@@ -1,7 +1,9 @@
 package logic;
 
-import logic.board.Piece;
-import logic.board.Square;
+import logic.enums.Piece;
+import logic.enums.Side;
+import logic.enums.Square;
+import logic.enums.Validity;
 
 public class Move {
 
@@ -59,9 +61,4 @@ public class Move {
         return color;
     }
 
-    public enum Validity {
-        VALID,
-        INVALID,
-        PROCESSING
-    }
 }
