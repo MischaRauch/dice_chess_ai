@@ -103,21 +103,27 @@ public class Board0x88 extends Board {
         String files = "\n　 　　A　B　C　D　E　F　G　H  \n";
         System.out.println(files);
 
-        int rank = 8;
-        Piece prev = Piece.OFF_BOARD;
+        int rank = 8; //print board from top to bottom (white perspective)
+        Piece previousPiece = Piece.OFF_BOARD;
 
-        for (Piece p : board) {
-            if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD)
+        //simple foreach loop through board array
+        for (Piece piece : board) {
+            //starting to print a new rank
+            if ((previousPiece == Piece.OFF_BOARD) && (piece != Piece.OFF_BOARD))
                 System.out.print("　" + rank-- + "　 ");
 
-            if (p != Piece.OFF_BOARD)
-                System.out.print(p.getType() + " ");
+            //print board pieces in rank
+            if (piece != Piece.OFF_BOARD)
+                System.out.print(piece.getType() + " ");
 
-            if (prev != Piece.OFF_BOARD && p == Piece.OFF_BOARD)
+            //reached end of rank. the following 7 pieces are off board, so just print rank again
+            if (previousPiece != Piece.OFF_BOARD && piece == Piece.OFF_BOARD)
                 System.out.println("　" + rank + " ");
 
-            prev = p;
+            //update previous piece
+            previousPiece = piece;
         }
+
         System.out.println(files + "\n");
     }
 

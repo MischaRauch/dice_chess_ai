@@ -6,9 +6,9 @@ import javafx.scene.image.ImageView;
 public class LoadChessImages {
 
     char[] charOfPieces = {'p','P','r','R','n','N','b','B','q','Q','k','K'};
-    String[] imgOfChars = {"pieces/b_pawn.png", "pieces/w_pawn.png", "pieces/b_rook.png", "pieces/w_rook.png",
-            "pieces/b_knight.png", "pieces/w_knight.png", "pieces/b_bishop.png", "pieces/w_bishop.png",
-            "pieces/b_queen.png", "pieces/w_queen.png", "pieces/b_king.png", "pieces/w_king.png" };
+    String[] imgOfChars = {"images/pieces/b_pawn.png", "images/pieces/w_pawn.png", "images/pieces/b_rook.png", "images/pieces/w_rook.png",
+            "images/pieces/b_knight.png", "images/pieces/w_knight.png", "images/pieces/b_bishop.png", "images/pieces/w_bishop.png",
+            "images/pieces/b_queen.png", "images/pieces/w_queen.png", "images/pieces/b_king.png", "images/pieces/w_king.png"};
 
     char[] whichChar = {'p', 'n', 'b', 'r', 'q', 'k'};
 

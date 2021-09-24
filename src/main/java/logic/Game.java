@@ -1,6 +1,6 @@
 package logic;
 
-import logic.enums.Validity;
+import logic.enums.Legality;
 
 import java.util.LinkedList;
 
@@ -31,7 +31,7 @@ public class Game {
 
             previousStates.add(currentState);
             currentState = newState;
-            move.setStatus(Validity.VALID);
+            move.setStatus(Legality.VALID);
 
         } else {
             move.setInvalid();
