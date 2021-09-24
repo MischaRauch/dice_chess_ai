@@ -35,18 +35,16 @@ public class LegalMoveEvaluator {
                      //if that square is occupied by friendly piece and we cant go there
                      //or the piece is an empty square or its an opponent, in which case you can capture
                      return !b.getPieceAt(move.getDestination()).isFriendly(move.getColor());
+                 } else {
+                     //if pawn is on second rank then can jump 2 squares
+                     ///TODO: method which returns the rank of the Piece
+                     //else just one
+                     return true;
                  }
              }
          }
 
-
-
-
-         //if pawn is on second rank then can jump 2 squares
-            ///TODO: method which returns the rank of the Piece
-        //else just one
         return true;
     }
-
 
 }
