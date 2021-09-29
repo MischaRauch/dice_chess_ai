@@ -19,6 +19,12 @@ public enum Square {
     int squareNumber;
     int boardIndex;
 
+    /**
+     * Private constructor for Square enums. This constructor is automagically called with the values specified in the
+     * enum declarations above.
+     * @param square 0x88 square number
+     * @param index index of square in the board array
+     */
     Square(int square, int index) {
         this.squareNumber = square;
         this.boardIndex = index;
@@ -47,8 +53,29 @@ public enum Square {
         return boardIndex;
     }
 
+    /**
+     * Gets the file of the square, where file a = 0 and file h = 7;
+     * @return integer representation of file 0-indexed
+     */
+    public int getFile() {
+        return squareNumber & 7;
+    }
+
+    /**
+     * Gets the rank of the square, not 0-indexed (rank 1 = 1, rank 8 = 8)
+     * @return integer corresponding to square rank
+     */
+    public int getRank() {
+        return (squareNumber >> 4) + 1; //to make this 0-indexed, subtract 1
+    }
+
     public Square getSquareAbove() {
         return squareMap.getOrDefault(squareNumber + 16, INVALID);
+    }
+
+    //not really sure how to interpret what this returns
+    public int getDiff(Square b) {
+        return 0x77 + squareNumber - b.squareNumber;
     }
 
     public Square getSquareBelow() {

@@ -3,6 +3,7 @@ package logic;
 import logic.board.*;
 import logic.enums.Piece;
 import logic.enums.Side;
+import logic.enums.Square;
 
 public class LegalMoveEvaluator {
 
@@ -12,10 +13,17 @@ public class LegalMoveEvaluator {
      * @return true if piece can be moved to tile
      */
     public boolean isLegalMove(Move move, State state) {
-        Board board = state.board;
+
+        //can't move piece to the same square the piece is already at
+        if (move.getOrigin() == move.getDestination())
+            return false;
+
+        //player trying to move opponents piece
+        if (move.getPiece().getColor() != move.getColor())
+            return false;
+
         if (move.getPiece() == Piece.WHITE_PAWN) {
             return isLegalPawnMove(move, state);
-
         }
 
         return true;
@@ -25,26 +33,49 @@ public class LegalMoveEvaluator {
     public boolean isLegalPawnMove(Move move,State state) {
          Board b = state.board;
 
-         if (move.getColor() == Side.WHITE) {
-             if (b.getPieceAt(move.origin) != Piece.WHITE_PAWN) {
-                 //user chose wrong piece/piece color to move -> invalid
-                 return false;
-             } else {
-                 if (move.getOrigin().getSquareAbove() == move.getDestination()) {
-                     //the pawn wanted a single move forward
-                     //if that square is occupied by friendly piece and we cant go there
-                     //or the piece is an empty square or its an opponent, in which case you can capture
-                     return !b.getPieceAt(move.getDestination()).isFriendly(move.getColor());
+         //check if pawn is trying to move in its own file
+         if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
+             if (move.getColor() == Side.WHITE) {
+                 //white pawns can only move up
+                 Square squareAbove = move.getOrigin().getSquareAbove();
+                 if (b.isEmpty(squareAbove)) {
+                     //make sure square above pawn is empty
+                     if (squareAbove == move.getDestination()) {
+                         //the pawn wanted a single move forward
+                         return true;
+                     }  else if (move.getOrigin().getRank() == 2) {
+                         //pawn is eligible for a double jump
+                         //TODO: update en passant field
+                         return squareAbove.getSquareAbove() == move.getDestination() && b.isEmpty(squareAbove.getSquareAbove());
+                     } else return false;
                  } else {
-                     //if pawn is on second rank then can jump 2 squares
-                     ///TODO: method which returns the rank of the Piece
-                     //else just one
-                     return true;
+                     //square above pawn is not empty, so this pawn cannot move
+                     return false;
+                 }
+             } else {
+                 //black pawn can only move "down"
+                 Square squareBelow = move.getOrigin().getSquareBelow();
+                 if (b.isEmpty(squareBelow)) {
+                     //make sure square below pawn is empty
+                     //pawn wants to do a double jump
+                     if (squareBelow == move.getDestination()) {
+                         //the pawn wanted a single move forward
+                         return true;
+                     } else if (move.getOrigin().getRank() == 7) {
+                         //pawn is eligible for a double jump
+                         //TODO: update en passant field
+                         return squareBelow.getSquareBelow() == move.getDestination() && b.isEmpty(squareBelow.getSquareBelow());
+                     } else return false;
+                 } else {
+                     //square below pawn is not empty, so this pawn cannot move
+                     return false;
                  }
              }
+         } else {
+             //pawn is trying to move to a different file. Only legal if capture
+             //TODO: check pawn capture
+             return false;
          }
-
-        return true;
     }
 
 }
