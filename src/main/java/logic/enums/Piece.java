@@ -30,6 +30,14 @@ public enum Piece {
         this.color = color;
     }
 
+    public int[] getOffsets() {
+        switch (this) {
+            case WHITE_PAWN: return new int[] {16, 15, 17};
+            case BLACK_PAWN: return new int[] {-16, -15, -17};
+            default: return new int[0];
+        }
+    }
+
     public char getType() {
         return type;
     }

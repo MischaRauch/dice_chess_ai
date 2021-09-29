@@ -14,6 +14,7 @@ import java.util.EnumSet;
 public abstract class Board {
 
     public static void main(String[] args) {
+
         //for testing purposes
 //        Board b = new Board0x88(Board0x88.openingFEN);
 //        b.printBoard();
@@ -47,6 +48,19 @@ public abstract class Board {
 //        System.out.println("file: " + b.getFile(Square.c3));
 
         LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+
+        String pawnFEN = "8/8/8/8/8/n1B2qPp/PPPPPPPP/8 w KQkq - 0 1 1";
+        Board offsetTest = new Board0x88(pawnFEN);
+        offsetTest.printBoard();
+
+        int squareOffset = Square.c2.getSquareNumber() + offsetTest.getPieceAt(Square.c2).getOffsets()[0];
+        //System.out.println(offsetTest.getPieceAt(Square.getSquare(squareOffset)));
+
+        Move tryCapture = new Move(Piece.WHITE_PAWN,  Square.g2,Square.h3,1, Side.WHITE);
+        State state99 = new State(offsetTest, 1,Side.WHITE);
+        System.out.println(evaluator.isLegalMove(tryCapture, state99));
+
+
         Board testLegalMove = new Board0x88(Board0x88.openingFEN);
         testLegalMove.printBoard();
         Move potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4,1, Side.WHITE);

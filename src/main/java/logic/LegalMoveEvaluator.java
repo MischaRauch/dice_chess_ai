@@ -57,7 +57,6 @@ public class LegalMoveEvaluator {
                  Square squareBelow = move.getOrigin().getSquareBelow();
                  if (b.isEmpty(squareBelow)) {
                      //make sure square below pawn is empty
-                     //pawn wants to do a double jump
                      if (squareBelow == move.getDestination()) {
                          //the pawn wanted a single move forward
                          return true;
@@ -73,9 +72,23 @@ public class LegalMoveEvaluator {
              }
          } else {
              //pawn is trying to move to a different file. Only legal if capture
-             //TODO: check pawn capture
+             for (int i = 1; i < 3; i++) {
+                 Square validTarget = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[i]);
+                 if (validTarget == move.destination) {
+                     switch (b.getPieceAt(validTarget)) {
+                         case EMPTY, OFF_BOARD -> {
+                             return false; //TODO en-passant capture still possible if square is empty
+                         }
+                         default -> {
+                             return !b.getPieceAt(validTarget).isFriendly(move.color);
+                         }
+                     }
+                 }
+             }
+
              return false;
          }
+         //TODO pawn promotion
     }
 
 }
