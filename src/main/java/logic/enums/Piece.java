@@ -47,6 +47,7 @@ public enum Piece {
         return switch (this) {
             case WHITE_PAWN -> new int[]{16, 15, 17};
             case BLACK_PAWN -> new int[]{-16, -15, -17};
+            //etc
             default -> new int[0];
         };
     }
