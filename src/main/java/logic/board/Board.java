@@ -92,6 +92,41 @@ public abstract class Board {
             System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove6);
         } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove7 = new Move(Piece.WHITE_QUEEN, Square.c2, Square.a4,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove7, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove7);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove8 = new Move(Piece.WHITE_QUEEN, Square.a4, Square.c6,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove8, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove8);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove11 = new Move(Piece.WHITE_QUEEN, Square.c6, Square.c7,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove11, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove11);
+        } else System.out.println("INVALID MOVE for queen");
+
+
+        Move potentialMove9 = new Move(Piece.WHITE_BISHOP, Square.c1, Square.f4,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove9, state)) {
+            System.out.println("VALID MOVE for bishop");
+            state = state.applyMove(potentialMove9);
+        } else System.out.println("INVALID MOVE for bishop");
+
+        Move potentialMove10 = new Move(Piece.WHITE_BISHOP, Square.f4, Square.b8,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove10, state)) {
+            System.out.println("VALID MOVE for bishop");
+            state = state.applyMove(potentialMove10);
+        } else System.out.println("INVALID MOVE for bishop");
     }
 
 

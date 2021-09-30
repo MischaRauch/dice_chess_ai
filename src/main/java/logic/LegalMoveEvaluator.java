@@ -36,13 +36,19 @@ public class LegalMoveEvaluator {
             return isLegalQueenMove();
         }
 
+        else if (move.getPiece() == Piece.WHITE_ROOK || move.getPiece() == Piece.BLACK_ROOK) {
+            return isLegalRookMove();
+        }
+
+        else if (move.getPiece() == Piece.WHITE_BISHOP || move.getPiece() == Piece.BLACK_BISHOP) {
+            return isLegalBishopMove();
+        }
         return true;
     }
 
     //idk
     public boolean isLegalPawnMove() {
         Board b = state.board;
-
         //check if pawn is trying to move in its own file
         if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
             if (move.getColor() == Side.WHITE) {
@@ -90,22 +96,40 @@ public class LegalMoveEvaluator {
 
     public boolean isLegalQueenMove() {
         Board b = state.board;
-
         boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
-        // boolean sameDiagonal = move.getOrigin().getLeftDiagonals() == move.getDestination().getLeftDiagonals() || move.getOrigin().getRightDiagonals() == move.getDestination().getRightDiagonals();
+        boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
+                || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
 
-        if (sameFile || sameRank) {
-            if (sameRank) {
-                return (checkSameRank(b, move)); // true if piece can go there without any obstacle
-            }
-            else if (sameFile) {
-                return checkSameFile(b, move); // true if piece can go there without any obstacle
-            }
-            else if (false){ return checkSameDiagonal(b, move); // true if piece can go there without any obstacle
-            }
+        if (sameFile || sameRank || sameDiagonal) {
+            if (sameRank) {return (checkSameRank(b, move));} // true if piece can go there without any obstacle
+            else if (sameFile) {return checkSameFile(b, move);} // true if piece can go there without any obstacle
+            else { return checkSameDiagonal(b, move);} // true if piece can go there without any obstacle
         }
         return false; // meaning not even on same rank, file or diagonal
+    }
+
+    public boolean isLegalRookMove() {
+        Board b = state.board;
+        boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
+        boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
+
+        if (sameFile || sameRank) {
+            if (sameRank) {return (checkSameRank(b, move));} // true if piece can go there without any obstacle
+            else {return checkSameFile(b, move);} // true if piece can go there without any obstacle
+        }
+        return false; // meaning not even on same rank or file
+    }
+
+    public boolean isLegalBishopMove() {
+        Board b = state.board;
+        boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
+                || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
+
+        if (sameDiagonal) {
+            return checkSameDiagonal(b, move); // true if piece can go there without any obstacle
+        }
+        return false; // meaning not diagonal
     }
 
     public boolean checkSameFile(Board b, Move move) {
@@ -155,22 +179,37 @@ public class LegalMoveEvaluator {
     }
 
     public boolean checkSameDiagonal(Board b, Move move) {
-        int OriginRank = move.getOrigin().getFile();
-        int DestRank = move.getDestination().getFile();
-        Square currentSquare = move.getOrigin();
+        int OriginRank = move.getOrigin().getRank();
+        int DestRank = move.getDestination().getRank();
+        int OriginFile = move.getOrigin().getFile();
+        int DestFile = move.getDestination().getFile();
 
-        if (OriginRank < DestRank) { // can be used same logic of rank or file
+        Square currentSquare = move.getOrigin();
+        // either of rank or file can be used here
+        if (OriginRank < DestRank && OriginFile < DestFile) { // for right above diagonal
             for (int i = OriginRank; i < DestRank; i++) {
-                currentSquare = currentSquare.getSquareRight();
-                currentSquare = currentSquare.getSquareAbove();
+                currentSquare = currentSquare.getSquareRight().getSquareAbove();
                 if (!b.isEmpty(currentSquare)) {
                     return false;
                 }
             }
-        } else {
+        } else if (OriginRank < DestRank && OriginFile > DestFile) { // for left above diagonal
+            for (int i = OriginRank; i < DestRank; i++) {
+                currentSquare = currentSquare.getSquareLeft().getSquareAbove();
+                if (!b.isEmpty(currentSquare)) {
+                    return false;
+                }
+            }
+        } else if (OriginRank > DestRank && OriginFile > DestFile) { // for left below diagonal
             for (int i = OriginRank; i > DestRank; i--) {
-                currentSquare = currentSquare.getSquareLeft();
-                currentSquare = currentSquare.getSquareBelow();
+                currentSquare = currentSquare.getSquareLeft().getSquareBelow();
+                if (!b.isEmpty(currentSquare)) {
+                    return false;
+                }
+            }
+        } else if (OriginRank > DestRank && OriginFile < DestFile) { // for right below diagonal
+            for (int i = OriginRank; i > DestRank; i--) {
+                currentSquare = currentSquare.getSquareRight().getSquareAbove();
                 if (!b.isEmpty(currentSquare)) {
                     return false;
                 }

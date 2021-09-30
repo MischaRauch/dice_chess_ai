@@ -1,6 +1,7 @@
 package logic.enums;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +39,57 @@ public enum Square {
             squareMap.put(s.squareNumber, s);
     }
 
-    public Square[] getLeftDiagonals() { return null; } // don't know how to this yet
-    public Square[] getRightDiagonals() { return null; }
+    public Square getLeftUp() { return squareMap.getOrDefault(squareNumber + 15, INVALID);}
+    public Square getRightDown() { return squareMap.getOrDefault(squareNumber - 15, INVALID);}
+    public Square getRightUp() { return squareMap.getOrDefault(squareNumber + 17, INVALID);}
+    public Square getLeftDown() { return squareMap.getOrDefault(squareNumber - 17, INVALID);}
+
+    public boolean isOffBoard(int squareNumber) {
+        return (squareNumber & 0x88) != 0;
+    }
+
+    public ArrayList<Integer> getLeftDiagonals(Square square) {
+        ArrayList<Integer> leftDiagonals = new ArrayList<>();
+        leftDiagonals.add(square.boardIndex);
+        Square currentSquare = square;
+
+        while (!isOffBoard(currentSquare.getSquareNumber())) {
+            currentSquare = currentSquare.getLeftUp();
+            if (!leftDiagonals.contains(currentSquare.boardIndex)) {
+                leftDiagonals.add(currentSquare.boardIndex);
+            }
+            }
+        currentSquare = square;
+        while (!isOffBoard(currentSquare.getSquareNumber())) {
+            currentSquare = currentSquare.getRightDown();
+            if (!leftDiagonals.contains(currentSquare.boardIndex)) {
+                leftDiagonals.add(currentSquare.boardIndex);
+            }
+        }
+        Collections.sort(leftDiagonals);
+        return leftDiagonals;
+    }
+    public ArrayList<Integer> getRightDiagonals(Square square) {
+        ArrayList<Integer> rightDiagonals = new ArrayList<>();
+        rightDiagonals.add(square.boardIndex);
+        Square currentSquare = square;
+
+        while (!isOffBoard(currentSquare.getSquareNumber())) {
+            currentSquare = currentSquare.getRightUp();
+            if (!rightDiagonals.contains(currentSquare.boardIndex)) {
+                rightDiagonals.add(currentSquare.boardIndex);
+            }
+        }
+        currentSquare = square;
+        while (!isOffBoard(currentSquare.getSquareNumber())) {
+            currentSquare = currentSquare.getLeftDown();
+            if (!rightDiagonals.contains(currentSquare.boardIndex)) {
+                rightDiagonals.add(currentSquare.boardIndex);
+            }
+        }
+        Collections.sort(rightDiagonals);
+        return rightDiagonals;
+    }
 
     public Square getSquareRight() { return squareMap.getOrDefault(squareNumber+1, INVALID); }
     public Square getSquareLeft() { return squareMap.getOrDefault(squareNumber-1, INVALID); }

@@ -43,7 +43,7 @@ public class Game {
 
     // remove state from LinkedList
     public void undoState(State state) {
-        states.remove(state); // remove last or any state?
+        states.remove(state);
 
     }
 
