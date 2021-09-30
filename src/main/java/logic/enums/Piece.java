@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Piece {
-    PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, EMPTY, OFF_BOARD,
+    PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING,
+    EMPTY, OFF_BOARD,
 
     WHITE_PAWN(PAWN, Side.WHITE),
     WHITE_KNIGHT(KNIGHT, Side.WHITE),
@@ -21,8 +22,8 @@ public enum Piece {
     BLACK_QUEEN(QUEEN, Side.BLACK),
     BLACK_KING(KING, Side.BLACK);
 
-    Piece type;
-    Side color;
+    final Piece type;
+    final Side color;
 
     Piece(Piece type, Side color) {
         this.type = type;
@@ -34,11 +35,12 @@ public enum Piece {
         color = Side.NEUTRAL;
     }
 
+    //honestly can probably change it to just return type automatically, but not sure if above constructor is used
     public Piece getType() {
-        switch (this) {
-            case PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, EMPTY, OFF_BOARD -> {return this;}
-            default -> {return type;}
-        }
+        return switch (this) {
+            case PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, EMPTY, OFF_BOARD -> this;
+            default -> type;
+        };
     }
 
     public int[] getOffsets() {
@@ -65,6 +67,11 @@ public enum Piece {
         return charPieceMap.get(c);
     }
 
+    /**
+     * Only valid for Pawn pieces
+     * @param square at which piece is located
+     * @return true if pawn is at the appropriate rank, false in any other case
+     */
     public boolean canDoubleJump(Square square) {
         return switch (this) {
             case WHITE_PAWN -> square.getRank() == 2;
@@ -73,6 +80,11 @@ public enum Piece {
         };
     }
 
+    /**
+     * Only valid for Pawn pieces
+     * @param square at which piece is located
+     * @return true if pawn is at the appropriate rank, false in any other case
+     */
     public boolean canPromote(Square square) {
         return switch (this) {
             case WHITE_PAWN -> square.getRank() == 7;

@@ -59,7 +59,7 @@ public class LegalMoveEvaluator {
                              return false; //TODO en-passant capture still possible if square is empty
                          }
                          default -> {
-                             return !b.getPieceAt(validTarget).isFriendly(move.side);
+                             return !b.getPieceAt(validTarget).isFriendly(move.side); //can only capture enemy pieces
                          }
                      }
                  }

@@ -56,7 +56,7 @@ public abstract class Board {
         int squareOffset = Square.c2.getSquareNumber() + offsetTest.getPieceAt(Square.c2).getOffsets()[0];
         //System.out.println(offsetTest.getPieceAt(Square.getSquare(squareOffset)));
 
-        Move tryCapture = new Move(Piece.WHITE_PAWN,  Square.g2,Square.h3,1, Side.WHITE);
+        Move tryCapture = new Move(Piece.BLACK_PAWN,  Square.h3, Square.g2,1, Side.BLACK);
         State state99 = new State(offsetTest, 1,Side.WHITE);
         System.out.println(evaluator.isLegalMove(tryCapture, state99));
 

@@ -15,8 +15,8 @@ public enum Square {
     a1(0x00, 112), b1(0x01, 113), c1(0x02, 114), d1(0x03,115), e1(0x04, 116), f1(0x05, 117), g1(0x06, 118), h1(0x07, 119),
     INVALID(0x88, 128); //arbitrary
 
-    int squareNumber;
-    int boardIndex;
+    final int squareNumber;
+    final int boardIndex;
 
     /**
      * Private constructor for Square enums. This constructor is automagically called with the values specified in the
