@@ -92,8 +92,6 @@ public abstract class Board {
             System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove6);
         } else System.out.println("INVALID MOVE for queen");
-
-
     }
 
 
