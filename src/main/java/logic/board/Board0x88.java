@@ -108,13 +108,13 @@ public class Board0x88 extends Board {
 
         for (Piece p : board) {
             if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD)
-                System.out.print("　" + rank-- + "　 ");
+                System.out.print("　" + rank + "　 ");
 
             if (p != Piece.OFF_BOARD)
-                System.out.print(p.getType() + " ");
+                System.out.print(p.getUnicode() + " ");
 
             if (prev != Piece.OFF_BOARD && p == Piece.OFF_BOARD)
-                System.out.println("　" + rank + " ");
+                System.out.println("　" + rank-- + " ");
 
             prev = p;
         }
@@ -131,7 +131,7 @@ public class Board0x88 extends Board {
             System.out.print(" " + (8 - rank) + " 　");
             for (int file = 0; file < MAX_FILE; file++) {
                 int tile = rank * 16 + file; // this converts to board index
-                System.out.print(board[tile].getType() + " ");
+                System.out.print(board[tile].getUnicode() + " ");
             }
             System.out.println("　"+ (8 - rank) + " ");
         }

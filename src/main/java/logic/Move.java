@@ -12,15 +12,15 @@ public class Move {
     Square destination;
     int diceRoll;
 
-    Side color;
+    Side side;
     Validity status;
 
-    public Move(Piece piece, Square origin, Square destination, int diceRoll, Side color) {
+    public Move(Piece piece, Square origin, Square destination, int diceRoll, Side side) {
         this.piece = piece;
         this.origin = origin;
         this.destination = destination;
         this.diceRoll = diceRoll;
-        this.color = color;
+        this.side = side;
 
         this.status = Validity.PROCESSING;
     }
@@ -57,8 +57,8 @@ public class Move {
         return diceRoll;
     }
 
-    public Side getColor() {
-        return color;
+    public Side getSide() {
+        return side;
     }
 
 }
