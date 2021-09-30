@@ -61,10 +61,38 @@ public abstract class Board {
 
         if (evaluator.isLegalMove(potentialMove2, state)) {
             System.out.println("VALID MOVE");
-            state = state.applyMove(potentialMove);
+            state = state.applyMove(potentialMove2);
         } else System.out.println("INVALID MOVE");
 
+        Move potentialMove3 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.c2,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove3, state)) {
+            System.out.println("VALID MOVE");
+            state = state.applyMove(potentialMove3);
+        } else System.out.println("INVALID MOVE");
+
+        Move potentialMove4 = new Move(Piece.WHITE_QUEEN, Square.c2, Square.c5,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove4, state)) {
+            System.out.println("VALID MOVE");
+            state = state.applyMove(potentialMove4);
+        } else System.out.println("INVALID MOVE");
+
+        Move potentialMove5 = new Move(Piece.WHITE_QUEEN, Square.c2, Square.a4,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove5, state)) {
+            System.out.println("VALID MOVE");
+            state = state.applyMove(potentialMove5);
+        } else System.out.println("INVALID MOVE");
+
+        Move potentialMove6 = new Move(Piece.WHITE_QUEEN, Square.d8, Square.d4,1, Side.BLACK);
+
+        if (evaluator.isLegalMove(potentialMove6, state)) {
+            System.out.println("VALID MOVE");
+            state = state.applyMove(potentialMove6);
+        } else System.out.println("INVALID MOVE");
     }
+
 
 
     public abstract boolean isEmpty(Square square);
