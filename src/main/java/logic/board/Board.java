@@ -57,41 +57,45 @@ public abstract class Board {
             state = state.applyMove(potentialMove);
         } else System.out.println("INVALID MOVE");
 
-        Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.b2, Square.b3,1, Side.WHITE);
+        Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.d2, Square.d4,1, Side.WHITE);
 
         if (evaluator.isLegalMove(potentialMove2, state)) {
             System.out.println("VALID MOVE");
             state = state.applyMove(potentialMove2);
         } else System.out.println("INVALID MOVE");
 
-        Move potentialMove3 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.c2,1, Side.WHITE);
+
+        Move potentialMove3 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.d5,1, Side.WHITE);
 
         if (evaluator.isLegalMove(potentialMove3, state)) {
-            System.out.println("VALID MOVE");
+            System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove3);
-        } else System.out.println("INVALID MOVE");
+        } else System.out.println("INVALID MOVE for queen");
 
-        Move potentialMove4 = new Move(Piece.WHITE_QUEEN, Square.c2, Square.c5,1, Side.WHITE);
+        Move potentialMove4 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.d2,1, Side.WHITE);
 
         if (evaluator.isLegalMove(potentialMove4, state)) {
-            System.out.println("VALID MOVE");
+            System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove4);
-        } else System.out.println("INVALID MOVE");
+        } else System.out.println("INVALID MOVE for queen");
 
-        Move potentialMove5 = new Move(Piece.WHITE_QUEEN, Square.c2, Square.a4,1, Side.WHITE);
+        Move potentialMove5 = new Move(Piece.WHITE_QUEEN, Square.d2, Square.a2,1, Side.WHITE);
 
         if (evaluator.isLegalMove(potentialMove5, state)) {
-            System.out.println("VALID MOVE");
+            System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove5);
-        } else System.out.println("INVALID MOVE");
+        } else System.out.println("INVALID MOVE for queen");
 
-        Move potentialMove6 = new Move(Piece.WHITE_QUEEN, Square.d8, Square.d4,1, Side.BLACK);
+        Move potentialMove6 = new Move(Piece.WHITE_QUEEN, Square.d2, Square.c2,1, Side.WHITE);
 
         if (evaluator.isLegalMove(potentialMove6, state)) {
-            System.out.println("VALID MOVE");
+            System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove6);
-        } else System.out.println("INVALID MOVE");
+        } else System.out.println("INVALID MOVE for queen");
+
+
     }
+
 
 
 
