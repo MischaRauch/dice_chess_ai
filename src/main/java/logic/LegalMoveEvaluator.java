@@ -26,6 +26,11 @@ public class LegalMoveEvaluator {
             return isLegalPawnMove(move, state);
         }
 
+
+        if (move.getPiece() == Piece.WHITE_KING || move.getPiece() == Piece.BLACK_KING) {
+            return isLegalKingMove(move,state);
+        }
+
         return true;
     }
 
@@ -76,6 +81,49 @@ public class LegalMoveEvaluator {
              //TODO: check pawn capture
              return false;
          }
+    }
+
+    public boolean isLegalKingMove(Move move, State state) {
+        Board b = state.board;
+
+        Square squareAbove = move.getOrigin().getSquareAbove();
+        Square squareBelow = move.getOrigin().getSquareBelow();
+        Square squareRight = move.getOrigin().getSquareRight();
+        Square squareLeft = move.getOrigin().getSquareLeft();
+        Square squareDiagonalRightAbove = move.getOrigin().getSquareDiagonalRightAbove();
+        Square squareDiagonalLeftAbove = move.getOrigin().getSquareDiagonalLeftAbove();
+        Square squareDiagonalRightBelow = move.getOrigin().getSquareDiagonalRightBelow();
+        Square squareDiagonalLeftBelow = move.getOrigin().getSquareDiagonalLeftBelow();
+
+
+        //check if move is up
+        if (squareAbove == move.getDestination())
+            //check if square is empty
+            if (b.isEmpty(squareAbove))
+                return true;
+        if(squareBelow == move.getDestination())
+            if (b.isEmpty(squareBelow))
+                return true;
+        if (squareRight == move.getDestination())
+            if (b.isEmpty(squareRight))
+                return true;
+        if (squareLeft == move.getDestination())
+            if (b.isEmpty(squareLeft))
+                return true;
+        if (squareDiagonalLeftAbove == move.getDestination())
+            if (b.isEmpty(squareDiagonalLeftAbove))
+                return true;
+        if (squareDiagonalRightAbove == move.getDestination())
+            if (b.isEmpty(squareDiagonalRightAbove))
+                return true;
+        if (squareDiagonalLeftBelow == move.getDestination())
+            if (b.isEmpty(squareDiagonalLeftBelow))
+                return true;
+        if(squareDiagonalRightBelow == move.getDestination())
+            if (b.isEmpty(squareDiagonalRightBelow))
+                return true;
+
+        return false;
     }
 
 }

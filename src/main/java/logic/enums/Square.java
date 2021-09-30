@@ -82,6 +82,18 @@ public enum Square {
         return squareMap.getOrDefault(squareNumber - 16, INVALID);
     }
 
+    public Square getSquareRight() { return squareMap.getOrDefault(squareNumber + 1, INVALID ); }
+
+    public Square getSquareLeft() { return squareMap.getOrDefault(squareNumber - 1, INVALID ); }
+
+    public Square getSquareDiagonalRightAbove() { return squareMap.getOrDefault(squareNumber + 17, INVALID ); }
+
+    public Square getSquareDiagonalLeftAbove() { return squareMap.getOrDefault(squareNumber + 15, INVALID ); }
+
+    public Square getSquareDiagonalRightBelow() { return squareMap.getOrDefault(squareNumber - 15, INVALID ); }
+
+    public Square getSquareDiagonalLeftBelow() { return squareMap.getOrDefault(squareNumber - 17, INVALID ); }
+
 
 }
 

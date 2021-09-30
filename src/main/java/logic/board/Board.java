@@ -61,9 +61,15 @@ public abstract class Board {
 
         if (evaluator.isLegalMove(potentialMove2, state)) {
             System.out.println("VALID MOVE");
-            state = state.applyMove(potentialMove);
+            state = state.applyMove(potentialMove2);
         } else System.out.println("INVALID MOVE");
 
+        Move potentialMove3 = new Move(Piece.WHITE_KING, Square.d4, Square.d4,1, Side.WHITE);
+
+        if (evaluator.isLegalMove(potentialMove3, state)) {
+            System.out.println("VALID MOVE King");
+            state = state.applyMove(potentialMove3);
+        } else System.out.println("INVALID MOVE King");
     }
 
 
