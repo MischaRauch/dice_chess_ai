@@ -3,7 +3,7 @@ package logic;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.enums.Legality;
+import logic.enums.Validity;
 
 public class Move {
 
@@ -12,33 +12,33 @@ public class Move {
     Square destination;
     int diceRoll;
 
-    Side color;
-    Legality status;
+    Side side;
+    Validity status;
 
-    public Move(Piece piece, Square origin, Square destination, int diceRoll, Side color) {
+    public Move(Piece piece, Square origin, Square destination, int diceRoll, Side side) {
         this.piece = piece;
         this.origin = origin;
         this.destination = destination;
         this.diceRoll = diceRoll;
-        this.color = color;
+        this.side = side;
 
-        this.status = Legality.PROCESSING;
+        this.status = Validity.PROCESSING;
     }
 
-    public Legality getStatus() {
+    public Validity getStatus() {
         return status;
     }
 
-    public void setStatus(Legality status) {
+    public void setStatus(Validity status) {
         this.status = status;
     }
 
     public void setValid() {
-        this.status = Legality.VALID;
+        this.status = Validity.VALID;
     }
 
     public void setInvalid() {
-        this.status = Legality.VALID;
+        this.status = Validity.VALID;
     }
 
     public Piece getPiece() {
@@ -57,8 +57,8 @@ public class Move {
         return diceRoll;
     }
 
-    public Side getColor() {
-        return color;
+    public Side getSide() {
+        return side;
     }
 
 }

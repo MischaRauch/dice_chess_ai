@@ -106,19 +106,15 @@ public class Board0x88 extends Board {
         int rank = 8; //print board from top to bottom (white perspective)
         Piece previousPiece = Piece.OFF_BOARD;
 
-        //simple foreach loop through board array
-        for (Piece piece : board) {
-            //starting to print a new rank
-            if ((previousPiece == Piece.OFF_BOARD) && (piece != Piece.OFF_BOARD))
-                System.out.print("　" + rank-- + "　 ");
+        for (Piece p : board) {
+            if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD)
+                System.out.print("　" + rank + "　 ");
 
-            //print board pieces in rank
-            if (piece != Piece.OFF_BOARD)
-                System.out.print(piece.getType() + " ");
+            if (p != Piece.OFF_BOARD)
+                System.out.print(p.getUnicode() + " ");
 
-            //reached end of rank. the following 7 pieces are off board, so just print rank again
-            if (previousPiece != Piece.OFF_BOARD && piece == Piece.OFF_BOARD)
-                System.out.println("　" + rank + " ");
+            if (prev != Piece.OFF_BOARD && p == Piece.OFF_BOARD)
+                System.out.println("　" + rank-- + " ");
 
             //update previous piece
             previousPiece = piece;
@@ -137,7 +133,7 @@ public class Board0x88 extends Board {
             System.out.print(" " + (8 - rank) + " 　");
             for (int file = 0; file < MAX_FILE; file++) {
                 int tile = rank * 16 + file; // this converts to board index
-                System.out.print(board[tile].getType() + " ");
+                System.out.print(board[tile].getUnicode() + " ");
             }
             System.out.println("　"+ (8 - rank) + " ");
         }

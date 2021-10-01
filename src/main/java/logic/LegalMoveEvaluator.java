@@ -2,7 +2,6 @@ package logic;
 
 import logic.board.*;
 import logic.enums.Piece;
-import logic.enums.Side;
 import logic.enums.Square;
 
 public class LegalMoveEvaluator {
@@ -25,12 +24,11 @@ public class LegalMoveEvaluator {
             return false;
 
         //player trying to move opponents piece
-        if (move.getPiece().getColor() != move.getColor())
+        if (move.getPiece().getColor() != move.getSide())
             return false;
 
-        if (move.getPiece() == Piece.WHITE_PAWN) {
-            return isLegalPawnMove();
-        }
+        if (move.getPiece().getType() == Piece.PAWN) {
+            return isLegalPawnMove(move, state);
 
         else if (move.getPiece() == Piece.WHITE_QUEEN || move.getPiece() == Piece.BLACK_QUEEN) {
             return isLegalQueenMove();
@@ -46,53 +44,47 @@ public class LegalMoveEvaluator {
         return true;
     }
 
-    //idk
-    public boolean isLegalPawnMove() {
-        Board b = state.board;
-        //check if pawn is trying to move in its own file
-        if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
-            if (move.getColor() == Side.WHITE) {
-                //white pawns can only move up
-                Square squareAbove = move.getOrigin().getSquareAbove();
-                if (b.isEmpty(squareAbove)) {
-                    //make sure square above pawn is empty
-                    if (squareAbove == move.getDestination()) {
-                        //the pawn wanted a single move forward
-                        return true;
-                    }  else if (move.getOrigin().getRank() == 2) {
-                        //pawn is eligible for a double jump
-                        //TODO: update en passant field
-                        return squareAbove.getSquareAbove() == move.getDestination() && b.isEmpty(squareAbove.getSquareAbove());
-                    } else return false;
-                } else {
-                    //square above pawn is not empty, so this pawn cannot move
-                    return false;
-                }
-            } else {
-                //black pawn can only move "down"
-                Square squareBelow = move.getOrigin().getSquareBelow();
-                if (b.isEmpty(squareBelow)) {
-                    //make sure square below pawn is empty
-                    //pawn wants to do a double jump
-                    if (squareBelow == move.getDestination()) {
-                        //the pawn wanted a single move forward
-                        return true;
-                    } else if (move.getOrigin().getRank() == 7) {
-                        //pawn is eligible for a double jump
-                        //TODO: update en passant field
-                        return squareBelow.getSquareBelow() == move.getDestination() && b.isEmpty(squareBelow.getSquareBelow());
-                    } else return false;
-                } else {
-                    //square below pawn is not empty, so this pawn cannot move
-                    return false;
-                }
-            }
-        } else {
-            //pawn is trying to move to a different file. Only legal if capture
-            //TODO: check pawn capture
-            return false;
-        }
-    }
+
+    public boolean isLegalPawnMove(Move move, State state) {
+         Board b = state.board;
+
+         //check if pawn is trying to move in its own file
+         if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
+             Square nextSquare = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[0]); //can return INVALID
+             if (b.isEmpty(nextSquare)) {
+                 //pawn can only move if next square is empty
+                 if (nextSquare == move.destination) {
+                     //that's the square pawn wants to move to
+                     return true;
+                 } else {
+                     //maybe the pawn wanted a double jump
+                     if (move.piece.canDoubleJump(move.origin)) {
+                         //TODO: update en-passant field
+                         Square nextSquare2 = Square.getSquare(nextSquare.getSquareNumber() + move.piece.getOffsets()[0]);
+                         return b.isEmpty(nextSquare2) && nextSquare2 == move.destination;
+                     }
+                 }
+             }
+         } else {
+             //pawn is trying to move to a different file. Only legal if capture
+             for (int i = 1; i < 3; i++) {
+                 Square validTarget = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[i]);
+                 if (validTarget == move.destination) {
+                     switch (b.getPieceAt(validTarget)) {
+                         case EMPTY, OFF_BOARD -> {
+                             return false; //TODO en-passant capture still possible if square is empty
+                         }
+                         default -> {
+                             return !b.getPieceAt(validTarget).isFriendly(move.side); //can only capture enemy pieces
+                         }
+                     }
+                 }
+             }
+
+         }
+        return false;
+        //TODO pawn promotion
+
 
     public boolean isLegalQueenMove() {
         Board b = state.board;
@@ -217,5 +209,4 @@ public class LegalMoveEvaluator {
         }
         return true;
     }
-
 }
