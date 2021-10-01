@@ -123,6 +123,9 @@ public class LegalMoveEvaluator {
         }
         return false; // meaning not diagonal
     }
+    public boolean checkingSides (Board b, Move move, Square currentSquare) {
+        return ((b.getPieceAt(currentSquare).getColor() != move.getSide()) && currentSquare == move.getDestination());
+    } // all other situations are false, so just implemented one "if clause"
 
     public boolean checkSameFile(Board b, Move move) {
         int OriginRank = move.getOrigin().getRank();
@@ -133,14 +136,14 @@ public class LegalMoveEvaluator {
             for (int i = OriginRank; i < DestRank; i++) {
                 currentSquare = currentSquare.getSquareAbove();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         } else {
             for (int i = OriginRank; i > DestRank; i--) {
                 currentSquare = currentSquare.getSquareBelow();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         }
@@ -156,19 +159,20 @@ public class LegalMoveEvaluator {
             for (int i = OriginFile; i < DestFile; i++) {
                 currentSquare = currentSquare.getSquareRight();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         } else {
             for (int i = OriginFile; i > DestFile; i--) {
                 currentSquare = currentSquare.getSquareLeft();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         }
         return true;
     }
+
 
     public boolean checkSameDiagonal(Board b, Move move) {
         int OriginRank = move.getOrigin().getRank();
@@ -182,28 +186,28 @@ public class LegalMoveEvaluator {
             for (int i = OriginRank; i < DestRank; i++) {
                 currentSquare = currentSquare.getSquareRight().getSquareAbove();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         } else if (OriginRank < DestRank && OriginFile > DestFile) { // for left above diagonal
             for (int i = OriginRank; i < DestRank; i++) {
                 currentSquare = currentSquare.getSquareLeft().getSquareAbove();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         } else if (OriginRank > DestRank && OriginFile > DestFile) { // for left below diagonal
             for (int i = OriginRank; i > DestRank; i--) {
                 currentSquare = currentSquare.getSquareLeft().getSquareBelow();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         } else if (OriginRank > DestRank && OriginFile < DestFile) { // for right below diagonal
             for (int i = OriginRank; i > DestRank; i--) {
                 currentSquare = currentSquare.getSquareRight().getSquareAbove();
                 if (!b.isEmpty(currentSquare)) {
-                    return false;
+                    return checkingSides(b, move, currentSquare);
                 }
             }
         }
