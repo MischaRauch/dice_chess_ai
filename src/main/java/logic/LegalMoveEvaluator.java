@@ -28,9 +28,9 @@ public class LegalMoveEvaluator {
             return false;
 
         if (move.getPiece().getType() == Piece.PAWN) {
-            return isLegalPawnMove(move, state);
+            return isLegalPawnMove();
 
-        else if (move.getPiece() == Piece.WHITE_QUEEN || move.getPiece() == Piece.BLACK_QUEEN) {
+        } else if (move.getPiece() == Piece.WHITE_QUEEN || move.getPiece() == Piece.BLACK_QUEEN) {
             return isLegalQueenMove();
         }
 
@@ -45,7 +45,7 @@ public class LegalMoveEvaluator {
     }
 
 
-    public boolean isLegalPawnMove(Move move, State state) {
+    public boolean isLegalPawnMove() {
          Board b = state.board;
 
          //check if pawn is trying to move in its own file
@@ -84,7 +84,7 @@ public class LegalMoveEvaluator {
          }
         return false;
         //TODO pawn promotion
-
+        }
 
     public boolean isLegalQueenMove() {
         Board b = state.board;

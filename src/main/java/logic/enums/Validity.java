@@ -1,6 +1,6 @@
 package logic.enums;
 
-public enum Legality {
+public enum Validity {
     VALID,
     INVALID,
     PROCESSING

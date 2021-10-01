@@ -104,7 +104,7 @@ public class Board0x88 extends Board {
         System.out.println(files);
 
         int rank = 8; //print board from top to bottom (white perspective)
-        Piece previousPiece = Piece.OFF_BOARD;
+        Piece prev = Piece.OFF_BOARD;
 
         for (Piece p : board) {
             if (prev == Piece.OFF_BOARD && p != Piece.OFF_BOARD)
@@ -117,7 +117,7 @@ public class Board0x88 extends Board {
                 System.out.println("　" + rank-- + " ");
 
             //update previous piece
-            previousPiece = piece;
+            prev = p;
         }
 
         System.out.println(files + "\n");
