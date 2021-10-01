@@ -4,6 +4,8 @@ import logic.board.*;
 import logic.enums.Piece;
 import logic.enums.Square;
 
+import java.util.ArrayList;
+
 public class LegalMoveEvaluator {
 
     Move move;
@@ -40,6 +42,10 @@ public class LegalMoveEvaluator {
 
         else if (move.getPiece() == Piece.WHITE_BISHOP || move.getPiece() == Piece.BLACK_BISHOP) {
             return isLegalBishopMove();
+        }
+
+        else if (move.getPiece() == Piece.WHITE_KNIGHT || move.getPiece() == Piece.BLACK_KNIGHT) {
+            return isLegalKnightMove();
         }
         return true;
     }
@@ -85,6 +91,37 @@ public class LegalMoveEvaluator {
         return false;
         //TODO pawn promotion
         }
+
+    public boolean isLegalKnightMove() {
+        Board b = state.board;
+        ArrayList<Square> options = new ArrayList<>();
+
+        options.add(move.getOrigin().getSquareAbove().getLeftUp());
+        options.add(move.getOrigin().getSquareAbove().getRightUp());
+        options.add(move.getOrigin().getSquareRight().getRightUp());
+        options.add(move.getOrigin().getSquareRight().getRightDown());
+        options.add(move.getOrigin().getSquareBelow().getLeftDown());
+        options.add(move.getOrigin().getSquareBelow().getRightDown());
+        options.add(move.getOrigin().getSquareLeft().getLeftUp());
+        options.add(move.getOrigin().getSquareLeft().getLeftDown());
+
+        int i=0;
+        while (i < options.size()) {
+            if (b.isOffBoard(options.get(i).getSquareNumber())) {
+                options.remove(i);
+            }
+            i++;
+        }
+
+        i=0;
+        while (i<options.size()) {
+            if (options.get(i) == move.getDestination()) {
+                return checkingSides(b, move, move.getDestination());
+            }
+            i++;
+        }
+        return false;
+    }
 
     public boolean isLegalQueenMove() {
         Board b = state.board;

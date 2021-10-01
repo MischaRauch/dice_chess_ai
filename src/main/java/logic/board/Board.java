@@ -164,6 +164,41 @@ public abstract class Board {
             state = state.applyMove(potentialMove16);
         } else System.out.println("INVALID MOVE for queen");
 
+        Move potentialMove17 = new Move(Piece.WHITE_KNIGHT, Square.b1, Square.a3,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove17, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove17);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove18 = new Move(Piece.WHITE_KNIGHT, Square.a3, Square.c2,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove18, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove18);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove19 = new Move(Piece.WHITE_KNIGHT, Square.a3, Square.c4,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove19, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove19);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove20 = new Move(Piece.WHITE_KNIGHT, Square.a3, Square.b5,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove20, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove20);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove21 = new Move(Piece.WHITE_KNIGHT, Square.b5, Square.a7,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove21, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove21);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove22 = new Move(Piece.WHITE_KNIGHT, Square.a7, Square.c8,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove22, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove22);
+        } else System.out.println("INVALID MOVE for knight");
     }
 
 
