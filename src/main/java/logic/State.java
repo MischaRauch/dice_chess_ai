@@ -19,6 +19,8 @@ public class State {
     public int diceRoll;
     public Side color;
 
+    //en-passant square
+
     public State(Board board, int diceRoll, Side color) {
         this.board = board;
         this.diceRoll = diceRoll;
