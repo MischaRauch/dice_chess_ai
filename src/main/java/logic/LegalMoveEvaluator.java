@@ -49,7 +49,7 @@ public class LegalMoveEvaluator {
         }
 
         if (move.getPiece() == Piece.WHITE_KING || move.getPiece() == Piece.BLACK_KING) {
-            return isLegalKingMove(move,state);
+            return isLegalKingMove();
         }
 
         return true;
@@ -215,44 +215,59 @@ public class LegalMoveEvaluator {
         return true;
     }
 
-    public boolean isLegalKingMove(Move move, State state) {
+    public boolean isLegalKingMove() {
         Board b = state.board;
 
         Square squareAbove = move.getOrigin().getSquareAbove();
         Square squareBelow = move.getOrigin().getSquareBelow();
         Square squareRight = move.getOrigin().getSquareRight();
         Square squareLeft = move.getOrigin().getSquareLeft();
-        Square squareDiagonalRightAbove = move.getOrigin().getSquareDiagonalRightAbove();
-        Square squareDiagonalLeftAbove = move.getOrigin().getSquareDiagonalLeftAbove();
-        Square squareDiagonalRightBelow = move.getOrigin().getSquareDiagonalRightBelow();
-        Square squareDiagonalLeftBelow = move.getOrigin().getSquareDiagonalLeftBelow();
-
+        Square squareDiagonalRightAbove = move.getOrigin().getRightUp();
+        Square squareDiagonalLeftAbove = move.getOrigin().getLeftUp();
+        Square squareDiagonalRightBelow = move.getOrigin().getRightDown();
+        Square squareDiagonalLeftBelow = move.getOrigin().getLeftDown();
 
         //check if move is up
         if (squareAbove == move.getDestination())
             //check if square is empty
-            if (b.isEmpty(squareAbove))
+            if (!b.isEmpty(squareAbove))
+                return checkingSides(b,move,squareAbove);
+            else
                 return true;
         if(squareBelow == move.getDestination())
-            if (b.isEmpty(squareBelow))
+            if (!b.isEmpty(squareBelow))
+                return checkingSides(b,move,squareBelow);
+            else
                 return true;
         if (squareRight == move.getDestination())
-            if (b.isEmpty(squareRight))
+            if (!b.isEmpty(squareRight))
+                return checkingSides(b,move,squareRight);
+            else
                 return true;
         if (squareLeft == move.getDestination())
-            if (b.isEmpty(squareLeft))
+            if (!b.isEmpty(squareLeft))
+                return checkingSides(b,move,squareLeft);
+            else
                 return true;
         if (squareDiagonalLeftAbove == move.getDestination())
-            if (b.isEmpty(squareDiagonalLeftAbove))
+            if (!b.isEmpty(squareDiagonalLeftAbove))
+                return checkingSides(b,move,squareDiagonalLeftAbove);
+            else
                 return true;
         if (squareDiagonalRightAbove == move.getDestination())
-            if (b.isEmpty(squareDiagonalRightAbove))
+            if (!b.isEmpty(squareDiagonalRightAbove))
+                return checkingSides(b,move,squareDiagonalRightAbove);
+            else
                 return true;
         if (squareDiagonalLeftBelow == move.getDestination())
-            if (b.isEmpty(squareDiagonalLeftBelow))
+            if (!b.isEmpty(squareDiagonalLeftBelow))
+                return checkingSides(b,move,squareDiagonalLeftBelow);
+            else
                 return true;
         if(squareDiagonalRightBelow == move.getDestination())
-            if (b.isEmpty(squareDiagonalRightBelow))
+            if (!b.isEmpty(squareDiagonalRightBelow))
+                return checkingSides(b,move,squareDiagonalRightBelow);
+            else
                 return true;
 
         return false;

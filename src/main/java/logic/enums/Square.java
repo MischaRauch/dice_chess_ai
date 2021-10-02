@@ -38,10 +38,50 @@ public enum Square {
             squareMap.put(s.squareNumber, s);
     }
 
+    /**
+     * Gets the file of the square, where file_a = 0 and file_h = 7;
+     * @return integer representation of file 0-indexed
+     */
+    public int getFile() {
+        return squareNumber & 7;
+    }
+
+    /**
+     * Gets the rank of the square, not 0-indexed (rank_1 = 1, rank_8 = 8)
+     * @return integer corresponding to square rank
+     */
+    public int getRank() {
+        return (squareNumber >> 4) + 1; //to make this 0-indexed, subtract 1
+    }
+
+    public static Square getSquare(int rank, int file) {
+        return squareMap.getOrDefault(rank * 16 + file, INVALID);
+    }
+
+    public static Square getSquare(int squareNumber) {
+        return squareMap.getOrDefault(squareNumber, INVALID);
+    }
+
+    public int getSquareNumber() {
+        return squareNumber;
+    }
+
+    public int getBoardIndex() {
+        return boardIndex;
+    }
+
+    public Square getSquareRight() { return squareMap.getOrDefault(squareNumber+1, INVALID); }
+    public Square getSquareLeft() { return squareMap.getOrDefault(squareNumber-1, INVALID); }
     public Square getLeftUp() { return squareMap.getOrDefault(squareNumber + 15, INVALID);}
     public Square getRightDown() { return squareMap.getOrDefault(squareNumber - 15, INVALID);}
     public Square getRightUp() { return squareMap.getOrDefault(squareNumber + 17, INVALID);}
     public Square getLeftDown() { return squareMap.getOrDefault(squareNumber - 17, INVALID);}
+    public Square getSquareBelow() {
+        return squareMap.getOrDefault(squareNumber - 16, INVALID);
+    }
+    public Square getSquareAbove() {
+        return squareMap.getOrDefault(squareNumber + 16, INVALID);
+    }
 
     public boolean isOffBoard(int squareNumber) {
         return (squareNumber & 0x88) != 0;
@@ -90,44 +130,6 @@ public enum Square {
         return rightDiagonals;
     }
 
-    public Square getSquareRight() { return squareMap.getOrDefault(squareNumber+1, INVALID); }
-    public Square getSquareLeft() { return squareMap.getOrDefault(squareNumber-1, INVALID); }
-
-    public static Square getSquare(int rank, int file) {
-        return squareMap.getOrDefault(rank * 16 + file, INVALID);
-    }
-
-    public static Square getSquare(int squareNumber) {
-        return squareMap.getOrDefault(squareNumber, INVALID);
-    }
-
-    public int getSquareNumber() {
-        return squareNumber;
-    }
-
-    public int getBoardIndex() {
-        return boardIndex;
-    }
-
-    /**
-     * Gets the file of the square, where file_a = 0 and file_h = 7;
-     * @return integer representation of file 0-indexed
-     */
-    public int getFile() {
-        return squareNumber & 7;
-    }
-
-    /**
-     * Gets the rank of the square, not 0-indexed (rank_1 = 1, rank_8 = 8)
-     * @return integer corresponding to square rank
-     */
-    public int getRank() {
-        return (squareNumber >> 4) + 1; //to make this 0-indexed, subtract 1
-    }
-
-    public Square getSquareAbove() {
-        return squareMap.getOrDefault(squareNumber + 16, INVALID);
-    }
 
     //not really sure how to interpret what this returns
         //okay, so basically I think adding 0x77 (119) to the square difference ensures that the result is non-negative
@@ -136,23 +138,6 @@ public enum Square {
     public int getDiff(Square b) {
         return 0x77 + squareNumber - b.squareNumber;
     }
-
-    public Square getSquareBelow() {
-        return squareMap.getOrDefault(squareNumber - 16, INVALID);
-    }
-
-    public Square getSquareRight() { return squareMap.getOrDefault(squareNumber + 1, INVALID ); }
-
-    public Square getSquareLeft() { return squareMap.getOrDefault(squareNumber - 1, INVALID ); }
-
-    public Square getSquareDiagonalRightAbove() { return squareMap.getOrDefault(squareNumber + 17, INVALID ); }
-
-    public Square getSquareDiagonalLeftAbove() { return squareMap.getOrDefault(squareNumber + 15, INVALID ); }
-
-    public Square getSquareDiagonalRightBelow() { return squareMap.getOrDefault(squareNumber - 15, INVALID ); }
-
-    public Square getSquareDiagonalLeftBelow() { return squareMap.getOrDefault(squareNumber - 17, INVALID ); }
-
 
 }
 

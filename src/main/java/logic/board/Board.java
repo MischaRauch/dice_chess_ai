@@ -70,19 +70,20 @@ public abstract class Board {
             state = state.applyMove(potentialMove);
         } else System.out.println("INVALID MOVE");
 
-        Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.b2, Square.b3,1, Side.WHITE);
+        Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.b2, Square.b4,1, Side.WHITE);
         //TODO: figure out bug here, why does moving the piece again make it vanish off the board???????????
         if (evaluator.isLegalMove(potentialMove2, state)) {
             System.out.println("VALID MOVE");
             state = state.applyMove(potentialMove2);
         } else System.out.println("INVALID MOVE");
 
-        Move potentialMove3 = new Move(Piece.WHITE_KING, Square.d4, Square.d4,1, Side.WHITE);
+        Move potentialMove3 = new Move(Piece.BLACK_PAWN, Square.c7, Square.c5,1, Side.BLACK);
 
         if (evaluator.isLegalMove(potentialMove3, state)) {
-            System.out.println("VALID MOVE King");
+            System.out.println("VALID MOVE Pawn");
             state = state.applyMove(potentialMove3);
-        } else System.out.println("INVALID MOVE King");
+        } else System.out.println("INVALID MOVE Pawn");
+
     }
 
 
