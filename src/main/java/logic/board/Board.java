@@ -47,6 +47,19 @@ public abstract class Board {
 //        System.out.println("file: " + b.getFile(Square.c3));
 
         LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+
+        String pawnFEN = "8/8/8/8/8/n1B2qPp/PPPPPPPP/8 w KQkq - 0 1 1";
+        Board offsetTest = new Board0x88(pawnFEN);
+        offsetTest.printBoard();
+
+        int squareOffset = Square.c2.getSquareNumber() + offsetTest.getPieceAt(Square.c2).getOffsets()[0];
+        //System.out.println(offsetTest.getPieceAt(Square.getSquare(squareOffset)));
+
+        Move tryCapture = new Move(Piece.BLACK_PAWN,  Square.h3, Square.g2,1, Side.BLACK);
+        State state99 = new State(offsetTest, 1,Side.WHITE);
+        System.out.println(evaluator.isLegalMove(tryCapture, state99));
+
+
         Board testLegalMove = new Board0x88(Board0x88.openingFEN);
         testLegalMove.printBoard();
         Move potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4,1, Side.WHITE);
@@ -58,7 +71,7 @@ public abstract class Board {
         } else System.out.println("INVALID MOVE");
 
         Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.b2, Square.b3,1, Side.WHITE);
-
+        //TODO: figure out bug here, why does moving the piece again make it vanish off the board???????????
         if (evaluator.isLegalMove(potentialMove2, state)) {
             System.out.println("VALID MOVE");
             state = state.applyMove(potentialMove2);
@@ -98,10 +111,8 @@ public abstract class Board {
 
     public EnumSet<Square> getFile(Square square) {
         EnumSet<Square> file = EnumSet.noneOf(Square.class);
-        //Square[] file = new Square[8];
         for (int i = 0; i < 8; i++) {
             file.add(Square.getSquare(i, square.getFile()));
-            //file[i] = Square.getSquare(i, square.getFile());
         }
         return file;
     }
