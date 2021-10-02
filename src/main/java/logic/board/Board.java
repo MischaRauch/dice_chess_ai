@@ -14,6 +14,7 @@ import java.util.EnumSet;
 public abstract class Board {
 
     public static void main(String[] args) {
+
         //for testing purposes
 //        Board b = new Board0x88(Board0x88.openingFEN);
 //        b.printBoard();
@@ -70,20 +71,134 @@ public abstract class Board {
             state = state.applyMove(potentialMove);
         } else System.out.println("INVALID MOVE");
 
-        Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.b2, Square.b4,1, Side.WHITE);
+        Move potentialMove2 = new Move(Piece.WHITE_PAWN, Square.b2, Square.b3,1, Side.WHITE);
         //TODO: figure out bug here, why does moving the piece again make it vanish off the board???????????
         if (evaluator.isLegalMove(potentialMove2, state)) {
             System.out.println("VALID MOVE");
             state = state.applyMove(potentialMove2);
         } else System.out.println("INVALID MOVE");
 
-        Move potentialMove3 = new Move(Piece.BLACK_PAWN, Square.c7, Square.c5,1, Side.BLACK);
 
+        Move potentialMove3 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.d5,1, Side.WHITE);
         if (evaluator.isLegalMove(potentialMove3, state)) {
-            System.out.println("VALID MOVE Pawn");
+            System.out.println("VALID MOVE for queen");
             state = state.applyMove(potentialMove3);
-        } else System.out.println("INVALID MOVE Pawn");
+        } else System.out.println("INVALID MOVE for queen");
 
+        Move potentialMove4 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.d2,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove4, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove4);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove5 = new Move(Piece.WHITE_QUEEN, Square.d2, Square.a2,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove5, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove5);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove6 = new Move(Piece.WHITE_QUEEN, Square.d2, Square.c2,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove6, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove6);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove7 = new Move(Piece.WHITE_QUEEN, Square.c2, Square.a4,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove7, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove7);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove8 = new Move(Piece.WHITE_QUEEN, Square.a4, Square.c6,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove8, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove8);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove11 = new Move(Piece.WHITE_QUEEN, Square.c6, Square.c7,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove11, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove11);
+        } else System.out.println("INVALID MOVE for queen");
+
+
+        Move potentialMove9 = new Move(Piece.WHITE_BISHOP, Square.c1, Square.f4,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove9, state)) {
+            System.out.println("VALID MOVE for bishop");
+            state = state.applyMove(potentialMove9);
+        } else System.out.println("INVALID MOVE for bishop");
+
+        Move potentialMove10 = new Move(Piece.WHITE_BISHOP, Square.f4, Square.b8,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove10, state)) {
+            System.out.println("VALID MOVE for bishop");
+            state = state.applyMove(potentialMove10);
+        } else System.out.println("INVALID MOVE for bishop");
+
+        Move potentialMove12 = new Move(Piece.WHITE_QUEEN, Square.d1, Square.d4,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove12, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove12);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove13 = new Move(Piece.BLACK_PAWN, Square.e7, Square.e5,1, Side.BLACK);
+        if (evaluator.isLegalMove(potentialMove13, state)) {
+            System.out.println("VALID MOVE for pawn");
+            state = state.applyMove(potentialMove13);
+        } else System.out.println("INVALID MOVE for pawn");
+
+        Move potentialMove14 = new Move(Piece.WHITE_QUEEN, Square.d4, Square.f6,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove14, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove14);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove15 = new Move(Piece.WHITE_QUEEN, Square.d4, Square.d8,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove15, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove15);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove16 = new Move(Piece.WHITE_QUEEN, Square.d4, Square.d7,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove16, state)) {
+            System.out.println("VALID MOVE for queen");
+            state = state.applyMove(potentialMove16);
+        } else System.out.println("INVALID MOVE for queen");
+
+        Move potentialMove17 = new Move(Piece.WHITE_KNIGHT, Square.b1, Square.a3,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove17, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove17);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove18 = new Move(Piece.WHITE_KNIGHT, Square.a3, Square.c2,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove18, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove18);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove19 = new Move(Piece.WHITE_KNIGHT, Square.a3, Square.c4,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove19, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove19);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove20 = new Move(Piece.WHITE_KNIGHT, Square.a3, Square.b5,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove20, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove20);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove21 = new Move(Piece.WHITE_KNIGHT, Square.b5, Square.a7,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove21, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove21);
+        } else System.out.println("INVALID MOVE for knight");
+
+        Move potentialMove22 = new Move(Piece.WHITE_KNIGHT, Square.a7, Square.c8,1, Side.WHITE);
+        if (evaluator.isLegalMove(potentialMove22, state)) {
+            System.out.println("VALID MOVE for knight");
+            state = state.applyMove(potentialMove22);
+        } else System.out.println("INVALID MOVE for knight");
     }
 
 
@@ -112,8 +227,10 @@ public abstract class Board {
 
     public EnumSet<Square> getFile(Square square) {
         EnumSet<Square> file = EnumSet.noneOf(Square.class);
+        //Square[] file = new Square[8];
         for (int i = 0; i < 8; i++) {
             file.add(Square.getSquare(i, square.getFile()));
+            //file[i] = Square.getSquare(i, square.getFile());
         }
         return file;
     }

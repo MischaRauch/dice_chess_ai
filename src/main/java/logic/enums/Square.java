@@ -131,6 +131,7 @@ public enum Square {
     }
 
 
+
     //not really sure how to interpret what this returns
         //okay, so basically I think adding 0x77 (119) to the square difference ensures that the result is non-negative
         //so that you can use it as an index in some sort of attack table, which lets you know which pieces can attack a

@@ -273,6 +273,49 @@ public class LegalMoveEvaluator {
         return false;
     }
 
+    public boolean isLegalKingMove(Move move, State state) {
+        Board b = state.board;
+
+        Square squareAbove = move.getOrigin().getSquareAbove();
+        Square squareBelow = move.getOrigin().getSquareBelow();
+        Square squareRight = move.getOrigin().getSquareRight();
+        Square squareLeft = move.getOrigin().getSquareLeft();
+        Square squareDiagonalRightAbove = move.getOrigin().getRightUp();
+        Square squareDiagonalLeftAbove = move.getOrigin().getLeftUp();
+        Square squareDiagonalRightBelow = move.getOrigin().getRightDown();
+        Square squareDiagonalLeftBelow = move.getOrigin().getLeftDown();
+
+
+        //check if move is up
+        if (squareAbove == move.getDestination())
+            //check if square is empty
+            if (b.isEmpty(squareAbove))
+                return true;
+        if(squareBelow == move.getDestination())
+            if (b.isEmpty(squareBelow))
+                return true;
+        if (squareRight == move.getDestination())
+            if (b.isEmpty(squareRight))
+                return true;
+        if (squareLeft == move.getDestination())
+            if (b.isEmpty(squareLeft))
+                return true;
+        if (squareDiagonalLeftAbove == move.getDestination())
+            if (b.isEmpty(squareDiagonalLeftAbove))
+                return true;
+        if (squareDiagonalRightAbove == move.getDestination())
+            if (b.isEmpty(squareDiagonalRightAbove))
+                return true;
+        if (squareDiagonalLeftBelow == move.getDestination())
+            if (b.isEmpty(squareDiagonalLeftBelow))
+                return true;
+        if(squareDiagonalRightBelow == move.getDestination())
+            if (b.isEmpty(squareDiagonalRightBelow))
+                return true;
+
+        return false;
+    }
+
 
     public boolean checkSameDiagonal(Board b, Move move) {
         int OriginRank = move.getOrigin().getRank();
