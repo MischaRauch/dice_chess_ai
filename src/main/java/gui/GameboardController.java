@@ -69,13 +69,33 @@ public class GameboardController {
                 "rn1qk1nr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2 3 0" // white has no bishops
         };
 
-        loadBoard(openingMoves[0]);
+        //loadBoard(openingMoves[0]);
+        loadBoardAlternative(openingMoves[0]);
 
         guiBoard.setOnKeyPressed(event -> {
             if (event.getCode().isDigitKey())
                 loadBoard(openingMoves[Integer.parseInt(event.getCode().getChar())]); //use numbers 0-3 to load board states
         });
+    }
 
+    public void loadBoardAlternative(String fenD) {
+        char[][] boardState = parseFENd(fenD);
+        for (int i = 1; i < boardState.length; i++) {
+            for (int j = 1; j < boardState.length; j++) {
+                Tile tile = new Tile(boardState[i][j], i-1, j-1);//0-index the row/col
+
+                tile.setOnMouseClicked(event -> {
+                    //the event handler can technically also be made in the constructor in the Tile class,
+                    //but it might be better to have it here so that you can use other fields/info from this class
+                    //that you would not have access to from the Tile class unless everything in here
+                    //is static or if each tile has access to an instance of this class
+
+                    //process move, check validity, update gui board, etc
+                });
+
+                guiBoard.add(tile, j, i);
+            }
+        }
     }
 
     public void loadBoard(String fenD) {
@@ -138,7 +158,6 @@ public class GameboardController {
                 }
             }
         });
-
 
         return tile;
     }
