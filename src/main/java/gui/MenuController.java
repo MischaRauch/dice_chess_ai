@@ -29,6 +29,7 @@ public class MenuController {
     @FXML
     void newGame(ActionEvent event) throws IOException {
         messageLabel.setText("dice chess yay!");
+
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
         Scene scene = new Scene(root);

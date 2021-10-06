@@ -6,10 +6,15 @@ import javafx.scene.layout.VBox;
 import logic.enums.Piece;
 import logic.enums.Square;
 
+//i threw this class together real quick to test demonstrate that you can also make custom JavaFX components in pure Java
+//and still be able to add them to Scenes or as children of other Nodes (regardless if create in FXML or not)
+//each Tile is a Vbox bc I like Vboxes and they have the alignment property so you can center its children, which is nicer
+//than just using a Pane. (Also I'm pretty sure Vbox extends from Pane so Vbox's are really just fancier Panes)
 public class Tile extends VBox {
 
+    //useful for parsing the Move, and also to check if a Tile is empty, since you can check if piece == Piece.EMPTY
     private Piece piece;
-    private final Square square;
+    private final Square square; //also useful for parsing move
 
     private ImageView view = new ImageView();
 
