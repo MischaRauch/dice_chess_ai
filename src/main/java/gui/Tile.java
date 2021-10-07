@@ -12,6 +12,8 @@ import logic.enums.Square;
 //than just using a Pane. (Also I'm pretty sure Vbox extends from Pane so Vbox's are really just fancier Panes)
 public class Tile extends VBox {
 
+    public static Tile selectedTile = null;
+
     //useful for parsing the Move, and also to check if a Tile is empty, since you can check if piece == Piece.EMPTY
     private Piece piece;
     private final Square square; //also useful for parsing move
@@ -36,7 +38,7 @@ public class Tile extends VBox {
             view = ChessIcons.load(p);
 
         piece = Piece.getPieceFromChar(p);
-        square = Square.getSquare(row, col);
+        square = Square.getSquare(7-row, col);
 
         view.setFitHeight(80);
         view.setPreserveRatio(true);
@@ -45,13 +47,37 @@ public class Tile extends VBox {
         setAlignment(Pos.CENTER);
     }
 
+    private void updateView() {
+        getChildren().removeAll(getChildren());
+        view.setFitHeight(80);
+        view.setPreserveRatio(true);
+        getChildren().add(view);
+    }
+
+    public void select() {
+        selectedTile = this;
+        setStyle("-fx-background-color: #2ecc71");
+    }
+
+    public void unselect() {
+        selectedTile = null;
+        if ((row + col) % 2 == 0) {
+            //white cells: row + col % 2 == 0
+            setStyle("-fx-background-color: #d5a47d");
+        } else {
+            //black cells: row + col % 2 == 1
+            setStyle("-fx-background-color: #98501a");
+        }
+    }
+
     public Piece getPiece() {
         return piece;
     }
 
     public void setPiece(Piece piece) {
         this.piece = piece;
-        view = ChessIcons.load(piece);
+        view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
+        updateView();
     }
 
     public Square getSquare() {

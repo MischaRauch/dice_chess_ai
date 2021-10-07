@@ -31,13 +31,13 @@ public class State {
     public State applyMove(Move move) {
         //extract castling en passant dice roll
         Board newBoard = board.movePiece(move.origin, move.destination);
-        //int newRoll = Dice.roll();      //idk about this stuff
-        //Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
+        int newRoll = Dice.roll();      //idk about this stuff
+        Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
 
         //update castling rights
         //update available pieces sets
 
-        return new State(newBoard, diceRoll, color);
+        return new State(newBoard, newRoll, nextTurn);
     }
 
 

@@ -52,7 +52,7 @@ public class LegalMoveEvaluator {
             return isLegalKingMove();
         }
 
-        return true;
+        return false;
     }
 
 

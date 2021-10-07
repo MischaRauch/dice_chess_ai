@@ -111,6 +111,7 @@ public enum Piece {
         charPieceMap.put('q', BLACK_QUEEN);
         charPieceMap.put('k', BLACK_KING);
         charPieceMap.put('o', OFF_BOARD);
+        charPieceMap.put('\u0000', EMPTY);
 
         unicodeMap.put(WHITE_PAWN, '♟');
         unicodeMap.put(WHITE_KNIGHT, '♞');

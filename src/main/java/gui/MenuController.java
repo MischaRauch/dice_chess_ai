@@ -32,7 +32,8 @@ public class MenuController {
 
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
-        Scene scene = new Scene(root);
+
+        Scene scene = new Scene(new ChessBoard());
         stage.setScene(scene);
     }
 

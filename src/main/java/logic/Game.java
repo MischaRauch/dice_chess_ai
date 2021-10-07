@@ -78,6 +78,18 @@ public class Game {
         return move;
     }
 
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public Side getTurn() {
+        return currentState.color;
+    }
+
+    public int getDiceRoll() {
+        return currentState.diceRoll;
+    }
+
     // remove state from LinkedList
     public void undoState(State state) {
         states.remove(state); // remove last or any state?

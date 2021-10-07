@@ -38,7 +38,7 @@ public class Move {
     }
 
     public void setInvalid() {
-        this.status = Validity.VALID;
+        this.status = Validity.INVALID;
     }
 
     public Piece getPiece() {

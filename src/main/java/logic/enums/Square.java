@@ -15,7 +15,7 @@ public enum Square {
     a3(0x20, 80), b3(0x21, 81), c3(0x22, 82), d3(0x23,83), e3(0x24, 84), f3(0x25, 85), g3(0x26, 86), h3(0x27, 87),
     a2(0x10, 96), b2(0x11, 97), c2(0x12, 98), d2(0x13,99), e2(0x14, 100), f2(0x15, 101), g2(0x16, 102), h2(0x17, 103),
     a1(0x00, 112), b1(0x01, 113), c1(0x02, 114), d1(0x03,115), e1(0x04, 116), f1(0x05, 117), g1(0x06, 118), h1(0x07, 119),
-    INVALID(0x88, 128); //arbitrary
+    INVALID(0x88, 99999); //arbitrary
 
     final int squareNumber;
     final int boardIndex;
