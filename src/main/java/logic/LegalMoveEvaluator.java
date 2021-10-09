@@ -348,7 +348,7 @@ public class LegalMoveEvaluator {
             }
         } else if (OriginRank > DestRank && OriginFile < DestFile) { // for right below diagonal
             for (int i = OriginRank; i > DestRank; i--) {
-                currentSquare = currentSquare.getSquareRight().getSquareAbove();
+                currentSquare = currentSquare.getSquareRight().getSquareBelow();
                 if (!b.isEmpty(currentSquare)) {
                     return checkingSides(b, move, currentSquare);
                 }
