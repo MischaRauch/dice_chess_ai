@@ -43,6 +43,11 @@ public class Game {
     String[] boardFENConfig;
     LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
 
+    static boolean shortCastlingWhite = true;
+    static boolean longCastlingWhite = true;
+    static boolean shortCastlingBlack = true;
+    static boolean longCastlingBlack = true;
+
     public Game(LinkedList<State> states, String[] boardFENConfig) {
         this.states = states;
         this.boardFENConfig = boardFENConfig;
@@ -69,6 +74,11 @@ public class Game {
             previousStates.add(currentState);
             currentState = newState;
             move.setStatus(Validity.VALID);
+
+            //State castState = newState.applyMove(new Move(Piece.WHITE_ROOK, Square.h1, Square.d4,1,Side.WHITE));
+            //previousStates.add(castState);
+            //currentState = castState;
+            //move.setStatus(Validity.VALID);
 
         } else {
             move.setInvalid();

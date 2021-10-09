@@ -2,6 +2,7 @@ package logic;
 
 import logic.board.*;
 import logic.enums.Piece;
+import logic.enums.Side;
 import logic.enums.Square;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class LegalMoveEvaluator {
 
     Move move;
     State state;
+
 
     /**
      * @param move move object
@@ -144,6 +146,28 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalRookMove() {
+        if (Game.longCastlingWhite || Game.longCastlingBlack || Game.longCastlingWhite || Game.shortCastlingWhite) {
+            if (move.getPiece().getColor() == Side.WHITE) {
+                if (move.getOrigin().getSquareNumber() == 0) {
+                    Game.longCastlingWhite = false;
+                    System.out.println("long castling: " + Game.longCastlingWhite);
+                } else {
+                    Game.shortCastlingWhite = false;
+                    System.out.println("short castling: " + Game.shortCastlingWhite);
+                }
+            }
+            else {
+                if(move.getOrigin().getSquareNumber() == 112) {
+                    Game.longCastlingBlack = false;
+                    System.out.println("long castling: " + Game.longCastlingBlack);
+                } else {
+                    Game.shortCastlingBlack = false;
+                    System.out.println("short castling: " + Game.shortCastlingBlack);
+                }
+            }
+        }
+
+
         Board b = state.board;
         boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
@@ -270,48 +294,36 @@ public class LegalMoveEvaluator {
             else
                 return true;
 
-        return false;
-    }
+        //check for castling
+        if (Game.longCastlingWhite || Game.longCastlingBlack || Game.shortCastlingBlack || Game.shortCastlingWhite) {
+            if (move.getPiece() == Piece.WHITE_KING) {
+                if (move.getOrigin().getSquareNumber() == 4) {
+                    if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && Game.shortCastlingWhite) {
+                        Game.shortCastlingWhite = false;
+                        System.out.println("SHORT CASTLING WHITE");
+                        return true;
+                    }
+                    else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && Game.longCastlingWhite) {
+                        Game.longCastlingWhite = false;
+                        System.out.println("LONG CASTLING WHITE");
+                        return true;
+                    }
+                }
+            }
+            else {
+                if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && Game.shortCastlingBlack) {
+                    Game.shortCastlingBlack = false;
+                    System.out.println("SHORT CASTLING Black");
+                    return true;
+                }
+                else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && Game.longCastlingBlack) {
+                    Game.longCastlingBlack = false;
+                    System.out.println("LONG CASTLING Black");
+                    return true;
+                }
 
-    public boolean isLegalKingMove(Move move, State state) {
-        Board b = state.board;
-
-        Square squareAbove = move.getOrigin().getSquareAbove();
-        Square squareBelow = move.getOrigin().getSquareBelow();
-        Square squareRight = move.getOrigin().getSquareRight();
-        Square squareLeft = move.getOrigin().getSquareLeft();
-        Square squareDiagonalRightAbove = move.getOrigin().getRightUp();
-        Square squareDiagonalLeftAbove = move.getOrigin().getLeftUp();
-        Square squareDiagonalRightBelow = move.getOrigin().getRightDown();
-        Square squareDiagonalLeftBelow = move.getOrigin().getLeftDown();
-
-
-        //check if move is up
-        if (squareAbove == move.getDestination())
-            //check if square is empty
-            if (b.isEmpty(squareAbove))
-                return true;
-        if(squareBelow == move.getDestination())
-            if (b.isEmpty(squareBelow))
-                return true;
-        if (squareRight == move.getDestination())
-            if (b.isEmpty(squareRight))
-                return true;
-        if (squareLeft == move.getDestination())
-            if (b.isEmpty(squareLeft))
-                return true;
-        if (squareDiagonalLeftAbove == move.getDestination())
-            if (b.isEmpty(squareDiagonalLeftAbove))
-                return true;
-        if (squareDiagonalRightAbove == move.getDestination())
-            if (b.isEmpty(squareDiagonalRightAbove))
-                return true;
-        if (squareDiagonalLeftBelow == move.getDestination())
-            if (b.isEmpty(squareDiagonalLeftBelow))
-                return true;
-        if(squareDiagonalRightBelow == move.getDestination())
-            if (b.isEmpty(squareDiagonalRightBelow))
-                return true;
+            }
+        }
 
         return false;
     }

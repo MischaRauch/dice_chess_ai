@@ -7,6 +7,7 @@ import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
 import logic.enums.Side;
+import logic.enums.Square;
 import logic.enums.Validity;
 
 import java.io.IOException;
@@ -101,6 +102,10 @@ public class ChessBoard extends GridPane {
             Tile.selectedTile.unselect();
 
             System.out.println("Next dice roll: " + game.getDiceRoll());
+
+            //tile.setPiece(Piece.WHITE_ROOK);
+            //Move move1 = new Move(Piece.WHITE_ROOK, Square.h1, Square.d4,1,Side.WHITE);
+            //castling();
         } else {
             System.out.println("INVALID move");
         }
@@ -135,4 +140,11 @@ public class ChessBoard extends GridPane {
 
         return board;
     }
+    public void castling() {
+      // Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
+        Tile tile1 = (Tile) this.getChildren().get(140);
+        System.out.println("WHATS THAT: "+tile1.getPiece());
+
+    }
 }
+
