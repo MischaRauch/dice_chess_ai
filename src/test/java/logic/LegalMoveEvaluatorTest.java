@@ -1,6 +1,6 @@
 package logic;
+
 import logic.board.*;
-import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -24,57 +24,78 @@ class LegalMoveEvaluatorTest {
         assertTrue(value);
     }
 
-//    @Test
-//    void testIsLegalPawnMove() {
-//        Boolean value= legalmove.isLegalPawnMove();
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testIsLegalKnightMove() {
-//        Boolean value= legalmove.isLegalKnightMove();
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testIsLegalQueenMove() {
-//        Boolean value= legalmove.isLegalQueenMove();
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testIsLegalRookMove() {
-//        Boolean value= legalmove.isLegalRookMove();
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testIsLegalBishopMove() {
-//        Boolean value= legalmove.isLegalBishopMove();
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testCheckingSides() {
-//        Boolean value= legalmove.checkingSides(b,move,currentSquare);
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testCheckSameFile() {
-//        Boolean value= legalmove.checkSameFile(b,move);
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testCheckSameRank() {
-//        Boolean value= legalmove.checkSameRank(b,move);
-//        assertTrue(value);
-//    }
-//
-//    @Test
-//    void testCheckSameDiagonal() {
-//        Boolean value= legalmove.checkSameDiagonal(b,move);
-//        assertTrue(value);
-//    }
+    @Test
+   void testIsLegalPawnMove() {
+        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4,1, Side.WHITE);
+        state = new State(testLegalMoves, 1,Side.WHITE);
+
+        boolean value= evaluator.isLegalPawnMove(potentialMove,state);
+        assertTrue(value);
+  }
+
+   @Test
+    void testIsLegalKnightMove() {
+       potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+       state = new State(testLegalMoves, 1, Side.WHITE);
+
+       boolean value = evaluator.isLegalKnightMove(potentialMove, state);
+       assertTrue(value);
+   }
+
+
+   @Test
+   void testIsLegalQueenMove() {
+       potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+       state = new State(testLegalMoves, 1, Side.WHITE);
+       boolean value= evaluator.isLegalQueenMove(potentialMove,state);
+        assertTrue(value);
+   }
+
+    @Test
+    void testIsLegalRookMove() {
+        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+        state = new State(testLegalMoves, 1, Side.WHITE);
+        boolean value= evaluator.isLegalRookMove(potentialMove,state);
+        assertTrue(value);
+   }
+
+   @Test
+   void testIsLegalBishopMove() {
+       potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+       state = new State(testLegalMoves, 1, Side.WHITE);
+       boolean value= evaluator.isLegalBishopMove(potentialMove,state);
+       assertTrue(value);
+   }
+
+    @Test
+   void testCheckingSides() {
+        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+
+       boolean value= evaluator.checkingSides(testLegalMoves,potentialMove,Square.c2);
+       assertTrue(value);
+    }
+
+    @Test
+   void testCheckSameFile() {
+        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+
+        boolean value= evaluator.checkSameFile(testLegalMoves,potentialMove);
+       assertTrue(value);
+  }
+
+   @Test
+  void testCheckSameRank() {
+       potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+
+       boolean value= evaluator.checkSameRank(testLegalMoves,potentialMove);
+       assertTrue(value);
+  }
+
+   @Test
+   void testCheckSameDiagonal() {
+       potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
+
+       boolean value= evaluator.checkSameDiagonal(testLegalMoves,potentialMove);
+       assertTrue(value);
+   }
 }

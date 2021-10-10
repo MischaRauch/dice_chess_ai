@@ -1,12 +1,14 @@
 package logic;
-
 import logic.board.*;
 import logic.enums.Piece;
 import logic.enums.Square;
 
 import java.util.ArrayList;
 
-public class LegalMoveEvaluator {
+
+public class LegalMoveEvaluator
+
+{
 
     Move move;
     State state;
@@ -16,6 +18,7 @@ public class LegalMoveEvaluator {
      * @param state board state
      * @return true if piece can be moved to tile
      */
+
     public boolean isLegalMove(Move move, State state) {
 
         this.move = move;
@@ -30,28 +33,30 @@ public class LegalMoveEvaluator {
             return false;
 
         if (move.getPiece().getType() == Piece.PAWN) {
-            return isLegalPawnMove();
+            return isLegalPawnMove(move,state);
 
         } else if (move.getPiece() == Piece.WHITE_QUEEN || move.getPiece() == Piece.BLACK_QUEEN) {
-            return isLegalQueenMove();
+            return isLegalQueenMove(move,state);
         }
 
         else if (move.getPiece() == Piece.WHITE_ROOK || move.getPiece() == Piece.BLACK_ROOK) {
-            return isLegalRookMove();
+            return isLegalRookMove(move,state);
         }
 
         else if (move.getPiece() == Piece.WHITE_BISHOP || move.getPiece() == Piece.BLACK_BISHOP) {
-            return isLegalBishopMove();
+            return isLegalBishopMove(move,state);
         }
 
         else if (move.getPiece() == Piece.WHITE_KNIGHT || move.getPiece() == Piece.BLACK_KNIGHT) {
-            return isLegalKnightMove();
+            return isLegalKnightMove(move,state);
         }
         return true;
     }
 
 
-    public boolean isLegalPawnMove() {
+    public boolean isLegalPawnMove(Move move,State state) {
+         this.move = move;
+         this.state = state;
          Board b = state.board;
 
          //check if pawn is trying to move in its own file
@@ -92,7 +97,9 @@ public class LegalMoveEvaluator {
         //TODO pawn promotion
         }
 
-    public boolean isLegalKnightMove() {
+    public boolean isLegalKnightMove(Move move,State state) {
+        this.move = move;
+        this.state = state;
         Board b = state.board;
         ArrayList<Square> options = new ArrayList<>();
 
@@ -123,7 +130,9 @@ public class LegalMoveEvaluator {
         return false;
     }
 
-    public boolean isLegalQueenMove() {
+    public boolean isLegalQueenMove(Move move,State state) {
+        this.move = move;
+        this.state = state;
         Board b = state.board;
         boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
@@ -138,7 +147,9 @@ public class LegalMoveEvaluator {
         return false; // meaning not even on same rank, file or diagonal
     }
 
-    public boolean isLegalRookMove() {
+    public boolean isLegalRookMove(Move move,State state) {
+        this.move = move;
+        this.state= state;
         Board b = state.board;
         boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
@@ -150,7 +161,9 @@ public class LegalMoveEvaluator {
         return false; // meaning not even on same rank or file
     }
 
-    public boolean isLegalBishopMove() {
+    public boolean isLegalBishopMove(Move move,State state) {
+        this.move = move;
+        this.state= state;
         Board b = state.board;
         boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
                 || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
