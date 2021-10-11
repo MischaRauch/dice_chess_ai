@@ -252,47 +252,65 @@ public class LegalMoveEvaluator {
         Square squareDiagonalLeftBelow = move.getOrigin().getLeftDown();
 
         //check if move is up
-        if (squareAbove == move.getDestination())
+        if (squareAbove == move.getDestination()) {
+            //disable castlling
+            disableCastling();
             //check if square is empty
-            if (!b.isEmpty(squareAbove))
-                return checkingSides(b,move,squareAbove);
+            if (!b.isEmpty(squareAbove)) {
+                return checkingSides(b, move, squareAbove);
+            }
             else
                 return true;
-        if(squareBelow == move.getDestination())
-            if (!b.isEmpty(squareBelow))
-                return checkingSides(b,move,squareBelow);
-            else
+        }
+        if(squareBelow == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareBelow)) {
+                return checkingSides(b, move, squareBelow);
+            } else
                 return true;
-        if (squareRight == move.getDestination())
-            if (!b.isEmpty(squareRight))
-                return checkingSides(b,move,squareRight);
-            else
+        }
+        if (squareRight == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareRight)) {
+                return checkingSides(b, move, squareRight);
+            } else
                 return true;
-        if (squareLeft == move.getDestination())
-            if (!b.isEmpty(squareLeft))
-                return checkingSides(b,move,squareLeft);
-            else
+        }
+        if (squareLeft == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareLeft)) {
+                return checkingSides(b, move, squareLeft);
+            } else
                 return true;
-        if (squareDiagonalLeftAbove == move.getDestination())
-            if (!b.isEmpty(squareDiagonalLeftAbove))
-                return checkingSides(b,move,squareDiagonalLeftAbove);
-            else
+        }
+        if (squareDiagonalLeftAbove == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareDiagonalLeftAbove)) {
+                return checkingSides(b, move, squareDiagonalLeftAbove);
+            } else
                 return true;
-        if (squareDiagonalRightAbove == move.getDestination())
-            if (!b.isEmpty(squareDiagonalRightAbove))
-                return checkingSides(b,move,squareDiagonalRightAbove);
-            else
+        }
+        if (squareDiagonalRightAbove == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareDiagonalRightAbove)) {
+                return checkingSides(b, move, squareDiagonalRightAbove);
+            } else
                 return true;
-        if (squareDiagonalLeftBelow == move.getDestination())
-            if (!b.isEmpty(squareDiagonalLeftBelow))
-                return checkingSides(b,move,squareDiagonalLeftBelow);
-            else
+        }
+        if (squareDiagonalLeftBelow == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareDiagonalLeftBelow)) {
+                return checkingSides(b, move, squareDiagonalLeftBelow);
+            } else
                 return true;
-        if(squareDiagonalRightBelow == move.getDestination())
-            if (!b.isEmpty(squareDiagonalRightBelow))
-                return checkingSides(b,move,squareDiagonalRightBelow);
-            else
+        }
+        if(squareDiagonalRightBelow == move.getDestination()) {
+            disableCastling();
+            if (!b.isEmpty(squareDiagonalRightBelow)) {
+                return checkingSides(b, move, squareDiagonalRightBelow);
+            } else
                 return true;
+        }
 
         //check for castling
         if (Game.longCastlingWhite || Game.longCastlingBlack || Game.shortCastlingBlack || Game.shortCastlingWhite) {
@@ -326,6 +344,17 @@ public class LegalMoveEvaluator {
         }
 
         return false;
+    }
+    //disabled castling rights after a king move
+    public void disableCastling() {
+        if (move.getPiece().getColor() == Side.WHITE) {
+            Game.shortCastlingWhite = false;
+            Game.longCastlingWhite = false;
+        }
+        else {
+            Game.shortCastlingBlack = false;
+            Game.longCastlingBlack = false;
+        }
     }
 
 

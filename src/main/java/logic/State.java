@@ -18,6 +18,7 @@ public class State {
     public Board board;
     public int diceRoll;
     public Side color;
+    public static int gameOver;
 
     //en-passant square
 
@@ -26,15 +27,27 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
     }
+    public int getGameOver() {
+        return gameOver;
+    }
 
 
     public State applyMove(Move move) {
         //extract castling en passant dice roll
         Board newBoard = board.movePiece(move.origin, move.destination);
+        //check if king got captured
+        if (board.getPieceAt(move.getDestination()) == Piece.WHITE_KING) {
+            gameOver = -1;
+        }
+        if (board.getPieceAt(move.getDestination()) == Piece.BLACK_KING) {
+            gameOver = 1;
+        }
         int newRoll = Dice.roll();      //idk about this stuff
         Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
 
         //update castling rights
+       // newBoard.movePiece(Square.h1, Square.d4);
+       // System.out.println("TEST: "+move.origin + move.destination);
         //update available pieces sets
 
         return new State(newBoard, newRoll, nextTurn);

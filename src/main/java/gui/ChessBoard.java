@@ -2,6 +2,7 @@ package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 import logic.Game;
 import logic.Move;
@@ -103,6 +104,9 @@ public class ChessBoard extends GridPane {
 
             System.out.println("Next dice roll: " + game.getDiceRoll());
 
+            if (game.getCurrentState().getGameOver() != 0) {
+                showEndGame(game.getCurrentState().getGameOver());
+            }
             //tile.setPiece(Piece.WHITE_ROOK);
             //Move move1 = new Move(Piece.WHITE_ROOK, Square.h1, Square.d4,1,Side.WHITE);
             //castling();
@@ -140,11 +144,16 @@ public class ChessBoard extends GridPane {
 
         return board;
     }
-    public void castling() {
-      // Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
-        Tile tile1 = (Tile) this.getChildren().get(140);
-        System.out.println("WHATS THAT: "+tile1.getPiece());
+    public void showEndGame(int winner) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("End of the Game");
+        alert.setHeaderText("Group 04 hopes you enjoed the game!");
+        if (winner == 1)
+            alert.setContentText("Good job WHITE you won!");
+        else
+            alert.setContentText("Good job BLACK you won!");
 
+        alert.showAndWait();
     }
 }
 
