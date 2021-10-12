@@ -55,7 +55,6 @@ public class LegalMoveEvaluator {
         return true;
     }
 
-
     public boolean isLegalPawnMove() {
          Board b = state.board;
 
