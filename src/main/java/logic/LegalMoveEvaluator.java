@@ -12,7 +12,6 @@ public class LegalMoveEvaluator {
     Move move;
     State state;
 
-
     /**
      * @param move move object
      * @param state board state
