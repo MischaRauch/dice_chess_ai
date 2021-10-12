@@ -8,18 +8,21 @@ import logic.enums.Square;
 
 import java.util.EnumSet;
 
+import static logic.enums.Piece.*;
+import static logic.enums.Side.*;
+
 public class State {
 
-    EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
-
-    EnumSet<Piece> availableWhitePieces = EnumSet.of(Piece.WHITE_KING,Piece.WHITE_PAWN, Piece.WHITE_BISHOP, Piece.WHITE_KNIGHT, Piece.BLACK_ROOK, Piece.WHITE_QUEEN);
-    EnumSet<Piece> availableBlackPieces = EnumSet.of(Piece.BLACK_KING,Piece.BLACK_PAWN, Piece.BLACK_BISHOP, Piece.BLACK_KNIGHT, Piece.BLACK_ROOK, Piece.BLACK_QUEEN);
-
+    public static int gameOver;
     public Board board;
     public int diceRoll;
     public Side color;
 
-    //en-passant square
+    public Square enPassant = Square.INVALID;
+
+    EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
+    EnumSet<Piece> availableWhitePieces = EnumSet.of(WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING);
+    EnumSet<Piece> availableBlackPieces = EnumSet.of(BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING);
 
     public State(Board board, int diceRoll, Side color) {
         this.board = board;
@@ -27,20 +30,33 @@ public class State {
         this.color = color;
     }
 
+    public int getGameOver() {
+        return gameOver;
+    }
 
     public State applyMove(Move move) {
         //extract castling en passant dice roll
         Board newBoard = board.movePiece(move.origin, move.destination);
-        //int newRoll = Dice.roll();      //idk about this stuff
-        //Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
+        //check if king got captured
+        if (board.getPieceAt(move.getDestination()) == WHITE_KING) {
+            gameOver = -1;
+        }
 
-        //update castling rights
+        if (board.getPieceAt(move.getDestination()) == BLACK_KING) {
+            gameOver = 1;
+        }
+
+        int newRoll = Dice.roll();
+        Side nextTurn = color == WHITE ? BLACK : WHITE;
+
         //update available pieces sets
+        State nextState = new State(newBoard, newRoll, nextTurn);
+        if (move.enPassantMove) {
+            nextState.enPassant = move.enPassant;
+        }
 
-        return new State(newBoard, diceRoll, color);
+        return nextState;
     }
-
-
 
 
 }

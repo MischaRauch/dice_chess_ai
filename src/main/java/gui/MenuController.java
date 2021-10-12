@@ -29,9 +29,11 @@ public class MenuController {
     @FXML
     void newGame(ActionEvent event) throws IOException {
         messageLabel.setText("dice chess yay!");
+
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
-        Scene scene = new Scene(root);
+
+        Scene scene = new Scene(new ChessBoard());
         stage.setScene(scene);
     }
 
@@ -41,7 +43,6 @@ public class MenuController {
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
     }
-
 
 
 }

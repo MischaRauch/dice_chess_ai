@@ -7,58 +7,28 @@ import logic.enums.Square;
 import logic.enums.Validity;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class Game {
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    static boolean shortCastlingWhite = true;
+    static boolean longCastlingWhite = true;
+    static boolean shortCastlingBlack = true;
+    static boolean longCastlingBlack = true;
 
-    public static void main(String[] args) {
-        Game game = new Game();
-
-        //pawn movement and capture seems to work
-        Move move = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
-        if (game.makeMove(move).getStatus() == Validity.VALID) {
-            Move nextMove = new Move(Piece.BLACK_PAWN, Square.d7,Square.d5, 1, Side.BLACK);
-            if (game.makeMove(nextMove).getStatus() == Validity.VALID) {
-                Move nextMove2 = new Move(Piece.WHITE_PAWN, Square.c4,Square.d5, 1, Side.WHITE);
-                if (game.makeMove(nextMove2).getStatus() == Validity.VALID) {
-                    Move nextMove3 = new Move(Piece.BLACK_PAWN, Square.c7,Square.c6, 1, Side.BLACK);
-                    if (game.makeMove(nextMove3).getStatus() == Validity.VALID) {
-                        Move nextMove4 = new Move(Piece.WHITE_PAWN, Square.d5,Square.c6, 1, Side.WHITE);
-                        if (game.makeMove(nextMove4).getStatus() == Validity.VALID) {
-                            Move nextMove5 = new Move(Piece.BLACK_PAWN, Square.b7,Square.c6, 1, Side.BLACK);
-                            game.makeMove(nextMove5);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    LinkedList<State> states; //TODO: what is this for?
-
-    LinkedList<State> previousStates;
-
-    State currentState;
-
-    String[] boardFENConfig;
-    LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
-
-    public Game(LinkedList<State> states, String[] boardFENConfig) {
-        this.states = states;
-        this.boardFENConfig = boardFENConfig;
-    }
-
-    public Game(String initialPosition) {
-        currentState = new State(new Board0x88(initialPosition), 1, Side.WHITE);
-        previousStates = new LinkedList<>();//Maybe should be stack or queue instead
-    }
+    private final Stack<State> previousStates;
+    private final Stack<State> redoStates;
+    private State currentState;
+    private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
 
     public Game() {
         this(openingFEN);
     }
-    // add state to LinkedList
-    public void updateState(State state) {
-        states.add(state);
+
+    public Game(String initialPosition) {
+        currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
+        previousStates = new Stack<>();
+        redoStates = new Stack<>();
     }
 
     public Move makeMove(Move move) {
@@ -66,7 +36,7 @@ public class Game {
 
             State newState = currentState.applyMove(move);
 
-            previousStates.add(currentState);
+            previousStates.push(currentState);
             currentState = newState;
             move.setStatus(Validity.VALID);
 
@@ -74,20 +44,36 @@ public class Game {
             move.setInvalid();
         }
 
-        //send back to GameboardConroller with updated validity flag
+        //send back to GUI with updated validity flag
         return move;
     }
 
-    // remove state from LinkedList
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public Side getTurn() {
+        return currentState.color;
+    }
+
+    public int getDiceRoll() {
+        return currentState.diceRoll;
+    }
+
+    //may need to refresh gui in order to view the change
     public void undoState(State state) {
-        states.remove(state); // remove last or any state?
+        if (!previousStates.isEmpty()) {
+            redoStates.push(currentState);              //push current state to redo stack in case user wants to redo
+            currentState = previousStates.pop();        //pop the previous state off the stack
+        }
     }
 
-    //optional
+    //may need to refresh gui in order to view the change
     public void redoState(State state) {
-        //
+        if (!redoStates.isEmpty()) {
+            previousStates.push(currentState);          //add current state to previous states stack
+            currentState = redoStates.pop();            //update the current state
+        }
     }
-
-
 
 }

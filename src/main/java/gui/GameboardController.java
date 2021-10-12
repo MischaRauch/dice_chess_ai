@@ -15,25 +15,21 @@ import logic.Dice;
 
 public class GameboardController {
 
-    @FXML
-    private GridPane guiBoard;
+    public boolean whiteTurn = true;
 
     /// TODO Add a individual dice for each side black and white to keep track of available rolls
     // alternatively we can update FEN but there are many problems with this
-
+    Label selectedPiece = null;
+    @FXML
+    private GridPane guiBoard;
     @FXML
     private Button diceRollButtonB;
-
     @FXML
     private Label diceRollB;
-
     @FXML
     private Button diceRollButtonW;
-
     @FXML
     private Label diceRollW;
-
-    public boolean whiteTurn = true;
 
     @FXML
     void rollB(ActionEvent event) {
@@ -52,7 +48,6 @@ public class GameboardController {
         whiteTurn = false;
     }
 
-
     @FXML
     void initialize() {
         ///TODO implement dice color usage
@@ -69,13 +64,33 @@ public class GameboardController {
                 "rn1qk1nr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2 3 0" // white has no bishops
         };
 
-        loadBoard(openingMoves[0]);
+        //loadBoard(openingMoves[0]);
+        loadBoardAlternative(openingMoves[0]);
 
         guiBoard.setOnKeyPressed(event -> {
             if (event.getCode().isDigitKey())
                 loadBoard(openingMoves[Integer.parseInt(event.getCode().getChar())]); //use numbers 0-3 to load board states
         });
+    }
 
+    public void loadBoardAlternative(String fenD) {
+        char[][] boardState = parseFENd(fenD);
+        for (int i = 1; i < boardState.length; i++) {
+            for (int j = 1; j < boardState.length; j++) {
+                Tile tile = new Tile(boardState[i][j], i - 1, j - 1);//0-index the row/col
+
+                tile.setOnMouseClicked(event -> {
+                    //the event handler can technically also be made in the constructor in the Tile class,
+                    //but it might be better to have it here so that you can use other fields/info from this class
+                    //that you would not have access to from the Tile class unless everything in here
+                    //is static or if each tile has access to an instance of this class
+
+                    //process move, check validity, update gui board, etc
+                });
+
+                guiBoard.add(tile, j, i);
+            }
+        }
     }
 
     public void loadBoard(String fenD) {
@@ -90,7 +105,8 @@ public class GameboardController {
     /**
      * should be much sophisticated later with proper graphics and cool event handlers, but we gotta start somewhere
      * Maybe have a dedicated PieceFactory class or something in the future, idk
-     * @param p char representing the piece
+     *
+     * @param p   char representing the piece
      * @param row i
      * @param col j
      * @return JavaFX Scene Node specifically a VBox possibly containing a Label
@@ -99,7 +115,7 @@ public class GameboardController {
         LoadChessImages loadChessImages = new LoadChessImages();
         ImageView view = loadChessImages.loadImage(p);
 
-        Label piece = new Label(p+"",view);
+        Label piece = new Label(p + "", view);
         piece.setFont(Font.font(1));
 
         VBox tile = new VBox();
@@ -139,14 +155,12 @@ public class GameboardController {
             }
         });
 
-
         return tile;
     }
 
-    Label selectedPiece = null;
-
     /**
      * Should probably be part of a GameState object rather than here
+     *
      * @param fenDiceBoard String in FEN-dice notation
      * @return char matrix representing board. Row and Col with 0 index are empty
      */
@@ -175,7 +189,7 @@ public class GameboardController {
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();
-            char[] rank = board[i+1];
+            char[] rank = board[i + 1];
             int index = 1;
             for (char c : rankSequence) {
                 if (Character.isDigit(c)) {

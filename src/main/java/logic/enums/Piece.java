@@ -22,6 +22,44 @@ public enum Piece {
     BLACK_QUEEN(QUEEN, Side.BLACK),
     BLACK_KING(KING, Side.BLACK);
 
+    static Map<Character, Piece> charPieceMap = new HashMap<>();
+    static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);
+
+    static {
+        charPieceMap.put('P', WHITE_PAWN);
+        charPieceMap.put('N', WHITE_KNIGHT);
+        charPieceMap.put('B', WHITE_BISHOP);
+        charPieceMap.put('R', WHITE_ROOK);
+        charPieceMap.put('Q', WHITE_QUEEN);
+        charPieceMap.put('K', WHITE_KING);
+        charPieceMap.put('p', BLACK_PAWN);
+        charPieceMap.put('n', BLACK_KNIGHT);
+        charPieceMap.put('b', BLACK_BISHOP);
+        charPieceMap.put('r', BLACK_ROOK);
+        charPieceMap.put('q', BLACK_QUEEN);
+        charPieceMap.put('k', BLACK_KING);
+        charPieceMap.put('o', OFF_BOARD);
+        charPieceMap.put('\u0000', EMPTY);
+
+        unicodeMap.put(WHITE_PAWN, '♟');
+        unicodeMap.put(WHITE_KNIGHT, '♞');
+        unicodeMap.put(WHITE_BISHOP, '♝');
+        unicodeMap.put(WHITE_ROOK, '♜');
+        unicodeMap.put(WHITE_QUEEN, '♛');
+        unicodeMap.put(WHITE_KING, '♚');
+
+        unicodeMap.put(BLACK_PAWN, '♙');
+        unicodeMap.put(BLACK_KNIGHT, '♘');
+        unicodeMap.put(BLACK_BISHOP, '♗');
+        unicodeMap.put(BLACK_ROOK, '♖');
+        unicodeMap.put(BLACK_QUEEN, '♕');
+        unicodeMap.put(BLACK_KING, '♔');
+
+        unicodeMap.put(EMPTY, '　');
+        unicodeMap.put(OFF_BOARD, 'o');
+
+    }
+
     final Piece type;
     final Side color;
 
@@ -33,6 +71,10 @@ public enum Piece {
     Piece() {
         type = this;
         color = Side.NEUTRAL;
+    }
+
+    public static Piece getPieceFromChar(char c) {
+        return charPieceMap.get(c);
     }
 
     //honestly can probably change it to just return type automatically, but not sure if above constructor is used
@@ -64,12 +106,9 @@ public enum Piece {
         return color == side;
     }
 
-    public static Piece getPieceFromChar(char c) {
-        return charPieceMap.get(c);
-    }
-
     /**
      * Only valid for Pawn pieces
+     *
      * @param square at which piece is located
      * @return true if pawn is at the appropriate rank, false in any other case
      */
@@ -83,6 +122,7 @@ public enum Piece {
 
     /**
      * Only valid for Pawn pieces
+     *
      * @param square at which piece is located
      * @return true if pawn is at the appropriate rank, false in any other case
      */
@@ -92,42 +132,5 @@ public enum Piece {
             case BLACK_PAWN -> square.getRank() == 2;
             default -> false;
         };
-    }
-
-    static Map<Character, Piece> charPieceMap = new HashMap<>();
-    static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);
-
-    static {
-        charPieceMap.put('P', WHITE_PAWN);
-        charPieceMap.put('N', WHITE_KNIGHT);
-        charPieceMap.put('B', WHITE_BISHOP);
-        charPieceMap.put('R', WHITE_ROOK);
-        charPieceMap.put('Q', WHITE_QUEEN);
-        charPieceMap.put('K', WHITE_KING);
-        charPieceMap.put('p', BLACK_PAWN);
-        charPieceMap.put('n', BLACK_KNIGHT);
-        charPieceMap.put('b', BLACK_BISHOP);
-        charPieceMap.put('r', BLACK_ROOK);
-        charPieceMap.put('q', BLACK_QUEEN);
-        charPieceMap.put('k', BLACK_KING);
-        charPieceMap.put('o', OFF_BOARD);
-
-        unicodeMap.put(WHITE_PAWN, '♟');
-        unicodeMap.put(WHITE_KNIGHT, '♞');
-        unicodeMap.put(WHITE_BISHOP, '♝');
-        unicodeMap.put(WHITE_ROOK, '♜');
-        unicodeMap.put(WHITE_QUEEN, '♛');
-        unicodeMap.put(WHITE_KING, '♚');
-
-        unicodeMap.put(BLACK_PAWN, '♙');
-        unicodeMap.put(BLACK_KNIGHT, '♘');
-        unicodeMap.put(BLACK_BISHOP, '♗');
-        unicodeMap.put(BLACK_ROOK, '♖');
-        unicodeMap.put(BLACK_QUEEN, '♕');
-        unicodeMap.put(BLACK_KING, '♔');
-
-        unicodeMap.put(EMPTY, '　');
-        unicodeMap.put(OFF_BOARD, 'o');
-
     }
 }
