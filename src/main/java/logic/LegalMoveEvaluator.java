@@ -1,20 +1,20 @@
 package logic;
 
-import logic.board.*;
-import logic.enums.Piece;
+import logic.board.Board;
 import logic.enums.Side;
 import logic.enums.Square;
 
 import java.util.ArrayList;
+
+import static logic.enums.Piece.WHITE_KING;
 
 public class LegalMoveEvaluator {
 
     Move move;
     State state;
 
-
     /**
-     * @param move move object
+     * @param move  move object
      * @param state board state
      * @return true if piece can be moved to tile
      */
@@ -31,73 +31,66 @@ public class LegalMoveEvaluator {
         if (move.getPiece().getColor() != move.getSide())
             return false;
 
-        if (move.getPiece().getType() == Piece.PAWN) {
-            return isLegalPawnMove();
-
-        } else if (move.getPiece() == Piece.WHITE_QUEEN || move.getPiece() == Piece.BLACK_QUEEN) {
-            return isLegalQueenMove();
-        }
-
-        else if (move.getPiece() == Piece.WHITE_ROOK || move.getPiece() == Piece.BLACK_ROOK) {
-            return isLegalRookMove();
-        }
-
-        else if (move.getPiece() == Piece.WHITE_BISHOP || move.getPiece() == Piece.BLACK_BISHOP) {
-            return isLegalBishopMove();
-        }
-
-        else if (move.getPiece() == Piece.WHITE_KNIGHT || move.getPiece() == Piece.BLACK_KNIGHT) {
-            return isLegalKnightMove();
-        }
-
-        if (move.getPiece() == Piece.WHITE_KING || move.getPiece() == Piece.BLACK_KING) {
-            return isLegalKingMove();
-        }
-
-        return false;
+        return switch (move.getPiece().getType()) {
+            case PAWN -> isLegalPawnMove();
+            case KNIGHT -> isLegalKnightMove();
+            case BISHOP -> isLegalBishopMove();
+            case ROOK -> isLegalRookMove();
+            case QUEEN -> isLegalQueenMove();
+            case KING -> isLegalKingMove();
+            default -> false;
+        };
     }
 
-
     public boolean isLegalPawnMove() {
-         Board b = state.board;
+        Board b = state.board;
 
-         //check if pawn is trying to move in its own file
-         if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
-             Square nextSquare = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[0]); //can return INVALID
-             if (b.isEmpty(nextSquare)) {
-                 //pawn can only move if next square is empty
-                 if (nextSquare == move.destination) {
-                     //that's the square pawn wants to move to
-                     return true;
-                 } else {
-                     //maybe the pawn wanted a double jump
-                     if (move.piece.canDoubleJump(move.origin)) {
-                         //TODO: update en-passant field
-                         Square nextSquare2 = Square.getSquare(nextSquare.getSquareNumber() + move.piece.getOffsets()[0]);
-                         return b.isEmpty(nextSquare2) && nextSquare2 == move.destination;
-                     }
-                 }
-             }
-         } else {
-             //pawn is trying to move to a different file. Only legal if capture
-             for (int i = 1; i < 3; i++) {
-                 Square validTarget = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[i]);
-                 if (validTarget == move.destination) {
-                     switch (b.getPieceAt(validTarget)) {
-                         case EMPTY, OFF_BOARD -> {
-                             return false; //TODO en-passant capture still possible if square is empty
-                         }
-                         default -> {
-                             return !b.getPieceAt(validTarget).isFriendly(move.side); //can only capture enemy pieces
-                         }
-                     }
-                 }
-             }
+        //check if pawn is trying to move in its own file
+        if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
+            Square nextSquare = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[0]); //can return INVALID
+            if (b.isEmpty(nextSquare)) {
+                //pawn can only move if next square is empty
+                if (nextSquare == move.destination) {
+                    //that's the square pawn wants to move to
+                    return true;
+                } else {
+                    //maybe the pawn wanted a double jump
+                    if (move.piece.canDoubleJump(move.origin)) {
+                        Square nextSquare2 = Square.getSquare(nextSquare.getSquareNumber() + move.piece.getOffsets()[0]);
 
-         }
+                        move.enPassant = nextSquare;
+                        move.enPassantMove = true;
+
+                        return b.isEmpty(nextSquare2) && nextSquare2 == move.destination;
+                    }
+                }
+            }
+        } else {
+            //pawn is trying to move to a different file. Only legal if capture
+            for (int i = 1; i < 3; i++) {
+                Square validTarget = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[i]);
+                if (validTarget == move.destination) {
+                    switch (b.getPieceAt(validTarget)) {
+                        case EMPTY -> {
+                            if (state.enPassant == move.destination) {
+                                move.enPassantCapture = true;
+                                return true; //Maybe update some type of flag?
+                            }
+                        }
+                        case OFF_BOARD -> {
+                            return false;
+                        }
+                        default -> {
+                            return !b.getPieceAt(validTarget).isFriendly(move.side); //can only capture enemy pieces
+                        }
+                    }
+                }
+            }
+
+        }
         return false;
         //TODO pawn promotion
-        }
+    }
 
     public boolean isLegalKnightMove() {
         Board b = state.board;
@@ -112,7 +105,7 @@ public class LegalMoveEvaluator {
         options.add(move.getOrigin().getSquareLeft().getLeftUp());
         options.add(move.getOrigin().getSquareLeft().getLeftDown());
 
-        int i=0;
+        int i = 0;
         while (i < options.size()) {
             if (b.isOffBoard(options.get(i).getSquareNumber())) {
                 options.remove(i);
@@ -120,8 +113,8 @@ public class LegalMoveEvaluator {
             i++;
         }
 
-        i=0;
-        while (i<options.size()) {
+        i = 0;
+        while (i < options.size()) {
             if (options.get(i) == move.getDestination()) {
                 return checkingSides(b, move, move.getDestination());
             }
@@ -138,9 +131,15 @@ public class LegalMoveEvaluator {
                 || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
 
         if (sameFile || sameRank || sameDiagonal) {
-            if (sameRank) {return (checkSameRank(b, move));} // true if piece can go there without any obstacle
-            else if (sameFile) {return checkSameFile(b, move);} // true if piece can go there without any obstacle
-            else { return checkSameDiagonal(b, move);} // true if piece can go there without any obstacle
+            if (sameRank) {
+                return (checkSameRank(b, move));
+            } // true if piece can go there without any obstacle
+            else if (sameFile) {
+                return checkSameFile(b, move);
+            } // true if piece can go there without any obstacle
+            else {
+                return checkSameDiagonal(b, move);
+            } // true if piece can go there without any obstacle
         }
         return false; // meaning not even on same rank, file or diagonal
     }
@@ -155,9 +154,8 @@ public class LegalMoveEvaluator {
                     Game.shortCastlingWhite = false;
                     System.out.println("short castling: " + Game.shortCastlingWhite);
                 }
-            }
-            else {
-                if(move.getOrigin().getSquareNumber() == 112) {
+            } else {
+                if (move.getOrigin().getSquareNumber() == 112) {
                     Game.longCastlingBlack = false;
                     System.out.println("long castling: " + Game.longCastlingBlack);
                 } else {
@@ -173,8 +171,12 @@ public class LegalMoveEvaluator {
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
 
         if (sameFile || sameRank) {
-            if (sameRank) {return (checkSameRank(b, move));} // true if piece can go there without any obstacle
-            else {return checkSameFile(b, move);} // true if piece can go there without any obstacle
+            if (sameRank) {
+                return (checkSameRank(b, move));
+            } // true if piece can go there without any obstacle
+            else {
+                return checkSameFile(b, move);
+            } // true if piece can go there without any obstacle
         }
         return false; // meaning not even on same rank or file
     }
@@ -189,7 +191,8 @@ public class LegalMoveEvaluator {
         }
         return false; // meaning not diagonal
     }
-    public boolean checkingSides (Board b, Move move, Square currentSquare) {
+
+    public boolean checkingSides(Board b, Move move, Square currentSquare) {
         return ((b.getPieceAt(currentSquare).getColor() != move.getSide()) && currentSquare == move.getDestination());
     } // all other situations are false, so just implemented one "if clause"
 
@@ -258,11 +261,10 @@ public class LegalMoveEvaluator {
             //check if square is empty
             if (!b.isEmpty(squareAbove)) {
                 return checkingSides(b, move, squareAbove);
-            }
-            else
+            } else
                 return true;
         }
-        if(squareBelow == move.getDestination()) {
+        if (squareBelow == move.getDestination()) {
             disableCastling();
             if (!b.isEmpty(squareBelow)) {
                 return checkingSides(b, move, squareBelow);
@@ -304,7 +306,7 @@ public class LegalMoveEvaluator {
             } else
                 return true;
         }
-        if(squareDiagonalRightBelow == move.getDestination()) {
+        if (squareDiagonalRightBelow == move.getDestination()) {
             disableCastling();
             if (!b.isEmpty(squareDiagonalRightBelow)) {
                 return checkingSides(b, move, squareDiagonalRightBelow);
@@ -314,27 +316,24 @@ public class LegalMoveEvaluator {
 
         //check for castling
         if (Game.longCastlingWhite || Game.longCastlingBlack || Game.shortCastlingBlack || Game.shortCastlingWhite) {
-            if (move.getPiece() == Piece.WHITE_KING) {
+            if (move.getPiece() == WHITE_KING) {
                 if (move.getOrigin().getSquareNumber() == 4) {
                     if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && Game.shortCastlingWhite) {
                         Game.shortCastlingWhite = false;
                         System.out.println("SHORT CASTLING WHITE");
                         return true;
-                    }
-                    else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && Game.longCastlingWhite) {
+                    } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && Game.longCastlingWhite) {
                         Game.longCastlingWhite = false;
                         System.out.println("LONG CASTLING WHITE");
                         return true;
                     }
                 }
-            }
-            else {
+            } else {
                 if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && Game.shortCastlingBlack) {
                     Game.shortCastlingBlack = false;
                     System.out.println("SHORT CASTLING Black");
                     return true;
-                }
-                else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && Game.longCastlingBlack) {
+                } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && Game.longCastlingBlack) {
                     Game.longCastlingBlack = false;
                     System.out.println("LONG CASTLING Black");
                     return true;
@@ -345,13 +344,13 @@ public class LegalMoveEvaluator {
 
         return false;
     }
+
     //disabled castling rights after a king move
     public void disableCastling() {
         if (move.getPiece().getColor() == Side.WHITE) {
             Game.shortCastlingWhite = false;
             Game.longCastlingWhite = false;
-        }
-        else {
+        } else {
             Game.shortCastlingBlack = false;
             Game.longCastlingBlack = false;
         }

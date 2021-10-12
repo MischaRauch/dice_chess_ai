@@ -7,8 +7,6 @@ import javafx.scene.layout.GridPane;
 import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
-import logic.enums.Side;
-import logic.enums.Square;
 import logic.enums.Validity;
 
 import java.io.IOException;
@@ -51,7 +49,7 @@ public class ChessBoard extends GridPane {
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
 
-                Tile tile = new Tile(boardState[i][j], i-1, j-1); //0-index the row/col
+                Tile tile = new Tile(boardState[i][j], i - 1, j - 1); //0-index the row/col
                 //since ChessBoard is a GridPane, we add elements using this.add();
                 this.add(tile, j, i);
 
@@ -86,7 +84,6 @@ public class ChessBoard extends GridPane {
                     //process move, check validity, update gui board, etc
                 });
 
-
             }
         }
     }
@@ -98,18 +95,20 @@ public class ChessBoard extends GridPane {
         if (applied.getStatus() == Validity.VALID) {
             tile.setPiece(Tile.selectedTile.getPiece());
             Tile.selectedTile.setPiece(Piece.EMPTY);
-            System.out.println("c");
 
             Tile.selectedTile.unselect();
+
+            if (applied.isEnPassantCapture()) {
+                //remove captured pawn;
+            }
 
             System.out.println("Next dice roll: " + game.getDiceRoll());
 
             if (game.getCurrentState().getGameOver() != 0) {
                 showEndGame(game.getCurrentState().getGameOver());
             }
-            //tile.setPiece(Piece.WHITE_ROOK);
-            //Move move1 = new Move(Piece.WHITE_ROOK, Square.h1, Square.d4,1,Side.WHITE);
-            //castling();
+
+
         } else {
             System.out.println("INVALID move");
         }
@@ -131,7 +130,7 @@ public class ChessBoard extends GridPane {
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();
-            char[] rank = board[i+1];
+            char[] rank = board[i + 1];
             int index = 1;
             for (char c : rankSequence) {
                 if (Character.isDigit(c)) {
@@ -144,6 +143,7 @@ public class ChessBoard extends GridPane {
 
         return board;
     }
+
     public void showEndGame(int winner) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("End of the Game");

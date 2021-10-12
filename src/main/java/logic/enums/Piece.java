@@ -22,78 +22,6 @@ public enum Piece {
     BLACK_QUEEN(QUEEN, Side.BLACK),
     BLACK_KING(KING, Side.BLACK);
 
-    final Piece type;
-    final Side color;
-
-    Piece(Piece type, Side color) {
-        this.type = type;
-        this.color = color;
-    }
-
-    Piece() {
-        type = this;
-        color = Side.NEUTRAL;
-    }
-
-    //honestly can probably change it to just return type automatically, but not sure if above constructor is used
-    public Piece getType() {
-        return switch (this) {
-            case PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, EMPTY, OFF_BOARD -> this;
-            default -> type;
-        };
-    }
-
-    public int[] getOffsets() {
-        return switch (this) {
-            case WHITE_PAWN -> new int[]{16, 15, 17};
-            case BLACK_PAWN -> new int[]{-16, -15, -17};
-            //etc
-            default -> new int[0];
-        };
-    }
-
-    public char getUnicode() {
-        return unicodeMap.get(this);
-    }
-
-    public Side getColor() {
-        return color;
-    }
-
-    public boolean isFriendly(Side side) {
-        return color == side;
-    }
-
-    public static Piece getPieceFromChar(char c) {
-        return charPieceMap.get(c);
-    }
-
-    /**
-     * Only valid for Pawn pieces
-     * @param square at which piece is located
-     * @return true if pawn is at the appropriate rank, false in any other case
-     */
-    public boolean canDoubleJump(Square square) {
-        return switch (this) {
-            case WHITE_PAWN -> square.getRank() == 2;
-            case BLACK_PAWN -> square.getRank() == 7;
-            default -> false;
-        };
-    }
-
-    /**
-     * Only valid for Pawn pieces
-     * @param square at which piece is located
-     * @return true if pawn is at the appropriate rank, false in any other case
-     */
-    public boolean canPromote(Square square) {
-        return switch (this) {
-            case WHITE_PAWN -> square.getRank() == 7;
-            case BLACK_PAWN -> square.getRank() == 2;
-            default -> false;
-        };
-    }
-
     static Map<Character, Piece> charPieceMap = new HashMap<>();
     static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);
 
@@ -130,5 +58,79 @@ public enum Piece {
         unicodeMap.put(EMPTY, '　');
         unicodeMap.put(OFF_BOARD, 'o');
 
+    }
+
+    final Piece type;
+    final Side color;
+
+    Piece(Piece type, Side color) {
+        this.type = type;
+        this.color = color;
+    }
+
+    Piece() {
+        type = this;
+        color = Side.NEUTRAL;
+    }
+
+    public static Piece getPieceFromChar(char c) {
+        return charPieceMap.get(c);
+    }
+
+    //honestly can probably change it to just return type automatically, but not sure if above constructor is used
+    public Piece getType() {
+        return switch (this) {
+            case PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, EMPTY, OFF_BOARD -> this;
+            default -> type;
+        };
+    }
+
+    public int[] getOffsets() {
+        return switch (this) {
+            case WHITE_PAWN -> new int[]{16, 15, 17};
+            case BLACK_PAWN -> new int[]{-16, -15, -17};
+            //etc
+            default -> new int[0];
+        };
+    }
+
+    public char getUnicode() {
+        return unicodeMap.get(this);
+    }
+
+    public Side getColor() {
+        return color;
+    }
+
+    public boolean isFriendly(Side side) {
+        return color == side;
+    }
+
+    /**
+     * Only valid for Pawn pieces
+     *
+     * @param square at which piece is located
+     * @return true if pawn is at the appropriate rank, false in any other case
+     */
+    public boolean canDoubleJump(Square square) {
+        return switch (this) {
+            case WHITE_PAWN -> square.getRank() == 2;
+            case BLACK_PAWN -> square.getRank() == 7;
+            default -> false;
+        };
+    }
+
+    /**
+     * Only valid for Pawn pieces
+     *
+     * @param square at which piece is located
+     * @return true if pawn is at the appropriate rank, false in any other case
+     */
+    public boolean canPromote(Square square) {
+        return switch (this) {
+            case WHITE_PAWN -> square.getRank() == 7;
+            case BLACK_PAWN -> square.getRank() == 2;
+            default -> false;
+        };
     }
 }

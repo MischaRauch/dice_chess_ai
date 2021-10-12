@@ -23,7 +23,7 @@ public class Board0x88 extends Board {
         }
     }
 
-    Piece[] board;
+    private final Piece[] board;
 
     public Board0x88() {
         board = new Piece[128];
@@ -123,20 +123,4 @@ public class Board0x88 extends Board {
         System.out.println(files + "\n");
     }
 
-    //idk if we still need this
-    public void printBoard(boolean full) {
-        final int MAX_FILE = full ? 16 : 8;
-        String files = "　　　A　B　C　D　E　F　G　H  \n";
-        System.out.println(files);
-
-        for (int rank = 0; rank < 8; rank++) {
-            System.out.print(" " + (8 - rank) + " 　");
-            for (int file = 0; file < MAX_FILE; file++) {
-                int tile = rank * 16 + file; // this converts to board index
-                System.out.print(board[tile].getUnicode() + " ");
-            }
-            System.out.println("　"+ (8 - rank) + " ");
-        }
-        System.out.println("\n"+files + "\n\n");
-    }
 }

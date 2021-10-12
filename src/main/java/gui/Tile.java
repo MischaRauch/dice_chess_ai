@@ -13,14 +13,11 @@ import logic.enums.Square;
 public class Tile extends VBox {
 
     public static Tile selectedTile = null;
-
+    private final Square square; //also useful for parsing move
+    private final int row, col;
     //useful for parsing the Move, and also to check if a Tile is empty, since you can check if piece == Piece.EMPTY
     private Piece piece;
-    private final Square square; //also useful for parsing move
-
     private ImageView view = new ImageView();
-
-    private final int row, col;
 
     public Tile(char p, int row, int col) {
         this.row = row;
@@ -38,7 +35,7 @@ public class Tile extends VBox {
             view = ChessIcons.load(p);
 
         piece = Piece.getPieceFromChar(p);
-        square = Square.getSquare(7-row, col);
+        square = Square.getSquare(7 - row, col);
 
         view.setFitHeight(80);
         view.setPreserveRatio(true);

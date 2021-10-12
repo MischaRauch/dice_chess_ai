@@ -16,6 +16,7 @@ public class ChessIcons {
     //EnumMaps are like normal Maps, except that they are fancier and faster and special and cool, read more online
     //the EnumMap constructor needs to know which enum it is mapping, so that's why Piece.class is in the constructor
     private static final EnumMap<Piece, String> imgMap = new EnumMap<>(Piece.class);
+
     static {
         //the code in this block gets run (only once) the first time the ChessIcons class is referenced in our application code
         //you can think of it like a constructor for static fields
@@ -38,6 +39,7 @@ public class ChessIcons {
     /**
      * This static load method references the EnumMap to instantly get the image url associated with that piece
      * and creates an ImageView out of it
+     *
      * @param piece The Piece enum which to load the ImageView of
      * @return ImageView
      */
@@ -48,6 +50,7 @@ public class ChessIcons {
     /**
      * This static load method converts a char to a Piece, and then calls the above load method to return the
      * associated ImageView
+     *
      * @param p char representing which piece. Case sensitive since case determines color
      * @return ImageView associated with the Piece associated with the char p
      */
@@ -60,8 +63,9 @@ public class ChessIcons {
      * turn it is. It uses the static diceToPiece char array to get the char for the roll number, and then converts that
      * char to upper case if the Side == WHITE. Then it uses the above load method with the char in order to return the
      * relevant ImageView
+     *
      * @param diceRoll integer in range of 1-6
-     * @param side Enum Side of the player who rolled
+     * @param side     Enum Side of the player who rolled
      * @return ImageView associated with the piece of the roll number with the color of the player who rolled.
      */
     public static ImageView load(int diceRoll, Side side) {
