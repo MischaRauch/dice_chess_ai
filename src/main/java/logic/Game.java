@@ -63,7 +63,7 @@ public class Game {
     }
 
     //may need to refresh gui in order to view the change
-    public void undoState(State state) {
+    public void undoState() {
         if (!previousStates.isEmpty()) {
             redoStates.push(currentState);              //push current state to redo stack in case user wants to redo
             currentState = previousStates.pop();        //pop the previous state off the stack
@@ -71,7 +71,7 @@ public class Game {
     }
 
     //may need to refresh gui in order to view the change
-    public void redoState(State state) {
+    public void redoState() {
         if (!redoStates.isEmpty()) {
             previousStates.push(currentState);          //add current state to previous states stack
             currentState = redoStates.pop();            //update the current state

@@ -1,6 +1,7 @@
 package gui;
 
 import com.sun.tools.javac.Main;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import logic.Game;
@@ -43,11 +45,14 @@ public class MainContainerController {
 
     public static AnchorPane modal;
 
+    @FXML private VBox chessVBox;
+
     @FXML
     void initialize() throws IOException{
         modal = modalDialogPane;
         //GridPane board = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
-        MainHbox.getChildren().add(new ChessBoard()); //how do I make it non-static?
+        chessVBox.getChildren().add(new ChessBoard(this)); //how do I make it non-static?
+        chessVBox.setAlignment(Pos.CENTER);
 
         Parent p =  FXMLLoader.load(getClass().getResource("/fxml/dice.fxml"));
 
@@ -83,6 +88,22 @@ public class MainContainerController {
         outFlowPaneW.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY)));
         outFlowPaneB.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, null, null)));
         outFlowPaneB.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY)));
+    }
+
+    public void setInFlowPaneW(ImageView piece){
+        piece.setFitWidth(80);
+        piece.setFitHeight(80);
+        ObservableList list = outFlowPaneW.getChildren();
+        list.add(piece);
+        System.out.println("ADDED");
+    }
+
+    public void setInFlowPaneB(ImageView piece){
+        piece.setFitWidth(80);
+        piece.setFitHeight(80);
+        ObservableList list = outFlowPaneB.getChildren();
+        list.add(piece);
+        System.out.println("ADDED");
     }
 
 
