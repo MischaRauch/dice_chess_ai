@@ -207,6 +207,8 @@ public class ChessBoard extends GridPane {
         if (applied.getStatus() == Validity.VALID) {
             //set in scrollPane
             mainContainerController.setInScrollPane(move);
+            mainContainerController.setGameForTurn(game);
+
             if((tile.getPiece() != Piece.EMPTY) && (tile.getPiece().getColor() != Tile.selectedTile.getPiece().getColor())){
                 //capture piece so move piece to the flowpane
                 movePieceOut(tile.getPiece(), tile.getPiece().getColor());
