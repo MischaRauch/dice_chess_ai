@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -92,6 +93,7 @@ public class ChessBoard extends GridPane {
     }
 
     private void move(Tile tile) {
+
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
         Move applied = game.makeMove(move);
 
@@ -104,6 +106,10 @@ public class ChessBoard extends GridPane {
             if (applied.isEnPassantCapture()) {
                 //remove captured pawn;
                 tileBoard[tile.getRow() + (move.getSide() == WHITE ? 1 : -1)][tile.getCol()].setPiece(Piece.EMPTY);
+            }
+
+            if (applied.isPromotionMove()) {
+                tile.setPiece(applied.getPromotionPiece());
             }
 
             System.out.println("Next dice roll: " + game.getDiceRoll());

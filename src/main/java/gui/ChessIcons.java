@@ -10,8 +10,7 @@ import static logic.enums.Piece.*;
 
 public class ChessIcons {
 
-    //the first element in this array is empty bc there will never be a dice roll = 0, since pawn = 1
-    private static final char[] diceToPiece = {' ', 'p', 'n', 'b', 'r', 'q', 'k'};
+    private static final char[] diceToPiece = {'p', 'n', 'b', 'r', 'q', 'k'};
 
     //EnumMaps are like normal Maps, except that they are fancier and faster and special and cool, read more online
     //the EnumMap constructor needs to know which enum it is mapping, so that's why Piece.class is in the constructor
@@ -73,6 +72,6 @@ public class ChessIcons {
         //with this syntax, it's basically an if/else statement in one line.
         //I have not tested this method so no idea if it works :D
         //read it like: (if) side equals Side.WHITE (then) load using the uppercase piece, (else) load using the default lowercase piece char
-        return side == Side.WHITE ? load(Character.toUpperCase(diceToPiece[diceRoll])) : load(diceToPiece[diceRoll]);
+        return side == Side.WHITE ? load(Character.toUpperCase(diceToPiece[diceRoll - 1])) : load(diceToPiece[diceRoll - 1]);
     }
 }

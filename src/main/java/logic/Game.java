@@ -11,6 +11,7 @@ import java.util.Stack;
 
 public class Game {
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    private static Game CURRENT_GAME;
 
     private final Stack<State> previousStates;
     private final Stack<State> redoStates;
@@ -25,6 +26,11 @@ public class Game {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         previousStates = new Stack<>();
         redoStates = new Stack<>();
+        CURRENT_GAME = this;
+    }
+
+    public static Game getInstance() {
+        return CURRENT_GAME;
     }
 
     public Move makeMove(Move move) {

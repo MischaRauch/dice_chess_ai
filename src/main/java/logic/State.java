@@ -1,5 +1,7 @@
 package logic;
 
+import gui.PromotionPrompt;
+import javafx.application.Platform;
 import logic.board.Board;
 import logic.enums.CastlingRights;
 import logic.enums.Piece;
@@ -66,6 +68,11 @@ public class State {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
         }
 
+        if (move.promotionMove) {
+            newBoard.setPiece(move.promotionPiece, move.destination);
+        }
+
+        //System.out.println(Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor())));
         newBoard.printBoard();
         return nextState;
     }

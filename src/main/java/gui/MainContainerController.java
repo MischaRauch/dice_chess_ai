@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import logic.Game;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -38,9 +39,13 @@ public class MainContainerController {
 
     @FXML private HBox MainHbox;
 
+    @FXML private AnchorPane modalDialogPane;
+
+    public static AnchorPane modal;
+
     @FXML
     void initialize() throws IOException{
-
+        modal = modalDialogPane;
         //GridPane board = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
         MainHbox.getChildren().add(new ChessBoard()); //how do I make it non-static?
 
