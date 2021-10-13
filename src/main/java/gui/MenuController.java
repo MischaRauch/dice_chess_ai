@@ -38,7 +38,7 @@ public class MenuController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         //stage.setMaximized(true);
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
     }
 
     @FXML

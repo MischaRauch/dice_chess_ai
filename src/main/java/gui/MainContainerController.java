@@ -7,13 +7,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import logic.Game;
+import logic.Move;
+import logic.enums.Piece;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -47,6 +54,10 @@ public class MainContainerController {
 
     @FXML private VBox chessVBox;
 
+    private VBox scrollVBox;
+
+
+
     @FXML
     void initialize() throws IOException{
         modal = modalDialogPane;
@@ -72,12 +83,18 @@ public class MainContainerController {
         undoRedoBox.setSpacing(10);
         undoRedoBox.getChildren().addAll(undoButton, redoButton);
 
+        scrollVBox = new VBox();
+
         historyScrollPane = new ScrollPane();
         historyScrollPane.setFitToHeight(true);
         historyScrollPane.setFitToWidth(true);
-        historyScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        historyScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         historyScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        // historyScrollPane.setContent(//List of moves);
+        historyScrollPane.setPrefViewportWidth(1000);
+        historyScrollPane.setPrefViewportHeight(1000);
+        historyScrollPane.setContent(scrollVBox);
+
+        //setInScrollPane();
 
         Label diceTitle = new Label("Dice:");
         Label scrollpaneTitle = new Label("History of Moves:");
@@ -106,6 +123,11 @@ public class MainContainerController {
         System.out.println("ADDED");
     }
 
-
-
+    public void setInScrollPane(Move move){
+        Label newL = new Label(move.toString());
+        //Label newL = new Label("Hello World");
+        newL.setFont(new Font("Arial", 13));
+        scrollVBox.getChildren().add(newL);
+        scrollVBox.setAlignment(Pos.TOP_CENTER);
+    }
 }

@@ -81,4 +81,10 @@ public class Move {
         return side;
     }
 
+    @Override
+    public String toString() {
+        return "Moved: " + piece +
+                " from (origin): " + origin +
+                ", to (destination)=" + destination;
+    }
 }
