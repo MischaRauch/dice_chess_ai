@@ -319,22 +319,30 @@ public class LegalMoveEvaluator {
             if (move.getPiece() == WHITE_KING) {
                 if (move.getOrigin().getSquareNumber() == 4) {
                     if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && State.shortCastlingWhite) {
+                        State.applyCastling = true;
                         State.shortCastlingWhite = false;
+                        move.castling = Square.f1;
                         System.out.println("SHORT CASTLING WHITE");
                         return true;
                     } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && State.longCastlingWhite) {
+                        State.applyCastling = true;
                         State.longCastlingWhite = false;
+                        move.castling = Square.d1;
                         System.out.println("LONG CASTLING WHITE");
                         return true;
                     }
                 }
             } else {
                 if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && State.shortCastlingBlack) {
+                    State.applyCastling = true;
                     State.shortCastlingBlack = false;
+                    move.castling = Square.f8;
                     System.out.println("SHORT CASTLING Black");
                     return true;
                 } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && State.longCastlingBlack) {
+                    State.applyCastling = true;
                     State.longCastlingBlack = false;
+                    move.castling = Square.d8;
                     System.out.println("LONG CASTLING Black");
                     return true;
                 }

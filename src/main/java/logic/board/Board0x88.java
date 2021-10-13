@@ -92,6 +92,11 @@ public class Board0x88 extends Board {
     }
 
     @Override
+    public void setPiece(Piece piece, Square location) {
+        board[location.getBoardIndex()] = piece;
+    }
+
+    @Override
     public Board movePiece(Square origin, Square destination) {
         Board0x88 boardAfterMove = new Board0x88(board);
 
