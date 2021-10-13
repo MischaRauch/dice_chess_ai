@@ -59,6 +59,7 @@ public class ChessBoard extends GridPane {
                 this.add(tile, j, i);
                 tileBoard[i-1][j-1] = tile;
 
+
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
 
