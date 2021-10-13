@@ -14,6 +14,9 @@ public class Move {
 
     Side side;
     Validity status;
+    public Square enPassant = Square.INVALID;
+    boolean enPassantMove = false;
+    boolean enPassantCapture = false;
 
     public Move(Piece piece, Square origin, Square destination, int diceRoll, Side side) {
         this.piece = piece;
@@ -27,6 +30,10 @@ public class Move {
 
     public Validity getStatus() {
         return status;
+    }
+
+    public boolean isEnPassantCapture() {
+        return enPassantCapture;
     }
 
     public void setStatus(Validity status) {

@@ -15,7 +15,7 @@ public enum CastlingRights {
     }
 
     public char getCharValue() {
-        return  value;
+        return value;
     }
 
     public CastlingRights getByChar(char c) {
