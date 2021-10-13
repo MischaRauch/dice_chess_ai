@@ -12,11 +12,15 @@ public class Move {
     Square destination;
     int diceRoll;
 
+    Piece promotionPiece;
+    boolean promotionMove = false;
+
     Side side;
     Validity status;
     public Square enPassant = Square.INVALID;
     boolean enPassantMove = false;
     boolean enPassantCapture = false;
+    public Square castling = Square.INVALID;
 
     public Move(Piece piece, Square origin, Square destination, int diceRoll, Side side) {
         this.piece = piece;
@@ -24,6 +28,7 @@ public class Move {
         this.destination = destination;
         this.diceRoll = diceRoll;
         this.side = side;
+        promotionPiece = piece;
 
         this.status = Validity.PROCESSING;
     }
@@ -34,6 +39,14 @@ public class Move {
 
     public boolean isEnPassantCapture() {
         return enPassantCapture;
+    }
+
+    public boolean isPromotionMove() {
+        return promotionMove;
+    }
+
+    public Piece getPromotionPiece() {
+        return promotionPiece;
     }
 
     public void setStatus(Validity status) {

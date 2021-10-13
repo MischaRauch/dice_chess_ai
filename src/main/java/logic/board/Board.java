@@ -8,6 +8,8 @@ import java.util.EnumSet;
 
 public abstract class Board {
 
+    public abstract void removePiece(Square location);
+
     public abstract boolean isEmpty(Square square);
 
     //this is kinda only relevant for 0x88 i think
@@ -16,6 +18,8 @@ public abstract class Board {
     public abstract Piece getPieceAt(Square square);
 
     public abstract Board movePiece(Square origin, Square destination);
+
+    public abstract void setPiece(Piece piece, Square destination);
 
     //not sure if this belongs in Square enum or here. Right now it's in both places
     public Square getSquareAbove(Square square) {

@@ -87,13 +87,21 @@ public class Board0x88 extends Board {
     }
 
     @Override
+    public void removePiece(Square location) {
+        board[location.getBoardIndex()] = Piece.EMPTY;
+    }
+
+    @Override
+    public void setPiece(Piece piece, Square location) {
+        board[location.getBoardIndex()] = piece;
+    }
+
+    @Override
     public Board movePiece(Square origin, Square destination) {
         Board0x88 boardAfterMove = new Board0x88(board);
 
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
         boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;
-
-        boardAfterMove.printBoard();
 
         return boardAfterMove;
     }

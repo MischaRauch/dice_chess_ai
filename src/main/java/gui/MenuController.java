@@ -31,14 +31,21 @@ public class MenuController {
         messageLabel.setText("dice chess yay!");
 
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
+        //Scene scene = new Scene(new ChessBoard());
 
-        Scene scene = new Scene(new ChessBoard());
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainContainer.fxml"));
+        Scene scene = new Scene(root);
         stage.setScene(scene);
+        //stage.setMaximized(true);
+        stage.setFullScreen(true);
     }
 
     @FXML
     void initialize() {
+        //set full screen
+
+
         //this method gets automatically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
