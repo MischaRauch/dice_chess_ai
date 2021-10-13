@@ -62,6 +62,7 @@ public class ChessBoard extends GridPane {
                 //since ChessBoard is a GridPane, we add elements using this.add();
 
                 this.add(tile, j, i);
+                //TODO fix this shit
                 tileMatrix[j-1][i-1]=tile;
 
                 tile.setOnMouseClicked(event -> {
