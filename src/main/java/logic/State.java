@@ -154,6 +154,45 @@ public class State {
         }
     }
 
+    public String toFEN() {
+        String fen = "";
+        Piece prev = OFF_BOARD;
+        int emptySpaces = 0;
+
+        for (int i = 0; i < board.getBoard().length; i++) {
+            Piece p = board.getBoard()[i];
+            if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
+                fen += "/"; //reached end of rank
+                i += 6;     //skip forward over off board pieces to next rank
+                emptySpaces = 0;   //reset empty spaces
+            }
+
+            if (p == EMPTY)
+                emptySpaces++;
+
+            if (prev == EMPTY && p != EMPTY)
+                fen += emptySpaces + "";   //reached end of empty spaces, print amount
+
+            if (p != EMPTY && p != OFF_BOARD) {
+                fen += p.getCharType();     //non-empty piece
+                emptySpaces = 0;            //reset empty spaces counter
+            }
+
+            prev = p;
+        }
+
+        return fen;
+    }
+
+    public static void main(String[] args) {
+        String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
+        String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        System.out.println("\n"+tricky);
+        Game game = new Game(tricky);
+        game.getCurrentState().board.printBoard();
+        System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
+    }
+
 
 
 }
