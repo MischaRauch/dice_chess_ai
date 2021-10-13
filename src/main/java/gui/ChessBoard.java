@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Dice;
 import logic.Game;
@@ -41,7 +40,7 @@ public class ChessBoard extends GridPane {
         game = new Game();
         this.mainContainerController = mainContainerController;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard2.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard.fxml"));
         loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
         loader.setRoot(this);       //this class is also the Parent node of the FXML view
         loader.load();              //this is the method that actually does the loading. It's non-static version of FXMLLoader.load()
