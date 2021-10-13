@@ -6,6 +6,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 
+import java.sql.SQLOutput;
 import java.util.EnumSet;
 
 import static logic.enums.Piece.*;
@@ -36,7 +37,7 @@ public class State {
 
     public State applyMove(Move move) {
         //extract castling en passant dice roll
-        Board newBoard = board.movePiece(move.origin, move.destination);
+
         //check if king got captured
         if (board.getPieceAt(move.getDestination()) == WHITE_KING) {
             gameOver = -1;
@@ -50,11 +51,18 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
+        Board newBoard = board.movePiece(move.origin, move.destination);
         State nextState = new State(newBoard, newRoll, nextTurn);
+
         if (move.enPassantMove) {
             nextState.enPassant = move.enPassant;
         }
 
+        if (move.enPassantCapture) {
+            newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
+        }
+
+        newBoard.printBoard();
         return nextState;
     }
 

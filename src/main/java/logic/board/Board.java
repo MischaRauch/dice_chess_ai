@@ -8,6 +8,8 @@ import java.util.EnumSet;
 
 public abstract class Board {
 
+    public abstract void removePiece(Square location);
+
     public abstract boolean isEmpty(Square square);
 
     //this is kinda only relevant for 0x88 i think

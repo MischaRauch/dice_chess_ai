@@ -2,6 +2,7 @@ package gui;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import logic.enums.Piece;
 import logic.enums.Square;

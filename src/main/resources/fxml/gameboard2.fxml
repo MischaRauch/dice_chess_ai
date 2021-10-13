@@ -33,69 +33,6 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-      <VBox alignment="CENTER" layoutX="170.0" layoutY="90.0" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="7" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="8" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="8" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="7" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="8" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="5" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="7" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="4" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="6" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="8" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="5" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #000000;" GridPane.columnIndex="7" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="8" GridPane.rowIndex="2" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="7" GridPane.rowIndex="3" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="8" GridPane.rowIndex="4" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="8" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="6" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="8" GridPane.rowIndex="8" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="3" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="5" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="7" GridPane.rowIndex="7" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="6" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-      <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="2" GridPane.rowIndex="6" />
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
          <children>
             <Label text="7">

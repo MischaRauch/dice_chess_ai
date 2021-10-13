@@ -2,8 +2,10 @@ package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
@@ -11,6 +13,8 @@ import logic.enums.Validity;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import static logic.enums.Side.WHITE;
 
 /**
  * This class is the controller and root of just the game board view. Extra methods can be added to make working with GridPane
@@ -25,13 +29,12 @@ public class ChessBoard extends GridPane {
     //that this class is loaded into, if needed
     public ChessBoard() throws IOException {
         super(); //honestly idk if this line is even necessary but ive seen it done on the internet
+        game = new Game();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard2.fxml"));
         loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
         loader.setRoot(this);       //this class is also the Parent node of the FXML view
         loader.load();              //this is the method that actually does the loading. It's non-static version of FXMLLoader.load()
-
-        game = new Game();
     }
 
     //This stuff gets called after the constructor has finished loading the FXML file
@@ -40,6 +43,8 @@ public class ChessBoard extends GridPane {
         String opening = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1 0";   //initial state
         loadBoard(opening);
     }
+
+    private final Tile[][] tileBoard = new Tile[8][8];
 
     //populates the GridPane (which is actually this class) with Tile objects
     //more or less copy-pasted from GameboardController with some slight modifications
@@ -52,13 +57,10 @@ public class ChessBoard extends GridPane {
                 Tile tile = new Tile(boardState[i][j], i - 1, j - 1); //0-index the row/col
                 //since ChessBoard is a GridPane, we add elements using this.add();
                 this.add(tile, j, i);
+                tileBoard[i-1][j-1] = tile;
 
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
-                    //the event handler can technically also be made in the constructor in the Tile class,
-                    //but it might be better to have it here so that you can use other fields/info from this class (e.g. currently selected piece/tile)
-                    //that you would not have access to from the Tile class unless everything in here
-                    //is static or if each tile has access to an instance of this class
 
                     if (tile.getPiece() != Piece.EMPTY) {
                         if (Tile.selectedTile == null) {
@@ -100,6 +102,7 @@ public class ChessBoard extends GridPane {
 
             if (applied.isEnPassantCapture()) {
                 //remove captured pawn;
+                tileBoard[tile.getRow() + (move.getSide() == WHITE ? 1 : -1)][tile.getCol()].setPiece(Piece.EMPTY);
             }
 
             System.out.println("Next dice roll: " + game.getDiceRoll());
@@ -113,6 +116,10 @@ public class ChessBoard extends GridPane {
             System.out.println("INVALID move");
         }
 
+    }
+
+    public Tile getTileAt(int row, int col) {
+        return tileBoard[row][col];
     }
 
     //copy-pasted from GameboardController and removed some of the unnecessary lines like the two dice rolls
