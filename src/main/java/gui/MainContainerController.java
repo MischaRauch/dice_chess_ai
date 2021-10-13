@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import logic.Game;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -38,6 +39,9 @@ public class MainContainerController {
 
     @FXML private HBox MainHbox;
 
+    private Game game;
+
+
     @FXML
     void initialize() throws IOException{
 
@@ -50,7 +54,9 @@ public class MainContainerController {
         undoButton = new Button("Undo");
         undoButton.setPrefSize(100, 50);
         undoButton.setOnMouseClicked(e ->{
-
+            game = game.getInstance();
+            game.getCurrentState().stateToFen();
+            game.undoState();
         });
         redoButton = new Button("Redo");
         redoButton.setPrefSize(100, 50);

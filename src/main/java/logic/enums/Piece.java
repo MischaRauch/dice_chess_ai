@@ -8,23 +8,23 @@ public enum Piece {
     PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING,
     EMPTY, OFF_BOARD,
 
-    WHITE_PAWN(PAWN, Side.WHITE),
-    WHITE_KNIGHT(KNIGHT, Side.WHITE),
-    WHITE_BISHOP(BISHOP, Side.WHITE),
-    WHITE_ROOK(ROOK, Side.WHITE),
-    WHITE_QUEEN(QUEEN, Side.WHITE),
-    WHITE_KING(KING, Side.WHITE),
+    WHITE_PAWN(PAWN, Side.WHITE, 'P'),
+    WHITE_KNIGHT(KNIGHT, Side.WHITE, 'K'),
+    WHITE_BISHOP(BISHOP, Side.WHITE, 'B'),
+    WHITE_ROOK(ROOK, Side.WHITE, 'R'),
+    WHITE_QUEEN(QUEEN, Side.WHITE, 'Q'),
+    WHITE_KING(KING, Side.WHITE, 'K'),
 
-    BLACK_PAWN(PAWN, Side.BLACK),
-    BLACK_KNIGHT(KNIGHT, Side.BLACK),
-    BLACK_BISHOP(BISHOP, Side.BLACK),
-    BLACK_ROOK(ROOK, Side.BLACK),
-    BLACK_QUEEN(QUEEN, Side.BLACK),
-    BLACK_KING(KING, Side.BLACK);
+    BLACK_PAWN(PAWN, Side.BLACK, 'p'),
+    BLACK_KNIGHT(KNIGHT, Side.BLACK, 'k'),
+    BLACK_BISHOP(BISHOP, Side.BLACK, 'b'),
+    BLACK_ROOK(ROOK, Side.BLACK, 'r'),
+    BLACK_QUEEN(QUEEN, Side.BLACK, 'q'),
+    BLACK_KING(KING, Side.BLACK, 'k');
 
     static Map<Character, Piece> charPieceMap = new HashMap<>();
     static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);
-
+    private static final char[] diceToPiece = {'p', 'n', 'b', 'r', 'q', 'k'};
     static {
         charPieceMap.put('P', WHITE_PAWN);
         charPieceMap.put('N', WHITE_KNIGHT);
@@ -62,10 +62,13 @@ public enum Piece {
 
     final Piece type;
     final Side color;
+    public char charType;
 
-    Piece(Piece type, Side color) {
+    Piece(Piece type, Side color, char charType) {
         this.type = type;
         this.color = color;
+        this.charType = charType;
+
     }
 
     Piece() {
@@ -76,6 +79,7 @@ public enum Piece {
     public static Piece getPieceFromChar(char c) {
         return charPieceMap.get(c);
     }
+    public char getCharType() {return this.charType;}
 
     //honestly can probably change it to just return type automatically, but not sure if above constructor is used
     public Piece getType() {
@@ -128,9 +132,17 @@ public enum Piece {
      */
     public boolean canPromote(Square square) {
         return switch (this) {
-            case WHITE_PAWN -> square.getRank() == 7;
-            case BLACK_PAWN -> square.getRank() == 2;
+            case WHITE_PAWN -> square.getRank() == 8;
+            case BLACK_PAWN -> square.getRank() == 1;
             default -> false;
+        };
+    }
+
+    public Piece promote(int diceRoll) {
+        return switch (this) {
+            case WHITE_PAWN -> getPieceFromChar(Character.toUpperCase(diceToPiece[diceRoll - 1]));
+            case BLACK_PAWN -> getPieceFromChar(diceToPiece[diceRoll - 1]);
+            default -> this;
         };
     }
 }

@@ -11,6 +11,7 @@ import java.util.Stack;
 
 public class Game {
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    private static Game CURRENT_GAME;
 
     private final Stack<State> previousStates;
     private final Stack<State> redoStates;
@@ -25,7 +26,13 @@ public class Game {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         previousStates = new Stack<>();
         redoStates = new Stack<>();
+        CURRENT_GAME = this;
+
     }
+    public static Game getInstance() {
+        return CURRENT_GAME;
+    }
+
 
     public Move makeMove(Move move) {
         if (evaluator.isLegalMove(move, currentState)) {
@@ -57,7 +64,7 @@ public class Game {
     }
 
     //may need to refresh gui in order to view the change
-    public void undoState(State state) {
+    public void undoState() {
         if (!previousStates.isEmpty()) {
             redoStates.push(currentState);              //push current state to redo stack in case user wants to redo
             currentState = previousStates.pop();        //pop the previous state off the stack
@@ -65,7 +72,7 @@ public class Game {
     }
 
     //may need to refresh gui in order to view the change
-    public void redoState(State state) {
+    public void redoState() {
         if (!redoStates.isEmpty()) {
             previousStates.push(currentState);          //add current state to previous states stack
             currentState = redoStates.pop();            //update the current state
