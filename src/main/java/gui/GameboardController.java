@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.Dice;
+import java.io.IOException;
 
 
 public class GameboardController {
@@ -41,7 +42,6 @@ public class GameboardController {
 
     @FXML
     void rollW(ActionEvent event) {
-
         diceRollW.setText("");
         LoadChessImages aid = new LoadChessImages();
         diceRollW.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
@@ -49,9 +49,7 @@ public class GameboardController {
     }
 
     @FXML
-    void initialize() {
-        ///TODO implement dice color usage
-
+    void initialize() throws IOException{
         //create all pieces
         //set event handlers
         //can access gridpane cells using row and column indices

@@ -19,7 +19,8 @@ public class LoadChessImages {
             if (p == charOfPieces[i]) {
                 Image img = new Image(imgOfChars[i]);
                 view = new ImageView(img);
-                view.setFitHeight(80);
+                view.setFitHeight(150);
+                view.setFitWidth(150);
                 view.setPreserveRatio(true);
                 return view;
             }

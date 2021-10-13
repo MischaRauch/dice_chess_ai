@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 /**
@@ -37,12 +36,17 @@ public class MenuController {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainContainer.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setMinWidth(1400);
+        stage.setMinHeight(930);
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException{
+        //set full screen
+
+
         //this method gets automatically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
