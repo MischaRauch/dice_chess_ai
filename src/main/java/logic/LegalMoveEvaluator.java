@@ -8,6 +8,7 @@ import logic.enums.Side;
 import logic.enums.Square;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static logic.enums.Piece.WHITE_KING;
 
@@ -119,15 +120,17 @@ public class LegalMoveEvaluator {
         options.add(move.getOrigin().getSquareLeft().getLeftUp());
         options.add(move.getOrigin().getSquareLeft().getLeftDown());
 
-        int i = 0;
-        while (i < options.size()) {
-            if (b.isOffBoard(options.get(i).getSquareNumber())) {
-                options.remove(i);
-            }
-            i++;
-        }
+        options.removeIf(option -> option == Square.INVALID);
 
-        i = 0;
+        //int i = 0;
+//        while (i < options.size()) {
+//            if (b.isOffBoard(options.get(i).getSquareNumber())) {
+//                options.remove(i);
+//            }
+//            i++;
+//        }
+
+        int i = 0;
         while (i < options.size()) {
             if (options.get(i) == move.getDestination()) {
                 return checkingSides(b, move, move.getDestination());
