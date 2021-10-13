@@ -9,13 +9,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import logic.Game;
+import logic.LegalMoveEvaluator;
+import logic.LegalMoveGenerator;
 import logic.Move;
+import logic.board.Board;
 import logic.enums.Piece;
+import logic.enums.Square;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.enums.Validity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static logic.enums.Side.BLACK;
@@ -28,6 +33,7 @@ import static logic.enums.Side.WHITE;
  */
 public class ChessBoard extends GridPane {
 
+    private final boolean DEBUG = true;
     private final Game game;
     MainContainerController mainContainerController;
 
@@ -57,12 +63,16 @@ public class ChessBoard extends GridPane {
     //more or less copy-pasted from GameboardController with some slight modifications
     public void loadBoard(String fenD) {
         char[][] boardState = parseFENd(fenD);
+        System.out.println(Arrays.deepToString(boardState));
+        if(DEBUG)System.out.println(boardState.length + "len");
 
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
 
+                // tile gets colored during construction
                 Tile tile = new Tile(boardState[i][j], i - 1, j - 1); //0-index the row/col
                 //since ChessBoard is a GridPane, we add elements using this.add();
+
                 this.add(tile, j, i);
                 tileBoard[i-1][j-1] = tile;
 
@@ -70,23 +80,110 @@ public class ChessBoard extends GridPane {
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
 
+                    // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {
                         if (Tile.selectedTile == null) {
                             if (tile.getPiece().isFriendly(game.getTurn())) {
                                 //can only select your own pieces
                                 tile.select();
-                            }
+
+                                LegalMoveGenerator gen = new LegalMoveGenerator();
+                                ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(),tile.getSquare(),tile.getPiece(),tile.getPiece().getColor());
+
+                                // on piece click first time, selection
+//                              // hard to work with matrix system and loops, doing manually
+                                // TODO add loop system
+                                if(legalMoves.contains(Square.a8)) {tileMatrix[0][0].colorGreen();}
+                                if(legalMoves.contains(Square.b8)) {tileMatrix[0][1].colorGreen();}
+                                if(legalMoves.contains(Square.c8)) {tileMatrix[0][2].colorGreen();}
+                                if(legalMoves.contains(Square.d8)) {tileMatrix[0][3].colorGreen();}
+                                if(legalMoves.contains(Square.e8)) {tileMatrix[0][4].colorGreen();}
+                                if(legalMoves.contains(Square.f8)) {tileMatrix[0][5].colorGreen();}
+                                if(legalMoves.contains(Square.g8)) {tileMatrix[0][6].colorGreen();}
+                                if(legalMoves.contains(Square.h8)) {tileMatrix[0][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a7)) {tileMatrix[1][0].colorGreen();}
+                                if(legalMoves.contains(Square.b7)) {tileMatrix[1][1].colorGreen();}
+                                if(legalMoves.contains(Square.c7)) {tileMatrix[1][2].colorGreen();}
+                                if(legalMoves.contains(Square.d7)) {tileMatrix[1][3].colorGreen();}
+                                if(legalMoves.contains(Square.e7)) {tileMatrix[1][4].colorGreen();}
+                                if(legalMoves.contains(Square.f7)) {tileMatrix[1][5].colorGreen();}
+                                if(legalMoves.contains(Square.g7)) {tileMatrix[1][6].colorGreen();}
+                                if(legalMoves.contains(Square.h7)) {tileMatrix[1][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a6)) {tileMatrix[2][0].colorGreen();}
+                                if(legalMoves.contains(Square.b6)) {tileMatrix[2][1].colorGreen();}
+                                if(legalMoves.contains(Square.c6)) {tileMatrix[2][2].colorGreen();}
+                                if(legalMoves.contains(Square.d6)) {tileMatrix[2][3].colorGreen();}
+                                if(legalMoves.contains(Square.e6)) {tileMatrix[2][4].colorGreen();}
+                                if(legalMoves.contains(Square.f6)) {tileMatrix[2][5].colorGreen();}
+                                if(legalMoves.contains(Square.g6)) {tileMatrix[2][6].colorGreen();}
+                                if(legalMoves.contains(Square.h6)) {tileMatrix[2][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a5)) {tileMatrix[3][0].colorGreen();}
+                                if(legalMoves.contains(Square.b5)) {tileMatrix[3][1].colorGreen();}
+                                if(legalMoves.contains(Square.c5)) {tileMatrix[3][2].colorGreen();}
+                                if(legalMoves.contains(Square.d5)) {tileMatrix[3][3].colorGreen();}
+                                if(legalMoves.contains(Square.e5)) {tileMatrix[3][4].colorGreen();}
+                                if(legalMoves.contains(Square.f5)) {tileMatrix[3][5].colorGreen();}
+                                if(legalMoves.contains(Square.g5)) {tileMatrix[3][6].colorGreen();}
+                                if(legalMoves.contains(Square.h5)) {tileMatrix[3][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a4)) {tileMatrix[4][0].colorGreen();}
+                                if(legalMoves.contains(Square.b4)) {tileMatrix[4][1].colorGreen();}
+                                if(legalMoves.contains(Square.c4)) {tileMatrix[4][2].colorGreen();}
+                                if(legalMoves.contains(Square.d4)) {tileMatrix[4][3].colorGreen();}
+                                if(legalMoves.contains(Square.e4)) {tileMatrix[4][4].colorGreen();}
+                                if(legalMoves.contains(Square.f4)) {tileMatrix[4][5].colorGreen();}
+                                if(legalMoves.contains(Square.g4)) {tileMatrix[4][6].colorGreen();}
+                                if(legalMoves.contains(Square.h4)) {tileMatrix[4][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a3)) {tileMatrix[5][0].colorGreen();}
+                                if(legalMoves.contains(Square.b3)) {tileMatrix[5][1].colorGreen();}
+                                if(legalMoves.contains(Square.c3)) {tileMatrix[5][2].colorGreen();}
+                                if(legalMoves.contains(Square.d3)) {tileMatrix[5][3].colorGreen();}
+                                if(legalMoves.contains(Square.e3)) {tileMatrix[5][4].colorGreen();}
+                                if(legalMoves.contains(Square.f3)) {tileMatrix[5][5].colorGreen();}
+                                if(legalMoves.contains(Square.g3)) {tileMatrix[5][6].colorGreen();}
+                                if(legalMoves.contains(Square.h3)) {tileMatrix[5][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a2)) {tileMatrix[6][0].colorGreen();}
+                                if(legalMoves.contains(Square.b2)) {tileMatrix[6][1].colorGreen();}
+                                if(legalMoves.contains(Square.c2)) {tileMatrix[6][2].colorGreen();}
+                                if(legalMoves.contains(Square.d2)) {tileMatrix[6][3].colorGreen();}
+                                if(legalMoves.contains(Square.e2)) {tileMatrix[6][4].colorGreen();}
+                                if(legalMoves.contains(Square.f2)) {tileMatrix[6][5].colorGreen();}
+                                if(legalMoves.contains(Square.g2)) {tileMatrix[6][6].colorGreen();}
+                                if(legalMoves.contains(Square.h2)) {tileMatrix[6][7].colorGreen();}
+
+                                if(legalMoves.contains(Square.a1)) {tileMatrix[7][0].colorGreen();}
+                                if(legalMoves.contains(Square.b1)) {tileMatrix[7][1].colorGreen();}
+                                if(legalMoves.contains(Square.c1)) {tileMatrix[7][2].colorGreen();}
+                                if(legalMoves.contains(Square.d1)) {tileMatrix[7][3].colorGreen();}
+                                if(legalMoves.contains(Square.e1)) {tileMatrix[7][4].colorGreen();}
+                                if(legalMoves.contains(Square.f1)) {tileMatrix[7][5].colorGreen();}
+                                if(legalMoves.contains(Square.g1)) {tileMatrix[7][6].colorGreen();}
+                                if(legalMoves.contains(Square.h1)) {tileMatrix[7][7].colorGreen();}
+
+                                System.out.println("legal moves: " + legalMoves); //correct,which means legal move gen works
+                                }
                         } else {
                             if (tile == Tile.selectedTile) {
                                 //suicide not allowed
                                 tile.unselect();
+                                recolorBoard();
                             } else {
                                 //capture
+                                if(DEBUG)System.out.println("Capture");
+                                recolorBoard();
                                 move(tile);
+
                             }
                         }
                     } else {
                         if (Tile.selectedTile != null) {
+                            if(DEBUG)System.out.println("piece not selected");
+                            recolorBoard();
                             move(tile);
                         }
                     }
@@ -98,6 +195,16 @@ public class ChessBoard extends GridPane {
         }
     }
 
+    private void recolorBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                tileMatrix[i][j].colorDefault();
+            }
+        }
+    }
+
+
+    // you only move selected tile ever
     private void move(Tile tile) {
 
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
@@ -113,6 +220,7 @@ public class ChessBoard extends GridPane {
             Tile.selectedTile.setPiece(Piece.EMPTY);
 
             Tile.selectedTile.unselect();
+            recolorBoard();
 
             if (applied.isEnPassantCapture()) {
                 //remove captured pawn;
@@ -155,6 +263,8 @@ public class ChessBoard extends GridPane {
 
 
         } else {
+            // VERY IMPORTANT TO UNSELECT: FIXED BUG
+            Tile.selectedTile.unselect();
             System.out.println("INVALID move");
         }
 

@@ -4,8 +4,11 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Square;
+
+import java.util.ArrayList;
 
 //i threw this class together real quick to test demonstrate that you can also make custom JavaFX components in pure Java
 //and still be able to add them to Scenes or as children of other Nodes (regardless if create in FXML or not)
@@ -59,6 +62,14 @@ public class Tile extends VBox {
 
     public void unselect() {
         selectedTile = null;
+    }
+
+    public void colorGreen() {
+        setStyle("-fx-background-color: #2ecc71");
+//        updateView(); //may be
+    }
+
+    public void colorDefault() {
         if ((row + col) % 2 == 0) {
             //white cells: row + col % 2 == 0
             setStyle("-fx-background-color: #d5a47d");
