@@ -10,7 +10,7 @@ import logic.enums.Square;
 
 import java.util.ArrayList;
 
-//i threw this class together real quick to test demonstrate that you can also make custom JavaFX components in pure Java
+//I threw this class together real quick to test demonstrate that you can also make custom JavaFX components in pure Java
 //and still be able to add them to Scenes or as children of other Nodes (regardless if create in FXML or not)
 //each Tile is a Vbox bc I like Vboxes and they have the alignment property so you can center its children, which is nicer
 //than just using a Pane. (Also I'm pretty sure Vbox extends from Pane so Vbox's are really just fancier Panes)
