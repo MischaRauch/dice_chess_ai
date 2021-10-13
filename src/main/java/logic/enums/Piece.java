@@ -4,25 +4,26 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
 
 public enum Piece {
     PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING,
     EMPTY, OFF_BOARD,
 
-    WHITE_PAWN(PAWN, Side.WHITE, 'P'),
-    WHITE_KNIGHT(KNIGHT, Side.WHITE, 'N'),
-    WHITE_BISHOP(BISHOP, Side.WHITE, 'B'),
-    WHITE_ROOK(ROOK, Side.WHITE, 'R'),
-    WHITE_QUEEN(QUEEN, Side.WHITE, 'Q'),
-    WHITE_KING(KING, Side.WHITE, 'K'),
+    WHITE_PAWN(PAWN, WHITE, 'P'),
+    WHITE_KNIGHT(KNIGHT, WHITE, 'N'),
+    WHITE_BISHOP(BISHOP, WHITE, 'B'),
+    WHITE_ROOK(ROOK, WHITE, 'R'),
+    WHITE_QUEEN(QUEEN, WHITE, 'Q'),
+    WHITE_KING(KING, WHITE, 'K'),
 
-    BLACK_PAWN(PAWN, Side.BLACK, 'p'),
-    BLACK_KNIGHT(KNIGHT, Side.BLACK, 'n'),
-    BLACK_BISHOP(BISHOP, Side.BLACK, 'b'),
-    BLACK_ROOK(ROOK, Side.BLACK, 'r'),
-    BLACK_QUEEN(QUEEN, Side.BLACK, 'q'),
-    BLACK_KING(KING, Side.BLACK, 'k');
+    BLACK_PAWN(PAWN, BLACK, 'p'),
+    BLACK_KNIGHT(KNIGHT, BLACK, 'n'),
+    BLACK_BISHOP(BISHOP, BLACK, 'b'),
+    BLACK_ROOK(ROOK, BLACK, 'r'),
+    BLACK_QUEEN(QUEEN, BLACK, 'q'),
+    BLACK_KING(KING, BLACK, 'k');
 
     static Map<Character, Piece> charPieceMap = new HashMap<>();
     static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);

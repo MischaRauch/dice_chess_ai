@@ -284,11 +284,11 @@ public class ChessBoard extends GridPane {
         char[][] board = new char[9][9];
         String[] info = fenDiceBoard.split("/|\\s"); //either split on "/" or on " " (whitespace)
 
-        String activeColor = info[8];
-        String castling = info[9];
-        String enPassant = info[10];
-        String halfmoveClock = info[11];
-        String fullmoveNumber = info[12];
+//        String activeColor = info[8];
+//        String castling = info[9];
+//        String enPassant = info[10];
+//        String halfmoveClock = info[11];
+//        String fullmoveNumber = info[12];
 
         for (int i = 0; i < 8; i++) {
             char[] rankSequence = info[i].toCharArray();

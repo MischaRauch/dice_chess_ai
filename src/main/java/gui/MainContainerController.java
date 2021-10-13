@@ -57,8 +57,7 @@ public class MainContainerController {
 
     private VBox scrollVBox;
 
-
-    private Game game;
+    ChessBoard board;
 
 
     @FXML
@@ -68,7 +67,7 @@ public class MainContainerController {
 
         modal = modalDialogPane;
         //GridPane board = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
-        chessVBox.getChildren().add(new ChessBoard(this)); //how do I make it non-static?
+        chessVBox.getChildren().add(board = new ChessBoard(this)); //how do I make it non-static?
         chessVBox.setAlignment(Pos.CENTER);
 
         Parent p =  FXMLLoader.load(getClass().getResource("/fxml/dice.fxml"));
@@ -76,15 +75,17 @@ public class MainContainerController {
         undoRedoBox = new HBox();
         undoButton = new Button("Undo");
         undoButton.setPrefSize(100, 50);
-        undoButton.setOnMouseClicked(e ->{
-            game = game.getInstance();
-            game.getCurrentState().stateToFen();
+        undoButton.setOnMouseClicked(e -> {
+            Game game = Game.getInstance();
             game.undoState();
+            board.loadBoard(game.getCurrentState().toFEN());
         });
         redoButton = new Button("Redo");
         redoButton.setPrefSize(100, 50);
         redoButton.setOnMouseClicked(e ->{
-
+            Game game = Game.getInstance();
+            game.redoState();
+            board.loadBoard(game.getCurrentState().toFEN());
         });
 
         undoRedoBox.setAlignment(Pos.CENTER);
