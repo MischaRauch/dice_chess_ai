@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainContainerController">
+   <children>
+      <HBox layoutX="81.0" layoutY="38.0" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #5F9EA0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Let's Play">
+               <font>
+                  <Font size="43.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="50.0" top="5.0" />
+               </HBox.margin>
+            </Text>
+            <Button fx:id="quitButton" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#quitEvent" text="QUIT">
+               <HBox.margin>
+                  <Insets left="300.0" top="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <HBox fx:id="MainHbox" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <VBox fx:id="rightSideVBox" prefHeight="640.0" prefWidth="262.0" HBox.hgrow="ALWAYS" />
+            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <FlowPane fx:id="outFlowPaneB" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <FlowPane fx:id="outFlowPaneW" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
