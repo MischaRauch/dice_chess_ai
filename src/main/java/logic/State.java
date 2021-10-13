@@ -119,7 +119,6 @@ public class State {
 
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        //System.out.println(Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor())));
         newBoard.printBoard();
         return nextState;
     }

@@ -75,7 +75,7 @@ public class ChessBoard extends GridPane {
 
                     // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {
-                            if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn())) {
+                            if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn()) || tile.getPiece().getType()==Piece.PAWN) {
                                 if (Tile.selectedTile == null) {
                                     if (tile.getPiece().isFriendly(game.getTurn())) {
                                         //can only select your own pieces
