@@ -34,10 +34,10 @@ public class DiceController {
 
     @FXML
     void initialize() throws IOException{
-        container.setBackground(new Background(new BackgroundFill(Color.TURQUOISE, null, null)));
-        container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
-        imageVBox.setAlignment(Pos.CENTER);
-        container.setAlignment(Pos.CENTER);
+        //container.setBackground(new Background(new BackgroundFill(Color.TURQUOISE, null, null)));
+        //container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
+        //imageVBox.setAlignment(Pos.CENTER);
+        //container.setAlignment(Pos.CENTER);
     }
 
 }

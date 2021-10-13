@@ -37,6 +37,8 @@ public class MenuController {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainContainer.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setMinWidth(1400);
+        stage.setMinHeight(930);
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
     }
