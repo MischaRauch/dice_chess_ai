@@ -61,6 +61,9 @@ public class MainContainerController {
 
     @FXML
     void initialize() throws IOException{
+        quitButton.setOnMouseEntered(event -> quitButton.setStyle("-fx-background-color: #FF0A0A;"));
+        quitButton.setOnMouseExited(event -> quitButton.setStyle("-fx-background-color: #bf7832;"));
+
         modal = modalDialogPane;
         //GridPane board = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
         chessVBox.getChildren().add(new ChessBoard(this)); //how do I make it non-static?

@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.Dice;
+import java.io.IOException;
 
 
 public class GameboardController {
@@ -49,7 +50,10 @@ public class GameboardController {
     }
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException{
+
+
+
         ///TODO implement dice color usage
 
         //create all pieces

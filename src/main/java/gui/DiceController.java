@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import logic.Dice;
 import logic.Game;
 import logic.enums.Side;
+import java.io.IOException;
 
 import java.io.IOException;
 
@@ -33,7 +34,9 @@ public class DiceController {
     }
 
     @FXML
-    void initialize() throws IOException{
+    void initialize() throws IOException {
+        rollButton.setOnMouseEntered(event -> rollButton.setStyle("-fx-background-color: #27ae60;"));
+        rollButton.setOnMouseExited(event -> rollButton.setStyle("-fx-background-color: #bf7832;"));
         //container.setBackground(new Background(new BackgroundFill(Color.TURQUOISE, null, null)));
         //container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
         //imageVBox.setAlignment(Pos.CENTER);
