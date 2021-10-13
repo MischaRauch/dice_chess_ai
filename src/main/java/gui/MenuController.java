@@ -31,10 +31,14 @@ public class MenuController {
         messageLabel.setText("dice chess yay!");
 
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
 
-        Scene scene = new Scene(new ChessBoard());
+        //Scene scene = new Scene(new ChessBoard());
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainContainer.fxml"));
+        Scene scene = new Scene(root);
         stage.setScene(scene);
+        //stage.setMaximized(true);
+        stage.setFullScreen(true);
     }
 
     @FXML
