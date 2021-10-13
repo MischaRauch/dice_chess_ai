@@ -152,6 +152,14 @@ public enum Piece {
         };
     }
 
+    public boolean promotable(Square square) {
+        return switch (this) {
+            case WHITE_PAWN -> square.getRank() == 7;
+            case BLACK_PAWN -> square.getRank() == 2;
+            default -> false;
+        };
+    }
+
     public Piece promote(int diceRoll) {
         return switch (this) {
             case WHITE_PAWN -> getPieceFromChar(Character.toUpperCase(diceToPiece[diceRoll - 1]));

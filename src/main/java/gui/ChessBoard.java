@@ -2,10 +2,12 @@ package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import logic.Dice;
 import logic.Game;
 import logic.LegalMoveGenerator;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
 
 /**
@@ -75,7 +78,7 @@ public class ChessBoard extends GridPane {
 
                     // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {
-                            if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn()) || tile.getPiece().getType()==Piece.PAWN) {
+                            if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn()) || tile.getPiece().promotable(tile.getSquare())) {
                                 if (Tile.selectedTile == null) {
                                     if (tile.getPiece().isFriendly(game.getTurn())) {
                                         //can only select your own pieces
@@ -255,6 +258,8 @@ public class ChessBoard extends GridPane {
 
             if (game.getCurrentState().getGameOver() != 0) {
                 showEndGame(game.getCurrentState().getGameOver());
+                Stage stage = (Stage) getScene().getWindow();
+                stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
             }
 
 
