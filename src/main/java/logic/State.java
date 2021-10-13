@@ -198,15 +198,6 @@ public class State {
         return fen;
     }
 
-    public static void main(String[] args) {
-        String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
-        String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-        System.out.println("\n"+tricky);
-        Game game = new Game(tricky);
-        game.getCurrentState().board.printBoard();
-        System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
-    }
-
 
 
 }
