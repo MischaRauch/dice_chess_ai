@@ -2,14 +2,20 @@ package gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import logic.Game;
+import logic.LegalMoveEvaluator;
 import logic.Move;
+import logic.board.Board;
 import logic.enums.Piece;
+import logic.enums.Square;
 import logic.enums.Validity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -20,6 +26,7 @@ import java.util.Arrays;
 public class ChessBoard extends GridPane {
 
     private final Game game;
+    private Tile[][] tileMatrix;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
@@ -30,7 +37,6 @@ public class ChessBoard extends GridPane {
         loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
         loader.setRoot(this);       //this class is also the Parent node of the FXML view
         loader.load();              //this is the method that actually does the loading. It's non-static version of FXMLLoader.load()
-
         game = new Game();
     }
 
@@ -44,14 +50,18 @@ public class ChessBoard extends GridPane {
     //populates the GridPane (which is actually this class) with Tile objects
     //more or less copy-pasted from GameboardController with some slight modifications
     public void loadBoard(String fenD) {
+        tileMatrix = new Tile[8][8];
         char[][] boardState = parseFENd(fenD);
         System.out.println(Arrays.deepToString(boardState));
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
 
+                // tile gets colored during construction
                 Tile tile = new Tile(boardState[i][j], i - 1, j - 1); //0-index the row/col
                 //since ChessBoard is a GridPane, we add elements using this.add();
+
                 this.add(tile, j, i);
+                tileMatrix[j-1][i-1]=tile;
 
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
@@ -65,6 +75,26 @@ public class ChessBoard extends GridPane {
                             if (tile.getPiece().isFriendly(game.getTurn())) {
                                 //can only select your own pieces
                                 tile.select();
+
+
+
+
+//                                VBox box = (VBox) node;
+//                                System.out.println("box: " + box.getClass());
+//                                box.getChildren().removeAll(box.getChildren());
+//                                box.setStyle("-fx-background-color: #2ecc71");
+//                                System.out.println("style maybe set?");
+//                                Tile t1 = (Tile) node; //failed
+//                                System.out.println("2");
+//                                t1.colorGreen();
+//                                System.out.println("3");
+                                // color tile
+
+                                /// TODO color other tiles green
+
+//                                if(tile.getPiece()==Piece.KING) {
+//
+//                                }
                             }
                         } else {
                             if (tile == Tile.selectedTile) {
@@ -87,19 +117,53 @@ public class ChessBoard extends GridPane {
             }
         }
     }
+    // used to return tile (that has HBox funcionality)
+    private Node getNodeFromGridPane(int col, int row) {
+        for (Node node : this.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
+            }
+        }
+        return null;
+    }
 
+    // you only move selected tile ever
     private void move(Tile tile) {
+
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
         Move applied = game.makeMove(move);
+
+        // have origin
+        // have piece type
+
+        // new legalmovegenerator
+        // getLegalMoves(origin, piecetype) return square[]
+        ArrayList<Square> generatedLegalPawnMovesWhite = new ArrayList<>();
+        generatedLegalPawnMovesWhite.add(Square.a3); //legal square
+
+
+        //todo use array of generated squares to color tiles green
+
+        // find same tile
+        for (int k = 0; k < tileMatrix.length; k++) {
+            for (int l = 0; l < tileMatrix.length; l++) {
+                if(tile==tileMatrix[l][k]) { //if tile selected
+                    System.out.println("TILE SELECTED");
+                    // TODO paint shit green
+
+                    tileMatrix[l][k+1].setStyle("-fx-background-color: #2ecc71");
+                }
+            }
+        }
 
         if (applied.getStatus() == Validity.VALID) {
             tile.setPiece(Tile.selectedTile.getPiece());
             Tile.selectedTile.setPiece(Piece.EMPTY);
 
-            Tile.selectedTile.unselect();
+            Tile.selectedTile.unselect(); // paints board back to the same
 
             if (applied.isEnPassantCapture()) {
-                //remove captured pawn;
+                //TODO remove captured pawn
             }
 
             System.out.println("Next dice roll: " + game.getDiceRoll());

@@ -4,46 +4,27 @@ import logic.board.Board;
 import logic.enums.Side;
 import logic.enums.Square;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-
 import static logic.enums.Piece.WHITE_KING;
 
-public class LegalMoveEvaluator {
+public class LegalMoveGenerator {
+
+
+
+    //state
+    //take pos on board (x and y) or (square), take piece type
+    //return string of moves
+// getLegalMoves(origin, piecetype) return square[]
 
     Move move;
     State state;
 
-    /**
-     * @param move  move object
-     * @param state board state
-     * @return true if piece can be moved to tile
-     */
-    public boolean isLegalMove(Move move, State state) {
-
-        this.move = move;
-        this.state = state;
-
-        //can't move piece to the same square the piece is already at
-        if (move.getOrigin() == move.getDestination())
-            return false;
-
-        //player trying to move opponents piece
-        if (move.getPiece().getColor() != move.getSide())
-            return false;
-
-        return switch (move.getPiece().getType()) {
-            case PAWN -> isLegalPawnMove();
-            case KNIGHT -> isLegalKnightMove();
-            case BISHOP -> isLegalBishopMove();
-            case ROOK -> isLegalRookMove();
-            case QUEEN -> isLegalQueenMove();
-            case KING -> isLegalKingMove();
-            default -> false;
-        };
-    }
-
-    public boolean isLegalPawnMove() {
+    public Array isLegalPawnMove() {
         Board b = state.board;
+        ArrayList<Square> squares;
+
+        //TODO add generation of moves returning Squares array
 
 
         //check if pawn is trying to move in its own file
@@ -53,9 +34,9 @@ public class LegalMoveEvaluator {
                 //pawn can only move if next square is empty
                 if (nextSquare == move.destination) {
                     //that's the square pawn wants to move to
-                    return true;
-
-                } else {
+                    squares.add(nextSquare);
+                }
+                else {
                     //maybe the pawn wanted a double jump
                     if (move.piece.canDoubleJump(move.origin)) {
                         Square nextSquare2 = Square.getSquare(nextSquare.getSquareNumber() + move.piece.getOffsets()[0]);
@@ -398,4 +379,6 @@ public class LegalMoveEvaluator {
         }
         return true;
     }
+
+
 }
