@@ -45,7 +45,6 @@ public class LegalMoveEvaluator {
     public boolean isLegalPawnMove() {
         Board b = state.board;
 
-
         //check if pawn is trying to move in its own file
         if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
             Square nextSquare = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[0]); //can return INVALID

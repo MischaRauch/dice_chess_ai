@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import logic.Game;
 import logic.LegalMoveEvaluator;
+import logic.LegalMoveGenerator;
 import logic.Move;
 import logic.board.Board;
 import logic.enums.Piece;
@@ -70,36 +71,47 @@ public class ChessBoard extends GridPane {
                     //that you would not have access to from the Tile class unless everything in here
                     //is static or if each tile has access to an instance of this class
 
+                    // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {
                         if (Tile.selectedTile == null) {
                             if (tile.getPiece().isFriendly(game.getTurn())) {
                                 //can only select your own pieces
                                 tile.select();
+                                //implement color tiles green
 
+                                tileMatrix[4][4].colorGreen();
 
+                                LegalMoveGenerator gen = new LegalMoveGenerator();
+                                ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(),tile.getSquare(),tile.getPiece(),tile.getPiece().getColor());
+                                // add all squares
+                                for (int k = 0; k < 8; k++) {
+                                    for (int l = 0; l < 8; l++) {
+                                        //legalMoves.add(Square.getSquare(k,l));
+                                        if(legalMoves.contains(Square.getSquare(k,l))) {
+                                            tileMatrix[k][l].colorGreen();
+                                        }
+                                    }
+                                }
 
-
-//                                VBox box = (VBox) node;
-//                                System.out.println("box: " + box.getClass());
-//                                box.getChildren().removeAll(box.getChildren());
-//                                box.setStyle("-fx-background-color: #2ecc71");
-//                                System.out.println("style maybe set?");
-//                                Tile t1 = (Tile) node; //failed
-//                                System.out.println("2");
-//                                t1.colorGreen();
-//                                System.out.println("3");
-                                // color tile
-
-                                /// TODO color other tiles green
-
-//                                if(tile.getPiece()==Piece.KING) {
-//
-//                                }
-                            }
+                                System.out.println(legalMoves);
+                                }
                         } else {
                             if (tile == Tile.selectedTile) {
                                 //suicide not allowed
                                 tile.unselect();
+                                tileMatrix[4][4].colorDefault();
+
+                                LegalMoveGenerator gen = new LegalMoveGenerator();
+                                ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(),tile.getSquare(),tile.getPiece(),tile.getPiece().getColor());
+                                for (int k = 0; k < 8; k++) {
+                                    for (int l = 0; l < 8; l++) {
+                                        //legalMoves.add(Square.getSquare(k,l));
+                                        if(legalMoves.contains(Square.getSquare(k,l))) {
+                                            tileMatrix[k][l].colorDefault();
+                                        }
+                                    }
+                                }
+
                             } else {
                                 //capture
                                 move(tile);
@@ -127,42 +139,27 @@ public class ChessBoard extends GridPane {
         return null;
     }
 
+    public Tile getTileAtSquare(Square square) {
+        return null;
+    }
+
     // you only move selected tile ever
     private void move(Tile tile) {
 
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
-        Move applied = game.makeMove(move);
-
-        // have origin
-        // have piece type
-
-        // new legalmovegenerator
-        // getLegalMoves(origin, piecetype) return square[]
-        ArrayList<Square> generatedLegalPawnMovesWhite = new ArrayList<>();
-        generatedLegalPawnMovesWhite.add(Square.a3); //legal square
-
+        Move appliedMove = game.makeMove(move); //updates Validity in Tile to VALID if move legal
 
         //todo use array of generated squares to color tiles green
 
-        // find same tile
-        for (int k = 0; k < tileMatrix.length; k++) {
-            for (int l = 0; l < tileMatrix.length; l++) {
-                if(tile==tileMatrix[l][k]) { //if tile selected
-                    System.out.println("TILE SELECTED");
-                    // TODO paint shit green
 
-                    tileMatrix[l][k+1].setStyle("-fx-background-color: #2ecc71");
-                }
-            }
-        }
-
-        if (applied.getStatus() == Validity.VALID) {
+        if (appliedMove.getStatus() == Validity.VALID) { // if legal move evaluator said VALIDITY Enum to VALID in Piece
             tile.setPiece(Tile.selectedTile.getPiece());
-            Tile.selectedTile.setPiece(Piece.EMPTY);
+
+            Tile.selectedTile.setPiece(Piece.EMPTY); // sets Piece Enum to empty
 
             Tile.selectedTile.unselect(); // paints board back to the same
 
-            if (applied.isEnPassantCapture()) {
+            if (appliedMove.isEnPassantCapture()) {
                 //TODO remove captured pawn
             }
 
@@ -171,7 +168,6 @@ public class ChessBoard extends GridPane {
             if (game.getCurrentState().getGameOver() != 0) {
                 showEndGame(game.getCurrentState().getGameOver());
             }
-
 
         } else {
             System.out.println("INVALID move");

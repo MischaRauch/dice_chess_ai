@@ -1,81 +1,44 @@
 package logic;
 
 import logic.board.Board;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import logic.enums.Validity;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+
 import static logic.enums.Piece.WHITE_KING;
 
 public class LegalMoveGenerator {
 
-
-
+    Move move;
+    State state;
     //state
     //take pos on board (x and y) or (square), take piece type
     //return string of moves
 // getLegalMoves(origin, piecetype) return square[]
 
-    Move move;
-    State state;
+    //
 
-    public Array isLegalPawnMove() {
-        Board b = state.board;
-        ArrayList<Square> squares;
-
-        //TODO add generation of moves returning Squares array
-
-
-        //check if pawn is trying to move in its own file
-        if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
-            Square nextSquare = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[0]); //can return INVALID
-            if (b.isEmpty(nextSquare)) {
-                //pawn can only move if next square is empty
-                if (nextSquare == move.destination) {
-                    //that's the square pawn wants to move to
-                    squares.add(nextSquare);
-                }
-                else {
-                    //maybe the pawn wanted a double jump
-                    if (move.piece.canDoubleJump(move.origin)) {
-                        Square nextSquare2 = Square.getSquare(nextSquare.getSquareNumber() + move.piece.getOffsets()[0]);
-
-                        move.enPassant = nextSquare;
-                        move.enPassantMove = true;
-
-                        return b.isEmpty(nextSquare2) && nextSquare2 == move.destination;
-                    }
-                }
+    public ArrayList<Square> getLegalMoves(State state, Square squareOrigin, Piece piece, Side side) {
+        LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+        ArrayList<Square> legalMoves = new ArrayList<>();
+        //fundamentally wrong with move as it need findal destinatino
+        //will need to loop through destinations, can't loop through destinations as can't "set" Squares
+        for (int i = 0; i < 128; i++) {
+            if(evaluator.isLegalMove(new Move(piece,squareOrigin,Square.getSquare(i),1,side),state)==true) {
+                legalMoves.add(Square.getSquare(i));
+                System.out.println("added index : " + Square.getSquare(i).getBoardIndex());
             }
-        } else {
-            //pawn is trying to move to a different file. Only legal if capture
-            for (int i = 1; i < 3; i++) {
-                Square validTarget = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[i]);
-                if (validTarget == move.destination) {
-                    switch (b.getPieceAt(validTarget)) {
-                        case EMPTY -> {
-                            if (state.enPassant == move.destination) {
-                                move.enPassantCapture = true;
-                                return true; //Maybe update some type of flag?
-                            }
-                        }
-                        case OFF_BOARD -> {
-                            return false;
-                        }
-                        default -> {
-                            return !b.getPieceAt(validTarget).isFriendly(move.side); //can only capture enemy pieces
-                        }
-                    }
-                }
-            }
-
         }
-        return false;
-        //TODO pawn promotion
+        return legalMoves;
     }
 
-    public boolean isLegalKnightMove() {
+
+    public ArrayList getLegalKnightMoves() {
         Board b = state.board;
         ArrayList<Square> options = new ArrayList<>();
 
@@ -99,81 +62,83 @@ public class LegalMoveGenerator {
         i = 0;
         while (i < options.size()) {
             if (options.get(i) == move.getDestination()) {
-                return checkingSides(b, move, move.getDestination());
+                if(checkingSides(b, move, move.getDestination())) {
+                    return options;
+                }
             }
             i++;
         }
-        return false;
+        return options;
     }
 
-    public boolean isLegalQueenMove() {
-        Board b = state.board;
-        boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
-        boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
-        boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
-                || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
-
-        if (sameFile || sameRank || sameDiagonal) {
-            if (sameRank) {
-                return (checkSameRank(b, move));
-            } // true if piece can go there without any obstacle
-            else if (sameFile) {
-                return checkSameFile(b, move);
-            } // true if piece can go there without any obstacle
-            else {
-                return checkSameDiagonal(b, move);
-            } // true if piece can go there without any obstacle
-        }
-        return false; // meaning not even on same rank, file or diagonal
-    }
-
-    public boolean isLegalRookMove() {
-        if (Game.longCastlingWhite || Game.longCastlingBlack || Game.longCastlingWhite || Game.shortCastlingWhite) {
-            if (move.getPiece().getColor() == Side.WHITE) {
-                if (move.getOrigin().getSquareNumber() == 0) {
-                    Game.longCastlingWhite = false;
-                    System.out.println("long castling: " + Game.longCastlingWhite);
-                } else {
-                    Game.shortCastlingWhite = false;
-                    System.out.println("short castling: " + Game.shortCastlingWhite);
-                }
-            } else {
-                if (move.getOrigin().getSquareNumber() == 112) {
-                    Game.longCastlingBlack = false;
-                    System.out.println("long castling: " + Game.longCastlingBlack);
-                } else {
-                    Game.shortCastlingBlack = false;
-                    System.out.println("short castling: " + Game.shortCastlingBlack);
-                }
-            }
-        }
-
-
-        Board b = state.board;
-        boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
-        boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
-
-        if (sameFile || sameRank) {
-            if (sameRank) {
-                return (checkSameRank(b, move));
-            } // true if piece can go there without any obstacle
-            else {
-                return checkSameFile(b, move);
-            } // true if piece can go there without any obstacle
-        }
-        return false; // meaning not even on same rank or file
-    }
-
-    public boolean isLegalBishopMove() {
-        Board b = state.board;
-        boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
-                || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
-
-        if (sameDiagonal) {
-            return checkSameDiagonal(b, move); // true if piece can go there without any obstacle
-        }
-        return false; // meaning not diagonal
-    }
+//    public boolean isLegalQueenMove() {
+//        Board b = state.board;
+//        boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
+//        boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
+//        boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
+//                || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
+//
+//        if (sameFile || sameRank || sameDiagonal) {
+//            if (sameRank) {
+//                return (checkSameRank(b, move));
+//            } // true if piece can go there without any obstacle
+//            else if (sameFile) {
+//                return checkSameFile(b, move);
+//            } // true if piece can go there without any obstacle
+//            else {
+//                return checkSameDiagonal(b, move);
+//            } // true if piece can go there without any obstacle
+//        }
+//        return false; // meaning not even on same rank, file or diagonal
+//    }
+//
+//    public boolean isLegalRookMove() {
+//        if (Game.longCastlingWhite || Game.longCastlingBlack || Game.longCastlingWhite || Game.shortCastlingWhite) {
+//            if (move.getPiece().getColor() == Side.WHITE) {
+//                if (move.getOrigin().getSquareNumber() == 0) {
+//                    Game.longCastlingWhite = false;
+//                    System.out.println("long castling: " + Game.longCastlingWhite);
+//                } else {
+//                    Game.shortCastlingWhite = false;
+//                    System.out.println("short castling: " + Game.shortCastlingWhite);
+//                }
+//            } else {
+//                if (move.getOrigin().getSquareNumber() == 112) {
+//                    Game.longCastlingBlack = false;
+//                    System.out.println("long castling: " + Game.longCastlingBlack);
+//                } else {
+//                    Game.shortCastlingBlack = false;
+//                    System.out.println("short castling: " + Game.shortCastlingBlack);
+//                }
+//            }
+//        }
+//
+//
+//        Board b = state.board;
+//        boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
+//        boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
+//
+//        if (sameFile || sameRank) {
+//            if (sameRank) {
+//                return (checkSameRank(b, move));
+//            } // true if piece can go there without any obstacle
+//            else {
+//                return checkSameFile(b, move);
+//            } // true if piece can go there without any obstacle
+//        }
+//        return false; // meaning not even on same rank or file
+//    }
+//
+//    public boolean isLegalBishopMove() {
+//        Board b = state.board;
+//        boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
+//                || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
+//
+//        if (sameDiagonal) {
+//            return checkSameDiagonal(b, move); // true if piece can go there without any obstacle
+//        }
+//        return false; // meaning not diagonal
+//    }
 
     public boolean checkingSides(Board b, Move move, Square currentSquare) {
         return ((b.getPieceAt(currentSquare).getColor() != move.getSide()) && currentSquare == move.getDestination());
@@ -379,6 +344,7 @@ public class LegalMoveGenerator {
         }
         return true;
     }
+
 
 
 }

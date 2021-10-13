@@ -72,7 +72,17 @@ public class Tile extends VBox {
 
     public void colorGreen() {
         setStyle("-fx-background-color: #2ecc71");
-        updateView();
+//        updateView(); //may be
+    }
+
+    public void colorDefault() {
+        if ((row + col) % 2 == 0) {
+            //white cells: row + col % 2 == 0
+            setStyle("-fx-background-color: #d5a47d");
+        } else {
+            //black cells: row + col % 2 == 1
+            setStyle("-fx-background-color: #98501a");
+        }
     }
 
     public Piece getPiece() {
