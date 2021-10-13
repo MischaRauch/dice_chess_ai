@@ -25,6 +25,10 @@ public class Board0x88 extends Board {
 
     private final Piece[] board;
 
+    public Piece[] getBoardArray() {
+        return board;
+    }
+
     public Board0x88() {
         board = new Piece[128];
         for (int i = 0x00; i < board.length; i++) {

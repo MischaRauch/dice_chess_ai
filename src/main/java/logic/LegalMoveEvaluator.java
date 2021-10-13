@@ -103,7 +103,6 @@ public class LegalMoveEvaluator {
 
         }
         return false;
-        //TODO pawn promotion
     }
 
     public boolean isLegalKnightMove() {
