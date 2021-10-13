@@ -55,6 +55,8 @@ public class ChessBoard extends GridPane {
         tileMatrix = new Tile[8][8];
         char[][] boardState = parseFENd(fenD);
         System.out.println(Arrays.deepToString(boardState));
+        System.out.println(boardState.length + "len");
+
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
 
