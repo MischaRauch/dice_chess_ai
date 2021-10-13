@@ -42,7 +42,6 @@ public class GameboardController {
 
     @FXML
     void rollW(ActionEvent event) {
-
         diceRollW.setText("");
         LoadChessImages aid = new LoadChessImages();
         diceRollW.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
@@ -51,11 +50,6 @@ public class GameboardController {
 
     @FXML
     void initialize() throws IOException{
-
-
-
-        ///TODO implement dice color usage
-
         //create all pieces
         //set event handlers
         //can access gridpane cells using row and column indices

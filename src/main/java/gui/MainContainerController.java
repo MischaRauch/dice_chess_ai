@@ -58,7 +58,6 @@ public class MainContainerController {
     private VBox scrollVBox;
 
 
-
     @FXML
     void initialize() throws IOException{
         quitButton.setOnMouseEntered(event -> quitButton.setStyle("-fx-background-color: #FF0A0A;"));

@@ -37,10 +37,6 @@ public class DiceController {
     void initialize() throws IOException {
         rollButton.setOnMouseEntered(event -> rollButton.setStyle("-fx-background-color: #27ae60;"));
         rollButton.setOnMouseExited(event -> rollButton.setStyle("-fx-background-color: #bf7832;"));
-        //container.setBackground(new Background(new BackgroundFill(Color.TURQUOISE, null, null)));
-        //container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
-        //imageVBox.setAlignment(Pos.CENTER);
-        //container.setAlignment(Pos.CENTER);
     }
 
 }
