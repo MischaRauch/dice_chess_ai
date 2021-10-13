@@ -216,14 +216,6 @@ class LegalMoveEvaluatorTest {
    }
 
     @Test
-   void testCheckingSides() {
-        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
-
-       boolean value= evaluator.checkingSides(startBoard,potentialMove,Square.c2);
-       assertTrue(value);
-    }
-
-    @Test
    void testCheckSameFile() {
         potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
 
