@@ -21,12 +21,13 @@ import javafx.stage.Stage;
 import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
+import logic.enums.Side;
 
 import javax.swing.*;
 import java.io.IOException;
 
 public class MainContainerController {
-
+    private Label displayTurn;
     private HBox undoRedoBox;
     private Button undoButton;
     private Button redoButton;
@@ -94,12 +95,19 @@ public class MainContainerController {
         historyScrollPane.setPrefViewportHeight(1000);
         historyScrollPane.setContent(scrollVBox);
 
-        //setInScrollPane();
 
-        Label diceTitle = new Label("Dice:");
         Label scrollpaneTitle = new Label("History of Moves:");
+        scrollpaneTitle.setFont(new Font("Cambria", 18));
+        scrollpaneTitle.setUnderline(true);
+        scrollpaneTitle.setStyle("-fx-font-weight: bold");
+
+        displayTurn = new Label("Turn: " + "WHITE");
+        displayTurn.setUnderline(true);
+        displayTurn.setFont(new Font("Cambria", 40));
+        displayTurn.setStyle("-fx-font-weight: bold");
+
         rightSideVBox.setSpacing(20);
-        rightSideVBox.getChildren().addAll(diceTitle, p, undoRedoBox, scrollpaneTitle, historyScrollPane);
+        rightSideVBox.getChildren().addAll(displayTurn, p, undoRedoBox, scrollpaneTitle, historyScrollPane);
 
         outFlowPaneW.setBackground(new Background(new BackgroundFill(Color.ANTIQUEWHITE, null, null)));
         outFlowPaneW.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY)));
@@ -129,5 +137,9 @@ public class MainContainerController {
         newL.setFont(new Font("Arial", 13));
         scrollVBox.getChildren().add(newL);
         scrollVBox.setAlignment(Pos.TOP_CENTER);
+    }
+
+    public void setGameForTurn(Game game) {
+        displayTurn.setText("Turn: " + game.getTurn());
     }
 }
