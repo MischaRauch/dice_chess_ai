@@ -4,16 +4,18 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static logic.enums.Side.WHITE;
+
 public enum Piece {
     PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING,
     EMPTY, OFF_BOARD,
 
-    WHITE_PAWN(PAWN, Side.WHITE),
-    WHITE_KNIGHT(KNIGHT, Side.WHITE),
-    WHITE_BISHOP(BISHOP, Side.WHITE),
-    WHITE_ROOK(ROOK, Side.WHITE),
-    WHITE_QUEEN(QUEEN, Side.WHITE),
-    WHITE_KING(KING, Side.WHITE),
+    WHITE_PAWN(PAWN, WHITE),
+    WHITE_KNIGHT(KNIGHT, WHITE),
+    WHITE_BISHOP(BISHOP, WHITE),
+    WHITE_ROOK(ROOK, WHITE),
+    WHITE_QUEEN(QUEEN, WHITE),
+    WHITE_KING(KING, WHITE),
 
     BLACK_PAWN(PAWN, Side.BLACK),
     BLACK_KNIGHT(KNIGHT, Side.BLACK),
@@ -89,8 +91,24 @@ public enum Piece {
         return switch (this) {
             case WHITE_PAWN -> new int[]{16, 15, 17};
             case BLACK_PAWN -> new int[]{-16, -15, -17};
-            //etc
+            case WHITE_KNIGHT, BLACK_KNIGHT -> new int[]{-31, 31, -33, 33, 18, -18, 14, -14};
+            case WHITE_BISHOP, BLACK_BISHOP -> new int[]{-15, -17, 15, 17};
+            case WHITE_ROOK, BLACK_ROOK -> new int[]{-16, 16, -1, 1};
+            case WHITE_QUEEN, BLACK_QUEEN -> new int[]{-15, -17, 15, 17, -16, 16, -1, 1};
+            case WHITE_KING, BLACK_KING -> new int[]{-15, -17, 15, 17, 1, -1, 16, -16};
             default -> new int[0];
+        };
+    }
+
+    public Piece getColoredPiece(Side color) {
+        return switch (this) {
+            case PAWN -> color == WHITE ? WHITE_PAWN : BLACK_PAWN;
+            case KNIGHT -> color == WHITE ? WHITE_KNIGHT : BLACK_KNIGHT;
+            case BISHOP -> color == WHITE ? WHITE_BISHOP : BLACK_BISHOP;
+            case ROOK -> color == WHITE ? WHITE_ROOK : BLACK_ROOK;
+            case QUEEN -> color == WHITE ? WHITE_QUEEN : BLACK_QUEEN;
+            case KING -> color == WHITE ? WHITE_KING : BLACK_KING;
+            default -> type;
         };
     }
 

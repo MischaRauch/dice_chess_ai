@@ -18,10 +18,13 @@ public enum Square {
     INVALID(0x88, 99999); //arbitrary
 
     static Map<Integer, Square> squareMap = new HashMap<>();
+    static Map<Integer, Square> boardIndexMap = new HashMap<>();
 
     static {
-        for (Square s : Square.values())
+        for (Square s : Square.values()) {
             squareMap.put(s.squareNumber, s);
+            boardIndexMap.put(s.boardIndex, s);
+        }
     }
 
     final int squareNumber;
@@ -45,6 +48,10 @@ public enum Square {
 
     public static Square getSquare(int squareNumber) {
         return squareMap.getOrDefault(squareNumber, INVALID);
+    }
+
+    public static Square getSquareByIndex(int squareNumber) {
+        return boardIndexMap.getOrDefault(squareNumber, INVALID);
     }
 
     /**
