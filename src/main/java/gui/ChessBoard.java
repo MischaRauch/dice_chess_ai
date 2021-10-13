@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import logic.Dice;
 import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
@@ -66,34 +67,35 @@ public class ChessBoard extends GridPane {
                 this.add(tile, j, i);
                 tileBoard[i-1][j-1] = tile;
 
-
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
 
-                    if (tile.getPiece() != Piece.EMPTY) {
-                        if (Tile.selectedTile == null) {
-                            if (tile.getPiece().isFriendly(game.getTurn())) {
-                                //can only select your own pieces
-                                tile.select();
+                        if (tile.getPiece() != Piece.EMPTY) {
+                            if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn())) {
+                                if (Tile.selectedTile == null) {
+                                    if (tile.getPiece().isFriendly(game.getTurn())) {
+                                        //can only select your own pieces
+                                        tile.select();
+                                    }
+                                } else {
+                                    if (tile == Tile.selectedTile) {
+                                        //suicide not allowed
+                                        tile.unselect();
+                                    } else {
+                                        //capture
+                                        move(tile);
+                                    }
+                                }
                             }
                         } else {
-                            if (tile == Tile.selectedTile) {
-                                //suicide not allowed
-                                tile.unselect();
-                            } else {
-                                //capture
+                            if (Tile.selectedTile != null) {
                                 move(tile);
                             }
                         }
-                    } else {
-                        if (Tile.selectedTile != null) {
-                            move(tile);
-                        }
-                    }
+
 
                     //process move, check validity, update gui board, etc
                 });
-
             }
         }
     }

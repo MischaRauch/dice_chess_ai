@@ -12,6 +12,8 @@ import static logic.enums.Piece.*;
 
 public class Dice {
 
+    public static Piece[] diceToPiece = {PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING};
+
     /**
      * Need to only return valid piece types. We need some way to check if the number returned is valid
      *
