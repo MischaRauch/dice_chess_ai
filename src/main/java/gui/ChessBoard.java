@@ -4,16 +4,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
+import logic.enums.Side;
 import logic.enums.Validity;
 
 import java.io.IOException;
 import java.util.Arrays;
 
+import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
 
 /**
@@ -24,12 +27,14 @@ import static logic.enums.Side.WHITE;
 public class ChessBoard extends GridPane {
 
     private final Game game;
+    MainContainerController mainContainerController;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
-    public ChessBoard() throws IOException {
+    public ChessBoard(MainContainerController mainContainerController) throws IOException {
         super(); //honestly idk if this line is even necessary but ive seen it done on the internet
         game = new Game();
+        this.mainContainerController = mainContainerController;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard2.fxml"));
         loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
@@ -96,6 +101,11 @@ public class ChessBoard extends GridPane {
         Move applied = game.makeMove(move);
 
         if (applied.getStatus() == Validity.VALID) {
+            if((tile.getPiece() != Piece.EMPTY) && (tile.getPiece().getColor() != Tile.selectedTile.getPiece().getColor())){
+                //capture piece so move piece to the flowpane
+                movePieceOut(tile.getPiece(), tile.getPiece().getColor());
+            }
+
             tile.setPiece(Tile.selectedTile.getPiece());
             Tile.selectedTile.setPiece(Piece.EMPTY);
 
@@ -150,6 +160,19 @@ public class ChessBoard extends GridPane {
         }
 
         return board;
+    }
+
+    public void movePieceOut(Piece piece, Side color){
+        ImageView view;
+        if (color == WHITE){
+            view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
+            mainContainerController.setInFlowPaneB(view);
+        }
+        else{
+            view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
+            mainContainerController.setInFlowPaneW(view);
+        }
+
     }
 
     public void showEndGame(int winner) {

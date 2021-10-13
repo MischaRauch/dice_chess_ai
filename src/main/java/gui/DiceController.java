@@ -1,26 +1,40 @@
 package gui;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.event.ActionEvent;
 import logic.Dice;
 
+import java.io.IOException;
+
 public class DiceController {
 
     @FXML
-    private VBox image;
+    private VBox container;
+    @FXML
+    private VBox imageVBox;
 
     @FXML
     private Button rollButton;
 
     @FXML
     void rollButtonAction(ActionEvent event) {
-        image.getChildren().clear();
+        imageVBox.getChildren().clear();
         LoadChessImages trial = new LoadChessImages();
-        image.getChildren().add(trial.loadImage(trial.whichPiece(Dice.roll(), false)));
+        imageVBox.getChildren().add(trial.loadImage(trial.whichPiece(Dice.roll(), false)));
+    }
+
+    @FXML
+    void initialize() throws IOException{
+        container.setBackground(new Background(new BackgroundFill(Color.TURQUOISE, null, null)));
+        container.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.FULL)));
+        imageVBox.setAlignment(Pos.CENTER);
+        container.setAlignment(Pos.CENTER);
     }
 
 }

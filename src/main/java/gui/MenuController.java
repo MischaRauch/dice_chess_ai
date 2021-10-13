@@ -38,11 +38,14 @@ public class MenuController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         //stage.setMaximized(true);
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
     }
 
     @FXML
     void initialize() {
+        //set full screen
+
+
         //this method gets automatically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
