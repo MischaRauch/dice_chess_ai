@@ -145,22 +145,22 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalRookMove() {
-        if (Game.longCastlingWhite || Game.longCastlingBlack || Game.longCastlingWhite || Game.shortCastlingWhite) {
+        if (State.longCastlingWhite || State.longCastlingBlack || State.longCastlingWhite || State.shortCastlingWhite) {
             if (move.getPiece().getColor() == Side.WHITE) {
                 if (move.getOrigin().getSquareNumber() == 0) {
-                    Game.longCastlingWhite = false;
-                    System.out.println("long castling: " + Game.longCastlingWhite);
+                    State.longCastlingWhite = false;
+                    System.out.println("long castling: " + State.longCastlingWhite);
                 } else {
-                    Game.shortCastlingWhite = false;
-                    System.out.println("short castling: " + Game.shortCastlingWhite);
+                    State.shortCastlingWhite = false;
+                    System.out.println("short castling: " + State.shortCastlingWhite);
                 }
             } else {
                 if (move.getOrigin().getSquareNumber() == 112) {
-                    Game.longCastlingBlack = false;
-                    System.out.println("long castling: " + Game.longCastlingBlack);
+                    State.longCastlingBlack = false;
+                    System.out.println("long castling: " + State.longCastlingBlack);
                 } else {
-                    Game.shortCastlingBlack = false;
-                    System.out.println("short castling: " + Game.shortCastlingBlack);
+                    State.shortCastlingBlack = false;
+                    System.out.println("short castling: " + State.shortCastlingBlack);
                 }
             }
         }
@@ -315,26 +315,26 @@ public class LegalMoveEvaluator {
         }
 
         //check for castling
-        if (Game.longCastlingWhite || Game.longCastlingBlack || Game.shortCastlingBlack || Game.shortCastlingWhite) {
+        if (State.longCastlingWhite || State.longCastlingBlack || State.shortCastlingBlack || State.shortCastlingWhite) {
             if (move.getPiece() == WHITE_KING) {
                 if (move.getOrigin().getSquareNumber() == 4) {
-                    if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && Game.shortCastlingWhite) {
-                        Game.shortCastlingWhite = false;
+                    if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && State.shortCastlingWhite) {
+                        State.shortCastlingWhite = false;
                         System.out.println("SHORT CASTLING WHITE");
                         return true;
-                    } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && Game.longCastlingWhite) {
-                        Game.longCastlingWhite = false;
+                    } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && State.longCastlingWhite) {
+                        State.longCastlingWhite = false;
                         System.out.println("LONG CASTLING WHITE");
                         return true;
                     }
                 }
             } else {
-                if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && Game.shortCastlingBlack) {
-                    Game.shortCastlingBlack = false;
+                if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && State.shortCastlingBlack) {
+                    State.shortCastlingBlack = false;
                     System.out.println("SHORT CASTLING Black");
                     return true;
-                } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && Game.longCastlingBlack) {
-                    Game.longCastlingBlack = false;
+                } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && State.longCastlingBlack) {
+                    State.longCastlingBlack = false;
                     System.out.println("LONG CASTLING Black");
                     return true;
                 }
@@ -348,11 +348,11 @@ public class LegalMoveEvaluator {
     //disabled castling rights after a king move
     public void disableCastling() {
         if (move.getPiece().getColor() == Side.WHITE) {
-            Game.shortCastlingWhite = false;
-            Game.longCastlingWhite = false;
+            State.shortCastlingWhite = false;
+            State.longCastlingWhite = false;
         } else {
-            Game.shortCastlingBlack = false;
-            Game.longCastlingBlack = false;
+            State.shortCastlingBlack = false;
+            State.longCastlingBlack = false;
         }
     }
 

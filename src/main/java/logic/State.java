@@ -18,6 +18,10 @@ public class State {
     public Board board;
     public int diceRoll;
     public Side color;
+    static boolean shortCastlingWhite = true;
+    static boolean longCastlingWhite = true;
+    static boolean shortCastlingBlack = true;
+    static boolean longCastlingBlack = true;
 
     public Square enPassant = Square.INVALID;
 

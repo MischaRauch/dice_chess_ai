@@ -11,10 +11,6 @@ import java.util.Stack;
 
 public class Game {
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-    static boolean shortCastlingWhite = true;
-    static boolean longCastlingWhite = true;
-    static boolean shortCastlingBlack = true;
-    static boolean longCastlingBlack = true;
 
     private final Stack<State> previousStates;
     private final Stack<State> redoStates;
