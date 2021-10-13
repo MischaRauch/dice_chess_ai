@@ -26,6 +26,7 @@ import java.util.Arrays;
  */
 public class ChessBoard extends GridPane {
 
+    private final boolean DEBUG = false;
     private final Game game;
     private Tile[][] tileMatrix;
 
@@ -63,7 +64,7 @@ public class ChessBoard extends GridPane {
 
                 this.add(tile, j, i);
                 //TODO fix this shit
-                tileMatrix[j-1][i-1]=tile;
+                tileMatrix[i-1][j-1]=tile;
 
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
@@ -78,22 +79,13 @@ public class ChessBoard extends GridPane {
                             if (tile.getPiece().isFriendly(game.getTurn())) {
                                 //can only select your own pieces
                                 tile.select();
-                                //implement color tiles green
-
-                                tileMatrix[4][4].colorGreen();
 
                                 LegalMoveGenerator gen = new LegalMoveGenerator();
                                 ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(),tile.getSquare(),tile.getPiece(),tile.getPiece().getColor());
-                                // add all squares
-//                                for (int k = 0; k < 8; k++) {
-//                                    for (int l = 0; l < 8; l++) {
-//                                        //legalMoves.add(Square.getSquare(k,l));
-//                                        if(legalMoves.contains(Square.getSquare(k,l))) {
-//                                            System.out.println("rank: " + k + " file: " + l);
-//                                            tileMatrix[k][l].colorGreen();
-//                                        }
-//                                    }
-//                              // aids to work with matrix system and loops, mayally
+
+                                // on piece click first time, selection
+//                              // hard to work with matrix system and loops, doing manually
+                                // TODO add loop system
                                 if(legalMoves.contains(Square.a8)) {tileMatrix[0][0].colorGreen();}
                                 if(legalMoves.contains(Square.b8)) {tileMatrix[0][1].colorGreen();}
                                 if(legalMoves.contains(Square.c8)) {tileMatrix[0][2].colorGreen();}
@@ -172,10 +164,11 @@ public class ChessBoard extends GridPane {
                             if (tile == Tile.selectedTile) {
                                 //suicide not allowed
                                 tile.unselect();
-                                tileMatrix[4][4].colorDefault();
 
                                 LegalMoveGenerator gen = new LegalMoveGenerator();
                                 ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(),tile.getSquare(),tile.getPiece(),tile.getPiece().getColor());
+
+                                //on piece de-selection, second click
                                 if(legalMoves.contains(Square.a8)) {tileMatrix[0][0].colorGreen();}
                                 if(legalMoves.contains(Square.b8)) {tileMatrix[0][1].colorDefault();}
                                 if(legalMoves.contains(Square.c8)) {tileMatrix[0][2].colorDefault();}
@@ -250,11 +243,16 @@ public class ChessBoard extends GridPane {
 
                             } else {
                                 //capture
+                                if(DEBUG)System.out.println("Capture");
+                                redrawBoard();
                                 move(tile);
+
                             }
                         }
                     } else {
                         if (Tile.selectedTile != null) {
+                            if(DEBUG)System.out.println("piece not selected");
+                            redrawBoard();
                             move(tile);
                         }
                     }
@@ -265,19 +263,15 @@ public class ChessBoard extends GridPane {
             }
         }
     }
-    // used to return tile (that has HBox funcionality)
-    private Node getNodeFromGridPane(int col, int row) {
-        for (Node node : this.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
+
+    private void redrawBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                tileMatrix[i][j].colorDefault();
             }
         }
-        return null;
     }
 
-    public Tile getTileAtSquare(Square square) {
-        return null;
-    }
 
     // you only move selected tile ever
     private void move(Tile tile) {
