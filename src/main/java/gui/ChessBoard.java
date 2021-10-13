@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,6 +12,7 @@ import logic.Game;
 import logic.Move;
 import logic.enums.Piece;
 import logic.enums.Side;
+import logic.enums.Square;
 import logic.enums.Validity;
 
 import java.io.IOException;
@@ -97,6 +99,7 @@ public class ChessBoard extends GridPane {
     }
 
     private void move(Tile tile) {
+
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
         Move applied = game.makeMove(move);
 
@@ -114,6 +117,34 @@ public class ChessBoard extends GridPane {
             if (applied.isEnPassantCapture()) {
                 //remove captured pawn;
                 tileBoard[tile.getRow() + (move.getSide() == WHITE ? 1 : -1)][tile.getCol()].setPiece(Piece.EMPTY);
+            }
+
+            if (applied.isPromotionMove()) {
+                tile.setPiece(applied.getPromotionPiece());
+            }
+
+            //move rook if castling was performed
+            if (move.castling != Square.INVALID) {
+                //Short castling white
+                if(move.castling == Square.f1) {
+                    tileBoard[7][7].setPiece(Piece.EMPTY);
+                    tileBoard[7][5].setPiece(Piece.WHITE_ROOK);
+                }
+                //Long castling white
+                if(move.castling == Square.d1) {
+                    tileBoard[7][0].setPiece(Piece.EMPTY);
+                    tileBoard[7][3].setPiece(Piece.WHITE_ROOK);
+                }
+                //Short castling black
+                if(move.castling == Square.f8) {
+                    tileBoard[0][7].setPiece(Piece.EMPTY);
+                    tileBoard[0][5].setPiece(Piece.BLACK_ROOK);
+                }
+                //Long castling black
+                if(move.castling == Square.d8) {
+                    tileBoard[0][0].setPiece(Piece.EMPTY);
+                    tileBoard[0][3].setPiece(Piece.BLACK_ROOK);
+                }
             }
 
             System.out.println("Next dice roll: " + game.getDiceRoll());
