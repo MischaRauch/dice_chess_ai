@@ -45,7 +45,7 @@ public class ChessBoard extends GridPane {
     //more or less copy-pasted from GameboardController with some slight modifications
     public void loadBoard(String fenD) {
         char[][] boardState = parseFENd(fenD);
-        System.out.println(Arrays.deepToString(boardState));
+
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
 
@@ -55,10 +55,6 @@ public class ChessBoard extends GridPane {
 
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
-                    //the event handler can technically also be made in the constructor in the Tile class,
-                    //but it might be better to have it here so that you can use other fields/info from this class (e.g. currently selected piece/tile)
-                    //that you would not have access to from the Tile class unless everything in here
-                    //is static or if each tile has access to an instance of this class
 
                     if (tile.getPiece() != Piece.EMPTY) {
                         if (Tile.selectedTile == null) {

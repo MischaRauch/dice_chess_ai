@@ -41,8 +41,8 @@ public class MainContainerController {
     @FXML
     void initialize() throws IOException{
 
-        GridPane board = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
-        MainHbox.getChildren().add(board); //how do I make it non-static?
+        //GridPane board = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
+        MainHbox.getChildren().add(new ChessBoard()); //how do I make it non-static?
 
         Parent p =  FXMLLoader.load(getClass().getResource("/fxml/dice.fxml"));
 
