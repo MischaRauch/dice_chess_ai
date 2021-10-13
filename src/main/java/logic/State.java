@@ -20,6 +20,7 @@ public class State {
     public Board board;
     public int diceRoll;
     public Side color;
+    static boolean applyCastling = false;
     static boolean shortCastlingWhite = true;
     static boolean longCastlingWhite = true;
     static boolean shortCastlingBlack = true;
@@ -56,6 +57,11 @@ public class State {
         int newRoll = Dice.roll();
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
+        System.out.println("PIECE FOR CASTLING "+ move.castling);
+        System.out.println("Boolean for castling S B "+shortCastlingBlack);
+        System.out.println("Boolean for castling S W "+shortCastlingWhite);
+        System.out.println("Boolean for castling L B "+longCastlingBlack);
+        System.out.println("Boolean for castling L W "+longCastlingWhite);
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
         State nextState = new State(newBoard, newRoll, nextTurn);
@@ -66,6 +72,39 @@ public class State {
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
+        }
+        //check if castling has happend and the rook needs to move
+        if (applyCastling) {
+        // (1) if (shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite) {
+        // (2) if ((shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite)) = false {
+        // (1) would check till all castle moves are not possible anymore at the beginning of the game, while
+        //(2) would check till the end of the game if castling is possible --> I created a new applyCastling boolean
+        //to check if castling was done - more efficient over the long run but not optimal
+            System.out.println("WHY");
+            if (move.castling != Square.INVALID) {
+                //check which rook has to move based on the setted square
+                if (move.castling == Square.f1) {
+                    newBoard.setPiece(EMPTY, Square.h1);
+                    newBoard.setPiece(WHITE_ROOK, move.castling);
+                    longCastlingWhite = false;
+                }
+                if (move.castling == Square.d1) {
+                    newBoard.setPiece(EMPTY, Square.a1);
+                    newBoard.setPiece(WHITE_ROOK, move.castling);
+                    shortCastlingWhite = false;
+                }
+                if (move.castling == Square.f8) {
+                    newBoard.setPiece(EMPTY, Square.h8);
+                    newBoard.setPiece(BLACK_ROOK, Square.f8);
+                    longCastlingBlack = false;
+                }
+                if (move.castling == Square.d8) {
+                    newBoard.setPiece(EMPTY, Square.a8);
+                    newBoard.setPiece(BLACK_ROOK, move.castling);
+                    shortCastlingBlack = false;
+                }
+            }
+            applyCastling = false;
         }
 
         if (move.promotionMove) {
