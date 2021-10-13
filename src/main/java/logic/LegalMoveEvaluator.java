@@ -67,6 +67,7 @@ public class LegalMoveEvaluator {
                         move.promotionMove = true;
                     }
                     return true;
+
                 } else {
                     //maybe the pawn wanted a double jump
                     if (move.piece.canDoubleJump(move.origin)) {

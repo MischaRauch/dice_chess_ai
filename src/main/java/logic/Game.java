@@ -33,8 +33,9 @@ public class Game {
         return CURRENT_GAME;
     }
 
+    // called for GUI to moves Tile
     public Move makeMove(Move move) {
-        if (evaluator.isLegalMove(move, currentState)) {
+        if (evaluator.isLegalMove(move, currentState)) { //move legal
 
             State newState = currentState.applyMove(move);
 
