@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.event.ActionEvent;
 import logic.Dice;
+import logic.Game;
+import logic.enums.Side;
 
 import java.io.IOException;
 
@@ -25,8 +27,9 @@ public class DiceController {
     @FXML
     void rollButtonAction(ActionEvent event) {
         imageVBox.getChildren().clear();
-        LoadChessImages trial = new LoadChessImages();
-        imageVBox.getChildren().add(trial.loadImage(trial.whichPiece(Dice.roll(), false)));
+        int diceRoll = Game.getInstance().getDiceRoll();
+        Side color = Game.getInstance().getTurn();
+        imageVBox.getChildren().add(ChessIcons.load(diceRoll, color));
     }
 
     @FXML

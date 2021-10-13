@@ -38,6 +38,10 @@ public class State {
         this.color = color;
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
+
     public int getGameOver() {
         return gameOver;
     }
@@ -55,6 +59,7 @@ public class State {
         }
 
         int newRoll = Dice.roll();
+
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         System.out.println("PIECE FOR CASTLING "+ move.castling);
@@ -64,11 +69,6 @@ public class State {
         System.out.println("Boolean for castling L W "+longCastlingWhite);
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
-        State nextState = new State(newBoard, newRoll, nextTurn);
-
-        if (move.enPassantMove) {
-            nextState.enPassant = move.enPassant;
-        }
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
@@ -111,7 +111,14 @@ public class State {
             newBoard.setPiece(move.promotionPiece, move.destination);
         }
 
-        //System.out.println(Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor())));
+        State nextState = new State(newBoard, newRoll, nextTurn);
+
+        if (move.enPassantMove) {
+            nextState.enPassant = move.enPassant;
+        }
+
+        nextState.diceRoll = Dice.roll(nextState, nextTurn);
+
         newBoard.printBoard();
         return nextState;
     }
