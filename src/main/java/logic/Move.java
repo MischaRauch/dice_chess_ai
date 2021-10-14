@@ -84,7 +84,7 @@ public class Move {
     @Override
     public String toString() {
         return "Moved: " + piece +
-                " from (origin): " + origin +
-                ", to (destination)=" + destination;
+                " from: " + origin +
+                ", to: " + destination;
     }
 }

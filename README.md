@@ -1,6 +1,10 @@
 # Group04_2021
 
-After you clone the repository in intellij (File > New Project from Version Control)
+## Dice Chess!
 
-You wil be prompted to load it as a gradle project, which you should do and that will generate
-all the gradle stuff
+### How to run:
+
+1. Unzip the source code project folder
+2. Navigate to the project root folder on the command line
+3. If you have gradle installed, run the project using ```gradle run```
+4. If you don't have gradle installed, try running ``gradlew run``
