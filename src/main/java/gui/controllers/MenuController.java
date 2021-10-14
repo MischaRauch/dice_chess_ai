@@ -44,9 +44,6 @@ public class MenuController {
 
     @FXML
     void initialize() throws IOException{
-        //set full screen
-
-
         //this method gets automatically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
         newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -65,19 +66,34 @@ public class MainContainerController {
 
         undoRedoBox = new HBox();
         undoButton = new Button("Undo");
-        undoButton.setPrefSize(100, 50);
+        undoButton.setPrefSize(100, 60);
+        undoButton.setStyle("-fx-text-fill: #ffffff");
+        undoButton.setStyle("-fx-background-color: #bf7832;");
+        undoButton.setCursor(Cursor.HAND);
+        undoButton.setOnMouseEntered(event -> undoButton.setStyle("-fx-background-color: #bf5500;"));
         undoButton.setOnMouseClicked(e -> {
             Game game = Game.getInstance();
             game.undoState();
             board.loadBoard(game.getCurrentState().toFEN());
         });
+        undoButton.setOnMousePressed(event -> undoButton.setStyle("-fx-background-color: #2ecc71"));
+        undoButton.setOnMouseReleased(event -> undoButton.setStyle("-fx-background-color: #bf7832;"));
+        undoButton.setOnMouseExited(event -> undoButton.setStyle("-fx-background-color: #bf7832;"));
+
         redoButton = new Button("Redo");
-        redoButton.setPrefSize(100, 50);
+        redoButton.setPrefSize(100, 60);
+        redoButton.setStyle("-fx-text-fill: #ffffff");
+        redoButton.setStyle("-fx-background-color: #bf7832;");
+        redoButton.setCursor(Cursor.HAND);
+        redoButton.setOnMouseEntered(event -> redoButton.setStyle("-fx-background-color: #bf5500;"));
         redoButton.setOnMouseClicked(e -> {
             Game game = Game.getInstance();
             game.redoState();
             board.loadBoard(game.getCurrentState().toFEN());
         });
+        redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71"));
+        redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #bf7832;"));
+        redoButton.setOnMouseExited(event -> redoButton.setStyle("-fx-background-color: #bf7832;"));
 
         undoRedoBox.setAlignment(Pos.CENTER);
         undoRedoBox.setSpacing(10);
@@ -94,16 +110,15 @@ public class MainContainerController {
         historyScrollPane.setPrefViewportHeight(1000);
         historyScrollPane.setContent(scrollVBox);
 
-
         Label scrollpaneTitle = new Label("History of Moves:");
-        scrollpaneTitle.setFont(new Font("Cambria", 18));
-        scrollpaneTitle.setUnderline(true);
+        scrollpaneTitle.setFont(new Font("System", 18));
         scrollpaneTitle.setStyle("-fx-font-weight: bold");
+        scrollpaneTitle.setStyle("-fx-text-fill: #ffffff;");
 
         displayTurn = new Label("Turn: " + "WHITE");
-        displayTurn.setUnderline(true);
-        displayTurn.setFont(new Font("Cambria", 40));
+        displayTurn.setFont(new Font("System", 40));
         displayTurn.setStyle("-fx-font-weight: bold");
+        displayTurn.setStyle("-fx-text-fill: #000000;");
 
         rightSideVBox.setSpacing(20);
         rightSideVBox.getChildren().addAll(displayTurn, p, undoRedoBox, scrollpaneTitle, historyScrollPane);
