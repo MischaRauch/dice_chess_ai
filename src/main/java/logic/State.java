@@ -1,33 +1,28 @@
 package logic;
 
-import gui.PromotionPrompt;
-import javafx.application.Platform;
 import logic.board.Board;
 import logic.enums.CastlingRights;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-
-import java.sql.SQLOutput;
 import java.util.EnumSet;
-
 import static logic.enums.Piece.*;
-import static logic.enums.Side.*;
+import static logic.enums.Side.BLACK;
+import static logic.enums.Side.WHITE;
 
 public class State {
 
     public static int gameOver;
-    public Board board;
-    public int diceRoll;
-    public Side color;
+    public static int counterForSpaces = 0;
     static boolean applyCastling = false;
     static boolean shortCastlingWhite = true;
     static boolean longCastlingWhite = true;
     static boolean shortCastlingBlack = true;
     static boolean longCastlingBlack = true;
+    public Board board;
+    public int diceRoll;
+    public Side color;
     public String fen = "";
-    public static int counterForSpaces = 0;
-
     public Square enPassant = Square.INVALID;
 
     EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
@@ -38,6 +33,15 @@ public class State {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
+    }
+
+    public static void main(String[] args) {
+        String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
+        String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        System.out.println("\n" + tricky);
+        Game game = new Game(tricky);
+        game.getCurrentState().board.printBoard();
+        System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
     }
 
     public Board getBoard() {
@@ -64,11 +68,11 @@ public class State {
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
-        System.out.println("PIECE FOR CASTLING "+ move.castling);
-        System.out.println("Boolean for castling S B "+shortCastlingBlack);
-        System.out.println("Boolean for castling S W "+shortCastlingWhite);
-        System.out.println("Boolean for castling L B "+longCastlingBlack);
-        System.out.println("Boolean for castling L W "+longCastlingWhite);
+        System.out.println("PIECE FOR CASTLING " + move.castling);
+        System.out.println("Boolean for castling S B " + shortCastlingBlack);
+        System.out.println("Boolean for castling S W " + shortCastlingWhite);
+        System.out.println("Boolean for castling L B " + longCastlingBlack);
+        System.out.println("Boolean for castling L W " + longCastlingWhite);
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
 
@@ -77,11 +81,11 @@ public class State {
         }
         //check if castling has happend and the rook needs to move
         if (applyCastling) {
-        // (1) if (shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite) {
-        // (2) if ((shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite)) = false {
-        // (1) would check till all castle moves are not possible anymore at the beginning of the game, while
-        //(2) would check till the end of the game if castling is possible --> I created a new applyCastling boolean
-        //to check if castling was done - more efficient over the long run but not optimal
+            // (1) if (shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite) {
+            // (2) if ((shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite)) = false {
+            // (1) would check till all castle moves are not possible anymore at the beginning of the game, while
+            //(2) would check till the end of the game if castling is possible --> I created a new applyCastling boolean
+            //to check if castling was done - more efficient over the long run but not optimal
             System.out.println("WHY");
             if (move.castling != Square.INVALID) {
                 //check which rook has to move based on the setted square
@@ -124,6 +128,7 @@ public class State {
         newBoard.printBoard();
         return nextState;
     }
+
     public void stateToFen() {
         Piece[] piece = board.getBoard();
         int counterlines = 0;
@@ -146,13 +151,13 @@ public class State {
                         counterForSpaces = 0;
                     }
                 }
-                if (counterlines >8) {
+                if (counterlines > 8) {
                     if (counterForSpaces != 0) {
                         fen += counterForSpaces;
                         counterForSpaces = 0;
                     }
                     fen += "/";
-                    counterlines= 0;
+                    counterlines = 0;
                 }
                 if (current != '\u0000') {
                     fen += current;
@@ -197,16 +202,6 @@ public class State {
 
         return fen;
     }
-
-    public static void main(String[] args) {
-        String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
-        String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-        System.out.println("\n"+tricky);
-        Game game = new Game(tricky);
-        game.getCurrentState().board.printBoard();
-        System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
-    }
-
 
 
 }

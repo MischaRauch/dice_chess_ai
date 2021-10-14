@@ -15,7 +15,7 @@ public class DiceChess extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/exampleMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainMenu.fxml"));
 
         Scene scene = new Scene(root);
 

@@ -3,7 +3,6 @@ package gui;
 import javafx.scene.image.ImageView;
 import logic.enums.Piece;
 import logic.enums.Side;
-
 import java.util.EnumMap;
 
 import static logic.enums.Piece.*;

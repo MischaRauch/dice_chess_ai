@@ -6,7 +6,6 @@ import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-
 import java.util.ArrayList;
 
 import static logic.enums.Piece.WHITE_KING;

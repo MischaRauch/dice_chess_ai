@@ -1,5 +1,7 @@
-package gui;
+package gui.controllers;
 
+import gui.LoadChessImages;
+import gui.Tile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -23,30 +25,6 @@ public class GameboardController {
     Label selectedPiece = null;
     @FXML
     private GridPane guiBoard;
-    @FXML
-    private Button diceRollButtonB;
-    @FXML
-    private Label diceRollB;
-    @FXML
-    private Button diceRollButtonW;
-    @FXML
-    private Label diceRollW;
-
-    @FXML
-    void rollB(ActionEvent event) {
-        LoadChessImages aid = new LoadChessImages();
-        diceRollB.setText("");
-        diceRollB.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
-        whiteTurn = true;
-    }
-
-    @FXML
-    void rollW(ActionEvent event) {
-        diceRollW.setText("");
-        LoadChessImages aid = new LoadChessImages();
-        diceRollW.setGraphic(aid.loadImage(aid.whichPiece(Dice.roll(), whiteTurn)));
-        whiteTurn = false;
-    }
 
     @FXML
     void initialize() throws IOException{

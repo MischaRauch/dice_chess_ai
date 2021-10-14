@@ -3,7 +3,6 @@ package logic.board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-
 import java.util.EnumSet;
 
 public abstract class Board {

@@ -1,12 +1,8 @@
 package logic;
 
 import logic.board.Board0x88;
-import logic.enums.Piece;
 import logic.enums.Side;
-import logic.enums.Square;
 import logic.enums.Validity;
-
-import java.util.LinkedList;
 import java.util.Stack;
 
 public class Game {
@@ -15,8 +11,8 @@ public class Game {
 
     private final Stack<State> previousStates;
     private final Stack<State> redoStates;
-    private State currentState;
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+    private State currentState;
 
     public Game() {
         this(openingFEN);
@@ -29,6 +25,7 @@ public class Game {
         CURRENT_GAME = this;
 
     }
+
     public static Game getInstance() {
         return CURRENT_GAME;
     }

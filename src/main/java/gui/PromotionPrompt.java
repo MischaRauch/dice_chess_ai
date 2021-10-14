@@ -1,20 +1,15 @@
 package gui;
 
+import gui.controllers.MainContainerController;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import logic.enums.Piece;
 import logic.enums.Side;
-
-import java.io.IOException;
 
 import static logic.enums.Piece.*;
 import static logic.enums.Side.WHITE;

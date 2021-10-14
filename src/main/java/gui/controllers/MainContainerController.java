@@ -1,67 +1,58 @@
-package gui;
+package gui.controllers;
 
-import com.sun.tools.javac.Main;
+import gui.ChessBoard;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import logic.Game;
 import logic.Move;
-import logic.enums.Piece;
-import logic.enums.Side;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class MainContainerController {
+    public static AnchorPane modal;
+    ChessBoard board;
     private Label displayTurn;
     private HBox undoRedoBox;
     private Button undoButton;
     private Button redoButton;
     private ScrollPane historyScrollPane;
-
-    @FXML private FlowPane outFlowPaneW;
-
-    @FXML private FlowPane outFlowPaneB;
-
-    @FXML private Button quitButton;
     @FXML
-    void quitEvent(ActionEvent event){
-        System.exit(0);
-    }
-
-    @FXML private Pane boardPane;
-
-    @FXML private VBox rightSideVBox;
-
-    @FXML private HBox MainHbox;
-
-    @FXML private AnchorPane modalDialogPane;
-
-    public static AnchorPane modal;
-
-    @FXML private VBox chessVBox;
+    private FlowPane outFlowPaneW;
+    @FXML
+    private FlowPane outFlowPaneB;
+    @FXML
+    private Button quitButton;
+    @FXML
+    private Pane boardPane;
+    @FXML
+    private VBox rightSideVBox;
+    @FXML
+    private HBox MainHbox;
+    @FXML
+    private AnchorPane modalDialogPane;
+    @FXML
+    private VBox chessVBox;
 
     private VBox scrollVBox;
 
-    ChessBoard board;
-
+    @FXML
+    void quitEvent(ActionEvent event) {
+        System.exit(0);
+    }
 
     @FXML
-    void initialize() throws IOException{
+    void initialize() throws IOException {
         quitButton.setOnMouseEntered(event -> quitButton.setStyle("-fx-background-color: #FF0A0A;"));
         quitButton.setOnMouseExited(event -> quitButton.setStyle("-fx-background-color: #bf7832;"));
 
@@ -70,7 +61,7 @@ public class MainContainerController {
         chessVBox.getChildren().add(board = new ChessBoard(this)); //how do I make it non-static?
         chessVBox.setAlignment(Pos.CENTER);
 
-        Parent p =  FXMLLoader.load(getClass().getResource("/fxml/dice.fxml"));
+        Parent p = FXMLLoader.load(getClass().getResource("/fxml/dice.fxml"));
 
         undoRedoBox = new HBox();
         undoButton = new Button("Undo");
@@ -82,7 +73,7 @@ public class MainContainerController {
         });
         redoButton = new Button("Redo");
         redoButton.setPrefSize(100, 50);
-        redoButton.setOnMouseClicked(e ->{
+        redoButton.setOnMouseClicked(e -> {
             Game game = Game.getInstance();
             game.redoState();
             board.loadBoard(game.getCurrentState().toFEN());
@@ -123,7 +114,7 @@ public class MainContainerController {
         outFlowPaneB.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.EMPTY)));
     }
 
-    public void setInFlowPaneW(ImageView piece){
+    public void setInFlowPaneW(ImageView piece) {
         piece.setFitWidth(80);
         piece.setFitHeight(80);
         ObservableList list = outFlowPaneW.getChildren();
@@ -131,7 +122,7 @@ public class MainContainerController {
         System.out.println("ADDED");
     }
 
-    public void setInFlowPaneB(ImageView piece){
+    public void setInFlowPaneB(ImageView piece) {
         piece.setFitWidth(80);
         piece.setFitHeight(80);
         ObservableList list = outFlowPaneB.getChildren();
@@ -139,7 +130,7 @@ public class MainContainerController {
         System.out.println("ADDED");
     }
 
-    public void setInScrollPane(Move move){
+    public void setInScrollPane(Move move) {
         Label newL = new Label(move.toString());
         //Label newL = new Label("Hello World");
         newL.setFont(new Font("Arial", 13));

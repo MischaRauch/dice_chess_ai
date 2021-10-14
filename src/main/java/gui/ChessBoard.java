@@ -1,12 +1,12 @@
 package gui;
 
+import gui.controllers.MainContainerController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Dice;
 import logic.Game;
@@ -16,6 +16,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.enums.Validity;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,7 @@ public class ChessBoard extends GridPane {
 
     private final boolean DEBUG = true;
     private final Game game;
+    private final Tile[][] tileBoard = new Tile[8][8];
     MainContainerController mainContainerController;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
@@ -41,7 +43,7 @@ public class ChessBoard extends GridPane {
         game = new Game();
         this.mainContainerController = mainContainerController;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard2.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard.fxml"));
         loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
         loader.setRoot(this);       //this class is also the Parent node of the FXML view
         loader.load();              //this is the method that actually does the loading. It's non-static version of FXMLLoader.load()
@@ -54,14 +56,12 @@ public class ChessBoard extends GridPane {
         loadBoard(opening);
     }
 
-    private final Tile[][] tileBoard = new Tile[8][8];
-
     //populates the GridPane (which is actually this class) with Tile objects
     //more or less copy-pasted from GameboardController with some slight modifications
     public void loadBoard(String fenD) {
         char[][] boardState = parseFENd(fenD);
         System.out.println(Arrays.deepToString(boardState));
-        if(DEBUG)System.out.println(boardState.length + "len");
+        if (DEBUG) System.out.println(boardState.length + "len");
 
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
@@ -71,121 +71,246 @@ public class ChessBoard extends GridPane {
                 //since ChessBoard is a GridPane, we add elements using this.add();
 
                 this.add(tile, j, i);
-                tileBoard[i-1][j-1] = tile;
+                tileBoard[i - 1][j - 1] = tile;
 
                 tile.setOnMouseClicked(event -> {
                     System.out.println(tile.getSquare() + " : " + tile.getPiece());
 
                     // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {
-                            if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn()) || tile.getPiece().promotable(tile.getSquare())) {
-                                if (Tile.selectedTile == null) {
-                                    if (tile.getPiece().isFriendly(game.getTurn())) {
-                                        //can only select your own pieces
-                                        tile.select();
+                        if (tile.getPiece().getType() == Dice.diceToPiece[game.getDiceRoll() - 1] || !tile.getPiece().isFriendly(game.getTurn()) || tile.getPiece().promotable(tile.getSquare())) {
+                            if (Tile.selectedTile == null) {
+                                if (tile.getPiece().isFriendly(game.getTurn())) {
+                                    //can only select your own pieces
+                                    tile.select();
 
-                                        LegalMoveGenerator gen = new LegalMoveGenerator();
-                                        ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(),tile.getSquare(),tile.getPiece(),tile.getPiece().getColor());
+                                    LegalMoveGenerator gen = new LegalMoveGenerator();
+                                    ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece(), tile.getPiece().getColor());
 
-                                        // on piece click first time, selection
-//                              // hard to work with matrix system and loops, doing manually
-                                        // TODO add loop system
-                                        if(legalMoves.contains(Square.a8)) {tileBoard[0][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b8)) {tileBoard[0][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c8)) {tileBoard[0][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d8)) {tileBoard[0][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e8)) {tileBoard[0][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f8)) {tileBoard[0][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g8)) {tileBoard[0][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h8)) {tileBoard[0][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a7)) {tileBoard[1][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b7)) {tileBoard[1][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c7)) {tileBoard[1][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d7)) {tileBoard[1][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e7)) {tileBoard[1][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f7)) {tileBoard[1][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g7)) {tileBoard[1][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h7)) {tileBoard[1][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a6)) {tileBoard[2][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b6)) {tileBoard[2][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c6)) {tileBoard[2][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d6)) {tileBoard[2][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e6)) {tileBoard[2][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f6)) {tileBoard[2][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g6)) {tileBoard[2][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h6)) {tileBoard[2][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a5)) {tileBoard[3][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b5)) {tileBoard[3][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c5)) {tileBoard[3][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d5)) {tileBoard[3][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e5)) {tileBoard[3][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f5)) {tileBoard[3][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g5)) {tileBoard[3][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h5)) {tileBoard[3][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a4)) {tileBoard[4][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b4)) {tileBoard[4][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c4)) {tileBoard[4][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d4)) {tileBoard[4][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e4)) {tileBoard[4][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f4)) {tileBoard[4][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g4)) {tileBoard[4][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h4)) {tileBoard[4][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a3)) {tileBoard[5][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b3)) {tileBoard[5][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c3)) {tileBoard[5][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d3)) {tileBoard[5][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e3)) {tileBoard[5][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f3)) {tileBoard[5][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g3)) {tileBoard[5][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h3)) {tileBoard[5][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a2)) {tileBoard[6][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b2)) {tileBoard[6][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c2)) {tileBoard[6][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d2)) {tileBoard[6][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e2)) {tileBoard[6][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f2)) {tileBoard[6][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g2)) {tileBoard[6][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h2)) {tileBoard[6][7].colorGreen();}
-
-                                        if(legalMoves.contains(Square.a1)) {tileBoard[7][0].colorGreen();}
-                                        if(legalMoves.contains(Square.b1)) {tileBoard[7][1].colorGreen();}
-                                        if(legalMoves.contains(Square.c1)) {tileBoard[7][2].colorGreen();}
-                                        if(legalMoves.contains(Square.d1)) {tileBoard[7][3].colorGreen();}
-                                        if(legalMoves.contains(Square.e1)) {tileBoard[7][4].colorGreen();}
-                                        if(legalMoves.contains(Square.f1)) {tileBoard[7][5].colorGreen();}
-                                        if(legalMoves.contains(Square.g1)) {tileBoard[7][6].colorGreen();}
-                                        if(legalMoves.contains(Square.h1)) {tileBoard[7][7].colorGreen();}
-
-                                        System.out.println("legal moves: " + legalMoves); //correct,which means legal move gen works
+                                    // on piece click first time, selection
+                                    // TODO add loop system
+                                    if (legalMoves.contains(Square.a8)) {
+                                        tileBoard[0][0].colorGreen();
                                     }
+                                    if (legalMoves.contains(Square.b8)) {
+                                        tileBoard[0][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c8)) {
+                                        tileBoard[0][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d8)) {
+                                        tileBoard[0][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e8)) {
+                                        tileBoard[0][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f8)) {
+                                        tileBoard[0][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g8)) {
+                                        tileBoard[0][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h8)) {
+                                        tileBoard[0][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a7)) {
+                                        tileBoard[1][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b7)) {
+                                        tileBoard[1][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c7)) {
+                                        tileBoard[1][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d7)) {
+                                        tileBoard[1][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e7)) {
+                                        tileBoard[1][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f7)) {
+                                        tileBoard[1][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g7)) {
+                                        tileBoard[1][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h7)) {
+                                        tileBoard[1][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a6)) {
+                                        tileBoard[2][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b6)) {
+                                        tileBoard[2][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c6)) {
+                                        tileBoard[2][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d6)) {
+                                        tileBoard[2][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e6)) {
+                                        tileBoard[2][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f6)) {
+                                        tileBoard[2][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g6)) {
+                                        tileBoard[2][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h6)) {
+                                        tileBoard[2][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a5)) {
+                                        tileBoard[3][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b5)) {
+                                        tileBoard[3][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c5)) {
+                                        tileBoard[3][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d5)) {
+                                        tileBoard[3][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e5)) {
+                                        tileBoard[3][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f5)) {
+                                        tileBoard[3][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g5)) {
+                                        tileBoard[3][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h5)) {
+                                        tileBoard[3][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a4)) {
+                                        tileBoard[4][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b4)) {
+                                        tileBoard[4][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c4)) {
+                                        tileBoard[4][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d4)) {
+                                        tileBoard[4][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e4)) {
+                                        tileBoard[4][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f4)) {
+                                        tileBoard[4][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g4)) {
+                                        tileBoard[4][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h4)) {
+                                        tileBoard[4][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a3)) {
+                                        tileBoard[5][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b3)) {
+                                        tileBoard[5][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c3)) {
+                                        tileBoard[5][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d3)) {
+                                        tileBoard[5][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e3)) {
+                                        tileBoard[5][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f3)) {
+                                        tileBoard[5][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g3)) {
+                                        tileBoard[5][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h3)) {
+                                        tileBoard[5][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a2)) {
+                                        tileBoard[6][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b2)) {
+                                        tileBoard[6][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c2)) {
+                                        tileBoard[6][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d2)) {
+                                        tileBoard[6][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e2)) {
+                                        tileBoard[6][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f2)) {
+                                        tileBoard[6][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g2)) {
+                                        tileBoard[6][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h2)) {
+                                        tileBoard[6][7].colorGreen();
+                                    }
+
+                                    if (legalMoves.contains(Square.a1)) {
+                                        tileBoard[7][0].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.b1)) {
+                                        tileBoard[7][1].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.c1)) {
+                                        tileBoard[7][2].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.d1)) {
+                                        tileBoard[7][3].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.e1)) {
+                                        tileBoard[7][4].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.f1)) {
+                                        tileBoard[7][5].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.g1)) {
+                                        tileBoard[7][6].colorGreen();
+                                    }
+                                    if (legalMoves.contains(Square.h1)) {
+                                        tileBoard[7][7].colorGreen();
+                                    }
+
+                                    System.out.println("legal moves: " + legalMoves); //correct,which means legal move gen works
+                                }
+                            } else {
+                                if (tile == Tile.selectedTile) {
+                                    //suicide not allowed
+                                    tile.unselect();
+                                    recolorBoard();
                                 } else {
-                                    if (tile == Tile.selectedTile) {
-                                        //suicide not allowed
-                                        tile.unselect();
-                                        recolorBoard();
-                                    } else {
-                                        //capture
-                                        if(DEBUG)System.out.println("Capture");
-                                        recolorBoard();
-                                        move(tile);
-                                    }
+                                    //capture
+                                    if (DEBUG) System.out.println("Capture");
+                                    recolorBoard();
+                                    move(tile);
                                 }
                             }
-                        } else {
-                            if (Tile.selectedTile != null) {
-                                if(DEBUG)System.out.println("piece not selected");
-                                recolorBoard();
-                                move(tile);
-                            }
                         }
-
-
+                    } else {
+                        if (Tile.selectedTile != null) {
+                            if (DEBUG) System.out.println("piece not selected");
+                            recolorBoard();
+                            move(tile);
+                        }
+                    }
                     //process move, check validity, update gui board, etc
                 });
             }
@@ -200,7 +325,6 @@ public class ChessBoard extends GridPane {
         }
     }
 
-
     // you only move selected tile ever
     private void move(Tile tile) {
 
@@ -212,7 +336,7 @@ public class ChessBoard extends GridPane {
             mainContainerController.setInScrollPane(move);
             mainContainerController.setGameForTurn(game);
 
-            if((tile.getPiece() != Piece.EMPTY) && (tile.getPiece().getColor() != Tile.selectedTile.getPiece().getColor())){
+            if ((tile.getPiece() != Piece.EMPTY) && (tile.getPiece().getColor() != Tile.selectedTile.getPiece().getColor())) {
                 //capture piece so move piece to the flowpane
                 movePieceOut(tile.getPiece(), tile.getPiece().getColor());
             }
@@ -235,22 +359,22 @@ public class ChessBoard extends GridPane {
             //move rook if castling was performed
             if (move.castling != Square.INVALID) {
                 //Short castling white
-                if(move.castling == Square.f1) {
+                if (move.castling == Square.f1) {
                     tileBoard[7][7].setPiece(Piece.EMPTY);
                     tileBoard[7][5].setPiece(Piece.WHITE_ROOK);
                 }
                 //Long castling white
-                if(move.castling == Square.d1) {
+                if (move.castling == Square.d1) {
                     tileBoard[7][0].setPiece(Piece.EMPTY);
                     tileBoard[7][3].setPiece(Piece.WHITE_ROOK);
                 }
                 //Short castling black
-                if(move.castling == Square.f8) {
+                if (move.castling == Square.f8) {
                     tileBoard[0][7].setPiece(Piece.EMPTY);
                     tileBoard[0][5].setPiece(Piece.BLACK_ROOK);
                 }
                 //Long castling black
-                if(move.castling == Square.d8) {
+                if (move.castling == Square.d8) {
                     tileBoard[0][0].setPiece(Piece.EMPTY);
                     tileBoard[0][3].setPiece(Piece.BLACK_ROOK);
                 }
@@ -306,13 +430,12 @@ public class ChessBoard extends GridPane {
         return board;
     }
 
-    public void movePieceOut(Piece piece, Side color){
+    public void movePieceOut(Piece piece, Side color) {
         ImageView view;
-        if (color == WHITE){
+        if (color == WHITE) {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             mainContainerController.setInFlowPaneB(view);
-        }
-        else{
+        } else {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             mainContainerController.setInFlowPaneW(view);
         }

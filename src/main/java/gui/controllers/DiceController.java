@@ -1,17 +1,12 @@
-package gui;
+package gui.controllers;
 
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import gui.ChessIcons;
 import javafx.event.ActionEvent;
-import logic.Dice;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import logic.Game;
 import logic.enums.Side;
-import java.io.IOException;
 
 import java.io.IOException;
 

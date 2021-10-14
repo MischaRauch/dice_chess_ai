@@ -11,9 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import logic.enums.Side;
-
 import java.io.IOException;
-
 import static logic.enums.Side.WHITE;
 
 public class GameOverScreen extends AnchorPane {
