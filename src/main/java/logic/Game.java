@@ -1,7 +1,6 @@
 package logic;
 
 import logic.board.Board0x88;
-import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import java.util.Stack;
@@ -15,27 +14,11 @@ public class Game {
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private State currentState;
 
-    private Stack<Tuple> deadBlackPieces = new Stack<>();
-    private Stack<Tuple> deadWhitePieces = new Stack<>();
+    private Stack<PieceAndTurnDeathTuple> deadBlackPieces = new Stack<>();
+    private Stack<PieceAndTurnDeathTuple> deadWhitePieces = new Stack<>();
 
-    private Stack<Tuple> redoDeadBlackPieces = new Stack<>();
-    private Stack<Tuple> redoDeadWhitePieces = new Stack<>();
-
-    public Stack<Tuple> getRedoDeadBlackPieces() {
-        return redoDeadBlackPieces;
-    }
-
-    public Stack<Tuple> getRedoDeadWhitePieces() {
-        return redoDeadWhitePieces;
-    }
-
-    public Stack<Tuple> getDeadBlackPieces() {
-        return deadBlackPieces;
-    }
-
-    public Stack<Tuple> getDeadWhitePieces() {
-        return deadWhitePieces;
-    }
+    private Stack<PieceAndTurnDeathTuple> redoDeadBlackPieces = new Stack<>();
+    private Stack<PieceAndTurnDeathTuple> redoDeadWhitePieces = new Stack<>();
 
     public Game() {
         this(openingFEN);
@@ -52,7 +35,6 @@ public class Game {
     public static Game getInstance() {
         return CURRENT_GAME;
     }
-
 
     // called for GUI to moves Tile
     public Move makeMove(Move move) {
@@ -82,6 +64,22 @@ public class Game {
 
     public int getDiceRoll() {
         return currentState.diceRoll;
+    }
+
+    public Stack<PieceAndTurnDeathTuple> getRedoDeadBlackPieces() {
+        return redoDeadBlackPieces;
+    }
+
+    public Stack<PieceAndTurnDeathTuple> getRedoDeadWhitePieces() {
+        return redoDeadWhitePieces;
+    }
+
+    public Stack<PieceAndTurnDeathTuple> getDeadBlackPieces() {
+        return deadBlackPieces;
+    }
+
+    public Stack<PieceAndTurnDeathTuple> getDeadWhitePieces() {
+        return deadWhitePieces;
     }
 
     //may need to refresh gui in order to view the change

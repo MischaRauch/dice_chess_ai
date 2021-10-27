@@ -1,10 +1,10 @@
 package logic;
 
-public class Tuple<Piece, Integer> {
+public class PieceAndTurnDeathTuple<Piece, Integer> {
     public final Piece x;
     public final int y;
 
-    public Tuple(Piece x, Integer y) {
+    public PieceAndTurnDeathTuple(Piece x, Integer y) {
         this.x = x;
         this.y = (int) y;
     }

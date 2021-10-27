@@ -13,12 +13,9 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.enums.Validity;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
-
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
 
@@ -254,12 +251,14 @@ public class ChessBoard extends GridPane {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             /// it was setInFlowPaneB, fixed, was this intentional?
             mainContainerController.setInFlowPaneW(view);
-            game.getDeadWhitePieces().push(new Tuple(piece,game.getPreviousStates().size()));
+            // marks piece as dead
+            game.getDeadWhitePieces().push(new PieceAndTurnDeathTuple(piece,game.getPreviousStates().size()));
         } else {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             /// it was setInFlowPaneW, was this intentional?
             mainContainerController.setInFlowPaneB(view);
-            game.getDeadBlackPieces().push(new Tuple(piece,game.getPreviousStates().size()));
+            // marks piece as dead
+            game.getDeadBlackPieces().push(new PieceAndTurnDeathTuple(piece,game.getPreviousStates().size()));
         }
     }
 

@@ -17,12 +17,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.Game;
 import logic.Move;
-import logic.Tuple;
+import logic.PieceAndTurnDeathTuple;
 import logic.enums.Piece;
 import logic.enums.Side;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class MainContainerController {
@@ -179,25 +177,27 @@ public class MainContainerController {
         list.add(piece);
     }
 
+    // adds previously dead piece, now dead again, piece back to flow panel
     public void redoInFlowPanelB() {
         Game game = Game.getInstance();
         if(!game.getRedoDeadBlackPieces().isEmpty()){
             if(game.getRedoDeadBlackPieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
                 board.movePieceOut((Piece) game.getRedoDeadBlackPieces().peek().getPiece(), Side.BLACK);
-                Tuple temp = game.getRedoDeadBlackPieces().peek();
+                PieceAndTurnDeathTuple temp = game.getRedoDeadBlackPieces().peek();
                 game.getDeadBlackPieces().push(temp);
                 game.getRedoDeadBlackPieces().pop();
             }
         }
     }
 
+    // adds previously dead piece, now dead again, piece back to flow panel
     public void redoInFlowPanelW() {
         Game game = Game.getInstance();
         if(!game.getRedoDeadWhitePieces().isEmpty()){
             if(game.getRedoDeadWhitePieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
                 //move the piece out that was dead
                 board.movePieceOut((Piece) game.getRedoDeadWhitePieces().peek().getPiece(), Side.WHITE);
-                Tuple temp = game.getRedoDeadWhitePieces().peek();
+                PieceAndTurnDeathTuple temp = game.getRedoDeadWhitePieces().peek();
                 // add the piece that is dead again into the dead pieces, now it's dead again
                 game.getDeadWhitePieces().push(temp);
                 // remove the piece that is dead again from the redo stack
@@ -206,6 +206,7 @@ public class MainContainerController {
         }
     }
 
+    // removes now alive piece from flow panel
     public void removeInFlowPanelW() {
         // previous state stack size is number of turns
         Game game = Game.getInstance();
@@ -213,13 +214,14 @@ public class MainContainerController {
             // if the last piece that died, died on a turn that has more than current turn
             if (game.getDeadWhitePieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size() && outFlowPaneW.getChildren().size()!=0) {
                 outFlowPaneW.getChildren().remove(outFlowPaneW.getChildren().size() - 1, outFlowPaneW.getChildren().size());
-                Tuple temp = game.getDeadWhitePieces().peek();
+                PieceAndTurnDeathTuple temp = game.getDeadWhitePieces().peek();
                 game.getRedoDeadWhitePieces().push(temp);
                 game.getDeadWhitePieces().pop();
             }
         }
     }
 
+    // removes now alive piece from flow panel
     public void removeInFlowPanelB() {
         // previous state stack size is number of turns
         Game game = Game.getInstance();
@@ -227,7 +229,7 @@ public class MainContainerController {
             // if the last piece that died, died on a turn that has more than current turn
             if(game.getDeadBlackPieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()  && outFlowPaneB.getChildren().size()!=0) {
                 outFlowPaneB.getChildren().remove(outFlowPaneB.getChildren().size()-1,outFlowPaneB.getChildren().size());
-                Tuple temp = game.getDeadBlackPieces().peek();
+                PieceAndTurnDeathTuple temp = game.getDeadBlackPieces().peek();
                 game.getRedoDeadBlackPieces().push(temp);
                 game.getDeadBlackPieces().pop();
             }
