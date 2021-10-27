@@ -15,15 +15,27 @@ public class Game {
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private State currentState;
 
-//    private Stack<Tuple> deadBlackPieces = new Stack<>();
-//    private Stack<Tuple> deadWhitePieces = new Stack<>();
-//
-//    public Stack<Tuple> getDeadBlackPieces() {
-//        return deadBlackPieces;
-//    }
-//    public Stack<Tuple> getDeadWhitePieces() {
-//        return deadWhitePieces;
-//    }
+    private Stack<Tuple> deadBlackPieces = new Stack<>();
+    private Stack<Tuple> deadWhitePieces = new Stack<>();
+
+    private Stack<Tuple> redoDeadBlackPieces = new Stack<>();
+    private Stack<Tuple> redoDeadWhitePieces = new Stack<>();
+
+    public Stack<Tuple> getRedoDeadBlackPieces() {
+        return redoDeadBlackPieces;
+    }
+
+    public Stack<Tuple> getRedoDeadWhitePieces() {
+        return redoDeadWhitePieces;
+    }
+
+    public Stack<Tuple> getDeadBlackPieces() {
+        return deadBlackPieces;
+    }
+
+    public Stack<Tuple> getDeadWhitePieces() {
+        return deadWhitePieces;
+    }
 
     public Game() {
         this(openingFEN);

@@ -252,12 +252,14 @@ public class ChessBoard extends GridPane {
         ImageView view;
         if (color == WHITE) {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
-            mainContainerController.setInFlowPaneB(view);
-//            game.getDeadWhitePieces().push(new Tuple(piece,game.getPreviousStates().size()));
+            /// it was setInFlowPaneB, fixed, was this intentional?
+            mainContainerController.setInFlowPaneW(view);
+            game.getDeadWhitePieces().push(new Tuple(piece,game.getPreviousStates().size()));
         } else {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
-            mainContainerController.setInFlowPaneW(view);
-//            game.getDeadBlackPieces().push(new Tuple(piece,game.getPreviousStates().size()));
+            /// it was setInFlowPaneW, was this intentional?
+            mainContainerController.setInFlowPaneB(view);
+            game.getDeadBlackPieces().push(new Tuple(piece,game.getPreviousStates().size()));
         }
     }
 

@@ -17,6 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import logic.Game;
 import logic.Move;
+import logic.Tuple;
+import logic.enums.Piece;
+import logic.enums.Side;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +56,8 @@ public class MainContainerController {
 
     private Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
 
+    private final boolean DEBUG = false;
+
     @FXML
     void quitEvent(ActionEvent event) {
         System.exit(0);
@@ -82,8 +87,18 @@ public class MainContainerController {
             game.undoState();
             board.loadBoard(game.getCurrentState().toFEN());
             removeLastInScrollPane();
-//            removeInFlowPanelB();
-//            removeInFlowPanelW();
+            if (DEBUG) {
+                System.out.println("UNDO: ");
+                System.out.println("outFlowPaneW size W: " + outFlowPaneW.getChildren().size());
+                System.out.println("outFlowPaneB size B: " + outFlowPaneB.getChildren().size());
+                System.out.println("dead white pieces tuple stack size: " + game.getDeadWhitePieces().size());
+                System.out.println("dead black pieces tuple stack size: " + game.getDeadBlackPieces().size());
+                System.out.println("dead white pieces tuple stack size: " + game.getDeadWhitePieces().size());
+                System.out.println("dead black pieces tuple stack size: " + game.getDeadBlackPieces().size());
+            }
+
+            removeInFlowPanelB();
+            removeInFlowPanelW();
         });
         undoButton.setOnMousePressed(event -> undoButton.setStyle("-fx-background-color: #2ecc71"));
         undoButton.setOnMouseReleased(event -> undoButton.setStyle("-fx-background-color: #bf7832;"));
@@ -100,6 +115,17 @@ public class MainContainerController {
             game.redoState();
             board.loadBoard(game.getCurrentState().toFEN());
             redoInScrollPane();
+            if(DEBUG) {
+                System.out.println("REDO: ");
+                System.out.println("outFlowPaneW size W: " + outFlowPaneW.getChildren().size());
+                System.out.println("outFlowPaneB size B: " + outFlowPaneB.getChildren().size());
+                System.out.println("dead white pieces tuple stack size: " + game.getDeadWhitePieces().size());
+                System.out.println("dead black pieces tuple stack size: " + game.getDeadBlackPieces().size());
+                System.out.println("redo dead black pieces tuple stack size: " + game.getRedoDeadBlackPieces().size());
+                System.out.println("redo dead white pieces tuple stack size: " + game.getRedoDeadWhitePieces().size());
+            }
+            redoInFlowPanelB();
+            redoInFlowPanelW();
         });
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #bf7832;"));
@@ -144,7 +170,6 @@ public class MainContainerController {
         piece.setFitHeight(80);
         ObservableList list = outFlowPaneW.getChildren();
         list.add(piece);
-        System.out.println("ADDED");
     }
 
     public void setInFlowPaneB(ImageView piece) {
@@ -152,38 +177,63 @@ public class MainContainerController {
         piece.setFitHeight(80);
         ObservableList list = outFlowPaneB.getChildren();
         list.add(piece);
-        System.out.println("ADDED");
     }
 
-    /// TODO track piece deaths
-//    public void removeInFlowPanelW() {
-//        // previousstate stack size is number of turns
-//        Game game = Game.getInstance();
-//        if (!game.getDeadWhitePieces().isEmpty()) {
-//            // if the last piece that died, died on a turn that has more than current turn
-//            if (game.getDeadWhitePieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()) {
-//                ObservableList list = outFlowPaneW.getChildren();
-//                System.out.println("List size W: " + list.size());
-//                list.removeAll();
-////                outFlowPaneW.getChildren().remove(outFlowPaneW.getChildren().size() - 1, outFlowPaneW.getChildren().size());
-//            }
-//        }
-//    }
-//    public void removeInFlowPanelB() {
-//        // previousstate stack size is number of turns
-//        Game game = Game.getInstance();
-//
-//        if (!game.getDeadBlackPieces().isEmpty()) {
-//            // if the last piece that died, died on a turn that has more than current turn
-//            if(game.getDeadBlackPieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()) {
-//                ObservableList list = outFlowPaneB.getChildren();
-//                System.out.println("List size B: " + list.size());
-//                list.removeAll();
-//                //outFlowPaneB.getChildren().remove(outFlowPaneB.getChildren().size()-1,outFlowPaneB.getChildren().size());
-//            }
-//        }
-//
-//    }
+    public void redoInFlowPanelB() {
+        Game game = Game.getInstance();
+        if(!game.getRedoDeadBlackPieces().isEmpty()){
+            if(game.getRedoDeadBlackPieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
+                board.movePieceOut((Piece) game.getRedoDeadBlackPieces().peek().getPiece(), Side.BLACK);
+                Tuple temp = game.getRedoDeadBlackPieces().peek();
+                game.getDeadBlackPieces().push(temp);
+                game.getRedoDeadBlackPieces().pop();
+            }
+        }
+    }
+
+    public void redoInFlowPanelW() {
+        Game game = Game.getInstance();
+        if(!game.getRedoDeadWhitePieces().isEmpty()){
+            if(game.getRedoDeadWhitePieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
+                //move the piece out that was dead
+                board.movePieceOut((Piece) game.getRedoDeadWhitePieces().peek().getPiece(), Side.WHITE);
+                Tuple temp = game.getRedoDeadWhitePieces().peek();
+                // add the piece that is dead again into the dead pieces, now it's dead again
+                game.getDeadWhitePieces().push(temp);
+                // remove the piece that is dead again from the redo stack
+                game.getRedoDeadWhitePieces().pop();
+            }
+        }
+    }
+
+    public void removeInFlowPanelW() {
+        // previous state stack size is number of turns
+        Game game = Game.getInstance();
+        if (!game.getDeadWhitePieces().isEmpty()) {
+            // if the last piece that died, died on a turn that has more than current turn
+            if (game.getDeadWhitePieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size() && outFlowPaneW.getChildren().size()!=0) {
+                outFlowPaneW.getChildren().remove(outFlowPaneW.getChildren().size() - 1, outFlowPaneW.getChildren().size());
+                Tuple temp = game.getDeadWhitePieces().peek();
+                game.getRedoDeadWhitePieces().push(temp);
+                game.getDeadWhitePieces().pop();
+            }
+        }
+    }
+
+    public void removeInFlowPanelB() {
+        // previous state stack size is number of turns
+        Game game = Game.getInstance();
+        if (!game.getDeadBlackPieces().isEmpty()) {
+            // if the last piece that died, died on a turn that has more than current turn
+            if(game.getDeadBlackPieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()  && outFlowPaneB.getChildren().size()!=0) {
+                outFlowPaneB.getChildren().remove(outFlowPaneB.getChildren().size()-1,outFlowPaneB.getChildren().size());
+                Tuple temp = game.getDeadBlackPieces().peek();
+                game.getRedoDeadBlackPieces().push(temp);
+                game.getDeadBlackPieces().pop();
+            }
+        }
+
+    }
 
     //used in ChessBoard
     //adds move string to previous moves stack
