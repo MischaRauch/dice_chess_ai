@@ -19,6 +19,8 @@ import logic.Game;
 import logic.Move;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class MainContainerController {
     public static AnchorPane modal;
@@ -46,6 +48,10 @@ public class MainContainerController {
     private VBox chessVBox;
 
     private VBox scrollVBox;
+
+    private Stack<String> guiStringHistoryOfPreviousMoves = new Stack<>();
+
+    private Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
 
     @FXML
     void quitEvent(ActionEvent event) {
@@ -75,6 +81,9 @@ public class MainContainerController {
             Game game = Game.getInstance();
             game.undoState();
             board.loadBoard(game.getCurrentState().toFEN());
+            removeLastInScrollPane();
+//            removeInFlowPanelB();
+//            removeInFlowPanelW();
         });
         undoButton.setOnMousePressed(event -> undoButton.setStyle("-fx-background-color: #2ecc71"));
         undoButton.setOnMouseReleased(event -> undoButton.setStyle("-fx-background-color: #bf7832;"));
@@ -90,6 +99,7 @@ public class MainContainerController {
             Game game = Game.getInstance();
             game.redoState();
             board.loadBoard(game.getCurrentState().toFEN());
+            redoInScrollPane();
         });
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #bf7832;"));
@@ -145,12 +155,70 @@ public class MainContainerController {
         System.out.println("ADDED");
     }
 
+    /// TODO track piece deaths
+//    public void removeInFlowPanelW() {
+//        // previousstate stack size is number of turns
+//        Game game = Game.getInstance();
+//        if (!game.getDeadWhitePieces().isEmpty()) {
+//            // if the last piece that died, died on a turn that has more than current turn
+//            if (game.getDeadWhitePieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()) {
+//                ObservableList list = outFlowPaneW.getChildren();
+//                System.out.println("List size W: " + list.size());
+//                list.removeAll();
+////                outFlowPaneW.getChildren().remove(outFlowPaneW.getChildren().size() - 1, outFlowPaneW.getChildren().size());
+//            }
+//        }
+//    }
+//    public void removeInFlowPanelB() {
+//        // previousstate stack size is number of turns
+//        Game game = Game.getInstance();
+//
+//        if (!game.getDeadBlackPieces().isEmpty()) {
+//            // if the last piece that died, died on a turn that has more than current turn
+//            if(game.getDeadBlackPieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()) {
+//                ObservableList list = outFlowPaneB.getChildren();
+//                System.out.println("List size B: " + list.size());
+//                list.removeAll();
+//                //outFlowPaneB.getChildren().remove(outFlowPaneB.getChildren().size()-1,outFlowPaneB.getChildren().size());
+//            }
+//        }
+//
+//    }
+
+    //used in ChessBoard
+    //adds move string to previous moves stack
     public void setInScrollPane(Move move) {
+        guiStringHistoryOfPreviousMoves.push(move.toString());
         Label newL = new Label(move.toString());
-        //Label newL = new Label("Hello World");
         newL.setFont(new Font("Arial", 13));
         scrollVBox.getChildren().add(newL);
         scrollVBox.setAlignment(Pos.TOP_CENTER);
+        System.out.println("scrollVBox size: " + scrollVBox.getChildren().size());
+    }
+
+    //only visual gui string tracking of moves
+    //removes the last move string in redo moves stack
+    private void redoInScrollPane() {
+        if (!guiStringHistoryOfRedoMoves.isEmpty()) {
+            String temp = guiStringHistoryOfRedoMoves.peek();
+            Label newL = new Label(temp);
+            newL.setFont(new Font("Arial", 13));
+            scrollVBox.getChildren().add(newL);
+            scrollVBox.setAlignment(Pos.TOP_CENTER);
+            guiStringHistoryOfPreviousMoves.push(temp);
+            guiStringHistoryOfRedoMoves.pop();
+        }
+    }
+
+    //only visual gui string tracking of moves
+    //removes the last move string in previous moves stack
+    private void removeLastInScrollPane() {
+        if(!guiStringHistoryOfPreviousMoves.isEmpty()) {
+            String current = guiStringHistoryOfPreviousMoves.peek();
+            guiStringHistoryOfRedoMoves.push(current);
+            guiStringHistoryOfPreviousMoves.pop();
+            scrollVBox.getChildren().remove(scrollVBox.getChildren().size() - 1, scrollVBox.getChildren().size());
+        }
     }
 
     public void setGameForTurn(Game game) {

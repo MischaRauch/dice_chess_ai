@@ -8,10 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import logic.Dice;
-import logic.Game;
-import logic.LegalMoveGenerator;
-import logic.Move;
+import logic.*;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -20,6 +17,7 @@ import logic.enums.Validity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
@@ -54,6 +52,9 @@ public class ChessBoard extends GridPane {
     void initialize() {
         String opening = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1 0";   //initial state
         loadBoard(opening);
+        //tileBoard[4][4].setPiece(Piece.WHITE_ROOK);
+//        moveTile(tileBoard[1][1],Square.d4);
+
     }
 
     //populates the GridPane (which is actually this class) with Tile objects
@@ -99,8 +100,6 @@ public class ChessBoard extends GridPane {
                                             if (legalMoves.contains(Square.getSquareByIndex(boardIndex))) {
                                                 tileBoard[horizontal][vertical].colorGreen();
                                             }
-                                            System.out.println("Board index: " + boardIndex);
-                                            System.out.println("Vertical index: " + vertical);
                                             boardIndex++;
                                             vertical++;
                                         }
@@ -158,6 +157,7 @@ public class ChessBoard extends GridPane {
 
             if ((tile.getPiece() != Piece.EMPTY) && (tile.getPiece().getColor() != Tile.selectedTile.getPiece().getColor())) {
                 //capture piece so move piece to the flowpanel
+                System.out.println("tile not empty and tile color not selected color");
                 movePieceOut(tile.getPiece(), tile.getPiece().getColor());
             }
 
@@ -207,8 +207,6 @@ public class ChessBoard extends GridPane {
                 Stage stage = (Stage) getScene().getWindow();
                 stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
             }
-
-
         } else {
             // VERY IMPORTANT TO UNSELECT: FIXED BUG
             Tile.selectedTile.unselect();
@@ -255,12 +253,15 @@ public class ChessBoard extends GridPane {
         if (color == WHITE) {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             mainContainerController.setInFlowPaneB(view);
+//            game.getDeadWhitePieces().push(new Tuple(piece,game.getPreviousStates().size()));
         } else {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             mainContainerController.setInFlowPaneW(view);
+//            game.getDeadBlackPieces().push(new Tuple(piece,game.getPreviousStates().size()));
         }
-
     }
+
+
 
     public void showEndGame(int winner) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

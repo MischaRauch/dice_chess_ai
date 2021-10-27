@@ -48,17 +48,21 @@
                   <Insets />
                </HBox.margin>
             </Text>
-            <Button fx:id="quitButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#quitEvent" prefHeight="0.0" prefWidth="82.0" style="-fx-background-color: #bf7832;" text="QUIT" textFill="WHITE">
-               <HBox.margin>
-                  <Insets left="1200.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+            <HBox alignment="CENTER_RIGHT" maxHeight="60.0" prefHeight="60.0" prefWidth="1680.0" style="-fx-background-color: #001f3e;">
+               <children>
+                  <Button fx:id="quitButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#quitEvent" prefHeight="46.0" prefWidth="84.0" style="-fx-background-color: #bf7832;" text="QUIT" textAlignment="CENTER" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="22.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </HBox>
    </children>

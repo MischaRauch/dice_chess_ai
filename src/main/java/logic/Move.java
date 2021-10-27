@@ -21,6 +21,7 @@ public class Move {
     boolean enPassantMove = false;
     boolean enPassantCapture = false;
     public Square castling = Square.INVALID;
+    boolean AIMove = false;
 
     public Move(Piece piece, Square origin, Square destination, int diceRoll, Side side) {
         this.piece = piece;
@@ -43,6 +44,10 @@ public class Move {
 
     public boolean isPromotionMove() {
         return promotionMove;
+    }
+
+    public boolean isAIMove() {
+        return AIMove;
     }
 
     public Piece getPromotionPiece() {

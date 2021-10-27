@@ -1,6 +1,7 @@
 package logic;
 
 import logic.board.Board0x88;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import java.util.Stack;
@@ -13,6 +14,16 @@ public class Game {
     private final Stack<State> redoStates;
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private State currentState;
+
+//    private Stack<Tuple> deadBlackPieces = new Stack<>();
+//    private Stack<Tuple> deadWhitePieces = new Stack<>();
+//
+//    public Stack<Tuple> getDeadBlackPieces() {
+//        return deadBlackPieces;
+//    }
+//    public Stack<Tuple> getDeadWhitePieces() {
+//        return deadWhitePieces;
+//    }
 
     public Game() {
         this(openingFEN);
@@ -74,7 +85,15 @@ public class Game {
         if (!redoStates.isEmpty()) {
             previousStates.push(currentState);          //add current state to previous states stack
             currentState = redoStates.pop();            //update the current state
+
         }
     }
 
+    public Stack<State> getPreviousStates() {
+        return previousStates;
+    }
+
+    public Stack<State> getRedoStates() {
+        return redoStates;
+    }
 }

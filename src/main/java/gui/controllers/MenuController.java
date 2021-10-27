@@ -26,18 +26,18 @@ public class MenuController {
     private Label messageLabel;
 
     @FXML
+    private Button newGameBtnAI;
+
+    @FXML
     void newGame(ActionEvent event) throws IOException {
         messageLabel.setText("dice chess yay!");
-
         Stage stage = (Stage) newGameBtn.getScene().getWindow();
-        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/gameboard.fxml"));
-        //Scene scene = new Scene(new ChessBoard());
-
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainContainer.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setMinWidth(1400);
         stage.setMinHeight(930);
+        stage.centerOnScreen();
         //stage.setMaximized(true);
         //stage.setFullScreen(true);
     }
@@ -46,7 +46,11 @@ public class MenuController {
     void initialize() throws IOException{
         //this method gets automatically called after the FXMLLoader loads the fxml file into this controller class
         newGameBtn.setOnMouseEntered(event -> newGameBtn.setStyle("-fx-background-color: #27ae60;"));
-        newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #2ecc71;"));
+        newGameBtn.setOnMouseExited(event -> newGameBtn.setStyle("-fx-background-color: #bf7832;"));
+
+
+        newGameBtnAI.setOnMouseEntered(event -> newGameBtnAI.setStyle("-fx-background-color: #27ae60;"));
+        newGameBtnAI.setOnMouseExited(event -> newGameBtnAI.setStyle("-fx-background-color: #bf7832;"));
     }
 
 
