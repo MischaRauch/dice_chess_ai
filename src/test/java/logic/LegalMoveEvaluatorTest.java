@@ -163,17 +163,27 @@ class LegalMoveEvaluatorTest {
     @Test
     @Order(14)
     void testIsLegalMoveRookBlack() {
-        potentialMove = new Move(Piece.BLACK_ROOK, Square.a8, Square.d8, 1, Side.BLACK);
+        potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.c8, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
         boolean value = evaluator.isLegalMove(potentialMove, state);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
+   // @Test
+   // @Order(14)
+   // void testIsLegalMoveRookBlack() {
+   //     potentialMove = new Move(Piece.BLACK_ROOK, Square.a8, Square.d8, 1, Side.BLACK);
+   //    state = new State(tempState.board, 1, Side.BLACK);
+   //
+   //     boolean value = evaluator.isLegalMove(potentialMove, state);
+   //     tempState = state.applyMove(potentialMove);
+   //     assertTrue(value);
+   // }
 
     @Test
     @Order(15)
-    void testIsLegalMoveKingBlackFalse() {
+    void testIsLegalMoveKingCastle() {
         potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.e6, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
@@ -181,16 +191,16 @@ class LegalMoveEvaluatorTest {
         assertFalse(value);
     }
 
-    @Test
-    @Order(16)
-    void testIsLegalMoveKingBlackTrue() {
-        potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.e7, 1, Side.BLACK);
-        state = new State(tempState.board, 1, Side.BLACK);
-
-        boolean value = evaluator.isLegalMove(potentialMove, state);
-        tempState = state.applyMove(potentialMove);
-        assertTrue(value);
-    }
+  //  @Test
+  //  @Order(16)
+  //  void testIsLegalMoveKingBlackTrue() {
+  //      potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.e7, 1, Side.BLACK);
+  //      state = new State(tempState.board, 1, Side.BLACK);
+  //
+  //      boolean value = evaluator.isLegalMove(potentialMove, state);
+  //      tempState = state.applyMove(potentialMove);
+  //      assertTrue(value);
+  //  }
    @Test
    void testIsLegalQueenMove() {
        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
