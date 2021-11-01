@@ -12,7 +12,7 @@ public class LegalMoveGenerator {
         ArrayList<Square> legalMoves = new ArrayList<>();
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
-                if(evaluator.isLegalMove(new Move(piece,squareOrigin,Square.getSquare(rank,file),1,side),state)) {
+                if(evaluator.isLegalMove(new Move(piece,squareOrigin,Square.getSquare(rank,file),1,side),state, false)) {
                     legalMoves.add(Square.getSquare(rank,file));
                 }
             }

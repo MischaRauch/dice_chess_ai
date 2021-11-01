@@ -6,6 +6,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import java.util.EnumSet;
+import logic.Game;
 import static logic.enums.Piece.*;
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
@@ -85,6 +86,29 @@ public class State {
     public void setLongCastlingBlack(boolean longCastlingBlack) { this.longCastlingBlack = longCastlingBlack; }
 
     public State applyMove(Move move) {
+        //check if last move was castling
+        if (Game.castlingPerformed != 0) {
+            if (Game.castlingPerformed == 1) {
+               // castling = Square.INVALID;
+                //this.applyCastling = false;
+                this.setShortCastlingWhite(false);
+            }
+            if (Game.castlingPerformed == 2) {
+              //  castling = Square.INVALID;
+                //this.applyCastling = false;
+                this.setShortCastlingBlack(false);
+            }
+            if (Game.castlingPerformed == 3) {
+               // castling = Square.INVALID;
+                //this.applyCastling = false;
+                this.setLongCastlingWhite(false);
+            }
+            if (Game.castlingPerformed == 4) {
+               // castling = Square.INVALID;
+                //this.applyCastling = false;
+                this.setLongCastlingBlack(false);
+            }
+        }
         //extract castling en passant dice roll
 
         //check if king got captured
@@ -101,10 +125,12 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         System.out.println("PIECE FOR CASTLING " + this.castling);
-        System.out.println("Boolean for castling S B " + shortCastlingBlack);
-        System.out.println("Boolean for castling S W " + shortCastlingWhite);
-        System.out.println("Boolean for castling L B " + longCastlingBlack);
-        System.out.println("Boolean for castling L W " + longCastlingWhite);
+        System.out.println("Boolean for apply castling: "+ this.applyCastling);
+        System.out.println("Boolean for castling S B " + this.shortCastlingBlack);
+        System.out.println("Boolean for castling S W " + this.shortCastlingWhite);
+        System.out.println("Boolean for castling L B " + this.longCastlingBlack);
+        System.out.println("Boolean for castling L W " + this.longCastlingWhite);
+
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
 
@@ -146,7 +172,7 @@ public class State {
                     move.castling = this.castling;
                 }
             }
-            applyCastling = false;
+            //applyCastling = false;
         }
 
         if (move.promotionMove) {
