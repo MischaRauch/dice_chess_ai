@@ -20,6 +20,17 @@ public enum Square {
     static Map<Integer, Square> squareMap = new HashMap<>();
     static Map<Integer, Square> boardIndexMap = new HashMap<>();
 
+    //gets board index by bit shifting, masking, and adding
+    public int getIndex() {
+        return ((ordinal() >> 3) << 4) + (ordinal() & 7); //(ordinal() / 8) * 16 + ordinal() % 8
+    }
+
+    //gets 0x88 square number by bit shifting, masking, and adding
+    //want to investigate if bitwise operations improve performance or something
+    public int get0x88() {
+        return 112 - ((ordinal() >> 3) << 4) + (ordinal() & 7); //112 - (ordinal() / 8) * 16 + ordinal() % 8
+    }
+
     static {
         for (Square s : Square.values()) {
             squareMap.put(s.squareNumber, s);

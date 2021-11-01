@@ -16,6 +16,8 @@ import logic.enums.Validity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
+
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
 
@@ -87,23 +89,27 @@ public class ChessBoard extends GridPane {
                                     LegalMoveGenerator gen = new LegalMoveGenerator();
                                     ArrayList<Square> legalMoves = gen.getLegalMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece(), tile.getPiece().getColor());
 
+                                    //color legal moves green
+                                    for (Square s : legalMoves)
+                                        tileBoard[8 - s.getRank()][s.getFile()].colorGreen();
+
                                     // on piece click first time, selection
                                     // tile green coloring loop for legal moves
-                                    int horizontal = 0;
-                                    int vertical = 0;
-                                    int boardIndex = 0;
-                                    while (horizontal < 8) {
-                                        while (vertical < 8) {
-                                            if (legalMoves.contains(Square.getSquareByIndex(boardIndex))) {
-                                                tileBoard[horizontal][vertical].colorGreen();
-                                            }
-                                            boardIndex++;
-                                            vertical++;
-                                        }
-                                        vertical=0;
-                                        boardIndex+=8;
-                                        horizontal++;
-                                    }
+//                                    int horizontal = 0;
+//                                    int vertical = 0;
+//                                    int boardIndex = 0;
+//                                    while (horizontal < 8) {
+//                                        while (vertical < 8) {
+//                                            if (legalMoves.contains(Square.getSquareByIndex(boardIndex))) {
+//                                                tileBoard[horizontal][vertical].colorGreen();
+//                                            }
+//                                            boardIndex++;
+//                                            vertical++;
+//                                        }
+//                                        vertical=0;
+//                                        boardIndex+=8;
+//                                        horizontal++;
+//                                    }
 
                                     if (DEBUG) System.out.println("legal moves: " + legalMoves); //correct,which means legal move gen works
                                 }

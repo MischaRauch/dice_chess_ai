@@ -1,6 +1,7 @@
 package logic;
 
 import logic.board.Board0x88;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import java.util.Stack;
@@ -26,6 +27,7 @@ public class Game {
 
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
+        currentState.diceRoll = Dice.roll(currentState, Side.WHITE);
         previousStates = new Stack<>();
         redoStates = new Stack<>();
         CURRENT_GAME = this;
