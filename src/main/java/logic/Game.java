@@ -8,11 +8,13 @@ import java.util.Stack;
 public class Game {
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     private static Game CURRENT_GAME;
-
+    private boolean isGameWithAI;
     private final Stack<State> previousStates;
     private final Stack<State> redoStates;
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private State currentState;
+
+    public AIHandler aiObject;
 
     private Stack<PieceAndTurnDeathTuple> deadBlackPieces = new Stack<>();
     private Stack<PieceAndTurnDeathTuple> deadWhitePieces = new Stack<>();
@@ -29,7 +31,14 @@ public class Game {
         previousStates = new Stack<>();
         redoStates = new Stack<>();
         CURRENT_GAME = this;
+    }
 
+    public Game(String initialPosition, AIHandler aiObject) {
+        currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE, true, aiObject);
+        previousStates = new Stack<>();
+        redoStates = new Stack<>();
+        CURRENT_GAME = this;
+        this.aiObject = aiObject;
     }
 
     public static Game getInstance() {
@@ -53,6 +62,14 @@ public class Game {
         //send back to GUI with updated validity flag
         return move;
     }
+
+    public Move aiMove(){ //we can pass the current state to the AI
+        //new state
+
+        // and push
+        return aiObject.getAIMove();
+    }
+    //GET AI MOVE and apply it to the state and change the GUI
 
     public State getCurrentState() {
         return currentState;

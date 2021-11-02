@@ -142,6 +142,7 @@ public class ChessBoard extends GridPane {
     }
 
     // you only move selected tile ever
+    //PlAYER
     private void move(Tile tile) {
 
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());

@@ -24,6 +24,8 @@ public class State {
     public Side color;
     public String fen = "";
     public Square enPassant = Square.INVALID;
+    public boolean withAI = false;
+    public AIHandler aiObject;
 
     EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
     EnumSet<Piece> availableWhitePieces = EnumSet.of(WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING);
@@ -33,6 +35,14 @@ public class State {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
+    }
+
+    public State(Board board, int diceRoll, Side color, boolean withAI, AIHandler aiObject) {
+        this.board = board;
+        this.diceRoll = diceRoll;
+        this.color = color;
+        this.withAI = withAI;
+        this.aiObject = aiObject;
     }
 
     public static void main(String[] args) {
@@ -67,7 +77,9 @@ public class State {
         int newRoll = Dice.roll();
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;
+        if(this.withAI && this.aiObject.getAiSide() == nextTurn){
 
+        }
         System.out.println("PIECE FOR CASTLING " + move.castling);
         System.out.println("Boolean for castling S B " + shortCastlingBlack);
         System.out.println("Boolean for castling S W " + shortCastlingWhite);

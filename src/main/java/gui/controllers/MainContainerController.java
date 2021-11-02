@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import logic.AIHandler;
 import logic.Game;
 import logic.Move;
 import logic.PieceAndTurnDeathTuple;
@@ -59,6 +60,10 @@ public class MainContainerController {
     @FXML
     void quitEvent(ActionEvent event) {
         System.exit(0);
+    }
+
+    public void initData(Side side){
+        AIHandler ai = new AIHandler(side);
     }
 
     @FXML
