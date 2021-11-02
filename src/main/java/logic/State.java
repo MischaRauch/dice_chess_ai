@@ -129,50 +129,6 @@ public class State {
         return nextState;
     }
 
-    public void stateToFen() {
-        Piece[] piece = board.getBoard();
-        int counterlines = 0;
-        for (int i = 0; i < piece.length; i++) {
-
-            if (piece[i] != OFF_BOARD) {
-
-                char current = piece[i].getCharType();
-                //System.out.println(current);
-                if (current == '\u0000') {
-                    counterForSpaces++;
-                    System.out.println("COUNTER " + counterForSpaces);
-                    if (counterForSpaces == 8) {
-                        fen += counterForSpaces;
-                        counterForSpaces = 0;
-                    }
-                    if (piece[i + 1].getCharType() != '\u0000' && counterForSpaces != 0) {
-                        //System.out.println("GEEE");
-                        fen += counterForSpaces;
-                        counterForSpaces = 0;
-                    }
-                }
-                if (counterlines > 8) {
-                    if (counterForSpaces != 0) {
-                        fen += counterForSpaces;
-                        counterForSpaces = 0;
-                    }
-                    fen += "/";
-                    counterlines = 0;
-                }
-                if (current != '\u0000') {
-                    fen += current;
-                }
-                System.out.println(fen);
-                counterlines++;
-            }
-
-            //System.out.println("UNI : "+piece[i].getUnicode());
-            //System.out.println("Type : "+piece[i].getType());
-
-            //System.out.println(piece[i]);
-        }
-    }
-
     public String toFEN() {
         String fen = "";
         Piece prev = OFF_BOARD;

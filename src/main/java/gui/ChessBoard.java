@@ -8,15 +8,20 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import logic.*;
+import logic.Dice;
+import logic.LegalMoveGenerator;
+import logic.Move;
+import logic.PieceAndTurnDeathTuple;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.enums.Validity;
+import logic.game.AIGame;
+import logic.game.Game;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
@@ -37,7 +42,8 @@ public class ChessBoard extends GridPane {
     //that this class is loaded into, if needed
     public ChessBoard(MainContainerController mainContainerController) throws IOException {
         super(); //honestly idk if this line is even necessary but ive seen it done on the internet
-        game = new Game();
+        //game = new Game();
+        game = new AIGame();
         this.mainContainerController = mainContainerController;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard.fxml"));
@@ -111,7 +117,8 @@ public class ChessBoard extends GridPane {
 //                                        horizontal++;
 //                                    }
 
-                                    if (DEBUG) System.out.println("legal moves: " + legalMoves); //correct,which means legal move gen works
+                                    if (DEBUG)
+                                        System.out.println("legal moves: " + legalMoves); //correct,which means legal move gen works
                                 }
                             } else {
                                 if (tile == Tile.selectedTile) {
@@ -151,12 +158,13 @@ public class ChessBoard extends GridPane {
     private void move(Tile tile) {
 
         Move move = new Move(Tile.selectedTile.getPiece(), Tile.selectedTile.getSquare(), tile.getSquare(), game.getDiceRoll(), game.getTurn());
-        Move applied = game.makeMove(move);
+        //Move applied = game.makeMove(move);
+        Move applied = game.makeHumanMove(move);
 
         if (applied.getStatus() == Validity.VALID) {
             //set in scrollPane
             mainContainerController.setInScrollPane(move);
-            mainContainerController.setGameForTurn(game);
+            //mainContainerController.setGameForTurn(game);
 
             if ((tile.getPiece() != Piece.EMPTY) && (tile.getPiece().getColor() != Tile.selectedTile.getPiece().getColor())) {
                 //capture piece so move piece to the flowpanel
@@ -210,12 +218,19 @@ public class ChessBoard extends GridPane {
                 Stage stage = (Stage) getScene().getWindow();
                 stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
             }
+
+            //ALL TEMPORARY, just wanna see if the AIGame works
+            Move aiMove = ((AIGame) game).makeAIMove();
+            Tile aiOrigin = getTileAt(8 - aiMove.getOrigin().getRank(), aiMove.getOrigin().getFile());
+            Tile aiDestination = getTileAt(8 - aiMove.getDestination().getRank(), aiMove.getDestination().getFile());
+            aiDestination.setPiece(aiOrigin.getPiece());
+            aiOrigin.setPiece(Piece.EMPTY);
+
         } else {
             // VERY IMPORTANT TO UNSELECT: FIXED BUG
             Tile.selectedTile.unselect();
             System.out.println("INVALID move");
         }
-
     }
 
     public Tile getTileAt(int row, int col) {
@@ -258,16 +273,15 @@ public class ChessBoard extends GridPane {
             /// it was setInFlowPaneB, fixed, was this intentional?
             mainContainerController.setInFlowPaneW(view);
             // marks piece as dead
-            game.getDeadWhitePieces().push(new PieceAndTurnDeathTuple(piece,game.getPreviousStates().size()));
+            game.getDeadWhitePieces().push(new PieceAndTurnDeathTuple(piece, game.getPreviousStates().size()));
         } else {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             /// it was setInFlowPaneW, was this intentional?
             mainContainerController.setInFlowPaneB(view);
             // marks piece as dead
-            game.getDeadBlackPieces().push(new PieceAndTurnDeathTuple(piece,game.getPreviousStates().size()));
+            game.getDeadBlackPieces().push(new PieceAndTurnDeathTuple(piece, game.getPreviousStates().size()));
         }
     }
-
 
 
     public void showEndGame(int winner) {

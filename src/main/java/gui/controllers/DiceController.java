@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import logic.Game;
+import logic.game.Game;
 import logic.enums.Side;
 
 import java.io.IOException;
