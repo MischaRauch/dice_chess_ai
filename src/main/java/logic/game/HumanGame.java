@@ -9,7 +9,7 @@ public class HumanGame extends Game {
     // called for GUI to moves Tile
     @Override
     public Move makeHumanMove(Move move) {
-        if (evaluator.isLegalMove(move, currentState)) { //move legal
+        if (evaluator.isLegalMove(move, currentState, true)) { //move legal
 
             State newState = currentState.applyMove(move);
 

@@ -36,7 +36,6 @@ public class LegalMoveEvaluator {
         if (move.getPiece().getColor() != move.getSide())
             return false;
 
-
         return switch (move.getPiece().getType()) {
             case PAWN -> isLegalPawnMove();
             case KNIGHT -> isLegalKnightMove();
