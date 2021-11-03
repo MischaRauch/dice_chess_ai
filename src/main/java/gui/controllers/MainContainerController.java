@@ -94,7 +94,6 @@ public class MainContainerController {
                 System.out.println("dead white pieces tuple stack size: " + game.getDeadWhitePieces().size());
                 System.out.println("dead black pieces tuple stack size: " + game.getDeadBlackPieces().size());
             }
-
             removeInFlowPanelB();
             removeInFlowPanelW();
         });

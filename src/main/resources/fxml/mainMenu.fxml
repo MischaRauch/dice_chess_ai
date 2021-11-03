@@ -23,7 +23,7 @@
                   <Font name="Monotype Corsiva" size="41.0" />
                </font>
             </Label>
-            <Button fx:id="newGameBtn" mnemonicParsing="false" onAction="#newGame" prefHeight="52.0" prefWidth="246.0" style="-fx-background-color: #bf7832;" text="Player vs Player" textFill="WHITE">
+            <Button fx:id="newGameBtnAI" mnemonicParsing="false" onAction="#newGameAI" prefHeight="52.0" prefWidth="246.0" style="-fx-background-color: #bf7832;" text="Player vs AI" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -31,7 +31,7 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Button>
-            <Button fx:id="newGameBtnAI" layoutX="427.0" layoutY="216.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="246.0" style="-fx-background-color: #bf7832;" text="Player vs AI" textFill="WHITE">
+            <Button fx:id="newGameBtn" mnemonicParsing="false" onAction="#newGame" layoutX="427.0" layoutY="216.0" prefHeight="52.0" prefWidth="246.0" style="-fx-background-color: #bf7832;" text="Player vs Player" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

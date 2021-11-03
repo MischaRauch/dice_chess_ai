@@ -60,7 +60,6 @@ public abstract class AIPlayer {
                                     validMoves.add(new Move(p, location, validTarget, state.diceRoll, color));
                             }
                         }
-
                     }
 
                     case KNIGHT, KING -> {

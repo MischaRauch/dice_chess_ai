@@ -5,6 +5,7 @@ import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
+import logic.player.ExpectiMiniMaxPlayer;
 import logic.player.RandomMovesPlayer;
 
 public class AIGame extends HumanGame {
@@ -13,7 +14,7 @@ public class AIGame extends HumanGame {
 
     public AIGame() {
         super();
-        aiPlayer = new RandomMovesPlayer(Side.BLACK);
+        aiPlayer = new ExpectiMiniMaxPlayer(Side.BLACK);
     }
 
     //should ideally be called immediately in the GUI controller after the makeHumanMove returns

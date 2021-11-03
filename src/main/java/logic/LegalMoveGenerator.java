@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class LegalMoveGenerator {
 
+    //for GUI
     public ArrayList<Square> getLegalMoves(State state, Square squareOrigin, Piece piece, Side side) {
         LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
         ArrayList<Square> legalMoves = new ArrayList<>();
