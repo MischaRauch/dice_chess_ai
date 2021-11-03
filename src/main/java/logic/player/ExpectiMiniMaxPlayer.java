@@ -20,71 +20,80 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
     @Override
     public Move chooseMove(State state) {
         List<Move> validMoves = getValidMoves(state);
+        // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
         int[][] knightBoardWeightsW = {
-                {1,2,3,3,3,3,2,1},
-                {2,3,4,4,4,4,3,2},
-                {3,4,4,4,4,4,4,3},
-                {3,4,4,4,4,4,4,3},
-                {3,4,4,4,4,4,4,3},
-                {3,4,4,4,4,4,4,3},
-                {2,3,4,4,4,4,3,2},
-                {1,2,3,3,3,3,2,1} };
-        int[][] kingBoardWeightsW = {
-                {4,5,3,3,3,3,5,4},
-                {4,4,3,3,3,3,4,4},
-                {4,3,3,3,3,3,3,4},
-                {4,3,3,2,2,3,3,4},
-                {4,2,2,1,1,2,2,4},
-                {4,2,2,1,1,2,2,4},
-                {3,2,2,1,1,2,2,3},
-                {3,2,2,1,1,2,2,3} };
+                {-50,-40,-30,-30,-30,-30,-40,-50},
+                {-40,-20,  0,  0,  0,  0,-20,-40},
+                {-30,  0, 10, 15, 15, 10,  0,-30},
+                {-30,  5, 15, 20, 20, 15,  5,-30},
+                {-30,  0, 15, 20, 20, 15,  0,-30},
+                {-30,  5, 10, 15, 15, 10,  5,-30},
+                {-40,-20,  0,  5,  5,  0,-20,-40},
+                {-50,-40,-30,-30,-30,-30,-40,-50} };
         int[][] queenBoardWeightsW = {
-                {1,2,2,3,3,2,2,1},
-                {2,3,3,3,3,3,3,2},
-                {2,3,4,4,4,4,3,2},
-                {3,3,4,4,4,4,3,3},
-                {3,3,4,4,4,4,3,3},
-                {2,3,4,4,4,4,3,2},
-                {2,3,3,3,3,3,3,2},
-                {1,2,2,3,3,2,2,1}};
+                {-20,-10,-10, -5, -5,-10,-10,-20},
+                {-10,  0,  0,  0,  0,  0,  0,-10},
+                {-10,  0,  5,  5,  5,  5,  0,-10},
+                {-5,  0,  5,  5,  5,  5,  0, -5},
+                {0,  0,  5,  5,  5,  5,  0, -5},
+                {-10,  5,  5,  5,  5,  5,  0,-10},
+                {-10,  0,  5,  0,  0,  0,  0,-10},
+                {-20,-10,-10, -5, -5,-10,-10,-20} };
         int[][] bishopBoardWeightsW = {
-                {3,2,2,2,2,2,2,3},
-                {2,3,2,2,2,2,3,2},
-                {2,3,3,3,3,3,3,2},
-                {2,3,3,4,4,3,3,2},
-                {2,4,3,4,4,3,4,2},
-                {2,3,3,4,4,3,3,2},
-                {2,3,3,3,3,3,3,2},
-                {1,2,2,2,2,2,2,1} };
+                {-20,-10,-10,-10,-10,-10,-10,-20},
+                {-10,  0,  0,  0,  0,  0,  0,-10},
+                {-10,  0,  5, 10, 10,  5,  0,-10},
+                {-10,  5,  5, 10, 10,  5,  5,-10},
+                {-10,  0, 10, 10, 10, 10,  0,-10},
+                {-10, 10, 10, 10, 10, 10, 10,-10},
+                {-10,  5,  0,  0,  0,  0,  5,-10},
+                {-20,-10,-10,-10,-10,-10,-10,-20} };
         int[][] pawnBoardWeightsW = {
-                {2,2,2,2,2,2,2,2},
-                {2,2,2,1,1,2,2,2},
-                {2,1,1,2,2,1,1,2},
-                {2,2,2,3,3,2,2,2},
-                {2,2,2,3,3,2,2,2},
-                {2,2,3,4,4,3,2,2},
-                {5,5,5,5,5,5,5,5},
-                {2,2,2,2,2,2,2,2} };
+                {0,  0,  0,  0,  0,  0,  0,  0},
+                {50, 50, 50, 50, 50, 50, 50, 50},
+                {10, 10, 20, 30, 30, 20, 10, 10},
+                {5,  5, 10, 25, 25, 10,  5,  5},
+                {0,  0,  0, 20, 20,  0,  0,  0},
+                {5, -5,-10,  0,  0,-10, -5,  5},
+                {5, 10, 10,-20,-20, 10, 10,  5},
+                {0,  0,  0,  0,  0,  0,  0,  0}};
         int[][] rookBoardWeightsW = {
-                {2,2,2,3,3,2,2,2},
-                {1,2,2,2,2,2,2,1},
-                {1,2,2,2,2,2,2,1},
-                {1,2,2,2,2,2,2,1},
-                {1,2,2,2,2,2,2,1},
-                {1,2,2,2,2,2,2,1},
-                {4,5,5,5,5,5,5,4},
-                {3,3,3,3,3,3,3,3} };
+                {0,  0,  0,  0,  0,  0,  0,  0},
+                {5, 10, 10, 10, 10, 10, 10,  5},
+                {-5,  0,  0,  0,  0,  0,  0, -5},
+                {-5,  0,  0,  0,  0,  0,  0, -5},
+                {-5,  0,  0,  0,  0,  0,  0, -5},
+                {-5,  0,  0,  0,  0,  0,  0, -5},
+                {-5,  0,  0,  0,  0,  0,  0, -5},
+                {0,  0,  0,  5,  5,  0,  0,  0} };
+        int[][] kingBoardWeightsMiddleGameW = {
+                {-30,-40,-40,-50,-50,-40,-40,-30},
+                {-30,-40,-40,-50,-50,-40,-40,-30},
+                {-30,-40,-40,-50,-50,-40,-40,-30},
+                {-30,-40,-40,-50,-50,-40,-40,-30},
+                {-20,-30,-30,-40,-40,-30,-30,-20},
+                {-10,-20,-20,-20,-20,-20,-20,-10},
+                {20, 20,  0,  0,  0,  0, 20, 20},
+                {20, 30, 10,  0,  0, 10, 30, 20} };
+        int[][] kingBoardWeightsEndGameW = {
+                {-50,-40,-30,-20,-20,-30,-40,-50},
+                {-30,-20,-10,  0,  0,-10,-20,-30},
+                {-30,-10, 20, 30, 30, 20,-10,-30},
+                {-30,-10, 30, 40, 40, 30,-10,-30},
+                {-30,-10, 30, 40, 40, 30,-10,-30},
+                {-30,-10, 20, 30, 30, 20,-10,-30},
+                {-30,-30,  0,  0,  0,  0,-30,-30},
+                {-50,-30,-30,-30,-30,-30,-30,-50} };
 
-        System.out.println("valid moves: " + validMoves.toString());
-
+        if (DEBUG) {System.out.println("valid moves: " + validMoves.toString());}
 
         for (int i = 0; i < validMoves.size(); i++) {
             // if target piece not friendly and target destination is not empty then capture always (not sure if we need the empty condition)
-            if(state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(WHITE) && state.getBoard().getPieceAt(validMoves.get(i).getDestination()) != Piece.EMPTY) {
+            if(!state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color) && state.getBoard().getPieceAt(validMoves.get(i).getDestination()) != Piece.EMPTY) {
                 if (DEBUG) {
                     System.out.println("Dest: " + validMoves.get(i).getDestination().toString());
                     System.out.println("Piece at Dest: " + state.getBoard().getPieceAt(validMoves.get(i).getDestination()).toString());
-                    System.out.println("piece as dest is friendly: " + state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(WHITE));
+                    System.out.println("piece as dest is friendly: " + !state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color));
                     System.out.println("valid move to choose: " + validMoves.get(i));
                     System.out.println("CAPTURE MOVE: ");
                 }
@@ -96,44 +105,54 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
             // all cases activated if piece has to move to empty square
             case PAWN -> {
                 if (DEBUG) {System.out.println("PAWN MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, flipMatrixHorizontal(pawnBoardWeightsW));
+                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(pawnBoardWeightsW,color));
                 // gets max value of most favorable move position
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KNIGHT -> {
                 if (DEBUG) {System.out.println("KNIGHT MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, flipMatrixHorizontal(knightBoardWeightsW));
+                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(knightBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case BISHOP -> {
                 if (DEBUG) {System.out.println("BISHOP MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, flipMatrixHorizontal(bishopBoardWeightsW));
+                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case ROOK -> {
                 if (DEBUG) {System.out.println("ROOK MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, flipMatrixHorizontal(rookBoardWeightsW));
+                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(rookBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case QUEEN -> {
                 if (DEBUG) {System.out.println("QUEEN MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, flipMatrixHorizontal(queenBoardWeightsW));
+                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(queenBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
+                /// TODO add end game condition; but need to know the turn somehow. we don't know turn as we have no access to game
                 if (DEBUG) {System.out.println("KING MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, flipMatrixHorizontal(kingBoardWeightsW));
+                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
                 return validMoves.get(favourableMoveMaxIndex);
             }
         }
         return validMoves.get(0);
     }
+
+    private int[][] getCorrectWeights(int[][] weights, Side color) {
+        if (color == Side.WHITE) {
+            return weights;
+        }
+        if (DEBUG) {System.out.println("Side is black from getCorrectweights");}
+        return(flipMatrixHorizontal(weights));
+    }
+
 
     // flips the weight matrix horizontally so if can be used for either black or white
     private int[][] flipMatrixHorizontal(int[][] matrix) {
