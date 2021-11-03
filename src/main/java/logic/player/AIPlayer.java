@@ -31,6 +31,7 @@ public abstract class AIPlayer {
     public abstract Move chooseMove(State state);
 
     //have not tested this
+    //need to incorporate castling and promotion
     public List<Move> getValidMoves(State state) {
         List<Move> validMoves = new LinkedList<>();
         Piece piece = Dice.diceToPiece[state.diceRoll - 1].getColoredPiece(color);
@@ -38,6 +39,7 @@ public abstract class AIPlayer {
         Board board = state.getBoard();
         Board0x88 b = (Board0x88) board;
 
+        //TODO: use piece lists so we don't have to loop through entire board
         for (int i = 0; i < b.getBoardArray().length; i++) {
             Piece p = b.getBoardArray()[i];
             Square location = Square.getSquareByIndex(i);
