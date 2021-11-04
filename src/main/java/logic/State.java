@@ -54,7 +54,7 @@ public class State {
         String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         // System.out.println("\n" + tricky);
         Game game = new Game(tricky);
-        game.getCurrentState().board.printBoard();
+        // game.getCurrentState().board.printBoard();
         // System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
     }
 
@@ -190,7 +190,7 @@ public class State {
 
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        newBoard.printBoard();
+        // newBoard.printBoard();
         return nextState;
     }
 

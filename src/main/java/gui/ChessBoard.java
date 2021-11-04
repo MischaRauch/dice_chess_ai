@@ -80,7 +80,7 @@ public class ChessBoard extends GridPane {
                 tileBoard[i - 1][j - 1] = tile;
 
                 tile.setOnMouseClicked(event -> {
-                    System.out.println(tile.getSquare() + " : " + tile.getPiece());
+                    // System.out.println(tile.getSquare() + " : " + tile.getPiece());
 
                     // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {

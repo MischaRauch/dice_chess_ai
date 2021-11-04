@@ -48,6 +48,10 @@ public abstract class AIPlayer {
                 switch (piece.getType()) {
                     case PAWN -> {
                         //this one is more complex and weird since it depends on board state with the en passant and capturing
+                        Square temp = Square.getSquare(location.getSquareNumber());
+                        if ((temp.getRank() == 8 || temp.getRank() == 1)) { // if pawn at promotion place just skip (because no possible moves available)
+                            break;
+                        }
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (board.isEmpty(naturalMove))
                             validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
