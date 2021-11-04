@@ -65,6 +65,7 @@ public class State {
     public int getGameOver() {
         return gameOver;
     }
+    public void setGameOver(int newGame) {gameOver = newGame;}
     //Getter for castling
     public boolean isApplyCastling() { return applyCastling; }
 
@@ -120,7 +121,8 @@ public class State {
         if (board.getPieceAt(move.getDestination()) == BLACK_KING) {
             gameOver = 1;
         }
-
+        //The variable newRoll looks like its actually never used - only for constructor
+        //purposes but gets overwritten at the end of this method
         int newRoll = Dice.roll();
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;

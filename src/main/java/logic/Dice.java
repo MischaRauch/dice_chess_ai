@@ -27,7 +27,7 @@ public class Dice {
         ArrayList<Integer> validRolls = new ArrayList<>();
 
         for (int i = 1; i <= diceToPiece.length; i++)
-            if (canMove(diceToPiece[i-1].getColoredPiece(side), state))
+            if (canMove(diceToPiece[i - 1].getColoredPiece(side), state))
                 validRolls.add(i);
         return validRolls.get((int) (Math.random() * validRolls.size()));
 

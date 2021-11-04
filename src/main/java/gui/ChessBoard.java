@@ -214,9 +214,9 @@ public class ChessBoard extends GridPane {
             System.out.println("Next dice roll: " + game.getDiceRoll());
 
             if (game.getCurrentState().getGameOver() != 0) {
-                showEndGame(game.getCurrentState().getGameOver());
                 Stage stage = (Stage) getScene().getWindow();
                 stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
+                game.getCurrentState().setGameOver(0);
             }
 
             //ALL TEMPORARY, just wanna see if the AIGame works
@@ -283,17 +283,5 @@ public class ChessBoard extends GridPane {
         }
     }
 
-
-    public void showEndGame(int winner) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("End of the Game");
-        alert.setHeaderText("Group 04 hopes you enjoyed the game!");
-        if (winner == 1)
-            alert.setContentText("Good job WHITE you won!");
-        else
-            alert.setContentText("Good job BLACK you won!");
-
-        alert.showAndWait();
-    }
 }
 

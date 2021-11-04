@@ -65,7 +65,9 @@ public class LegalMoveEvaluator {
                             move.promotionPiece = move.getPiece().promote(move.getDiceRoll());
                         } else {
                             //ask user what they want to promote to in case of pawn or king dice roll
-                            move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
+                            if(isActualMove) {
+                                move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
+                            }
                         }
                         move.promotionMove = true;
                     }
