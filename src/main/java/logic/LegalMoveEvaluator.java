@@ -16,6 +16,7 @@ public class LegalMoveEvaluator {
     Move move;
     State state;
     boolean isActualMove;
+    private final boolean DEBUG = false;
 
     /**
      * @param move  move object
@@ -168,20 +169,20 @@ public class LegalMoveEvaluator {
                 if (move.getPiece().getColor() == Side.WHITE) {
                     if (move.getOrigin().getSquareNumber() == 0) {
                         state.setLongCastlingWhite(false);
-                        System.out.println("long castling: " + state.isLongCastlingWhite());
+                        if (DEBUG) System.out.println("long castling: " + state.isLongCastlingWhite());
                     }
                     else if (move.getOrigin().getSquareNumber() == 7) {
                         state.setShortCastlingWhite(false);
-                        System.out.println("short castling: " + state.isShortCastlingWhite());
+                        if (DEBUG) System.out.println("short castling: " + state.isShortCastlingWhite());
                     }
                 } else {
                     if (move.getOrigin().getSquareNumber() == 112) {
                         state.setLongCastlingBlack(false);
-                        System.out.println("long castling: " + state.isLongCastlingBlack());
+                        if (DEBUG) System.out.println("long castling: " + state.isLongCastlingBlack());
                     }
                     else if (move.getOrigin().getSquareNumber() == 119) {
                         state.setShortCastlingBlack(false);
-                        System.out.println("short castling: " + state.isShortCastlingBlack());
+                        if (DEBUG) System.out.println("short castling: " + state.isShortCastlingBlack());
                     }
                 }
             }
@@ -346,7 +347,7 @@ public class LegalMoveEvaluator {
                             //state.setShortCastlingWhite(false);
                             state.castling = Square.f1;
                         }
-                        System.out.println("SHORT CASTLING WHITE");
+                        if (DEBUG) System.out.println("SHORT CASTLING WHITE");
                         return true;
                     } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && state.isLongCastlingWhite()) {
                         if (isActualMove) {
@@ -354,7 +355,7 @@ public class LegalMoveEvaluator {
                             //state.setLongCastlingWhite(false);
                             state.castling = Square.d1;
                         }
-                        System.out.println("LONG CASTLING WHITE");
+                        if (DEBUG) System.out.println("LONG CASTLING WHITE");
                         return true;
                     }
                 }
@@ -365,7 +366,7 @@ public class LegalMoveEvaluator {
                         //state.setShortCastlingBlack(false);
                         state.castling = Square.f8;
                     }
-                    System.out.println("SHORT CASTLING Black");
+                    if (DEBUG) System.out.println("SHORT CASTLING Black");
                     return true;
                 } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && state.isLongCastlingBlack()) {
                     if (isActualMove) {
@@ -373,7 +374,7 @@ public class LegalMoveEvaluator {
                         //state.setLongCastlingBlack(false);
                         state.castling = Square.d8;
                     }
-                    System.out.println("LONG CASTLING Black");
+                    if (DEBUG) System.out.println("LONG CASTLING Black");
                     return true;
 
                 }

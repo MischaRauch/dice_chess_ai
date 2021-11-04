@@ -10,6 +10,7 @@ import java.util.Stack;
 public class Game {
     static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     private static Game CURRENT_GAME;
+    private final boolean DEBUG = false;
 
     private final Stack<State> previousStates;
     private final Stack<State> redoStates;
@@ -58,22 +59,22 @@ public class Game {
             //check if castling was performed
             if (currentState.isApplyCastling()) {
                 if (currentState.castling == Square.f8) {
-                    System.out.println("SHORT CASTLING BLACK WAS PERFROMED 09");
+                    if (DEBUG) System.out.println("SHORT CASTLING BLACK WAS PERFROMED 09");
                     currentState.castling = Square.INVALID;
                     this.castlingPerformed = 2;
                 }
                 if (currentState.castling == Square.d8) {
-                    System.out.println("LONG CASTLING BLACK WAS PERFORMED 09");
+                    if (DEBUG) System.out.println("LONG CASTLING BLACK WAS PERFORMED 09");
                     currentState.castling = Square.INVALID;
                     this.castlingPerformed = 4;
                 }
                 if (currentState.castling == Square.f1) {
-                    System.out.println("SHORT CASTLING WHITE WAS PERFORMED 09");
+                    if (DEBUG) System.out.println("SHORT CASTLING WHITE WAS PERFORMED 09");
                     currentState.castling = Square.INVALID;
                     this.castlingPerformed = 1;
                 }
                 if (currentState.castling == Square.d1) {
-                    System.out.println("LONG CASTLING WHITE WAS PERFORMED 09");
+                    if (DEBUG) System.out.println("LONG CASTLING WHITE WAS PERFORMED 09");
                     currentState.castling = Square.INVALID;
                     this.castlingPerformed = 3;
                 }
@@ -120,12 +121,14 @@ public class Game {
         if (!previousStates.isEmpty()) {
             redoStates.push(currentState);              //push current state to redo stack in case user wants to redo
             currentState = previousStates.pop();        //pop the previous state off the stack
-            System.out.println("02 PIECE FOR CASTLING " + currentState.castling);
-            System.out.println("02 Boolean for apply castling: "+ currentState.isApplyCastling());
-            System.out.println("02 Boolean for castling S B " + currentState.isShortCastlingBlack());
-            System.out.println("02 Boolean for castling S W " + currentState.isShortCastlingWhite());
-            System.out.println("02 Boolean for castling L B " + currentState.isLongCastlingBlack());
-            System.out.println("02 Boolean for castling L W " + currentState.isLongCastlingWhite());
+            if (DEBUG) {
+                System.out.println("02 PIECE FOR CASTLING " + currentState.castling);
+                System.out.println("02 Boolean for apply castling: " + currentState.isApplyCastling());
+                System.out.println("02 Boolean for castling S B " + currentState.isShortCastlingBlack());
+                System.out.println("02 Boolean for castling S W " + currentState.isShortCastlingWhite());
+                System.out.println("02 Boolean for castling L B " + currentState.isLongCastlingBlack());
+                System.out.println("02 Boolean for castling L W " + currentState.isLongCastlingWhite());
+            }
         }
     }
 

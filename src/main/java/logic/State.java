@@ -26,6 +26,7 @@ public class State {
     public Side color;
     public String fen = "";
     public Square enPassant = Square.INVALID;
+    private final boolean DEBUG = false;
 
     EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
     EnumSet<Piece> availableWhitePieces = EnumSet.of(WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING);
@@ -51,10 +52,10 @@ public class State {
     public static void main(String[] args) {
         String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
         String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-        System.out.println("\n" + tricky);
+        // System.out.println("\n" + tricky);
         Game game = new Game(tricky);
         game.getCurrentState().board.printBoard();
-        System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
+        // System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
     }
 
     public Board getBoard() {
@@ -124,12 +125,14 @@ public class State {
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
-        System.out.println("PIECE FOR CASTLING " + this.castling);
-        System.out.println("Boolean for apply castling: "+ this.applyCastling);
-        System.out.println("Boolean for castling S B " + this.shortCastlingBlack);
-        System.out.println("Boolean for castling S W " + this.shortCastlingWhite);
-        System.out.println("Boolean for castling L B " + this.longCastlingBlack);
-        System.out.println("Boolean for castling L W " + this.longCastlingWhite);
+        if (DEBUG) {
+            System.out.println("PIECE FOR CASTLING " + this.castling);
+            System.out.println("Boolean for apply castling: " + this.applyCastling);
+            System.out.println("Boolean for castling S B " + this.shortCastlingBlack);
+            System.out.println("Boolean for castling S W " + this.shortCastlingWhite);
+            System.out.println("Boolean for castling L B " + this.longCastlingBlack);
+            System.out.println("Boolean for castling L W " + this.longCastlingWhite);
+        }
 
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
@@ -144,7 +147,7 @@ public class State {
             // (1) would check till all castle moves are not possible anymore at the beginning of the game, while
             //(2) would check till the end of the game if castling is possible --> I created a new applyCastling boolean
             //to check if castling was done - more efficient over the long run but not optimal
-            System.out.println("WHY");
+            if (DEBUG) System.out.println("WHY");
             if (this.castling != Square.INVALID) {
                 //check which rook has to move based on the setted square
                 if (this.castling == Square.f1) {

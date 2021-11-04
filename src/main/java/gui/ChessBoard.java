@@ -33,7 +33,7 @@ import static logic.enums.Side.WHITE;
  */
 public class ChessBoard extends GridPane {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
     MainContainerController mainContainerController;

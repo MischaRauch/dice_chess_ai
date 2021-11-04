@@ -11,7 +11,7 @@ import static logic.enums.Side.WHITE;
 public class ExpectiMiniMaxPlayer extends AIPlayer{
 
     //Node node = new Node(0);
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
 
     public ExpectiMiniMaxPlayer(Side color) {
         super(color);

@@ -244,7 +244,7 @@ public class MainContainerController {
         newL.setFont(new Font("Arial", 13));
         scrollVBox.getChildren().add(newL);
         scrollVBox.setAlignment(Pos.TOP_CENTER);
-        System.out.println("scrollVBox size: " + scrollVBox.getChildren().size());
+        //System.out.println("scrollVBox size: " + scrollVBox.getChildren().size());
     }
 
     //only visual gui string tracking of moves
