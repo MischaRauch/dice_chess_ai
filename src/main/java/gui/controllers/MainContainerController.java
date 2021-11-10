@@ -94,7 +94,6 @@ public class MainContainerController {
                 System.out.println("dead white pieces tuple stack size: " + game.getDeadWhitePieces().size());
                 System.out.println("dead black pieces tuple stack size: " + game.getDeadBlackPieces().size());
             }
-
             removeInFlowPanelB();
             removeInFlowPanelW();
         });
@@ -245,7 +244,7 @@ public class MainContainerController {
         newL.setFont(new Font("Arial", 13));
         scrollVBox.getChildren().add(newL);
         scrollVBox.setAlignment(Pos.TOP_CENTER);
-        System.out.println("scrollVBox size: " + scrollVBox.getChildren().size());
+        //System.out.println("scrollVBox size: " + scrollVBox.getChildren().size());
     }
 
     //only visual gui string tracking of moves

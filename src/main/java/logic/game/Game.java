@@ -2,6 +2,7 @@ package logic.game;
 
 import logic.*;
 import logic.board.Board0x88;
+import logic.enums.Piece;
 import logic.enums.Side;
 
 import java.util.Stack;
@@ -16,11 +17,11 @@ public abstract class Game {
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
 
-    protected Stack<PieceAndTurnDeathTuple> deadBlackPieces = new Stack<>();
-    protected Stack<PieceAndTurnDeathTuple> deadWhitePieces = new Stack<>();
+    protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> deadBlackPieces = new Stack<>();
+    protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> deadWhitePieces = new Stack<>();
 
-    protected Stack<PieceAndTurnDeathTuple> redoDeadBlackPieces = new Stack<>();
-    protected Stack<PieceAndTurnDeathTuple> redoDeadWhitePieces = new Stack<>();
+    protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadBlackPieces = new Stack<>();
+    protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadWhitePieces = new Stack<>();
 
     public Game() {
         this(openingFEN);
@@ -68,19 +69,19 @@ public abstract class Game {
         return currentState.diceRoll;
     }
 
-    public Stack<PieceAndTurnDeathTuple> getRedoDeadBlackPieces() {
+    public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getRedoDeadBlackPieces() {
         return redoDeadBlackPieces;
     }
 
-    public Stack<PieceAndTurnDeathTuple> getRedoDeadWhitePieces() {
+    public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getRedoDeadWhitePieces() {
         return redoDeadWhitePieces;
     }
 
-    public Stack<PieceAndTurnDeathTuple> getDeadBlackPieces() {
+    public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getDeadBlackPieces() {
         return deadBlackPieces;
     }
 
-    public Stack<PieceAndTurnDeathTuple> getDeadWhitePieces() {
+    public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getDeadWhitePieces() {
         return deadWhitePieces;
     }
 

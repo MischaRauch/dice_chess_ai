@@ -33,7 +33,7 @@ import static logic.enums.Side.WHITE;
  */
 public class ChessBoard extends GridPane {
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
     MainContainerController mainContainerController;
@@ -80,7 +80,7 @@ public class ChessBoard extends GridPane {
                 tileBoard[i - 1][j - 1] = tile;
 
                 tile.setOnMouseClicked(event -> {
-                    System.out.println(tile.getSquare() + " : " + tile.getPiece());
+                    // System.out.println(tile.getSquare() + " : " + tile.getPiece());
 
                     // if there is a Piece in vbox that is no the EMPTY Piece
                     if (tile.getPiece() != Piece.EMPTY) {
@@ -214,9 +214,9 @@ public class ChessBoard extends GridPane {
             System.out.println("Next dice roll: " + game.getDiceRoll());
 
             if (game.getCurrentState().getGameOver() != 0) {
-                showEndGame(game.getCurrentState().getGameOver());
                 Stage stage = (Stage) getScene().getWindow();
                 stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
+                game.getCurrentState().setGameOver(0);
             }
 
             //ALL TEMPORARY, just wanna see if the AIGame works
@@ -283,17 +283,5 @@ public class ChessBoard extends GridPane {
         }
     }
 
-
-    public void showEndGame(int winner) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("End of the Game");
-        alert.setHeaderText("Group 04 hopes you enjoyed the game!");
-        if (winner == 1)
-            alert.setContentText("Good job WHITE you won!");
-        else
-            alert.setContentText("Good job BLACK you won!");
-
-        alert.showAndWait();
-    }
 }
 

@@ -26,10 +26,9 @@ public class Dice {
     public static int roll(State state, Side side) {
         ArrayList<Integer> validRolls = new ArrayList<>();
 
-        for (int i = 1; i < diceToPiece.length; i++)
-            if (canMove(diceToPiece[i-1].getColoredPiece(side), state))
+        for (int i = 1; i <= diceToPiece.length; i++)
+            if (canMove(diceToPiece[i - 1].getColoredPiece(side), state))
                 validRolls.add(i);
-
         return validRolls.get((int) (Math.random() * validRolls.size()));
 
     }
@@ -46,6 +45,10 @@ public class Dice {
                 switch (piece.getType()) {
                     case PAWN -> {
                         //this one is more complex and weird since it depends on board state with the en passant and capturing
+                        Square temp = Square.getSquare(location.getSquareNumber());
+                        if ((temp.getRank() == 8 || temp.getRank() == 1)) { // if pawn at promotion place just skip (because no possible moves available)
+                            return false;
+                        }
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (board.isEmpty(naturalMove))
                             return true;
