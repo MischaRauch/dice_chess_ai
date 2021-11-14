@@ -20,7 +20,7 @@ public enum Square {
     static Map<Integer, Square> squareMap = new HashMap<>();
     static Map<Integer, Square> boardIndexMap = new HashMap<>();
 
-    //gets board index by bit shifting, masking, and adding
+    //gets logic.board index by bit shifting, masking, and adding
     public int getIndex() {
         return ((ordinal() >> 3) << 4) + (ordinal() & 7); //(ordinal() / 8) * 16 + ordinal() % 8
     }
@@ -42,11 +42,11 @@ public enum Square {
     final int boardIndex;
 
     /**
-     * Private constructor for Square enums. This constructor is automagically called with the values specified in the
+     * Private constructor for Square logic.enums. This constructor is automagically called with the values specified in the
      * enum declarations above.
      *
      * @param square 0x88 square number
-     * @param index  index of square in the board array
+     * @param index  index of square in the logic.board array
      */
     Square(int square, int index) {
         this.squareNumber = square;

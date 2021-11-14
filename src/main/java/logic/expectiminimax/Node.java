@@ -10,7 +10,7 @@ public class Node {
 //        PAWN = null; KNIGHT = null; BISHOP = null; ROOK = null; QUEEN = null; KING = null;
 //    }
 
-    public Node (int n) {
+    public Node(int n) {
         Node temp = new Node(n);
         temp.value = n;
         temp.PAWN = null; temp.KNIGHT = null; temp.BISHOP = null; temp.ROOK = null; temp.QUEEN = null; temp.KING = null;

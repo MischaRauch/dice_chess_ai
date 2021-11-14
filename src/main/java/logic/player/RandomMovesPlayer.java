@@ -1,10 +1,11 @@
 package logic.player;
-import java.util.Random;
+
+import logic.enums.Side;
 import logic.Move;
 import logic.State;
-import logic.enums.Side;
 
 import java.util.List;
+import java.util.Random;
 
 public class RandomMovesPlayer extends AIPlayer {
 
@@ -16,9 +17,6 @@ public class RandomMovesPlayer extends AIPlayer {
     @Override
     public Move chooseMove(State state) {
         List<Move> validMoves = getValidMoves(state);
-        //etc
-        //choose which move to use here
-        //etc
         return validMoves.get(randomly.nextInt(validMoves.size()));
     }
 

@@ -9,7 +9,6 @@ import logic.enums.Square;
 import java.util.ArrayList;
 
 import static logic.enums.Piece.*;
-
 public class Dice {
 
     public static Piece[] diceToPiece = {PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING};
@@ -45,7 +44,7 @@ public class Dice {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        //this one is more complex and weird since it depends on board state with the en passant and capturing
+                        //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (board.isEmpty(naturalMove))
                             return true;

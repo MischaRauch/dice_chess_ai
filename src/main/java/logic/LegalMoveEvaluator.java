@@ -1,13 +1,15 @@
 package logic;
 
-import gui.PromotionPrompt;
-import javafx.application.Platform;
+
 import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import gui.controllers.PromotionPrompt;
+import javafx.application.Platform;
+
+
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import static logic.enums.Piece.WHITE_KING;
 
@@ -19,7 +21,7 @@ public class LegalMoveEvaluator {
 
     /**
      * @param move  move object
-     * @param state board state
+     * @param state logic.board state
      * @return true if piece can be moved to tile
      */
     public boolean isLegalMove(Move move, State state, boolean isActualMove) {
@@ -32,7 +34,7 @@ public class LegalMoveEvaluator {
         if (move.getOrigin() == move.getDestination())
             return false;
 
-        //player trying to move opponents piece
+        //logic.player trying to move opponents piece
         if (move.getPiece().getColor() != move.getSide())
             return false;
 
@@ -162,6 +164,7 @@ public class LegalMoveEvaluator {
         return false; // meaning not even on same rank, file or diagonal
     }
 
+    //TODO: (Bug) castling is disabled even in case of invalid move
     public boolean isLegalRookMove() {
         if (isActualMove) {
             if (state.isLongCastlingWhite() || state.isLongCastlingBlack() || state.isShortCastlingBlack() || state.isShortCastlingWhite()) {

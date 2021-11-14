@@ -1,20 +1,21 @@
 package logic.player;
 
-import logic.Dice;
-import logic.Move;
-import logic.State;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import logic.Dice;
+import logic.Move;
+import logic.State;
+
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static logic.enums.Piece.EMPTY;
-import static logic.enums.Piece.PAWN;
 import static logic.enums.Square.INVALID;
+
 
 public abstract class AIPlayer {
 
@@ -39,7 +40,7 @@ public abstract class AIPlayer {
         Board board = state.getBoard();
         Board0x88 b = (Board0x88) board;
 
-        //TODO: use piece lists so we don't have to loop through entire board
+        //TODO: use piece lists so we don't have to loop through entire logic.board
         for (int i = 0; i < b.getBoardArray().length; i++) {
             Piece p = b.getBoardArray()[i];
             Square location = Square.getSquareByIndex(i);
@@ -47,10 +48,16 @@ public abstract class AIPlayer {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        //this one is more complex and weird since it depends on board state with the en passant and capturing
+                        //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
-                        if (board.isEmpty(naturalMove))
+                        if (board.isEmpty(naturalMove)) {
                             validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
+
+                            //double jumping
+                            Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
+                            if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(location))
+                                validMoves.add(new Move(p, location, doubleJump, state.diceRoll, color));
+                        }
 
                         for (int k = 1; k < 3; k++) {
                             if (!board.isOffBoard(location.getSquareNumber() + piece.getOffsets()[k])) {

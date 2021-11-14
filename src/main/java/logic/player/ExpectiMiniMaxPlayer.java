@@ -1,12 +1,11 @@
 package logic.player;
-import logic.Move;
-import logic.State;
+
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.expectiminimax.Node;
-import java.util.List;
+import logic.Move;
+import logic.State;
 
-import static logic.enums.Side.WHITE;
+import java.util.List;
 
 public class ExpectiMiniMaxPlayer extends AIPlayer{
 
@@ -135,7 +134,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
-                /// TODO add end game condition; but need to know the turn somehow. we don't know turn as we have no access to game
+                /// TODO add end logic.game condition; but need to know the turn somehow. we don't know turn as we have no access to logic.game
                 if (DEBUG) {System.out.println("KING MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
@@ -152,7 +151,6 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
         if (DEBUG) {System.out.println("Side is black from getCorrectweights");}
         return(flipMatrixHorizontal(weights));
     }
-
 
     // flips the weight matrix horizontally so if can be used for either black or white
     private int[][] flipMatrixHorizontal(int[][] matrix) {
@@ -174,7 +172,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
         int[] weightsOfValidMoves = new int[validMoves.size()];
         for (int i = 0; i < validMoves.size(); i++) {
             //get rank is 1 indexed, so subtracted 1 to make it 0 indexed
-            weightsOfValidMoves[i]=boardWeights[validMoves.get(i).getDestination().getRank()-1][validMoves.get(i).getDestination().getFile()];
+            weightsOfValidMoves[i] = boardWeights[validMoves.get(i).getDestination().getRank()-1][validMoves.get(i).getDestination().getFile()];
             if (DEBUG) {System.out.println("weights of valid moves: " + weightsOfValidMoves[i] + " valid move: " + validMoves.get(i));}
         }
         return weightsOfValidMoves;
@@ -193,27 +191,27 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
         return pos;
     }
 
-    // TODO implement expectiminimax
+    // TODO implement logic.expectiminimax
     // unused
-    public float expectiminimax(Node node, boolean is_max) {
-        if ( node.getPAWN() == null && node.getKNIGHT() == null && node.getBISHOP()==null
-                && node.getROOK()==null && node.getQUEEN()==null && node.getKING()==null ) {
-            return node.getValue();
-        }
-        if (is_max) {
-            return Math.max(
-                    Math.max(Math.max(expectiminimax(node.getPAWN(), false), expectiminimax(node.getKNIGHT(), false)),
-                    Math.max(expectiminimax(node.getBISHOP(), false),expectiminimax(node.getROOK(), false))),
-                    Math.max(expectiminimax(node.getQUEEN(), false),expectiminimax(node.getKING(), false))
-            );
-        }
-        else {
-            return (float) ((
-                    expectiminimax(node.getPAWN(), true) + expectiminimax(node.getKNIGHT(), true) + expectiminimax(node.getKNIGHT(), true) +
-                            expectiminimax(node.getROOK(), true) + expectiminimax(node.getQUEEN(), true) + expectiminimax(node.getKING(), true)
-                    )
-                    / 6.0);
-        }
-    }
+//    public float logic.expectiminimax(Node node, boolean is_max) {
+//        if ( node.getPAWN() == null && node.getKNIGHT() == null && node.getBISHOP()==null
+//                && node.getROOK()==null && node.getQUEEN()==null && node.getKING()==null ) {
+//            return node.getValue();
+//        }
+//        if (is_max) {
+//            return Math.max(
+//                    Math.max(Math.max(logic.expectiminimax(node.getPAWN(), false), logic.expectiminimax(node.getKNIGHT(), false)),
+//                    Math.max(logic.expectiminimax(node.getBISHOP(), false),logic.expectiminimax(node.getROOK(), false))),
+//                    Math.max(logic.expectiminimax(node.getQUEEN(), false),logic.expectiminimax(node.getKING(), false))
+//            );
+//        }
+//        else {
+//            return (float) ((
+//                    logic.expectiminimax(node.getPAWN(), true) + logic.expectiminimax(node.getKNIGHT(), true) + logic.expectiminimax(node.getKNIGHT(), true) +
+//                            logic.expectiminimax(node.getROOK(), true) + logic.expectiminimax(node.getQUEEN(), true) + logic.expectiminimax(node.getKING(), true)
+//                    )
+//                    / 6.0);
+//        }
+//    }
 
 }

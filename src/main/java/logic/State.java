@@ -1,20 +1,20 @@
 package logic;
 
 import logic.board.Board;
-import logic.enums.CastlingRights;
-import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import java.util.EnumSet;
-import logic.Game;
-import static logic.enums.Piece.*;
+import logic.enums.Piece;
+import logic.game.Game;
+
+import static logic.enums.Piece.BLACK_KING;
+import static logic.enums.Piece.WHITE_KING;
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
+import static logic.enums.Piece.*;
 
 public class State {
 
     public static int gameOver;
-    public static int counterForSpaces = 0;
     private boolean applyCastling = false;
     private boolean shortCastlingWhite = true;
     private boolean longCastlingWhite = true;
@@ -24,18 +24,14 @@ public class State {
     public Board board;
     public int diceRoll;
     public Side color;
-    public String fen = "";
     public Square enPassant = Square.INVALID;
-
-    EnumSet<CastlingRights> castleRights = EnumSet.allOf(CastlingRights.class);
-    EnumSet<Piece> availableWhitePieces = EnumSet.of(WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING);
-    EnumSet<Piece> availableBlackPieces = EnumSet.of(BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING);
 
     public State(Board board, int diceRoll, Side color) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
     }
+
     public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite, boolean longCastlingBlack, boolean longCastlingWhite, Square castling) {
         this.board = board;
         this.diceRoll = diceRoll;
@@ -46,15 +42,6 @@ public class State {
         this.longCastlingBlack = longCastlingBlack;
         this.longCastlingWhite = longCastlingWhite;
         this.castling = castling;
-    }
-
-    public static void main(String[] args) {
-        String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R";
-        String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-        System.out.println("\n" + tricky);
-        Game game = new Game(tricky);
-        game.getCurrentState().board.printBoard();
-        System.out.println(game.getCurrentState().toFEN() + "  " + tricky.equals(game.getCurrentState().toFEN()));
     }
 
     public Board getBoard() {
@@ -89,23 +76,15 @@ public class State {
         //check if last move was castling
         if (Game.castlingPerformed != 0) {
             if (Game.castlingPerformed == 1) {
-               // castling = Square.INVALID;
-                //this.applyCastling = false;
                 this.setShortCastlingWhite(false);
             }
             if (Game.castlingPerformed == 2) {
-              //  castling = Square.INVALID;
-                //this.applyCastling = false;
                 this.setShortCastlingBlack(false);
             }
             if (Game.castlingPerformed == 3) {
-               // castling = Square.INVALID;
-                //this.applyCastling = false;
                 this.setLongCastlingWhite(false);
             }
             if (Game.castlingPerformed == 4) {
-               // castling = Square.INVALID;
-                //this.applyCastling = false;
                 this.setLongCastlingBlack(false);
             }
         }
@@ -124,13 +103,6 @@ public class State {
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
-        System.out.println("PIECE FOR CASTLING " + this.castling);
-        System.out.println("Boolean for apply castling: "+ this.applyCastling);
-        System.out.println("Boolean for castling S B " + this.shortCastlingBlack);
-        System.out.println("Boolean for castling S W " + this.shortCastlingWhite);
-        System.out.println("Boolean for castling L B " + this.longCastlingBlack);
-        System.out.println("Boolean for castling L W " + this.longCastlingWhite);
-
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
 
@@ -141,10 +113,9 @@ public class State {
         if (applyCastling) {
             // (1) if (shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite) {
             // (2) if ((shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite)) = false {
-            // (1) would check till all castle moves are not possible anymore at the beginning of the game, while
-            //(2) would check till the end of the game if castling is possible --> I created a new applyCastling boolean
+            // (1) would check till all castle moves are not possible anymore at the beginning of the logic.game, while
+            //(2) would check till the end of the logic.game if castling is possible --> I created a new applyCastling boolean
             //to check if castling was done - more efficient over the long run but not optimal
-            System.out.println("WHY");
             if (this.castling != Square.INVALID) {
                 //check which rook has to move based on the setted square
                 if (this.castling == Square.f1) {
@@ -200,7 +171,7 @@ public class State {
             Piece p = board.getBoard()[i];
             if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
                 fen += "/"; //reached end of rank
-                i += 6;     //skip forward over off board pieces to next rank
+                i += 6;     //skip forward over off logic.board pieces to next rank
                 emptySpaces = 0;   //reset empty spaces
             }
 
