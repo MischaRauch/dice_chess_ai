@@ -4,6 +4,7 @@ import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import logic.game.Game;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,6 +33,66 @@ public class LegalMoveGenerator {
         List<Square> validMoves = new LinkedList<>();
         Board board = state.getBoard();
 
+        switch (piece.getType()) {
+            case PAWN -> {
+                //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
+                Square naturalMove = Square.getSquare(origin.getSquareNumber() + piece.getOffsets()[0]);
+                if (board.isEmpty(naturalMove)) {
+                    validMoves.add(naturalMove);
+
+                    //double jumping
+                    Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
+                    if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(origin))
+                        validMoves.add(doubleJump);
+                }
+
+                for (int k = 1; k < 3; k++) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + piece.getOffsets()[k])) {
+                        Square validTarget = Square.getSquare(origin.getSquareNumber() + piece.getOffsets()[k]);
+
+                        if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
+                            validMoves.add(validTarget);
+                    }
+                }
+            }
+
+            case KNIGHT, KING -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+            }
+
+            case BISHOP, ROOK, QUEEN -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        while (target != INVALID && board.isEmpty(target) ) {
+                            validMoves.add(target);
+                            target = Square.getSquare(target.getSquareNumber() + offset);
+                        }
+
+                        if (target != INVALID && !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return validMoves;
+    }
+
+    public static List<Square> getMovesWithoutState(Square origin, Piece piece) {
+        List<Square> validMoves = new LinkedList<>();
+        Board board = Game.getInstance().getCurrentState().getBoard();
         switch (piece.getType()) {
             case PAWN -> {
                 //this one is more complex and weird since it depends on logic.board state with the en passant and capturing

@@ -34,7 +34,6 @@ public class TempMenu {
     }
 
     private void loadGameScreen(ActionEvent event, GameType type) {
-
         try {
             Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             MainContainerController.stage = stage;

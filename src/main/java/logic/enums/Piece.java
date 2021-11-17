@@ -92,6 +92,32 @@ public enum Piece {
         };
     }
 
+    // heavily inpspired by https://www.chessprogramming.org/Point_Value
+    public int getWeight() {
+        return switch (this) {
+            case PAWN -> 100;
+            case KNIGHT -> 350;
+            case BISHOP -> 350;
+            case ROOK -> 525;
+            case QUEEN -> 1000;
+            case KING -> 10000;
+            case EMPTY -> 0;
+            case OFF_BOARD -> 0;
+            case WHITE_PAWN -> 100;
+            case WHITE_KNIGHT -> 350;
+            case WHITE_BISHOP -> 350;
+            case WHITE_ROOK -> 525;
+            case WHITE_QUEEN -> 1000;
+            case WHITE_KING -> 10000;
+            case BLACK_PAWN -> 100;
+            case BLACK_KNIGHT -> 350;
+            case BLACK_BISHOP -> 350;
+            case BLACK_ROOK -> 525;
+            case BLACK_QUEEN -> 1000;
+            case BLACK_KING -> 10000;
+        };
+    }
+
     public int[] getOffsets() {
         return switch (this) {
             case WHITE_PAWN -> new int[]{16, 15, 17};

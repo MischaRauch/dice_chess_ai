@@ -21,10 +21,35 @@ public class State {
     private boolean shortCastlingBlack = true;
     private boolean longCastlingBlack = true;
     public Square castling = Square.INVALID;
+    // doesn't contain pieces or empty square positions
     public Board board;
     public int diceRoll;
     public Side color;
     public Square enPassant = Square.INVALID;
+    // todo piece tracking on board for en passant and calstling
+    public static Piece[][] boardPieces = {
+            {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK},
+            {WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,},
+            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+            {BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN},
+            {BLACK_ROOK,BLACK_KNIGHT,BLACK_BISHOP,BLACK_QUEEN,BLACK_KING,BLACK_BISHOP,BLACK_KNIGHT,BLACK_ROOK}};
+
+    public Piece[][] getBoardPieces() {
+        return boardPieces;
+    }
+
+    public void boardPiecesToString() {
+        //Piece[][] temp = flipVerticalAxis(boardPieces);
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                System.out.print(boardPieces[file][rank] + " ");
+            }
+            System.out.print("\n");
+        }
+    }
 
     public State(Board board, int diceRoll, Side color) {
         this.board = board;
@@ -32,7 +57,8 @@ public class State {
         this.color = color;
     }
 
-    public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite, boolean longCastlingBlack, boolean longCastlingWhite, Square castling) {
+    public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite,
+                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, Piece[][] boardPieces) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
@@ -42,6 +68,7 @@ public class State {
         this.longCastlingBlack = longCastlingBlack;
         this.longCastlingWhite = longCastlingWhite;
         this.castling = castling;
+        this.boardPieces = boardPieces;
     }
 
     public Board getBoard() {
@@ -71,6 +98,7 @@ public class State {
     public void setShortCastlingBlack(boolean shortCastlingBlack) { this.shortCastlingBlack = shortCastlingBlack; }
 
     public void setLongCastlingBlack(boolean longCastlingBlack) { this.longCastlingBlack = longCastlingBlack; }
+
 
     public State applyMove(Move move) {
         //check if last move was castling
@@ -150,7 +178,8 @@ public class State {
             newBoard.setPiece(move.promotionPiece, move.destination);
         }
 
-        State nextState = new State(newBoard, newRoll, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite, longCastlingBlack, longCastlingWhite, castling);
+        State nextState = new State(newBoard, newRoll, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
+                longCastlingBlack, longCastlingWhite, castling, this.boardPieces);
 
         if (move.enPassantMove) {
             nextState.enPassant = move.enPassant;

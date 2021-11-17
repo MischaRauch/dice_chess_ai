@@ -4,6 +4,9 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.Move;
 import logic.State;
+import logic.expectiminimax.BoardStateEvaluator;
+import logic.expectiminimax.ExpectiMiniMax;
+import logic.game.Game;
 
 import java.util.List;
 
@@ -12,77 +15,22 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
     //Node node = new Node(0);
     private final boolean DEBUG = true;
 
+    ExpectiMiniMax miniMax = new ExpectiMiniMax();
+
     public ExpectiMiniMaxPlayer(Side color) {
         super(color);
     }
 
     @Override
     public Move chooseMove(State state) {
+        System.out.println(Game.getInstance().toString());
+        BoardStateEvaluator.getBoardEvaluationNumber();
+        System.out.println("AMAZING AMAZING AMAZING: " + BoardStateEvaluator.getBoardEvaluationNumber());
+
+
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
-        int[][] knightBoardWeightsW = {
-                {-50,-40,-30,-30,-30,-30,-40,-50},
-                {-40,-20,  0,  0,  0,  0,-20,-40},
-                {-30,  0, 10, 15, 15, 10,  0,-30},
-                {-30,  5, 15, 20, 20, 15,  5,-30},
-                {-30,  0, 15, 20, 20, 15,  0,-30},
-                {-30,  5, 10, 15, 15, 10,  5,-30},
-                {-40,-20,  0,  5,  5,  0,-20,-40},
-                {-50,-40,-30,-30,-30,-30,-40,-50} };
-        int[][] queenBoardWeightsW = {
-                {-20,-10,-10, -5, -5,-10,-10,-20},
-                {-10,  0,  0,  0,  0,  0,  0,-10},
-                {-10,  0,  5,  5,  5,  5,  0,-10},
-                {-5,  0,  5,  5,  5,  5,  0, -5},
-                {0,  0,  5,  5,  5,  5,  0, -5},
-                {-10,  5,  5,  5,  5,  5,  0,-10},
-                {-10,  0,  5,  0,  0,  0,  0,-10},
-                {-20,-10,-10, -5, -5,-10,-10,-20} };
-        int[][] bishopBoardWeightsW = {
-                {-20,-10,-10,-10,-10,-10,-10,-20},
-                {-10,  0,  0,  0,  0,  0,  0,-10},
-                {-10,  0,  5, 10, 10,  5,  0,-10},
-                {-10,  5,  5, 10, 10,  5,  5,-10},
-                {-10,  0, 10, 10, 10, 10,  0,-10},
-                {-10, 10, 10, 10, 10, 10, 10,-10},
-                {-10,  5,  0,  0,  0,  0,  5,-10},
-                {-20,-10,-10,-10,-10,-10,-10,-20} };
-        int[][] pawnBoardWeightsW = {
-                {0,  0,  0,  0,  0,  0,  0,  0},
-                {50, 50, 50, 50, 50, 50, 50, 50},
-                {10, 10, 20, 30, 30, 20, 10, 10},
-                {5,  5, 10, 25, 25, 10,  5,  5},
-                {0,  0,  0, 20, 20,  0,  0,  0},
-                {5, -5,-10,  0,  0,-10, -5,  5},
-                {5, 10, 10,-20,-20, 10, 10,  5},
-                {0,  0,  0,  0,  0,  0,  0,  0}};
-        int[][] rookBoardWeightsW = {
-                {0,  0,  0,  0,  0,  0,  0,  0},
-                {5, 10, 10, 10, 10, 10, 10,  5},
-                {-5,  0,  0,  0,  0,  0,  0, -5},
-                {-5,  0,  0,  0,  0,  0,  0, -5},
-                {-5,  0,  0,  0,  0,  0,  0, -5},
-                {-5,  0,  0,  0,  0,  0,  0, -5},
-                {-5,  0,  0,  0,  0,  0,  0, -5},
-                {0,  0,  0,  5,  5,  0,  0,  0} };
-        int[][] kingBoardWeightsMiddleGameW = {
-                {-30,-40,-40,-50,-50,-40,-40,-30},
-                {-30,-40,-40,-50,-50,-40,-40,-30},
-                {-30,-40,-40,-50,-50,-40,-40,-30},
-                {-30,-40,-40,-50,-50,-40,-40,-30},
-                {-20,-30,-30,-40,-40,-30,-30,-20},
-                {-10,-20,-20,-20,-20,-20,-20,-10},
-                {20, 20,  0,  0,  0,  0, 20, 20},
-                {20, 30, 10,  0,  0, 10, 30, 20} };
-        int[][] kingBoardWeightsEndGameW = {
-                {-50,-40,-30,-20,-20,-30,-40,-50},
-                {-30,-20,-10,  0,  0,-10,-20,-30},
-                {-30,-10, 20, 30, 30, 20,-10,-30},
-                {-30,-10, 30, 40, 40, 30,-10,-30},
-                {-30,-10, 30, 40, 40, 30,-10,-30},
-                {-30,-10, 20, 30, 30, 20,-10,-30},
-                {-30,-30,  0,  0,  0,  0,-30,-30},
-                {-50,-30,-30,-30,-30,-30,-30,-50} };
+
 
         if (DEBUG) {System.out.println("valid moves: " + validMoves.toString());}
 
@@ -96,6 +44,12 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                     System.out.println("valid move to choose: " + validMoves.get(i));
                     System.out.println("CAPTURE MOVE: ");
                 }
+                //// TODO not sure if we should update board pieces before or after updating state
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(i).getOrigin().getRank()-1][validMoves.get(i).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece (automatically overwrites opponent)
+                state.getBoardPieces()[validMoves.get(i).getDestination().getRank()-1][validMoves.get(i).getDestination().getFile()]=validMoves.get(i).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(i);
             }
         }
@@ -107,30 +61,55 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(pawnBoardWeightsW,color));
                 // gets max value of most favorable move position
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KNIGHT -> {
                 if (DEBUG) {System.out.println("KNIGHT MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(knightBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case BISHOP -> {
                 if (DEBUG) {System.out.println("BISHOP MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case ROOK -> {
                 if (DEBUG) {System.out.println("ROOK MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(rookBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case QUEEN -> {
                 if (DEBUG) {System.out.println("QUEEN MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(queenBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
@@ -138,6 +117,11 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                 if (DEBUG) {System.out.println("KING MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
+                // set previous location empty
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+                // set destination to current piece
+                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+                state.boardPiecesToString();
                 return validMoves.get(favourableMoveMaxIndex);
             }
         }
@@ -214,4 +198,95 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
 //        }
 //    }
 
+    public int[][] getKnightBoardWeightsW() {
+        return knightBoardWeightsW;
+    }
+
+    public int[][] getQueenBoardWeightsW() {
+        return queenBoardWeightsW;
+    }
+
+    public int[][] getBishopBoardWeightsW() {
+        return bishopBoardWeightsW;
+    }
+
+    public int[][] getPawnBoardWeightsW() {
+        return pawnBoardWeightsW;
+    }
+
+    public int[][] getRookBoardWeightsW() {
+        return rookBoardWeightsW;
+    }
+
+    public int[][] getKingBoardWeightsMiddleGameW() {
+        return kingBoardWeightsMiddleGameW;
+    }
+
+    public int[][] getKingBoardWeightsEndGameW() {
+        return kingBoardWeightsEndGameW;
+    }
+
+    private int[][] knightBoardWeightsW = {
+            {-50,-40,-30,-30,-30,-30,-40,-50},
+            {-40,-20,  0,  0,  0,  0,-20,-40},
+            {-30,  0, 10, 15, 15, 10,  0,-30},
+            {-30,  5, 15, 20, 20, 15,  5,-30},
+            {-30,  0, 15, 20, 20, 15,  0,-30},
+            {-30,  5, 10, 15, 15, 10,  5,-30},
+            {-40,-20,  0,  5,  5,  0,-20,-40},
+            {-50,-40,-30,-30,-30,-30,-40,-50} };
+    private int[][] queenBoardWeightsW = {
+            {-20,-10,-10, -5, -5,-10,-10,-20},
+            {-10,  0,  0,  0,  0,  0,  0,-10},
+            {-10,  0,  5,  5,  5,  5,  0,-10},
+            {-5,  0,  5,  5,  5,  5,  0, -5},
+            {0,  0,  5,  5,  5,  5,  0, -5},
+            {-10,  5,  5,  5,  5,  5,  0,-10},
+            {-10,  0,  5,  0,  0,  0,  0,-10},
+            {-20,-10,-10, -5, -5,-10,-10,-20} };
+    private int[][] bishopBoardWeightsW = {
+            {-20,-10,-10,-10,-10,-10,-10,-20},
+            {-10,  0,  0,  0,  0,  0,  0,-10},
+            {-10,  0,  5, 10, 10,  5,  0,-10},
+            {-10,  5,  5, 10, 10,  5,  5,-10},
+            {-10,  0, 10, 10, 10, 10,  0,-10},
+            {-10, 10, 10, 10, 10, 10, 10,-10},
+            {-10,  5,  0,  0,  0,  0,  5,-10},
+            {-20,-10,-10,-10,-10,-10,-10,-20} };
+    private int[][] pawnBoardWeightsW = {
+            {0,  0,  0,  0,  0,  0,  0,  0},
+            {50, 50, 50, 50, 50, 50, 50, 50},
+            {10, 10, 20, 30, 30, 20, 10, 10},
+            {5,  5, 10, 25, 25, 10,  5,  5},
+            {0,  0,  0, 20, 20,  0,  0,  0},
+            {5, -5,-10,  0,  0,-10, -5,  5},
+            {5, 10, 10,-20,-20, 10, 10,  5},
+            {0,  0,  0,  0,  0,  0,  0,  0}};
+    private int[][] rookBoardWeightsW = {
+            {0,  0,  0,  0,  0,  0,  0,  0},
+            {5, 10, 10, 10, 10, 10, 10,  5},
+            {-5,  0,  0,  0,  0,  0,  0, -5},
+            {-5,  0,  0,  0,  0,  0,  0, -5},
+            {-5,  0,  0,  0,  0,  0,  0, -5},
+            {-5,  0,  0,  0,  0,  0,  0, -5},
+            {-5,  0,  0,  0,  0,  0,  0, -5},
+            {0,  0,  0,  5,  5,  0,  0,  0} };
+    private int[][] kingBoardWeightsMiddleGameW = {
+            {-30,-40,-40,-50,-50,-40,-40,-30},
+            {-30,-40,-40,-50,-50,-40,-40,-30},
+            {-30,-40,-40,-50,-50,-40,-40,-30},
+            {-30,-40,-40,-50,-50,-40,-40,-30},
+            {-20,-30,-30,-40,-40,-30,-30,-20},
+            {-10,-20,-20,-20,-20,-20,-20,-10},
+            {20, 20,  0,  0,  0,  0, 20, 20},
+            {20, 30, 10,  0,  0, 10, 30, 20} };
+    private int[][] kingBoardWeightsEndGameW = {
+            {-50,-40,-30,-20,-20,-30,-40,-50},
+            {-30,-20,-10,  0,  0,-10,-20,-30},
+            {-30,-10, 20, 30, 30, 20,-10,-30},
+            {-30,-10, 30, 40, 40, 30,-10,-30},
+            {-30,-10, 30, 40, 40, 30,-10,-30},
+            {-30,-10, 20, 30, 30, 20,-10,-30},
+            {-30,-30,  0,  0,  0,  0,-30,-30},
+            {-50,-30,-30,-30,-30,-30,-30,-50} };
 }

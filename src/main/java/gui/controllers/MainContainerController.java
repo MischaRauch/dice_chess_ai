@@ -3,6 +3,9 @@ package gui.controllers;
 import logic.enums.GameType;
 import logic.enums.Piece;
 import logic.enums.Side;
+import logic.expectiminimax.BoardStateEvaluator;
+import logic.expectiminimax.BoardStateGenerator;
+import logic.expectiminimax.ExpectiMiniMax;
 import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
@@ -92,6 +95,12 @@ public class MainContainerController extends AnchorPane {
 
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new ExpectiMiniMaxPlayer(Side.BLACK));
+                BoardStateEvaluator eval = new BoardStateEvaluator();
+                BoardStateGenerator gen = new BoardStateGenerator();
+                ExpectiMiniMax miniMax = new ExpectiMiniMax();
+                game.getCurrentState().boardPiecesToString();
+                System.out.println("board pieces" + eval.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
+                //miniMax.constructTree(eval.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();

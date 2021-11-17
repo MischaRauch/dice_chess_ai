@@ -1,5 +1,6 @@
 package logic.game;
 
+import logic.enums.Piece;
 import logic.enums.Validity;
 import gui.controllers.MainContainerController;
 import gui.ChessIcons;
@@ -8,6 +9,8 @@ import javafx.application.Platform;
 import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
+
+import static logic.enums.Piece.EMPTY;
 
 //TODO: Rename this class lol
 public class AiAiGame extends Game {
@@ -29,6 +32,9 @@ public class AiAiGame extends Game {
             previousStates.push(currentState);
             currentState = newState;
             move.setStatus(Validity.VALID);
+
+
+
 
             processCastling();
 

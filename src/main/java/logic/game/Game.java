@@ -30,6 +30,8 @@ public abstract class Game {
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadBlackPieces = new Stack<>();
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadWhitePieces = new Stack<>();
 
+
+
     public Game() {
         this(openingFEN);
     }
