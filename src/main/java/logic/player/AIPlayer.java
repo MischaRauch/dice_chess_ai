@@ -50,7 +50,7 @@ public abstract class AIPlayer {
                     case PAWN -> {
                         //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
-                        if (board.isEmpty(naturalMove)) {
+                        if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
                             validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
 
                             //double jumping
