@@ -96,9 +96,9 @@
                            <font>
                               <Font size="18.0" />
                            </font></Label>
-                        <ScrollPane hbarPolicy="NEVER" prefHeight="450.0" prefWidth="202.0" style="-fx-background-color: #d5a47d;">
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="490.0" prefWidth="202.0" style="-fx-background-color: #d5a47d;">
                            <content>
-                              <VBox fx:id="moveHistory" prefHeight="448.0" prefWidth="300.0" style="-fx-background-color: #d5a47d;" />
+                              <VBox fx:id="moveHistory" prefHeight="488.0" prefWidth="250.0" style="-fx-background-color: #d5a47d;" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -159,7 +159,7 @@
                   <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                </padding>
             </VBox>
-            <Region HBox.hgrow="ALWAYS" />
+            <Region minWidth="20.0" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
       <AnchorPane fx:id="modalDialog" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="200.0" />
