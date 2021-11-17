@@ -95,8 +95,6 @@ public class Move {
     }
 
     public String stylized() {
-        return piece.getUnicode() +
-                " " + origin +
-                " to " + destination;
+        return origin + " ➞ " + destination;
     }
 }

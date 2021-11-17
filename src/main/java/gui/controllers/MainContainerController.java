@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import javafx.scene.image.Image;
 import logic.enums.GameType;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -73,6 +74,9 @@ public class MainContainerController extends AnchorPane {
 
     @FXML
     private AnchorPane modalDialog;
+
+    @FXML
+    private Label turnIndicator;
 
     @FXML
     void rollDice(ActionEvent event) {
@@ -235,6 +239,10 @@ public class MainContainerController extends AnchorPane {
         guiStringHistoryOfPreviousMoves.push(move.stylized());
         Label newL = new Label(move.stylized());
         newL.setFont(new Font("Arial", 16));
+        ImageView pieceIcon = ChessIcons.load(move.getPiece());
+        pieceIcon.setFitWidth(20);
+        pieceIcon.setFitHeight(20);
+        newL.setGraphic(pieceIcon);
         moveHistory.getChildren().add(newL);
         //moveHistory.setAlignment(Pos.TOP_CENTER);
         //System.out.println("scrollVBox size: " + moveHistory.getChildren().size());
@@ -247,6 +255,7 @@ public class MainContainerController extends AnchorPane {
             String temp = guiStringHistoryOfRedoMoves.peek();
             Label newL = new Label(temp);
             newL.setFont(new Font("Arial", 16));
+            //newL.setGraphic(ChessIcons.load(move.getPiece()));
             moveHistory.getChildren().add(newL);
             //moveHistory.setAlignment(Pos.TOP_CENTER);
             guiStringHistoryOfPreviousMoves.push(temp);
