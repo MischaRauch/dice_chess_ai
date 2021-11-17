@@ -28,6 +28,15 @@ public class LegalMoveGenerator {
         return legalMoves;
     }
 
+    //TODO: method more or less copied from AIPlayer class which is more update to date with better move gen, so this is outdated for now
+    /**
+     * Motivation for this method is to avoid the pitfalls of running the legal move eval on every possible move, due to how the
+     * legal move eval creates GUI prompts and stores static variables which could affect the state of the game unintentionally
+     * @param state Current game state
+     * @param origin Square at which piece in question is located on
+     * @param piece The piece whose legal moves should be retrieved from
+     * @return List of Square enums corresponding to the legal move destinations of that Piece
+     */
     public static List<Square> getMoves(State state, Square origin, Piece piece) {
         List<Square> validMoves = new LinkedList<>();
         Board board = state.getBoard();

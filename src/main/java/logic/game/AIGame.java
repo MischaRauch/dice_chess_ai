@@ -1,5 +1,6 @@
 package logic.game;
 
+import gui.controllers.MainContainerController;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.Move;
@@ -29,6 +30,7 @@ public class AIGame extends HumanGame {
         currentState = newState;
         move.setStatus(Validity.VALID);
         processCastling();
+        MainContainerController.getInstance().updateTurn(currentState.color);
         return move;
     }
 

@@ -1,5 +1,6 @@
 package logic;
 
+import gui.controllers.MainContainerController;
 import logic.board.Board;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -99,6 +100,8 @@ public class State {
             gameOver = 1;
         }
 
+        //necessary because the State constructor demands a dice roll. However, this value get pretty much immediately
+        //after the next State creation. So really this is unnecessary here I think
         int newRoll = Dice.roll();
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;
@@ -156,6 +159,8 @@ public class State {
             nextState.enPassant = move.enPassant;
         }
 
+        //get legal dice rolls according to updated new state
+        //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
         newBoard.printBoard();

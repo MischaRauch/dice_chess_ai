@@ -37,6 +37,7 @@ public class AiAiGame extends Game {
             Platform.runLater(() -> {
                 Chessboard.chessboard.updateGUI(move);
                 MainContainerController.getInstance().setDiceImage(ChessIcons.load(move.getDiceRoll(), move.getSide()));
+                MainContainerController.getInstance().updateTurn(move.getSide());
             });
 
             //exit the loop on logic.game over

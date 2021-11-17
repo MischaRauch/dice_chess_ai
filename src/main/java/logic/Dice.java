@@ -11,10 +11,14 @@ import java.util.ArrayList;
 import static logic.enums.Piece.*;
 public class Dice {
 
+    //index of diceToPiece[] correspond to the corresponding dice roll - 1 (arrays start at 0 >_< )
     public static Piece[] diceToPiece = {PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING};
 
     /**
-     * Need to only return valid piece types. We need some way to check if the number returned is valid
+     * Rolls a random integer in range 1-6.
+     * Math.random() * 6 returns a double between 0 and 5.999..., Casting that to an int is similar to Math.floor(),
+     * so the resulting integer always rounds down rather than up, so e.g. 5.9999 becomes 5. Then adding 1 adjusts the
+     * result so that it is an integer in range 1-6
      *
      * @return dice number
      */
@@ -25,14 +29,22 @@ public class Dice {
     public static int roll(State state, Side side) {
         ArrayList<Integer> validRolls = new ArrayList<>();
 
-        for (int i = 1; i < diceToPiece.length; i++)
-            if (canMove(diceToPiece[i-1].getColoredPiece(side), state))
-                validRolls.add(i);
+        for (int i = 0; i < diceToPiece.length; i++)
+            if (canMove(diceToPiece[i].getColoredPiece(side), state))
+                validRolls.add(i + 1); //valid dice rolls are in range 1-6, and i starts at 0
 
         return validRolls.get((int) (Math.random() * validRolls.size()));
 
     }
 
+    //TODO: method originally copy-pasted from AIPlayer class, however it is out of date and lacks most special move types
+
+    /**
+     * Indicates if a given piece is able to move. Necessary in order to roll appropriate dice rolls
+     * @param piece piece type for which to check
+     * @param state current game state
+     * @return True if at least one piece of the indicated piece type has a legal move
+     */
     public static boolean canMove(Piece piece, State state) {
         Board board = state.getBoard();
         Board0x88 b = (Board0x88) board;

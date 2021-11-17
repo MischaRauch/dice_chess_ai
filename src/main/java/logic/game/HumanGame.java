@@ -1,5 +1,6 @@
 package logic.game;
 
+import gui.controllers.MainContainerController;
 import logic.enums.Validity;
 import logic.Move;
 import logic.State;
@@ -17,7 +18,7 @@ public class HumanGame extends Game {
             move.setStatus(Validity.VALID);
 
             processCastling();
-
+            MainContainerController.getInstance().updateTurn(currentState.color);
         } else {
             move.setInvalid();
         }

@@ -116,6 +116,8 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMouseExited(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
+
+        updateTurn(WHITE);
     }
 
     @FXML
@@ -276,6 +278,13 @@ public class MainContainerController extends AnchorPane {
 
     public void setDiceImage(ImageView img) {
         diceImage.setImage(img.getImage());
+    }
+
+    public void updateTurn(Side color) {
+        if (color == WHITE)
+            turnIndicator.setText("White's");
+        else
+            turnIndicator.setText("Black's");
     }
 
     public static MainContainerController getInstance() {
