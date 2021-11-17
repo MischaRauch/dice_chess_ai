@@ -54,6 +54,7 @@ public class GameOverScreen extends AnchorPane {
 
     @FXML
     void restart(ActionEvent event) throws IOException {
+        //TODO: reset all the static variables in State and Game
         Stage stage = (Stage) playAgainButton.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/testMenu.fxml"));
         Scene scene = new Scene(root);

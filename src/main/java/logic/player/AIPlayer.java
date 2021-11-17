@@ -1,5 +1,7 @@
 package logic.player;
 
+import gui.controllers.PromotionPrompt;
+import javafx.application.Platform;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
@@ -51,7 +53,22 @@ public abstract class AIPlayer {
                         //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
-                            validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
+                            Move natural = new Move(p, location, naturalMove, state.diceRoll, color);
+                            //validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
+
+                            if (p.canPromote(naturalMove)) {
+                                //pawn is moving into promotion rank
+                                if (state.diceRoll != 1 && state.diceRoll != 6) {
+                                    //if dice roll is not pawn or king, then automatically promote piece
+                                    natural.promotionPiece = p.promote(state.diceRoll);
+                                } else {
+                                    //auto promote to Queen
+                                    natural.promotionPiece = Piece.QUEEN.getColoredPiece(p.getColor());
+                                }
+
+                                natural.promotionMove = true;
+                                validMoves.add(natural);
+                            }
 
                             //double jumping
                             Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
@@ -59,6 +76,7 @@ public abstract class AIPlayer {
                                 validMoves.add(new Move(p, location, doubleJump, state.diceRoll, color));
                         }
 
+                        //TODO promotion for captures into last rank
                         for (int k = 1; k < 3; k++) {
                             if (!board.isOffBoard(location.getSquareNumber() + piece.getOffsets()[k])) {
                                 Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
