@@ -3,67 +3,124 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MainContainerController">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #34495e;" type="AnchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox fx:id="MainHbox" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+      <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #34495e;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="rightSideVBox" alignment="CENTER" prefHeight="640.0" prefWidth="262.0" style="-fx-background-color: #A0BFDE;" HBox.hgrow="ALWAYS">
-               <padding>
-                  <Insets top="30.0" />
-               </padding></VBox>
-            <VBox fx:id="chessVBox" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #A0BFDE;" />
-            <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <FlowPane fx:id="outFlowPaneB" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #82A1C0;" VBox.vgrow="ALWAYS" />
-                  <FlowPane fx:id="outFlowPaneW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #96B5D4;" VBox.vgrow="ALWAYS" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <AnchorPane fx:id="modalDialogPane" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="200.0" />
-      <HBox alignment="CENTER_LEFT" maxHeight="60.0" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #001f3e;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <ImageView fx:id="logo" fitHeight="58.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/DiceChessIcon.png" />
-               </image>
-               <HBox.margin>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </HBox.margin>
-            </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Let's Play" x="10.0">
+            <Label text="Dice Chess" textFill="WHITE">
                <font>
-                  <Font name="System Bold" size="40.0" />
+                  <Font name="System Bold" size="24.0" />
                </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Text>
-            <HBox alignment="CENTER_RIGHT" maxHeight="60.0" prefHeight="60.0" prefWidth="1680.0" style="-fx-background-color: #001f3e;">
-               <children>
-                  <Button fx:id="quitButton" alignment="CENTER_RIGHT" contentDisplay="CENTER" graphicTextGap="0.0" mnemonicParsing="false" onAction="#quitEvent" prefHeight="46.0" prefWidth="84.0" style="-fx-background-color: #bf7832;" text="QUIT" textAlignment="CENTER" textFill="WHITE">
-                     <HBox.margin>
-                        <Insets right="10.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font name="System Bold" size="22.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-               </children>
-            </HBox>
+            </Label>
          </children>
       </HBox>
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <Region minWidth="20.0" HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" minWidth="200.0" prefHeight="200.0" spacing="25.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" minWidth="200.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+                     <children>
+                        <ImageView fx:id="diceImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/dice-icon.png" />
+                           </image></ImageView>
+                        <Button mnemonicParsing="false" onAction="#rollDice" text="Roll">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/dice-icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <HBox alignment="CENTER" minWidth="200.0" spacing="20.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+                     <children>
+                        <Button fx:id="undoButton" mnemonicParsing="false" onAction="#undoMove" style="-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5;" text="Undo">
+                           <padding>
+                              <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button fx:id="redoButton" mnemonicParsing="false" onAction="#redoMove" style="-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;" text="Redo">
+                           <padding>
+                              <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets bottom="25.0" left="15.0" right="15.0" top="25.0" />
+                     </padding>
+                  </HBox>
+                  <VBox alignment="TOP_CENTER" minWidth="200.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label text="Move History">
+                           <font>
+                              <Font size="18.0" />
+                           </font></Label>
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="450.0" prefWidth="202.0" style="-fx-background-color: #d5a47d;">
+                           <content>
+                              <VBox fx:id="moveHistory" prefHeight="448.0" prefWidth="300.0" style="-fx-background-color: #d5a47d;" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+               </padding>
+            </VBox>
+            <Region minWidth="20.0" HBox.hgrow="ALWAYS" />
+            <VBox fx:id="chessBoardContainer" alignment="CENTER" prefHeight="200.0" HBox.hgrow="ALWAYS" />
+            <Region HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" minWidth="200.0" prefHeight="200.0" spacing="25.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <FlowPane fx:id="whiteGraveyard" minWidth="200.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS" />
+                  <FlowPane fx:id="blackGraveyard" minWidth="200.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+               </padding>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <AnchorPane fx:id="modalDialog" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="200.0" />
    </children>
-</AnchorPane>
+</fx:root>

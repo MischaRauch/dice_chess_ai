@@ -1,10 +1,10 @@
 package gui;
 
+import logic.enums.Piece;
+import logic.enums.Square;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import logic.enums.Piece;
-import logic.enums.Square;
 
 //I threw this class together real quick to test demonstrate that you can also make custom JavaFX components in pure Java
 //and still be able to add them to Scenes or as children of other Nodes (regardless if create in FXML or not)
@@ -37,7 +37,7 @@ public class Tile extends VBox {
         piece = Piece.getPieceFromChar(p);
         square = Square.getSquare(7 - row, col);
 
-        view.setFitHeight(80);
+        view.setFitHeight(70);
         view.setPreserveRatio(true);
 
         getChildren().add(view);
@@ -46,7 +46,7 @@ public class Tile extends VBox {
 
     private void updateView() {
         getChildren().removeAll(getChildren());
-        view.setFitHeight(80);
+        view.setFitHeight(70);
         view.setPreserveRatio(true);
         getChildren().add(view);
     }

@@ -22,7 +22,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.WHITE_PAWN, Square.d2, Square.d4,1, Side.WHITE);
         state = new State(startBoard, 1,Side.WHITE);
 
-        boolean value= evaluator.isLegalMove(potentialMove,state);
+        boolean value= evaluator.isLegalMove(potentialMove,state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -33,7 +33,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.BLACK_PAWN, Square.e7, Square.e5,1, Side.BLACK);
         state = new State(tempState.board, 1,Side.BLACK);
 
-        boolean value= evaluator.isLegalMove(potentialMove,state);
+        boolean value= evaluator.isLegalMove(potentialMove,state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
   }
@@ -44,7 +44,7 @@ class LegalMoveEvaluatorTest {
        potentialMove = new Move(Piece.WHITE_PAWN, Square.d4, Square.e5, 1, Side.WHITE);
        state = new State(tempState.board, 1, Side.WHITE);
 
-       boolean value = evaluator.isLegalMove(potentialMove, state);
+       boolean value = evaluator.isLegalMove(potentialMove, state, true);
        tempState = state.applyMove(potentialMove);
 
        assertTrue(value);
@@ -56,7 +56,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.BLACK_PAWN, Square.d7, Square.d6, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -67,7 +67,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.BLACK_PAWN, Square.d6, Square.e5, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.WHITE);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -78,7 +78,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.WHITE_KNIGHT, Square.g1, Square.f3, 1, Side.WHITE);
         state = new State(tempState.board, 1, Side.WHITE);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -89,7 +89,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.WHITE_KNIGHT, Square.f3, Square.e5, 1, Side.WHITE);
         state = new State(tempState.board, 1, Side.WHITE);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -100,7 +100,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.WHITE_BISHOP, Square.c1, Square.h6, 1, Side.WHITE);
         state = new State(tempState.board, 1, Side.WHITE);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -111,7 +111,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.BLACK_BISHOP, Square.c8, Square.d7, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -122,7 +122,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.WHITE_KNIGHT, Square.e5, Square.d7, 1, Side.WHITE);
         state = new State(tempState.board, 1, Side.WHITE);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -133,7 +133,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.BLACK_QUEEN, Square.d8, Square.d7, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -144,7 +144,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.WHITE_QUEEN, Square.d1, Square.d7, 1, Side.WHITE);
         state = new State(tempState.board, 1, Side.WHITE);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -155,7 +155,7 @@ class LegalMoveEvaluatorTest {
         potentialMove = new Move(Piece.BLACK_KNIGHT, Square.b8, Square.d7, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
@@ -163,39 +163,49 @@ class LegalMoveEvaluatorTest {
     @Test
     @Order(14)
     void testIsLegalMoveRookBlack() {
-        potentialMove = new Move(Piece.BLACK_ROOK, Square.a8, Square.d8, 1, Side.BLACK);
+        potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.c8, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         tempState = state.applyMove(potentialMove);
         assertTrue(value);
     }
+   // @Test
+   // @Order(14)
+   // void testIsLegalMoveRookBlack() {
+   //     potentialMove = new Move(Piece.BLACK_ROOK, Square.a8, Square.d8, 1, Side.BLACK);
+   //    state = new State(tempState.board, 1, Side.BLACK);
+   //
+   //     boolean value = evaluator.isLegalMove(potentialMove, state);
+   //     tempState = state.applyMove(potentialMove);
+   //     assertTrue(value);
+   // }
 
     @Test
     @Order(15)
-    void testIsLegalMoveKingBlackFalse() {
+    void testIsLegalMoveKingCastle() {
         potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.e6, 1, Side.BLACK);
         state = new State(tempState.board, 1, Side.BLACK);
 
-        boolean value = evaluator.isLegalMove(potentialMove, state);
+        boolean value = evaluator.isLegalMove(potentialMove, state, true);
         assertFalse(value);
     }
 
-    @Test
-    @Order(16)
-    void testIsLegalMoveKingBlackTrue() {
-        potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.e7, 1, Side.BLACK);
-        state = new State(tempState.board, 1, Side.BLACK);
-
-        boolean value = evaluator.isLegalMove(potentialMove, state);
-        tempState = state.applyMove(potentialMove);
-        assertTrue(value);
-    }
+  //  @Test
+  //  @Order(16)
+  //  void testIsLegalMoveKingBlackTrue() {
+  //      potentialMove = new Move(Piece.BLACK_KING, Square.e8, Square.e7, 1, Side.BLACK);
+  //      state = new State(tempState.board, 1, Side.BLACK);
+  //
+  //      boolean value = evaluator.isLegalMove(potentialMove, state);
+  //      tempState = state.applyMove(potentialMove);
+  //      assertTrue(value);
+  //  }
    @Test
    void testIsLegalQueenMove() {
        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
        state = new State(startBoard, 1, Side.WHITE);
-       boolean value= evaluator.isLegalMove(potentialMove,state);
+       boolean value= evaluator.isLegalMove(potentialMove,state, true);
         assertTrue(value);
    }
 
@@ -203,7 +213,7 @@ class LegalMoveEvaluatorTest {
     void testIsLegalRookMove() {
         potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
         state = new State(startBoard, 1, Side.WHITE);
-        boolean value= evaluator.isLegalMove(potentialMove,state);
+        boolean value= evaluator.isLegalMove(potentialMove,state, true);
         assertTrue(value);
    }
 
@@ -211,7 +221,7 @@ class LegalMoveEvaluatorTest {
    void testIsLegalBishopMove() {
        potentialMove = new Move(Piece.WHITE_PAWN, Square.c2, Square.c4, 1, Side.WHITE);
        state = new State(startBoard, 1, Side.WHITE);
-       boolean value= evaluator.isLegalMove(potentialMove,state);
+       boolean value= evaluator.isLegalMove(potentialMove,state, true);
        assertTrue(value);
    }
 

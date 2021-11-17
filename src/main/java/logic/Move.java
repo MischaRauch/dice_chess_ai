@@ -1,5 +1,6 @@
 package logic;
 
+
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -91,5 +92,11 @@ public class Move {
         return "Moved: " + piece +
                 " from: " + origin +
                 ", to: " + destination;
+    }
+
+    public String stylized() {
+        return piece.getUnicode() +
+                " " + origin +
+                " to " + destination;
     }
 }
