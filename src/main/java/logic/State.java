@@ -171,7 +171,7 @@ public class State {
             Piece p = board.getBoard()[i];
             if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
                 fen += "/"; //reached end of rank
-                i += 6;     //skip forward over off logic.board pieces to next rank
+                i += 6;     //skip forward over off-board pieces to next rank
                 emptySpaces = 0;   //reset empty spaces
             }
 

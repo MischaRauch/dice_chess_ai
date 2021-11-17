@@ -55,7 +55,7 @@ public class GameOverScreen extends AnchorPane {
     @FXML
     void restart(ActionEvent event) throws IOException {
         Stage stage = (Stage) playAgainButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainContainer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/testMenu.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }

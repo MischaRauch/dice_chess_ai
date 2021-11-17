@@ -46,7 +46,7 @@ public class AiAiGame extends Game {
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
-            //this part just adds a pause between moves so you can watch the logic.game instead of it instantly being over
+            //this part just adds a pause between moves, so you can watch the game instead of it instantly being over
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
