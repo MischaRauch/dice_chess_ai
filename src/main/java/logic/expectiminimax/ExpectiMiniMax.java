@@ -1,35 +1,43 @@
 package logic.expectiminimax;
 
-import logic.enums.Piece;
-import logic.game.Game;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import static java.util.Collections.max;
 
 public class ExpectiMiniMax {
 
-    Tree tree;
+    private static Tree tree;
+    int depth;
 
-    public void constructTree(int boardEvaluationNumber) {
+    public void constructTree(int boardEvaluationNumber,int depth) {
         System.out.println("constructTree");
+        this.depth = depth;
         tree = new Tree();
         Node root = new Node(boardEvaluationNumber, true);
         tree.setRoot(root);
-        constructTree(root);
+        constructTree(root,depth);
     }
 
-    private void constructTree(Node parentNode) {
-        // TODO getPossibleStates
-        //List<Piece[][]> listofPossibleHeaps = BoardStateGenerator.getPossibleBoardStates(parentNode.getBoardPieceState());
+    private void constructTree(Node parentNode,int depth) {
         List<Integer> listofPossibleHeaps = BoardStateGenerator.getPossibleBoardStatesWeights(parentNode.getBoardPieceState());
+        System.out.println("listofPossibleHeaps: " + Arrays.toString(listofPossibleHeaps.toArray()));
         boolean isChildMaxPlayer = !parentNode.isMaxPlayer();
+
+        int max = max(listofPossibleHeaps);
+        System.out.println("Max: " + max);
+
+        depth--;
+        int finalDepth = depth;
+
         listofPossibleHeaps.forEach(n -> {
             Node newNode = new Node(n, isChildMaxPlayer);
-            parentNode.addChild(newNode);
-            if (newNode.getBoardEvaluationNumber() > 0) {
-                constructTree(newNode);
+            parentNode.addChild(newNode);;
+            if (newNode.getBoardEvaluationNumber() > max || finalDepth ==0) {
+                System.out.println("Constructing new tree : ");
+                constructTree(newNode, finalDepth);
             }
+
         });
     }
 
@@ -64,5 +72,32 @@ public class ExpectiMiniMax {
     public Tree getTree() {
         return tree;
     }
+
+
+//    static float expectimax(Node node, boolean is_max)
+//    {
+//        // Condition for Terminal node
+//        if (tree.getRoot()==node) {
+//            return node.getBoardEvaluationNumber();
+//        }
+//
+//        // Maximizer node. Chooses the max from the
+//        // left and right sub-trees
+//        if (is_max) {
+//            return Math.max(
+//                    expectimax(
+//                            node.left, false),
+//                    expectimax(node.right, false));
+//        }
+//
+//        // Chance node. Returns the average of
+//        // the left and right sub-trees
+//        else {
+//            return (float) ((
+//                    expectimax(node.left, true)
+//                            + expectimax(node.right, true))
+//                    / 2.0);
+//        }
+//    }
 
 }

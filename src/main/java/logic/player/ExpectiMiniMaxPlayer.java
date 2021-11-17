@@ -15,18 +15,20 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
     //Node node = new Node(0);
     private final boolean DEBUG = true;
 
-    ExpectiMiniMax miniMax = new ExpectiMiniMax();
-
     public ExpectiMiniMaxPlayer(Side color) {
         super(color);
     }
 
     @Override
     public Move chooseMove(State state) {
-        System.out.println(Game.getInstance().toString());
-        BoardStateEvaluator.getBoardEvaluationNumber();
-        System.out.println("AMAZING AMAZING AMAZING: " + BoardStateEvaluator.getBoardEvaluationNumber());
+//        System.out.println(Game.getInstance().toString());
+//        BoardStateEvaluator.getBoardEvaluationNumber();
+//        System.out.println("AMAZING AMAZING AMAZING: " + BoardStateEvaluator.getBoardEvaluationNumber());
 
+        ExpectiMiniMax miniMax = new ExpectiMiniMax();
+        miniMax.constructTree(1,6);
+        miniMax.getTree().getRoot().getBoardPieceState();
+        System.out.println(miniMax.getTree().getRoot().getBoardPieceState());
 
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function

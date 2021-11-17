@@ -77,6 +77,7 @@ public class MainContainerController extends AnchorPane {
     @FXML
     private AnchorPane modalDialog;
 
+
     @FXML
     void rollDice(ActionEvent event) {
         if (!inputBlock) {
@@ -91,22 +92,22 @@ public class MainContainerController extends AnchorPane {
         switch (type) {
             case AI_V_AI -> {
                 Game game = new AiAiGame(new RandomMovesPlayer(WHITE), new ExpectiMiniMaxPlayer(Side.BLACK));
+                ExpectiMiniMax miniMax = new ExpectiMiniMax();
+                miniMax.constructTree(1,3);
             }
-
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new ExpectiMiniMaxPlayer(Side.BLACK));
-                BoardStateEvaluator eval = new BoardStateEvaluator();
-                BoardStateGenerator gen = new BoardStateGenerator();
                 ExpectiMiniMax miniMax = new ExpectiMiniMax();
-                game.getCurrentState().boardPiecesToString();
-                System.out.println("board pieces" + eval.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
-                //miniMax.constructTree(eval.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
+                miniMax.constructTree(1,3);
+                //miniMax.constructTree(BoardStateEvaluator.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();
             }
 
         }
+
+
 
         board = new Chessboard(type);
         chessBoardContainer.getChildren().add(board);
@@ -121,6 +122,7 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMouseExited(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
+
     }
 
     @FXML

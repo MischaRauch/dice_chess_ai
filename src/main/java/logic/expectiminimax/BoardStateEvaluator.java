@@ -8,49 +8,55 @@ public class BoardStateEvaluator {
 
     public static int getBoardEvaluationNumber() {
         Game game = Game.getInstance();
-        System.out.println("getBoardEvaluationNumber() " + game.toString());
         int val = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 // if piece friendly
-                if(game.getCurrentState().getBoardPieces()[i][j].getColor()==game.getCurrentState().color) {
-                    System.out.println("color " + game.getCurrentState().color);
+                if(game.getCurrentState().getBoardPieces()[i][j].getColor()!=game.getCurrentState().color) {
+                    //System.out.println("color " + game.getCurrentState().color);
                     // update val for every piece
                     val+=game.getCurrentState().getBoardPieces()[i][j].getWeight();
                     // update val for favourable board position (center controL)
                     switch (game.getCurrentState().getBoardPieces()[i][j]) {
-                        case BLACK_PAWN -> val += getCorrectWeights(pawnBoardWeightsW,Side.BLACK)[i][j];
-                        case BLACK_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW,Side.BLACK)[i][j];
-                        case BLACK_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW,Side.BLACK)[i][j];
-                        case BLACK_ROOK -> val += getCorrectWeights(rookBoardWeightsW,Side.BLACK)[i][j];
-                        case BLACK_QUEEN -> val += getCorrectWeights(queenBoardWeightsW,Side.BLACK)[i][j];
+                        case BLACK_PAWN -> val += getCorrectWeights(pawnBoardWeightsW, Side.BLACK)[i][j];
+                        case BLACK_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW, Side.BLACK)[i][j];
+                        case BLACK_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW, Side.BLACK)[i][j];
+                        case BLACK_ROOK -> val += getCorrectWeights(rookBoardWeightsW, Side.BLACK)[i][j];
+                        case BLACK_QUEEN -> val += getCorrectWeights(queenBoardWeightsW, Side.BLACK)[i][j];
                         //// TODO figure out how to distiguish between middle and end game
-                        case BLACK_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW,Side.WHITE)[i][j];
-                        case WHITE_PAWN -> val += getCorrectWeights(pawnBoardWeightsW,Side.WHITE)[i][j];
-                        case WHITE_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW,Side.WHITE)[i][j];
-                        case WHITE_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW,Side.WHITE)[i][j];
-                        case WHITE_ROOK -> val += getCorrectWeights(rookBoardWeightsW,Side.WHITE)[i][j];
-                        case WHITE_QUEEN -> val += getCorrectWeights(queenBoardWeightsW,Side.WHITE)[i][j];
+                        case BLACK_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW, Side.WHITE)[i][j];}
+                } else {
+                    // update val for every piece
+                    val+=game.getCurrentState().getBoardPieces()[i][j].getWeight();
+                    // update val for favourable board position (center controL)
+                    switch (game.getCurrentState().getBoardPieces()[i][j]) {
+                        case WHITE_PAWN -> val += getCorrectWeights(pawnBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_ROOK -> val += getCorrectWeights(rookBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_QUEEN -> val += getCorrectWeights(queenBoardWeightsW, Side.WHITE)[i][j];
                         //// TODO figure out how to distiguish between middle and end game
-                        case WHITE_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW,Side.WHITE)[i][j];
+                        case WHITE_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW, Side.WHITE)[i][j];
                     }
                 }
-
             }
         }
+        System.out.println("getBoardEvaluationNumber() " + val);
         return val;
     }
 
+    // should be working values between one piece and all
     public static int getBoardEvaluationNumber(Piece[][] boardPieceState) {
-        //Game game = Game.getInstance();
+        Game game = Game.getInstance();
         //System.out.println("getBoardEvaluationNumber() " + game.toString());
         int val = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 // if piece friendly
-                //if(color==Side.BLACK) {
+                if(game.getTurn()==Side.BLACK && boardPieceState[i][j].getColor()==Side.BLACK) {
                     // update val for every piece
                     val+=boardPieceState[i][j].getWeight();
+                    //System.out.println("getBoardEvaluationNumber(Piece[][] boardPieceState) black 1 " + val);
                     // update val for favourable board position (center controL)
                     switch (boardPieceState[i][j]) {
                         case BLACK_PAWN -> val += getCorrectWeights(pawnBoardWeightsW,Side.BLACK)[i][j];
@@ -60,24 +66,33 @@ public class BoardStateEvaluator {
                         case BLACK_QUEEN -> val += getCorrectWeights(queenBoardWeightsW,Side.BLACK)[i][j];
                         //// TODO figure out how to distiguish between middle and end game
                         case BLACK_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW,Side.WHITE)[i][j];
-//                        case WHITE_PAWN -> val += getCorrectWeights(pawnBoardWeightsW,Side.WHITE)[i][j];
-//                        case WHITE_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW,Side.WHITE)[i][j];
-//                        case WHITE_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW,Side.WHITE)[i][j];
-//                        case WHITE_ROOK -> val += getCorrectWeights(rookBoardWeightsW,Side.WHITE)[i][j];
-//                        case WHITE_QUEEN -> val += getCorrectWeights(queenBoardWeightsW,Side.WHITE)[i][j];
-//                        //// TODO figure out how to distiguish between middle and end game
-//                        case WHITE_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW,Side.WHITE)[i][j];
                     }
-                //}
+                    //System.out.println("getBoardEvaluationNumber(Piece[][] boardPieceState) black 2 " + val);
+                } else if (game.getTurn()==Side.WHITE && boardPieceState[i][j].getColor()==Side.WHITE) {
+                    // update val for every piece
+                    val+=boardPieceState[i][j].getWeight();
+                    //System.out.println("getBoardEvaluationNumber(Piece[][] boardPieceState) white 1 " + val);
+                    // update val for favourable board position (center controL)
+                    switch (boardPieceState[i][j]) {
+                        case WHITE_PAWN -> val += getCorrectWeights(pawnBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_ROOK -> val += getCorrectWeights(rookBoardWeightsW, Side.WHITE)[i][j];
+                        case WHITE_QUEEN -> val += getCorrectWeights(queenBoardWeightsW, Side.WHITE)[i][j];
+                        //// TODO figure out how to distiguish between middle and end game
+                        case WHITE_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW, Side.WHITE)[i][j];
+                    }
+                    //System.out.println("getBoardEvaluationNumber(Piece[][] boardPieceState) white 2 " + val);
+                }
 
             }
         }
+        //System.out.println("getBoardEvaluationNumber(Piece[][] boardPieceState) " + val);
         return val;
     }
 
     // return appropriate board configuration for correct side
     private static int[][] getCorrectWeights(int[][] weights, Side color) {
-        System.out.println("board state eval get correct weights");
         if (color == Side.WHITE) {
             return weights;
         }

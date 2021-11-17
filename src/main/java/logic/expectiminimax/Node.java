@@ -3,12 +3,24 @@ package logic.expectiminimax;
 import logic.enums.Piece;
 import logic.game.Game;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static logic.enums.Piece.*;
+import static logic.enums.Piece.BLACK_ROOK;
 
 public class Node {
 
     private int boardEvaluationNumber;
-    private Piece[][] boardPieceState;
+    private Piece[][] boardPieceState = {
+                    {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK},
+                    {WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,},
+                    {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+                    {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+                    {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+                    {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
+                    {BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN},
+                    {BLACK_ROOK,BLACK_KNIGHT,BLACK_BISHOP,BLACK_QUEEN,BLACK_KING,BLACK_BISHOP,BLACK_KNIGHT,BLACK_ROOK}};
     private boolean isMaxPlayer;
     private int score;
     private List<Node> children;
@@ -17,11 +29,13 @@ public class Node {
         //this.boardPieceState = boardPieceState;
         this.isMaxPlayer = isMaxPlayer;
         this.boardEvaluationNumber = boardEvaluationNumber;
+        children = new ArrayList<>();
                 //.getBoardEvaluationNumber();
     }
 
     public int getBoardEvaluationNumber() {
-        return BoardStateEvaluator.getBoardEvaluationNumber();
+        return boardEvaluationNumber;
+        //return BoardStateEvaluator.getBoardEvaluationNumber(boardPieceState);
     }
 
     public Piece[][] getBoardPieceState() {
@@ -60,10 +74,5 @@ public class Node {
         this.children = children;
     }
 
-
-//    public Node (int n, Node PAWN, Node KNIGHT, Node BISHOP, Node ROOK, Node QUEEN, Node KING) {
-//        value = n;
-//        PAWN = null; KNIGHT = null; BISHOP = null; ROOK = null; QUEEN = null; KING = null;
-//    }
 
 }
