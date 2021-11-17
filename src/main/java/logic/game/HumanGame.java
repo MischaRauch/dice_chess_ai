@@ -12,8 +12,10 @@ public class HumanGame extends Game {
         if (evaluator.isLegalMove(move, currentState, true)) { //move legal
 
             State newState = currentState.applyMove(move);
-
             previousStates.push(currentState);
+
+            checkGameOver(move);
+
             currentState = newState;
             move.setStatus(Validity.VALID);
 

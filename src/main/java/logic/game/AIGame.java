@@ -27,6 +27,9 @@ public class AIGame extends HumanGame {
         Move move = aiPlayer.chooseMove(currentState);
         State newState = currentState.applyMove(move);
         previousStates.push(currentState);
+
+        checkGameOver(move);
+
         currentState = newState;
         move.setStatus(Validity.VALID);
         processCastling();
