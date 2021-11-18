@@ -26,6 +26,7 @@ public class AiAiGame extends Game {
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         while (!gameOver) {
             Move move = nextPlayer.chooseMove(currentState);
+
             State newState = currentState.applyMove(move);
             previousStates.push(currentState);
 

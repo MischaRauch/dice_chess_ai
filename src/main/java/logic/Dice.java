@@ -38,7 +38,7 @@ public class Dice {
     }
 
     //TODO: method originally copy-pasted from AIPlayer class, however it is out of date and lacks most special move types
-
+    //TODO: need to add en-passant check to see if a pawn can move if there are no other quiet or capture moves
     /**
      * Indicates if a given piece is able to move. Necessary in order to roll appropriate dice rolls
      * @param piece piece type for which to check
@@ -56,30 +56,33 @@ public class Dice {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
-                        Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
-                        if (board.isEmpty(naturalMove))
-                            return true;
+                        boolean canMove = false;
 
+                        //check if a pawn can do a quiet move
+                        Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
+                        if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
+                            canMove = true;
+                        }
+
+                        //check if pawns can capture
                         for (int k = 1; k < 3; k++) {
-                            if (!board.isOffBoard(location.getSquareNumber() + piece.getOffsets()[k])) {
-                                Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
-                                if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
-                                    return true;
+                            Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
+                            if (validTarget != Square.INVALID && board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor())) {
+                                canMove = true;
                             }
                         }
 
-                        return false;
+                        return canMove;
                     }
 
                     case KNIGHT, BISHOP, ROOK, QUEEN, KING -> {
                         for (int offset : piece.getOffsets()) {
-                            if (!board.isOffBoard(location.getSquareNumber() + offset)) {
-                                Square target = Square.getSquare(location.getSquareNumber() + offset);
-                                if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            Square target = Square.getSquare(location.getSquareNumber() + offset);
+                            if (target != Square.INVALID) {
+                                if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor()))
                                     return true;
-                                }
                             }
+
                         }
                     }
                 }
