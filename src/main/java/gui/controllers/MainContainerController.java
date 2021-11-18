@@ -92,13 +92,11 @@ public class MainContainerController extends AnchorPane {
         switch (type) {
             case AI_V_AI -> {
                 Game game = new AiAiGame(new RandomMovesPlayer(WHITE), new ExpectiMiniMaxPlayer(Side.BLACK));
-                ExpectiMiniMax miniMax = new ExpectiMiniMax();
-                miniMax.constructTree(1,3);
+
             }
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new ExpectiMiniMaxPlayer(Side.BLACK));
-                ExpectiMiniMax miniMax = new ExpectiMiniMax();
-                miniMax.constructTree(1,3);
+
                 //miniMax.constructTree(BoardStateEvaluator.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
             }
             case HUMAN_V_HUMAN -> {

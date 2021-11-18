@@ -80,7 +80,7 @@ public class Chessboard extends GridPane {
         if (gameType == GameType.AI_V_AI) {
             Task<Void> task = new Task<>() {
                 @Override
-                protected Void call() {
+                protected Void call() throws CloneNotSupportedException {
                     ((AiAiGame) game).start();
                     return null;
                 };
@@ -159,7 +159,7 @@ public class Chessboard extends GridPane {
     }
 
     // you only move selected tile ever
-    private void move(Tile tile) {
+    private void move(Tile tile) throws CloneNotSupportedException {
 
         switch (gameType) {
             case HUMAN_V_HUMAN -> {
@@ -267,14 +267,22 @@ public class Chessboard extends GridPane {
                         } else {
                             //capture
                             recolorBoard();
-                            move(tile);
+                            try {
+                                move(tile);
+                            } catch (CloneNotSupportedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
             } else {
                 if (Tile.selectedTile != null) {
                     recolorBoard();
-                    move(tile);
+                    try {
+                        move(tile);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

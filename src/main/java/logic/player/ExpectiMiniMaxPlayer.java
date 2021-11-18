@@ -1,5 +1,7 @@
 package logic.player;
 
+import logic.PieceAndSquareTuple;
+import logic.PieceAndTurnDeathTuple;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.Move;
@@ -9,33 +11,36 @@ import logic.expectiminimax.ExpectiMiniMax;
 import logic.game.Game;
 
 import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
-public class ExpectiMiniMaxPlayer extends AIPlayer{
+public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     //Node node = new Node(0);
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
+    private final boolean DEBUG2 = false;
 
     public ExpectiMiniMaxPlayer(Side color) {
         super(color);
     }
 
+    // track state
     @Override
-    public Move chooseMove(State state) {
-//        System.out.println(Game.getInstance().toString());
-//        BoardStateEvaluator.getBoardEvaluationNumber();
-//        System.out.println("AMAZING AMAZING AMAZING: " + BoardStateEvaluator.getBoardEvaluationNumber());
+    public Move chooseMove(State state) throws CloneNotSupportedException {
+        System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
 
         ExpectiMiniMax miniMax = new ExpectiMiniMax();
-        miniMax.constructTree(1,6);
-        miniMax.getTree().getRoot().getBoardPieceState();
-        System.out.println(miniMax.getTree().getRoot().getBoardPieceState());
+        miniMax.constructTree(3,state,this.color);
 
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
 
-
         if (DEBUG) {System.out.println("valid moves: " + validMoves.toString());}
 
+        // capture
+        List<PieceAndSquareTuple> pieceAndSquare = (List<PieceAndSquareTuple>) state.getPieceAndSquare().stream().collect(Collectors.toList());
+        List<PieceAndSquareTuple> pieceAndSquare2 = (List<PieceAndSquareTuple>) state.getPieceAndSquare().stream().collect(Collectors.toList());
         for (int i = 0; i < validMoves.size(); i++) {
             // if target piece not friendly and target destination is not empty then capture always (not sure if we need the empty condition)
             if(!state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color) && state.getBoard().getPieceAt(validMoves.get(i).getDestination()) != Piece.EMPTY) {
@@ -46,12 +51,39 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                     System.out.println("valid move to choose: " + validMoves.get(i));
                     System.out.println("CAPTURE MOVE: ");
                 }
+
                 //// TODO not sure if we should update board pieces before or after updating state
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(i).getOrigin().getRank()-1][validMoves.get(i).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece (automatically overwrites opponent)
-                state.getBoardPieces()[validMoves.get(i).getDestination().getRank()-1][validMoves.get(i).getDestination().getFile()]=validMoves.get(i).getPiece();
-                state.boardPiecesToString();
+//                for (PieceAndSquareTuple t : pieceAndSquare) {
+//                    // if there is a square in state that is the same as origin
+//                    if (t.getSquare() == validMoves.get(i).getOrigin()) {
+//                        System.out.println("ExpectiMiniMaxPlayer: removing: " + t.getPiece().toString() + t.getSquare().toString());
+//                        state.getPieceAndSquare().remove(t);
+//                    }
+//
+//                    // p is piece at my destination square
+//                    Piece p = (Piece) t.getPiece();
+//                    if (t.getSquare() == validMoves.get(i).getDestination() && p.getColorOfPiece() == Side.getOpposite(color)) {
+//                        // if there is such a tuple
+//                        PieceAndSquareTuple comparison = new PieceAndSquareTuple(p,t.getSquare());
+//                        if (t.equals(comparison)) {
+//                            System.out.println("ExpectiMiniMaxPlayer: removing: " + t.getPiece().toString() + t.getSquare().toString());
+//                            state.getPieceAndSquare().remove(t);
+//                        }
+//                    }
+//
+//                    // add new pos
+//                    if (t.getSquare() == validMoves.get(i).getDestination()) {
+//                        System.out.println("ExpectiMiniMaxPlayer: adding: " + (new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination())).getPiece().toString() +
+//                                (new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination())).getSquare().toString());
+//                        state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination()));
+//                    }
+//                }
+                updateState(state,validMoves.get(i));
+
+                //state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(),validMoves.get(i).getDestination()));
+
+                state.printPieceAndSquare();
+                // return first set of legal moves
                 return validMoves.get(i);
             }
         }
@@ -63,55 +95,41 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(pawnBoardWeightsW,color));
                 // gets max value of most favorable move position
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-                state.boardPiecesToString();
+                updateState(state,validMoves.get(favourableMoveMaxIndex));
+//                // set previous location empty
+//                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
+//                // set destination to current piece
+//                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
+//                state.boardPiecesToString();
+                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KNIGHT -> {
                 if (DEBUG) {System.out.println("KNIGHT MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(knightBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-                state.boardPiecesToString();
+                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case BISHOP -> {
                 if (DEBUG) {System.out.println("BISHOP MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-                state.boardPiecesToString();
+                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case ROOK -> {
                 if (DEBUG) {System.out.println("ROOK MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(rookBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-                state.boardPiecesToString();
+                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case QUEEN -> {
                 if (DEBUG) {System.out.println("QUEEN MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(queenBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-                state.boardPiecesToString();
+                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
@@ -119,16 +137,71 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                 if (DEBUG) {System.out.println("KING MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                // set previous location empty
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-                // set destination to current piece
-                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-                state.boardPiecesToString();
+                updateState(state,validMoves.get(favourableMoveMaxIndex));
+                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
         }
-        return validMoves.get(0);
+        // optimize later, rn takes first index
+        Move chosenMove = validMoves.get(0);
+
+
+
+        return chosenMove;
     }
+
+    private void updateState(State state, Move move) {
+        state.printPieceAndSquare();
+
+        List<PieceAndSquareTuple> list = new CopyOnWriteArrayList<PieceAndSquareTuple>();
+        ListIterator litr = state.getPieceAndSquare().listIterator();
+
+        while(litr.hasNext()) {
+            PieceAndSquareTuple t = (PieceAndSquareTuple) litr.next();
+            if (t.getSquare() == move.getOrigin()) {
+                if( DEBUG2)System.out.println("skipped: " + t.getPiece().toString() + t.getSquare().toString());
+            } else {
+                list.add((PieceAndSquareTuple)t);
+                if( DEBUG2)System.out.println("added: " + t.getPiece().toString() + t.getSquare().toString());
+            }
+        }
+        PieceAndSquareTuple tupleForLeavingSquare = new PieceAndSquareTuple(move.getPiece(), move.getDestination());
+        list.add(tupleForLeavingSquare);
+        if( DEBUG2)System.out.println("added:2 " + tupleForLeavingSquare.getPiece().toString() + tupleForLeavingSquare.getSquare().toString());
+
+        List<PieceAndSquareTuple> list2 = new CopyOnWriteArrayList<PieceAndSquareTuple>();
+
+        ListIterator litr2 = list.listIterator();
+        while(litr2.hasNext()) {
+            PieceAndSquareTuple t = (PieceAndSquareTuple) litr2.next();
+            if (tupleForLeavingSquare.getSquare()==t.getSquare() &&  litr2.nextIndex()==list.size()-1) {
+                litr2.next();
+                if( DEBUG2)System.out.println("skipped: " + t.getPiece().toString() + t.getSquare().toString());
+            } else if (tupleForLeavingSquare.getSquare()!=t.getSquare() && litr2.nextIndex()!=list.size()-1){
+                list2.add(t);
+                if( DEBUG2)System.out.println("added:1 " + t.getPiece().toString() + t.getSquare().toString());
+            } else if (litr2.nextIndex()==list.size()-1){
+                list2.add(t);
+                if( DEBUG2)System.out.println("added:2 " + t.getPiece().toString() + t.getSquare().toString());
+            }
+        }
+        list2.add(tupleForLeavingSquare);
+
+        state.setPieceAndSquare(list2);
+    }
+
+//    private void updateStateBasicMove(State state, List<Move> validMoves, int favourableMoveMaxIndex) {
+//        for (PieceAndSquareTuple t : state.getPieceAndSquare()) {
+//            // remove previous pos
+//            if (t.getSquare() == validMoves.get(favourableMoveMaxIndex).getOrigin()) {
+//                state.getPieceAndSquare().remove(t);
+//            }
+//            // add new pos
+//            if (t.getSquare() == validMoves.get(favourableMoveMaxIndex).getDestination()) {
+//                state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(favourableMoveMaxIndex).getPiece(), validMoves.get(favourableMoveMaxIndex).getDestination()));
+//            }
+//        }
+//    }
 
     private int[][] getCorrectWeights(int[][] weights, Side color) {
         if (color == Side.WHITE) {
@@ -177,6 +250,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
         return pos;
     }
 
+
     // TODO implement logic.expectiminimax
     // unused
 //    public float logic.expectiminimax(Node node, boolean is_max) {
@@ -199,7 +273,8 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
 //                    / 6.0);
 //        }
 //    }
-
+        
+        
     public int[][] getKnightBoardWeightsW() {
         return knightBoardWeightsW;
     }

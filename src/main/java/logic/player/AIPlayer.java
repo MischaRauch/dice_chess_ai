@@ -29,7 +29,7 @@ public abstract class AIPlayer {
         this(Side.BLACK);
     }
 
-    public abstract Move chooseMove(State state);
+    public abstract Move chooseMove(State state) throws CloneNotSupportedException;
 
     //have not tested this
     //need to incorporate castling and promotion

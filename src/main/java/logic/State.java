@@ -6,6 +6,9 @@ import logic.enums.Square;
 import logic.enums.Piece;
 import logic.game.Game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static logic.enums.Piece.BLACK_KING;
 import static logic.enums.Piece.WHITE_KING;
 import static logic.enums.Side.BLACK;
@@ -21,35 +24,11 @@ public class State {
     private boolean shortCastlingBlack = true;
     private boolean longCastlingBlack = true;
     public Square castling = Square.INVALID;
-    // doesn't contain pieces or empty square positions
     public Board board;
     public int diceRoll;
     public Side color;
     public Square enPassant = Square.INVALID;
-    // todo piece tracking on board for en passant and calstling
-    public static Piece[][] boardPieces = {
-            {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK},
-            {WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN},
-            {BLACK_ROOK,BLACK_KNIGHT,BLACK_BISHOP,BLACK_QUEEN,BLACK_KING,BLACK_BISHOP,BLACK_KNIGHT,BLACK_ROOK}};
-
-    public Piece[][] getBoardPieces() {
-        return boardPieces;
-    }
-
-    public void boardPiecesToString() {
-        //Piece[][] temp = flipVerticalAxis(boardPieces);
-        for (int file = 0; file < 8; file++) {
-            for (int rank = 0; rank < 8; rank++) {
-                System.out.print(boardPieces[file][rank] + " ");
-            }
-            System.out.print("\n");
-        }
-    }
+    private List<PieceAndSquareTuple> pieceAndSquare = new ArrayList<>();
 
     public State(Board board, int diceRoll, Side color) {
         this.board = board;
@@ -58,7 +37,7 @@ public class State {
     }
 
     public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite,
-                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, Piece[][] boardPieces) {
+                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, List<PieceAndSquareTuple> pieceAndSquare) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
@@ -68,7 +47,48 @@ public class State {
         this.longCastlingBlack = longCastlingBlack;
         this.longCastlingWhite = longCastlingWhite;
         this.castling = castling;
-        this.boardPieces = boardPieces;
+        this.pieceAndSquare = pieceAndSquare;
+    }
+
+    public void printPieceAndSquare(){
+        System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            System.out.print(t.toString() + " | ");
+        }
+        printPieceCounts(pieceAndSquare);
+    }
+
+    public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
+        int pawn = 0;
+        int knight = 0;
+        int rook = 0;
+        int bishop = 0;
+        int king = 0;
+        int queen = 0;
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if(t.getPiece().equals(Piece.BLACK_QUEEN)||t.getPiece().equals(Piece.WHITE_QUEEN)) {
+                queen++;
+            }else if (t.getPiece().equals(Piece.WHITE_BISHOP)||t.getPiece().equals(Piece.BLACK_BISHOP)) {
+                bishop++;
+            }else if (t.getPiece().equals(Piece.WHITE_KING)||t.getPiece().equals(Piece.BLACK_KING)) {
+                king++;
+            }else if (t.getPiece().equals(Piece.WHITE_ROOK)||t.getPiece().equals(Piece.BLACK_ROOK)) {
+                rook++;
+            }else if (t.getPiece().equals(Piece.WHITE_PAWN)||t.getPiece().equals(Piece.BLACK_PAWN)) {
+                pawn++;
+            }else if (t.getPiece().equals(Piece.WHITE_KNIGHT)||t.getPiece().equals(Piece.BLACK_KNIGHT)) {
+                knight++;
+            }
+        }
+        System.out.println("Counts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+    }
+
+    public List<PieceAndSquareTuple> getPieceAndSquare() {
+        return pieceAndSquare;
+    }
+
+    public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
+        this.pieceAndSquare = pieceAndSquare;
     }
 
     public Board getBoard() {
@@ -179,7 +199,7 @@ public class State {
         }
 
         State nextState = new State(newBoard, newRoll, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
-                longCastlingBlack, longCastlingWhite, castling, this.boardPieces);
+                longCastlingBlack, longCastlingWhite, castling, this.pieceAndSquare);
 
         if (move.enPassantMove) {
             nextState.enPassant = move.enPassant;
@@ -220,6 +240,7 @@ public class State {
 
         return fen;
     }
+
 
 
 }
