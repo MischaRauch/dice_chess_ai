@@ -14,6 +14,7 @@ import java.util.List;
 
 import static logic.enums.Piece.EMPTY;
 import static logic.enums.Square.INVALID;
+import static logic.enums.Square.getSquare;
 
 
 public abstract class AIPlayer {
@@ -106,7 +107,7 @@ public abstract class AIPlayer {
                     }
 
                     //TODO: seperate King into different case in order to incorporate Castling Generation and possibly check escape
-                    case KNIGHT, KING -> {
+                    case KNIGHT -> {
                         for (int offset : piece.getOffsets()) {
                             Square target = Square.getSquare(location.getSquareNumber() + offset);
                             if (target != Square.INVALID) {
@@ -114,6 +115,43 @@ public abstract class AIPlayer {
                                     validMoves.add(new Move(p, location, target, state.diceRoll, color));
                             }
 
+                        }
+                    }
+
+                    case KING -> {
+                        for (int offset : piece.getOffsets()) {
+                            if (!board.isOffBoard(location.getSquareNumber() + offset)) {
+                                Square target = Square.getSquare(location.getSquareNumber() + offset);
+
+                                if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                                    validMoves.add(new Move(p, location, target, state.diceRoll, color));
+                                }
+                            }
+                        }
+                        //CHECK FOR CASTLING
+                        if (piece.getColor() == Side.WHITE) {
+                            if (location.getSquareNumber() == 4) {
+                                //SHORT WHITE
+                                if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(6)) && state.isShortCastlingWhite()) {
+                                    validMoves.add(new Move(p, location, getSquare(6), state.diceRoll, color));
+                                }
+                                //LONG WHITE
+                                if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
+                                    validMoves.add(new Move(p, location, getSquare(2), state.diceRoll, color));
+                                }
+                            }
+                        }
+                        else {
+                            if (location.getSquareNumber() == 116) {
+                                //SHORT BLACK
+                                if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
+                                    validMoves.add(new Move(p, location, getSquare(118), state.diceRoll, color));
+                                }
+                                //LONG BLACK
+                                if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
+                                    validMoves.add(new Move(p, location, getSquare(114), state.diceRoll, color));
+                                }
+                            }
                         }
                     }
 
