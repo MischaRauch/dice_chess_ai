@@ -55,7 +55,7 @@ public class AiAiGame extends Game {
 
             //this part just adds a pause between moves, so you can watch the game instead of it instantly being over
             try {
-                Thread.sleep(200);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
