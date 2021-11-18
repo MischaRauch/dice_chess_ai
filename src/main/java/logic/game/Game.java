@@ -15,7 +15,7 @@ import static logic.enums.Side.*;
 public abstract class Game {
 
     public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-//    public static String openingFEN = "8/pppppppp/8/8/8/8/Q7/8 w KQkq - 0 1 1";
+    //public static String openingFEN = "8/8/8/8/8/PPPPPPPP/1p6/NNN5 w KQkq - 0 1 1";
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates;
@@ -42,6 +42,7 @@ public abstract class Game {
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         currentState.diceRoll = Dice.roll(currentState, Side.WHITE);
+        System.out.println("Initial dice roll: " + currentState.diceRoll);
         previousStates = new Stack<>();
         redoStates = new Stack<>();
         CURRENT_GAME = this;
