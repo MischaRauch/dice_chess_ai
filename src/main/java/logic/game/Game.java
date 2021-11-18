@@ -22,7 +22,7 @@ public abstract class Game {
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
     //2 = shortCastlingBlack, 3 = longCastlingWhite, 4 = longCastlingBlack
-    public static int castlingPerformed = 0;
+    private int castlingPerformed = 0;
 
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> deadBlackPieces = new Stack<>();
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> deadWhitePieces = new Stack<>();

@@ -74,17 +74,17 @@ public class State {
 
     public State applyMove(Move move) {
         //check if last move was castling
-        if (Game.castlingPerformed != 0) {
-            if (Game.castlingPerformed == 1) {
+        if (Game.getInstance().getCastlingPerformed() != 0) {
+            if (Game.getInstance().getCastlingPerformed() == 1) {
                 this.setShortCastlingWhite(false);
             }
-            if (Game.castlingPerformed == 2) {
+            if (Game.getInstance().getCastlingPerformed() == 2) {
                 this.setShortCastlingBlack(false);
             }
-            if (Game.castlingPerformed == 3) {
+            if (Game.getInstance().getCastlingPerformed() == 3) {
                 this.setLongCastlingWhite(false);
             }
-            if (Game.castlingPerformed == 4) {
+            if (Game.getInstance().getCastlingPerformed() == 4) {
                 this.setLongCastlingBlack(false);
             }
         }

@@ -11,6 +11,7 @@ import java.util.List;
 
 import static logic.enums.Piece.EMPTY;
 import static logic.enums.Square.INVALID;
+import static logic.enums.Square.getSquare;
 
 public class LegalMoveGenerator {
 
@@ -55,7 +56,44 @@ public class LegalMoveGenerator {
                 }
             }
 
-            case KNIGHT, KING -> {
+            case KING -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+                //CHECK FOR CASTLING
+                if (piece.getColor() == Side.WHITE) {
+                    if (origin.getSquareNumber() == 4) {
+                        //SHORT WHITE
+                        if (board.isEmpty(origin.getSquareRight()) && board.isEmpty(getSquare(6)) && state.isShortCastlingWhite()) {
+                            validMoves.add(getSquare(6));
+                        }
+                        //LONG WHITE
+                        if (board.isEmpty(origin.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
+                            validMoves.add(getSquare(2));
+                        }
+                    }
+                }
+                else {
+                    if (origin.getSquareNumber() == 116) {
+                        //SHORT BLACK
+                        if (board.isEmpty(origin.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
+                            validMoves.add(getSquare(118));
+                        }
+                        //LONG BLACK
+                        if (board.isEmpty(origin.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
+                            validMoves.add(getSquare(114));
+                        }
+                    }
+                }
+            }
+
+            case KNIGHT -> {
                 for (int offset : piece.getOffsets()) {
                     if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
                         Square target = Square.getSquare(origin.getSquareNumber() + offset);
