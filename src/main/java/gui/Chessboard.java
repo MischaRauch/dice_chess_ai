@@ -150,11 +150,15 @@ public class Chessboard extends GridPane {
                 }
             }
 
-            if (game.getCurrentState().getGameOver() != 0) {
-                //showEndGame(logic.game.getCurrentState().getGameOver());
-                //Stage stage = (Stage) getScene().getWindow();
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
-            }
+//            if (game.getCurrentState().getGameOver() != 0) {
+//                //showEndGame(logic.game.getCurrentState().getGameOver());
+//                //Stage stage = (Stage) getScene().getWindow();
+//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
+//            }
+
+            if (game.isGameOver())
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
+
         }
     }
 

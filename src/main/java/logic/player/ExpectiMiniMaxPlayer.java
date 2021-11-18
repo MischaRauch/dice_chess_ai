@@ -4,6 +4,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.Move;
 import logic.State;
+import logic.expectiminimax.Node;
 
 import java.util.List;
 
@@ -134,7 +135,9 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
-                /// TODO add end logic.game condition; but need to know the turn somehow. we don't know turn as we have no access to logic.game
+                /// TODO add end game condition; but need to know the turn somehow. we don't know turn as we have no access to game
+                // -> I think you can do Game.getInstance()
+                // -> also the state stores whose turn it is I think
                 if (DEBUG) {System.out.println("KING MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
@@ -193,25 +196,27 @@ public class ExpectiMiniMaxPlayer extends AIPlayer{
 
     // TODO implement logic.expectiminimax
     // unused
-//    public float logic.expectiminimax(Node node, boolean is_max) {
-//        if ( node.getPAWN() == null && node.getKNIGHT() == null && node.getBISHOP()==null
-//                && node.getROOK()==null && node.getQUEEN()==null && node.getKING()==null ) {
-//            return node.getValue();
-//        }
-//        if (is_max) {
-//            return Math.max(
-//                    Math.max(Math.max(logic.expectiminimax(node.getPAWN(), false), logic.expectiminimax(node.getKNIGHT(), false)),
-//                    Math.max(logic.expectiminimax(node.getBISHOP(), false),logic.expectiminimax(node.getROOK(), false))),
-//                    Math.max(logic.expectiminimax(node.getQUEEN(), false),logic.expectiminimax(node.getKING(), false))
-//            );
-//        }
-//        else {
-//            return (float) ((
-//                    logic.expectiminimax(node.getPAWN(), true) + logic.expectiminimax(node.getKNIGHT(), true) + logic.expectiminimax(node.getKNIGHT(), true) +
-//                            logic.expectiminimax(node.getROOK(), true) + logic.expectiminimax(node.getQUEEN(), true) + logic.expectiminimax(node.getKING(), true)
-//                    )
-//                    / 6.0);
-//        }
-//    }
+    public float expectiminimax(Node node, boolean is_max) {
+        if ( node.getPAWN() == null && node.getKNIGHT() == null && node.getBISHOP()==null
+                && node.getROOK()==null && node.getQUEEN()==null && node.getKING()==null ) {
+            return node.getValue();
+        }
+        if (is_max) {
+            return Math.max(
+                    Math.max(Math.max(expectiminimax(node.getPAWN(), false), expectiminimax(node.getKNIGHT(), false)),
+                    Math.max(expectiminimax(node.getBISHOP(), false), expectiminimax(node.getROOK(), false))),
+                    Math.max(expectiminimax(node.getQUEEN(), false), expectiminimax(node.getKING(), false))
+            );
+        }
+        else {
+            return (float) ((expectiminimax(node.getPAWN(), true)
+                    + expectiminimax(node.getKNIGHT(), true)
+                    + expectiminimax(node.getKNIGHT(), true)
+                    + expectiminimax(node.getROOK(), true)
+                    + expectiminimax(node.getQUEEN(), true)
+                    + expectiminimax(node.getKING(), true))
+                    / 6.0);
+        }
+    }
 
 }

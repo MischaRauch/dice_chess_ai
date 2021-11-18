@@ -21,12 +21,19 @@ public class AiAiGame extends Game {
     }
 
     public void start() {
+        boolean gameOver = false;
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         while (!gameOver) {
             Move move = nextPlayer.chooseMove(currentState);
             State newState = currentState.applyMove(move);
             previousStates.push(currentState);
+
+            //need to check if the destination capture move was a king, and in the next state the state the king might
+            //be dead already. so we can't check it was captured
+            checkGameOver(move);
+
+            //after checking if king was captured, we can updated the currentState
             currentState = newState;
             move.setStatus(Validity.VALID);
 
@@ -37,16 +44,16 @@ public class AiAiGame extends Game {
             Platform.runLater(() -> {
                 Chessboard.chessboard.updateGUI(move);
                 MainContainerController.getInstance().setDiceImage(ChessIcons.load(move.getDiceRoll(), move.getSide()));
+                MainContainerController.getInstance().updateTurn(move.getSide());
             });
 
-            //exit the loop on logic.game over
-            if (currentState.getGameOver() != 0)
-                gameOver = true;
+            //update the value for gameOver so we eventually exit this loop
+            gameOver = isGameOver();
 
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
-            //this part just adds a pause between moves so you can watch the logic.game instead of it instantly being over
+            //this part just adds a pause between moves, so you can watch the game instead of it instantly being over
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

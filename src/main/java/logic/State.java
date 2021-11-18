@@ -1,5 +1,6 @@
 package logic;
 
+import gui.controllers.MainContainerController;
 import logic.board.Board;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -8,13 +9,12 @@ import logic.game.Game;
 
 import static logic.enums.Piece.BLACK_KING;
 import static logic.enums.Piece.WHITE_KING;
-import static logic.enums.Side.BLACK;
-import static logic.enums.Side.WHITE;
 import static logic.enums.Piece.*;
+import static logic.enums.Side.*;
 
 public class State {
 
-    public static int gameOver;
+    //public static int gameOver;
     private boolean applyCastling = false;
     private boolean shortCastlingWhite = true;
     private boolean longCastlingWhite = true;
@@ -48,9 +48,9 @@ public class State {
         return this.board;
     }
 
-    public int getGameOver() {
-        return gameOver;
-    }
+//    public int getGameOver() {
+//        return gameOver;
+//    }
     //Getter for castling
     public boolean isApplyCastling() { return applyCastling; }
 
@@ -91,14 +91,16 @@ public class State {
         //extract castling en passant dice roll
 
         //check if king got captured
-        if (board.getPieceAt(move.getDestination()) == WHITE_KING) {
-            gameOver = -1;
-        }
+//        if (board.getPieceAt(move.getDestination()) == WHITE_KING) {
+//            gameOver = -1;
+//        }
+//
+//        if (board.getPieceAt(move.getDestination()) == BLACK_KING) {
+//            gameOver = 1;
+//        }
 
-        if (board.getPieceAt(move.getDestination()) == BLACK_KING) {
-            gameOver = 1;
-        }
-
+        //necessary because the State constructor demands a dice roll. However, this value get pretty much immediately
+        //after the next State creation. So really this is unnecessary here I think
         int newRoll = Dice.roll();
 
         Side nextTurn = color == WHITE ? BLACK : WHITE;
@@ -156,6 +158,8 @@ public class State {
             nextState.enPassant = move.enPassant;
         }
 
+        //get legal dice rolls according to updated new state
+        //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
         newBoard.printBoard();
@@ -171,7 +175,7 @@ public class State {
             Piece p = board.getBoard()[i];
             if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
                 fen += "/"; //reached end of rank
-                i += 6;     //skip forward over off logic.board pieces to next rank
+                i += 6;     //skip forward over off-board pieces to next rank
                 emptySpaces = 0;   //reset empty spaces
             }
 

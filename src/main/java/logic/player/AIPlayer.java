@@ -1,5 +1,7 @@
 package logic.player;
 
+import gui.controllers.PromotionPrompt;
+import javafx.application.Platform;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
@@ -40,7 +42,11 @@ public abstract class AIPlayer {
         Board board = state.getBoard();
         Board0x88 b = (Board0x88) board;
 
-        //TODO: use piece lists so we don't have to loop through entire logic.board
+        //TODO: use piece lists so we don't have to loop through entire board
+        //TODO: somewhere we need to detect check (both enemy and ours)
+        //TODO detect which moves protect the king/valuable pieces from check
+        //TODO: avoid moving into squares which are under attack. Maybe depending on how many available pieces opponent has
+        //TODO: add move option to promote pawn despite dice roll -> need way to see if advantages to do so
         for (int i = 0; i < b.getBoardArray().length; i++) {
             Piece p = b.getBoardArray()[i];
             Square location = Square.getSquareByIndex(i);
@@ -50,8 +56,24 @@ public abstract class AIPlayer {
                     case PAWN -> {
                         //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
-                        if (board.isEmpty(naturalMove)) {
-                            validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
+                        if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
+                            Move natural = new Move(p, location, naturalMove, state.diceRoll, color);
+                            //validMoves.add(new Move(p, location, naturalMove, state.diceRoll, color));
+
+                            if (p.canPromote(naturalMove)) {
+                                //pawn is moving into promotion rank
+                                if (state.diceRoll != 1 && state.diceRoll != 6) {
+                                    //if dice roll is not pawn or king, then automatically promote piece
+                                    natural.promotionPiece = p.promote(state.diceRoll);
+                                } else {
+                                    //auto promote to Queen
+                                    //TODO: potentially give AI the choice to promote to knight in cases where it would lead to a king capture in the next turn
+                                    natural.promotionPiece = Piece.QUEEN.getColoredPiece(p.getColor());
+                                }
+
+                                natural.promotionMove = true;
+                                validMoves.add(natural);
+                            }
 
                             //double jumping
                             Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
@@ -59,6 +81,8 @@ public abstract class AIPlayer {
                                 validMoves.add(new Move(p, location, doubleJump, state.diceRoll, color));
                         }
 
+                        //TODO promotion for captures into last rank
+                        //TODO not sure if I ought to be making sure the validTargets aren't Square.INVALID
                         for (int k = 1; k < 3; k++) {
                             if (!board.isOffBoard(location.getSquareNumber() + piece.getOffsets()[k])) {
                                 Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
@@ -69,6 +93,8 @@ public abstract class AIPlayer {
                         }
                     }
 
+                    //TODO: seperate King into different case in order to incorporate Castling Generation and possibly check escape
+                    //TODO: Rook case should avoid moving the unmoved rook if castling on that side is possible
                     case KNIGHT, KING -> {
                         for (int offset : piece.getOffsets()) {
                             if (!board.isOffBoard(location.getSquareNumber() + offset)) {

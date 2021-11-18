@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import javafx.scene.image.Image;
 import logic.enums.GameType;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -75,6 +76,9 @@ public class MainContainerController extends AnchorPane {
     private AnchorPane modalDialog;
 
     @FXML
+    private Label turnIndicator;
+
+    @FXML
     void rollDice(ActionEvent event) {
         if (!inputBlock) {
             int roll = Game.getInstance().getDiceRoll();
@@ -112,6 +116,8 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMouseExited(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
+
+        updateTurn(WHITE);
     }
 
     @FXML
@@ -235,6 +241,10 @@ public class MainContainerController extends AnchorPane {
         guiStringHistoryOfPreviousMoves.push(move.stylized());
         Label newL = new Label(move.stylized());
         newL.setFont(new Font("Arial", 16));
+        ImageView pieceIcon = ChessIcons.load(move.getPiece());
+        pieceIcon.setFitWidth(20);
+        pieceIcon.setFitHeight(20);
+        newL.setGraphic(pieceIcon);
         moveHistory.getChildren().add(newL);
         //moveHistory.setAlignment(Pos.TOP_CENTER);
         //System.out.println("scrollVBox size: " + moveHistory.getChildren().size());
@@ -247,6 +257,7 @@ public class MainContainerController extends AnchorPane {
             String temp = guiStringHistoryOfRedoMoves.peek();
             Label newL = new Label(temp);
             newL.setFont(new Font("Arial", 16));
+            //newL.setGraphic(ChessIcons.load(move.getPiece()));
             moveHistory.getChildren().add(newL);
             //moveHistory.setAlignment(Pos.TOP_CENTER);
             guiStringHistoryOfPreviousMoves.push(temp);
@@ -267,6 +278,13 @@ public class MainContainerController extends AnchorPane {
 
     public void setDiceImage(ImageView img) {
         diceImage.setImage(img.getImage());
+    }
+
+    public void updateTurn(Side color) {
+        if (color == WHITE)
+            turnIndicator.setText("White's");
+        else
+            turnIndicator.setText("Black's");
     }
 
     public static MainContainerController getInstance() {
