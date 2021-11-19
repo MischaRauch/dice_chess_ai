@@ -80,7 +80,7 @@ public class Chessboard extends GridPane {
         if (gameType == GameType.AI_V_AI) {
             Task<Void> task = new Task<>() {
                 @Override
-                protected Void call() throws CloneNotSupportedException {
+                protected Void call() {
                     ((AiAiGame) game).start();
                     return null;
                 };

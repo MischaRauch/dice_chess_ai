@@ -77,11 +77,9 @@ public class BoardStateGenerator {
     }
 
     // list of piece states for given dice roll and color
-    public List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) throws CloneNotSupportedException {
+    public List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = (List<PieceAndSquareTuple>) nodePieceAndSquare.stream().collect(Collectors.toList());
         List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = (List<PieceAndSquareTuple>) nodePieceAndSquare.stream().collect(Collectors.toList());
-        List<PieceAndSquareTuple> nodePieceAndSquareCopyDiceNumbers = (List<PieceAndSquareTuple>) nodePieceAndSquare.stream().collect(Collectors.toList());
-
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
 
@@ -91,7 +89,6 @@ public class BoardStateGenerator {
             // clone for casting
             Piece p = (Piece) t.getPiece();
             Square s = (Square) t.getSquare(); //origin
-
             // get all piece types with their dice numbers
 
 //            List<Integer> diceNumbers = new ArrayList<>();
@@ -125,8 +122,6 @@ public class BoardStateGenerator {
                             //printPieceAndSquare(states.get(j));
                         }
                     }
-
-
 //                }
 //            }
         }
@@ -137,7 +132,7 @@ public class BoardStateGenerator {
         return possibleStates;
     }
 
-    public List<Integer> getPossibleBoardStatesWeights(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) throws CloneNotSupportedException {
+    public List<Integer> getPossibleBoardStatesWeights(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
 //        Map<Piece,Integer> possibleBoardStatesWeights = new HashMap<>();
 
@@ -163,7 +158,7 @@ public class BoardStateGenerator {
         printPieceCounts(pieceAndSquare);
     }
 
-    public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
+    private void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
         int pawn = 0;
         int knight = 0;
         int rook = 0;
@@ -185,9 +180,8 @@ public class BoardStateGenerator {
                 knight++;
             }
         }
-        System.out.println("Counts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
-
 
     private Piece[][] flipMatrixHorizontal(Piece[][] matrix) {
         Piece temp;

@@ -23,7 +23,7 @@ public class AiAiGame extends Game {
         this.black = black;
     }
 
-    public void start() throws CloneNotSupportedException {
+    public void start() {
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         while (!gameOver) {

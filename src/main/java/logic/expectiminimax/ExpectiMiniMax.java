@@ -17,7 +17,7 @@ public class ExpectiMiniMax {
     int depth;
 
     // first recursive method call
-    public void constructTree(int depth,State state,Side aiSide) throws CloneNotSupportedException {
+    public void constructTree(int depth,State state,Side aiSide) {
         System.out.println("constructTree");
         System.out.println("DEPTH " + depth);
         this.depth = depth;
@@ -28,26 +28,26 @@ public class ExpectiMiniMax {
         constructTree(root,depth);
     }
 
-    private void constructTree(Node parentNode,int depth) throws CloneNotSupportedException {
-        boolean isChildMaxPlayer = !parentNode.isMaxPlayer();
-
-        System.out.println("DEPTH " + depth);
+    private void constructTree(Node parentNode,int depth) {
         BoardStateGenerator gen = new BoardStateGenerator();
+        boolean isChildMaxPlayer = !parentNode.isMaxPlayer();
+        System.out.println("DEPTH " + depth);
 
         Map<Piece,List<Integer>> evalNumMap = new HashMap<>();
         Map<Piece,List<List<PieceAndSquareTuple>>> boardStateMap = new HashMap<>();
 
+        // loop through for all 6 dice numbers
         for (int i = 0; i < 6; i++) {
             // evlation numbers for one dice roll
             List<Integer> possibleEvaluationNumbers =
                     gen.getPossibleBoardStatesWeights(parentNode.getState().getPieceAndSquare(),parentNode.getColor(),i+1,parentNode.getState());
 
-            System.out.println("Piece.getPieceFromDice(i,parentNode.getColor()) " + Piece.getPieceFromDice(i+1,parentNode.getColor()));
-            print(possibleEvaluationNumbers);
-
             // possible board states for all dice rolls
             List<List<PieceAndSquareTuple>> possibleBoardStates =
                     gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),parentNode.getColor(),i+1,parentNode.getState());
+
+            System.out.println("Piece.getPieceFromDice(i,parentNode.getColor()) " + Piece.getPieceFromDice(i+1,parentNode.getColor()));
+            print(possibleEvaluationNumbers);
 
             if (evalNumMap.get(Piece.getPieceFromDice(i+1,parentNode.getColor()))!=null) {
                 evalNumMap.put(Piece.getPieceFromDice(i+1,parentNode.getColor()),possibleEvaluationNumbers);
@@ -56,40 +56,12 @@ public class ExpectiMiniMax {
         }
         System.out.println("evalNumMap size" + evalNumMap.size());
         System.out.println("PieceAndSquareTuple size" + boardStateMap.size());
-
-        List<Integer> diceNumbers = new ArrayList<>();
-        for (PieceAndSquareTuple tDice : parentNode.getState().getPieceAndSquare()) {
-            //friendly pieces
-            if(Piece.getColorOfPiece((Piece)tDice.getPiece())==parentNode.getState().color) {
-                int dice = Piece.getDiceFromPiece((Piece)tDice.getPiece());
-                if(!diceNumbers.contains(dice)) {
-                    diceNumbers.add(dice);
-                }
-            }
-        }
-
-        System.out.println("ExpectiMiniMax; diceNumbers: " + diceNumbers);
-        List<Integer> diceNumbersCopy = (List<Integer>) diceNumbers.stream().collect(Collectors.toList());
-
-//        // evlation numbers for one dice roll
-//        List<Integer> possibleEvaluationNumbers =
-//                gen.getPossibleBoardStatesWeights(parentNode.getState().getPieceAndSquare(),parentNode.getColor(),parentNode.getDiceRoll(),parentNode.getState());
-//
-//        // possible board states for all dice rolls
-//        List<List<PieceAndSquareTuple>> possibleBoardStates =
-//                gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),parentNode.getColor(),parentNode.getDiceRoll(),parentNode.getState());
-
-//        printPossibleEvaluationNumbersMap(possibleEvaluationNumbers);
-//        printPossibleBoardStatesMap(possibleBoardStates);
-
-        // child alternates between max and min player
         System.out.println("isChildMaxPlayer " + isChildMaxPlayer);
-
         // AI assumes opponent will always choose the most favourable move
         // children are min
-        Node bestChild = null;
         if(isChildMaxPlayer==false) {
-            int evalNumber = 0;
+            int evalNumber = Integer.MAX_VALUE;
+            Node bestChild=null;
             for (Piece p : evalNumMap.keySet()) {
                 System.out.println("pieces to be evaluated: child: is max:" + isChildMaxPlayer + p.toString());
                 // eval numbers
@@ -106,9 +78,11 @@ public class ExpectiMiniMax {
                     parentNode.addChild(newNode);
                 }
             }
-            //children are max
+            constructTree(bestChild,--depth);
+        //children are max
         } else if (isChildMaxPlayer==true) {
-            int evalNumber = 0;
+            int evalNumber = Integer.MIN_VALUE;
+            Node bestChild=null;
             for (Piece p : evalNumMap.keySet()) {
                 System.out.println("pieces to be evaluated: child: is max:" + isChildMaxPlayer + p.toString());
                 // eval numbers
@@ -125,14 +99,9 @@ public class ExpectiMiniMax {
                     parentNode.addChild(newNode);
                 }
             }
-
+            constructTree(bestChild,--depth);
         }
-        System.out.println("Best child val " + bestChild.getBoardEvaluationNumber());
-        // we have best child, so make that new parent node
-        constructTree(bestChild,--depth);
-
-        }
-
+    }
 
 
 //        State temp = new State(state.getBoard(),parentNode.getDiceRoll(),parentNode.getColor());

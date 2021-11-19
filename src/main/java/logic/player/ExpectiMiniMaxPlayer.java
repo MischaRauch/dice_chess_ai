@@ -7,6 +7,7 @@ import logic.enums.Side;
 import logic.Move;
 import logic.State;
 import logic.expectiminimax.BoardStateEvaluator;
+import logic.expectiminimax.BoardStateGenerator;
 import logic.expectiminimax.ExpectiMiniMax;
 import logic.game.Game;
 
@@ -27,11 +28,12 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     // track state
     @Override
-    public Move chooseMove(State state) throws CloneNotSupportedException {
+    public Move chooseMove(State state) {
         System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
-
-        ExpectiMiniMax miniMax = new ExpectiMiniMax();
-        miniMax.constructTree(3,state,this.color);
+        BoardStateGenerator gen = new BoardStateGenerator();
+        gen.getPossibleBoardStates(state.getPieceAndSquare(),state.color,state.diceRoll,state);
+//        ExpectiMiniMax miniMax = new ExpectiMiniMax();
+//        miniMax.constructTree(3,state,this.color);
 
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function

@@ -80,7 +80,7 @@ public class State {
                 knight++;
             }
         }
-        System.out.println("Counts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
     public List<PieceAndSquareTuple> getPieceAndSquare() {
@@ -207,7 +207,7 @@ public class State {
 
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        newBoard.printBoard();
+        //newBoard.printBoard();
         return nextState;
     }
 
