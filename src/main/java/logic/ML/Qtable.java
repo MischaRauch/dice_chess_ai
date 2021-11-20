@@ -1,44 +1,40 @@
 package logic.ML;
 
-import logic.Move;
-import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.game.Game;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import static logic.expectiminimax.BoardStateGenerator.getPossibleBoardStates;
 
-
 public class Qtable {
 
-    PieceAndMove actionSpace; // at map each key can only have 1 value
-    Map<Piece[][], PieceAndMove> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
+    PieceAndMove actionSpace;
+    HashMap<Piece[][], PieceAndMove> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
     ArrayList<Piece[][]> stateSpace;
     Side currentSide;
+    int StepCounter = 0; // would be good to use this to increase negative reward each turn
 
     public Qtable(Side side) {
-        Qtable = new Hashtable<>();
+        Qtable = new HashMap<>();
         currentSide = side;
-        actionSpace = new PieceAndMove(currentSide);
+        actionSpace = new PieceAndMove(currentSide); // creating all action space
     }
 
-    public void ConstructQtable(ArrayList<Piece[][]> stateSpace, Map<Piece, ArrayList<Integer>> actionSpace) {
+    public void ConstructQtable(Map<Piece, ArrayList<Integer>> actionSpace) { // this table doesn't contain values, only info
         stateSpace = createStateSpace( 1);
 
         for (int i=0; i<stateSpace.size(); i++) {
             for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
                 Qtable.put(stateSpace.get(i), (PieceAndMove) entry);
-
             }
         }
     }
+
 
     public ArrayList<Piece[][]> createStateSpace(int depth) { // later will implement the depth feature, atm only 1 move
         Game game = Game.getInstance();
@@ -61,4 +57,7 @@ public class Qtable {
         return null;
     }
 
+    public void addZeros() {
+        // for (int i; i<)
+    }
 }
