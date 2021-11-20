@@ -32,8 +32,9 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
         BoardStateGenerator gen = new BoardStateGenerator();
         gen.getPossibleBoardStates(state.getPieceAndSquare(),state.color,state.diceRoll,state);
-//        ExpectiMiniMax miniMax = new ExpectiMiniMax();
-//        miniMax.constructTree(3,state,this.color);
+
+        ExpectiMiniMax miniMax = new ExpectiMiniMax();
+        miniMax.constructTree(3,state);
 
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
@@ -80,7 +81,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 //                        state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination()));
 //                    }
 //                }
-                updateState(state,validMoves.get(i));
+                updatePieceAndSquareState(state,validMoves.get(i));
 
                 //state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(),validMoves.get(i).getDestination()));
 
@@ -97,7 +98,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(pawnBoardWeightsW,color));
                 // gets max value of most favorable move position
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updateState(state,validMoves.get(favourableMoveMaxIndex));
+                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));
 //                // set previous location empty
 //                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
 //                // set destination to current piece
@@ -110,28 +111,28 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
                 if (DEBUG) {System.out.println("KNIGHT MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(knightBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
+                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case BISHOP -> {
                 if (DEBUG) {System.out.println("BISHOP MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
+                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case ROOK -> {
                 if (DEBUG) {System.out.println("ROOK MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(rookBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
+                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case QUEEN -> {
                 if (DEBUG) {System.out.println("QUEEN MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(queenBoardWeightsW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updateState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
+                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
@@ -139,7 +140,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
                 if (DEBUG) {System.out.println("KING MAX MOVE");}
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updateState(state,validMoves.get(favourableMoveMaxIndex));
+                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));
                 state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
@@ -152,7 +153,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         return chosenMove;
     }
 
-    private void updateState(State state, Move move) {
+    private void updatePieceAndSquareState(State state, Move move) {
         state.printPieceAndSquare();
 
         List<PieceAndSquareTuple> list = new CopyOnWriteArrayList<PieceAndSquareTuple>();

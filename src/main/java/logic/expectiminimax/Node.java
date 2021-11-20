@@ -15,14 +15,12 @@ public class Node {
     private boolean isMaxPlayer;
     private int score;
     private List<Node> children;
-    private Side color;
     private int diceRoll;
     private int boardEvaluationNumber;
     private State state;
 
-    public Node(boolean isMaxPlayer, Side color, int diceRoll, int boardEvaluationNumber, State state) {
+    public Node(boolean isMaxPlayer, int diceRoll, int boardEvaluationNumber, State state) {
         this.isMaxPlayer = isMaxPlayer;
-        this.color = color;
         this.diceRoll = diceRoll;
         this.boardEvaluationNumber = boardEvaluationNumber;
         this.state = state;
@@ -30,8 +28,7 @@ public class Node {
     }
 
     // for root
-    public Node(Side color, int diceRoll, boolean isMaxPlayer, State state) {
-        this.color=color;
+    public Node(int diceRoll, boolean isMaxPlayer, State state) {
         this.diceRoll=diceRoll;
         this.isMaxPlayer=isMaxPlayer;
         this.state = state;
@@ -99,14 +96,6 @@ public class Node {
 
     public void setChildren(List<Node> children) {
         this.children = children;
-    }
-
-    public Side getColor() {
-        return color;
-    }
-
-    public void setColor(Side color) {
-        this.color = color;
     }
 
     public int getDiceRoll() {

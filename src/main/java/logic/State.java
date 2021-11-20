@@ -34,6 +34,41 @@ public class State {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.a8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.b8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.c8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_QUEEN, Square.d8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KING, Square.e8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.f8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.g8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.h8));
+
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.a7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.b7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.c7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.d7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.e7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.f7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.g7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.h7));
+
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.a2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.b2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.c2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.d2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.e2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.f2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.g2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.h2));
+
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.a1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.b1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.c1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_QUEEN, Square.d1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KING, Square.e1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.f1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.g1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.h1));
     }
 
     public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite,
@@ -240,7 +275,6 @@ public class State {
 
         return fen;
     }
-
 
 
 }

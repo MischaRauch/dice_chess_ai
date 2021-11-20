@@ -96,6 +96,16 @@ public enum Piece {
         return null;
     }
 
+    public static Piece getNeutralPieceFromDice(int diceRoll) {
+        if (diceRoll==1) {return PAWN;}
+        else if (diceRoll==2) {return KNIGHT;}
+        else if (diceRoll==3) {return BISHOP;}
+        else if (diceRoll==4) {return ROOK;}
+        else if (diceRoll==5) {return QUEEN;}
+        else if (diceRoll==6) {return KING;}
+        return null;
+    }
+
     public static int getDiceFromPiece(Piece piece) {
         return switch (piece) {
             case WHITE_PAWN,BLACK_PAWN -> 1;

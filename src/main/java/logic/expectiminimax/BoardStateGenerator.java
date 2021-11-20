@@ -67,7 +67,6 @@ public class BoardStateGenerator {
                     nodePieceAndSquareCopy3 = (List<PieceAndSquareTuple>) nodePieceAndSquareCopy4.stream().collect(Collectors.toList());
                 }
             }
-
         }
 //        for (int i = 0; i < possibleStates.size(); i++) {
 //            System.out.print("Piece: " + possibleStates.get(i).get(0).getPiece().toString());
@@ -83,7 +82,7 @@ public class BoardStateGenerator {
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
 
-        printArray(nodePieceAndSquareCopy);
+        //printPieceAndSquare(nodePieceAndSquareCopy);
 
         for (PieceAndSquareTuple t : nodePieceAndSquareCopy) {
             // clone for casting
@@ -125,10 +124,6 @@ public class BoardStateGenerator {
 //                }
 //            }
         }
-
-        for (int i = 0; i < possibleStates.size(); i++) {
-            printPieceAndSquare(possibleStates.get(i));
-        }
         return possibleStates;
     }
 
@@ -158,7 +153,7 @@ public class BoardStateGenerator {
         printPieceCounts(pieceAndSquare);
     }
 
-    private void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
+    public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
         int pawn = 0;
         int knight = 0;
         int rook = 0;
@@ -183,32 +178,12 @@ public class BoardStateGenerator {
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
-    private Piece[][] flipMatrixHorizontal(Piece[][] matrix) {
-        Piece temp;
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length / 2; j++) {
-                temp = matrix[i][j];
-                matrix[i][j] = matrix[i][matrix.length - 1 - j];
-                matrix[i][matrix.length - 1 -j] = temp;
-            }
-        }
-        return matrix;
-    }
-
-    private void printLegalMoves(List<Square> legalMoves) {
+    public void printLegalMoves(List<Square> legalMoves) {
         System.out.print("BoardStateGenerator; Legal Moves: ");
         for (int i = 0; i < legalMoves.size(); i++) {
             System.out.print(" " + legalMoves.get(i).toString());
         }
         System.out.println();
-    }
-
-    public void printArray(List<PieceAndSquareTuple> pieceAndSquare){
-        System.out.println("BoardStateGenerator; printArray: ");
-        for (PieceAndSquareTuple t : pieceAndSquare) {
-            System.out.print(t.toString() + " | ");
-        }
-        System.out.println("Size: " + pieceAndSquare.size());
     }
 
 }
