@@ -4,20 +4,15 @@ import logic.*;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-
 import java.util.List;
-import java.util.Map;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static logic.enums.Side.BLACK;
-import static logic.enums.Side.WHITE;
 
-public class ExpectiMiniMax {
+public class MiniMax {
 
     private Tree tree;
     int depth;
+    private final boolean DEBUG = false;
 
     // first recursive method call
     public void constructTree(int depth,State state) {
@@ -32,8 +27,8 @@ public class ExpectiMiniMax {
     }
 
     private void constructTree(Node parentNode,int depth) {
-        System.out.println("THIS DEPTH " + this.depth);
-        System.out.println("DEPTH " + depth);
+        if(DEBUG)System.out.println("THIS DEPTH " + this.depth);
+        if(!DEBUG)System.out.println("DEPTH " + depth);
         while(this.depth>0) {
             BoardStateGenerator gen = new BoardStateGenerator();
             System.out.println("DEPTH " + depth);
@@ -43,19 +38,19 @@ public class ExpectiMiniMax {
 
             List<List<List<PieceAndSquareTuple>>> listOfAllPossibleBoardStates = new ArrayList<>();
             List<List<Integer>> listOfAllPossibleEvaluationNumbers = new ArrayList<>();
-            System.out.println("tupleList size: " + tupleList.size());
-            System.out.println("listOfAllPossibleBoardStates size: " + listOfAllPossibleBoardStates.size());
-            System.out.println("listOfAllPossibleEvaluationNumbers size: " + listOfAllPossibleEvaluationNumbers.size());
+            if(DEBUG)System.out.println("tupleList size: " + tupleList.size());
+            if(DEBUG)System.out.println("listOfAllPossibleBoardStates size: " + listOfAllPossibleBoardStates.size());
+            if(DEBUG)System.out.println("listOfAllPossibleEvaluationNumbers size: " + listOfAllPossibleEvaluationNumbers.size());
 
             // loop through for all 6 dice numbers
             for (int i = 1; i < 7; i++) {
-                System.out.println("Dice Number: " + i);
+                if(DEBUG)System.out.println("Dice Number: " + i);
                 // evlation numbers for i dice roll
-                ;
+
                 List<Integer> possibleEvaluationNumbers =
-                        gen.getPossibleBoardStatesWeights(parentNode.getState().getPieceAndSquare(),
+                        gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
                                 parentNode.getState().color,i,parentNode.getState());
-                System.out.println("parent node piece and square :");
+                if(DEBUG)System.out.println("parent node piece and square :");
                 printPieceAndSquare(parentNode.getState().getPieceAndSquare());
                 // possible board states fir ith dice roll
                 List<List<PieceAndSquareTuple>> possibleBoardStates =
@@ -77,22 +72,22 @@ public class ExpectiMiniMax {
             totalTupleList.add(tupleList);
 
             boolean isChildMaxPlayer = !parentNode.isMaxPlayer();
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             // AI assumes opponent will always choose the most favourable move
             // adding children for min player
             if(isChildMaxPlayer) {
-                System.out.println("Adding children for min player");
+                if(DEBUG)System.out.println("Adding children for min player");
                 int finalEvalNo = Integer.MAX_VALUE;
                 Node bestChild = null;
-                System.out.println("llistOfAllPossibleBoardStates.size(): " + listOfAllPossibleBoardStates.size());
+                if(DEBUG)System.out.println("llistOfAllPossibleBoardStates.size(): " + listOfAllPossibleBoardStates.size());
                 // loop through generated states
                 for (int j = 0; j < listOfAllPossibleBoardStates.size(); j++) {
-                    System.out.println("Index of generated States looping : " + j);
+                    if(DEBUG)System.out.println("Index of generated States looping : " + j);
                     //System.out.println("pieces to be evaluated: child: is max:" + isChildMaxPlayer + p.toString());
                     // loop through states for pieces
-                    System.out.println("listOfAllPossibleBoardStates.get(j).size(): " + listOfAllPossibleBoardStates.get(j).size());
+                    if(DEBUG)System.out.println("listOfAllPossibleBoardStates.get(j).size(): " + listOfAllPossibleBoardStates.get(j).size());
                     for (int i = 0; i < listOfAllPossibleBoardStates.get(j).size(); i++) {
-                        System.out.println("Index of generated States looping : " + j);
+                        if(DEBUG)System.out.println("Index of generated States looping : " + j);
 
                         // new state with alterate color
                         int lastPieceIndex = listOfAllPossibleBoardStates.get(j).get(i).size()-1;
@@ -110,10 +105,10 @@ public class ExpectiMiniMax {
                                 parentNode.getState().castling,
                                 parentNode.getState().getPieceAndSquare()
                         );
-                        System.out.println("Index of generated State for given piece : " + i);
-                        System.out.println("totalTupleList.get(j) size: " + totalTupleList.get(0).size());
-                        System.out.println("dice roll number: " + diceNo);
-                        System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
+                        if(DEBUG) System.out.println("Index of generated State for given piece : " + i);
+                        if(DEBUG)System.out.println("totalTupleList.get(j) size: " + totalTupleList.get(0).size());
+                        if(!DEBUG)System.out.println("dice roll number: " + diceNo);
+                        if(!DEBUG)System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
                         int evalNo = (int) totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().get(i);
 
                         List<PieceAndSquareTuple> currentBoardState = listOfAllPossibleBoardStates.get(j).get(i);
@@ -123,14 +118,14 @@ public class ExpectiMiniMax {
                         Piece movingPiece = (Piece) lastPieceAndSquareTuple.getPiece();
                         Square origin = null;
 
-                        System.out.println("Containsssss: " + containsSquare(currentBoardState,Square.a1));
+                        if(DEBUG)System.out.println("Containsssss: " + containsSquare(currentBoardState,Square.a1));
 
                         for (PieceAndSquareTuple ps : prevBoardState) {
                             if (ps.getPiece()==movingPiece) { //if black horse
-                                System.out.println("Moving piece: " + movingPiece.toString());
+                                if(DEBUG)System.out.println("Moving piece: " + movingPiece.toString());
                                 // get it's square
                                 Square previousSquare = (Square) ps.getSquare(); //black horse square in previous state
-                                System.out.println("Current square: " + previousSquare);
+                                if(DEBUG)System.out.println("Current square: " + previousSquare);
                                 if(containsSquare(currentBoardState,previousSquare)) {
                                     //didn't move
                                 } else {
@@ -139,8 +134,8 @@ public class ExpectiMiniMax {
                                 }
                             }
                         }
-                        System.out.println("DEPTH: " + this.depth + " origin square " + origin.toString());
-                        System.out.println("DEPTH: " + this.depth + " dest square (always correct) " + destination.toString());
+                        if(DEBUG)System.out.println("DEPTH: " + this.depth + " origin square " + origin.toString());
+                        if(DEBUG)System.out.println("DEPTH: " + this.depth + " dest square (always correct) " + destination.toString());
 
                         Node newNode = new Node(isChildMaxPlayer, diceNo, evalNo, newState,
                                 new Move(movingPiece, origin, destination, diceNo, movingPiece.getColor()));
@@ -149,7 +144,7 @@ public class ExpectiMiniMax {
                         // built in pruning as we only ever add better children, not all children
                         if (evalNo < finalEvalNo) {
                             finalEvalNo = evalNo;
-                            System.out.println("isChildMaxPlayer " + isChildMaxPlayer + " finalEvalNo " + finalEvalNo);
+                            if(DEBUG)System.out.println("isChildMaxPlayer " + isChildMaxPlayer + " finalEvalNo " + finalEvalNo);
                             bestChild = newNode;
                         }
                         parentNode.addChild(newNode);
@@ -159,14 +154,14 @@ public class ExpectiMiniMax {
                 constructTree(bestChild,this.depth);
                 // adding children for max player
             } else if (!isChildMaxPlayer) {
-                System.out.println("Adding children for max player");
+                if(DEBUG)System.out.println("Adding children for max player");
                 int finalEvalNo = Integer.MIN_VALUE;
                 Node bestChild = null;
-                System.out.println("llistOfAllPossibleBoardStates.size(): " + listOfAllPossibleBoardStates.size());
+                if(DEBUG)System.out.println("llistOfAllPossibleBoardStates.size(): " + listOfAllPossibleBoardStates.size());
                 for (int j = 0; j < listOfAllPossibleBoardStates.size(); j++) {
                     //System.out.println("pieces to be evaluated: child: is max:" + isChildMaxPlayer + p.toString());
                     // loop through states for pieces
-                    System.out.println("listOfAllPossibleBoardStates.get(j).size(): " + listOfAllPossibleBoardStates.get(j).size());
+                    if(DEBUG)System.out.println("listOfAllPossibleBoardStates.get(j).size(): " + listOfAllPossibleBoardStates.get(j).size());
                     int index = 0;
                     for (int i = 0; i < listOfAllPossibleBoardStates.get(j).size(); i++) {
                         // new state with alterate color
@@ -184,10 +179,10 @@ public class ExpectiMiniMax {
                                 parentNode.getState().castling,
                                 parentNode.getState().getPieceAndSquare()
                         );
-                        System.out.println("Index of generated State for given piece : " + i);
-                        System.out.println("totalTupleList.get(j) size: " + totalTupleList.get(0).size());
-                        System.out.println("dice roll number: " + diceNo);
-                        System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
+                        if(DEBUG)System.out.println("Index of generated State for given piece : " + i);
+                        if(DEBUG)System.out.println("totalTupleList.get(j) size: " + totalTupleList.get(0).size());
+                        if(!DEBUG)System.out.println("dice roll number: " + diceNo);
+                        if(!DEBUG)System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
                         int evalNo = (int) totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().get(i);
 
                         List<PieceAndSquareTuple> currentBoardState = listOfAllPossibleBoardStates.get(j).get(i);
@@ -197,14 +192,14 @@ public class ExpectiMiniMax {
                         Piece movingPiece = (Piece) lastPieceAndSquareTuple.getPiece();
                         Square origin = null;
 
-                        System.out.println("Containsssss: " + containsSquare(currentBoardState,Square.a1));
+                        if(DEBUG)System.out.println("Containsssss: " + containsSquare(currentBoardState,Square.a1));
 
                         for (PieceAndSquareTuple ps : prevBoardState) {
                             if (ps.getPiece()==movingPiece) { //if black horse
-                                System.out.println("Moving piece: " + movingPiece.toString());
+                                if(DEBUG)System.out.println("Moving piece: " + movingPiece.toString());
                                 // get it's square
                                 Square previousSquare = (Square) ps.getSquare(); //black horse square in previous state
-                                System.out.println("Current square: " + previousSquare);
+                                if(DEBUG)System.out.println("Current square: " + previousSquare);
                                 if(containsSquare(currentBoardState,previousSquare)) {
                                     //didn't move
                                 } else {
@@ -213,8 +208,8 @@ public class ExpectiMiniMax {
                                 }
                             }
                         }
-                        System.out.println("DEPTH: " + this.depth + " origin square " + origin.toString());
-                        System.out.println("DEPTH: " + this.depth + " dest square (always correct) " + destination.toString());
+                        if(DEBUG)System.out.println("DEPTH: " + this.depth + " origin square " + origin.toString());
+                        if(DEBUG)System.out.println("DEPTH: " + this.depth + " dest square (always correct) " + destination.toString());
 
                         Node newNode = new Node(isChildMaxPlayer, diceNo, evalNo, newState,
                                 new Move(movingPiece, origin, destination, diceNo, movingPiece.getColor()));
@@ -223,7 +218,7 @@ public class ExpectiMiniMax {
                         // built in pruning as we only ever add better children, not all children
                         if (evalNo > finalEvalNo) {
                             finalEvalNo = evalNo;
-                            System.out.println("isChildMaxPlayer " + isChildMaxPlayer + " finalEvalNo " + finalEvalNo);
+                            if(DEBUG)System.out.println("isChildMaxPlayer " + isChildMaxPlayer + " finalEvalNo " + finalEvalNo);
                             bestChild = newNode;
                         }
                         parentNode.addChild(newNode);

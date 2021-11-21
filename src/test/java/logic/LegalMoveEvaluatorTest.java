@@ -4,7 +4,6 @@ import logic.board.*;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.expectiminimax.ExpectiMiniMax;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;

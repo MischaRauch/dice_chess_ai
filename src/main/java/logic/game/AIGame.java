@@ -5,14 +5,14 @@ import logic.enums.Validity;
 import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
-import logic.player.ExpectiMiniMaxPlayer;
+import logic.player.MiniMaxPlayer;
 
 public class AIGame extends HumanGame {
 
     private final AIPlayer aiPlayer;
 
     public AIGame() {
-        this(new ExpectiMiniMaxPlayer(Side.BLACK));
+        this(new MiniMaxPlayer(Side.BLACK));
     }
 
     public AIGame(AIPlayer aiPlayer) {

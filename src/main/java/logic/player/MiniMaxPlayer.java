@@ -1,32 +1,24 @@
 package logic.player;
 
 import logic.PieceAndSquareTuple;
-import logic.PieceAndTurnDeathTuple;
-import logic.enums.Piece;
 import logic.enums.Side;
 import logic.Move;
 import logic.State;
-import logic.expectiminimax.BoardStateEvaluator;
 import logic.expectiminimax.BoardStateGenerator;
-import logic.expectiminimax.ExpectiMiniMax;
+import logic.expectiminimax.MiniMax;
 import logic.expectiminimax.Node;
-import logic.game.Game;
-
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
-public class ExpectiMiniMaxPlayer extends AIPlayer {
+public class MiniMaxPlayer extends AIPlayer {
 
-    //Node node = new Node(0);
     private final boolean DEBUG = false;
     private final boolean DEBUG2 = false;
 
-    public ExpectiMiniMaxPlayer(Side color) {
+    public MiniMaxPlayer(Side color) {
         super(color);
     }
-
 
     @Override
     public Move chooseMove(State state) {
@@ -34,7 +26,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         BoardStateGenerator gen = new BoardStateGenerator();
         gen.getPossibleBoardStates(state.getPieceAndSquare(),state.color,state.diceRoll,state);
 
-        ExpectiMiniMax miniMax = new ExpectiMiniMax();
+        MiniMax miniMax = new MiniMax();
         miniMax.constructTree(3,state);
         Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren());
         System.out.println("Optimal Move: " + bestChild.getMove().toString());;
@@ -44,110 +36,6 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         updatePieceAndSquareState(state,chosenMove);
         return chosenMove;
     }
-
-    public Move chooseMoveOld(State state) {
-        System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
-        BoardStateGenerator gen = new BoardStateGenerator();
-        gen.getPossibleBoardStates(state.getPieceAndSquare(),state.color,state.diceRoll,state);
-
-        ExpectiMiniMax miniMax = new ExpectiMiniMax();
-        miniMax.constructTree(3,state);
-        Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren());
-        System.out.println("Optimal Move: " + bestChild.getMove().toString());;
-
-        List<Move> validMoves = getValidMoves(state);
-        // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
-
-        if (DEBUG) {System.out.println("valid moves: " + validMoves.toString());}
-
-        // capture
-        List<PieceAndSquareTuple> pieceAndSquare = (List<PieceAndSquareTuple>) state.getPieceAndSquare().stream().collect(Collectors.toList());
-        List<PieceAndSquareTuple> pieceAndSquare2 = (List<PieceAndSquareTuple>) state.getPieceAndSquare().stream().collect(Collectors.toList());
-        for (int i = 0; i < validMoves.size(); i++) {
-            // if target piece not friendly and target destination is not empty then capture always (not sure if we need the empty condition)
-            if(!state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color) && state.getBoard().getPieceAt(validMoves.get(i).getDestination()) != Piece.EMPTY) {
-                if (DEBUG) {
-                    System.out.println("Dest: " + validMoves.get(i).getDestination().toString());
-                    System.out.println("Piece at Dest: " + state.getBoard().getPieceAt(validMoves.get(i).getDestination()).toString());
-                    System.out.println("piece as dest is friendly: " + !state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color));
-                    System.out.println("valid move to choose: " + validMoves.get(i));
-                    System.out.println("CAPTURE MOVE: ");
-                }
-
-                //// TODO not sure if we should update board pieces before or after updating state
-
-                updatePieceAndSquareState(state,validMoves.get(i));
-
-                //state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(),validMoves.get(i).getDestination()));
-
-                state.printPieceAndSquare();
-                // return first set of legal moves
-                return validMoves.get(i);
-            }
-        }
-        // checks what piece AI got on dice roll
-        switch (validMoves.get(0).getPiece().getType()) {
-            // all cases activated if piece has to move to empty square
-            case PAWN -> {
-                if (DEBUG) {System.out.println("PAWN MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(pawnBoardWeightsW,color));
-                // gets max value of most favorable move position
-                int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));
-//                // set previous location empty
-//                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getOrigin().getRank()-1][validMoves.get(favourableMoveMaxIndex).getOrigin().getFile()]=Piece.EMPTY;
-//                // set destination to current piece
-//                state.getBoardPieces()[validMoves.get(favourableMoveMaxIndex).getDestination().getRank()-1][validMoves.get(favourableMoveMaxIndex).getDestination().getFile()]=validMoves.get(favourableMoveMaxIndex).getPiece();
-//                state.boardPiecesToString();
-                state.printPieceAndSquare();
-                return validMoves.get(favourableMoveMaxIndex);
-            }
-            case KNIGHT -> {
-                if (DEBUG) {System.out.println("KNIGHT MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(knightBoardWeightsW,color));
-                int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
-                return validMoves.get(favourableMoveMaxIndex);
-            }
-            case BISHOP -> {
-                if (DEBUG) {System.out.println("BISHOP MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW,color));
-                int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
-                return validMoves.get(favourableMoveMaxIndex);
-            }
-            case ROOK -> {
-                if (DEBUG) {System.out.println("ROOK MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(rookBoardWeightsW,color));
-                int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
-                return validMoves.get(favourableMoveMaxIndex);
-            }
-            case QUEEN -> {
-                if (DEBUG) {System.out.println("QUEEN MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(queenBoardWeightsW,color));
-                int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));                state.printPieceAndSquare();
-                return validMoves.get(favourableMoveMaxIndex);
-            }
-            case KING -> {
-                /// TODO add end logic.game condition; but need to know the turn somehow. we don't know turn as we have no access to logic.game
-                if (DEBUG) {System.out.println("KING MAX MOVE");}
-                int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW,color));
-                int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                updatePieceAndSquareState(state,validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
-                return validMoves.get(favourableMoveMaxIndex);
-            }
-        }
-        // optimize later, rn takes first index
-        Move chosenMove = validMoves.get(0);
-
-
-
-        return chosenMove;
-    }
-
 
     private void updatePieceAndSquareState(State state, Move move) {
         state.printPieceAndSquare();

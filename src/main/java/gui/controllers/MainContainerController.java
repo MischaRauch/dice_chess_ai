@@ -5,7 +5,6 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.expectiminimax.BoardStateEvaluator;
 import logic.expectiminimax.BoardStateGenerator;
-import logic.expectiminimax.ExpectiMiniMax;
 import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
@@ -22,7 +21,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.Move;
 import logic.PieceAndTurnDeathTuple;
-import logic.player.ExpectiMiniMaxPlayer;
+import logic.player.BasicAIPlayer;
+import logic.player.MiniMaxPlayer;
 import logic.player.RandomMovesPlayer;
 
 import java.io.IOException;
@@ -91,13 +91,10 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new RandomMovesPlayer(WHITE), new ExpectiMiniMaxPlayer(Side.BLACK));
-
+                Game game = new AiAiGame(new BasicAIPlayer(WHITE), new MiniMaxPlayer(Side.BLACK));
             }
             case HUMAN_V_AI -> {
-                Game game = new AIGame(new ExpectiMiniMaxPlayer(Side.BLACK));
-
-                //miniMax.constructTree(BoardStateEvaluator.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
+                Game game = new AIGame(new MiniMaxPlayer(Side.BLACK));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();

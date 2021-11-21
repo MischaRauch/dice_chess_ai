@@ -141,13 +141,13 @@ public enum Piece {
             case WHITE_BISHOP -> 350;
             case WHITE_ROOK -> 525;
             case WHITE_QUEEN -> 1000;
-            case WHITE_KING -> 10000;
+            case WHITE_KING -> 20000;
             case BLACK_PAWN -> 100;
             case BLACK_KNIGHT -> 350;
             case BLACK_BISHOP -> 350;
             case BLACK_ROOK -> 525;
             case BLACK_QUEEN -> 1000;
-            case BLACK_KING -> 10000;
+            case BLACK_KING -> 20000;
             default -> 0;
         };
     }

@@ -1,23 +1,7 @@
 package logic;
 
-import logic.enums.Side;
-import logic.expectiminimax.ExpectiMiniMax;
-import logic.expectiminimax.Tree;
-import logic.game.AiAiGame;
-import logic.game.Game;
-import logic.player.ExpectiMiniMaxPlayer;
-import logic.player.RandomMovesPlayer;
-import org.junit.Before;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-
-import static logic.enums.Side.WHITE;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
-
-public class MinimaxUnitTest {
+public class MiniMaxUnitTest {
 //    private Tree gameTree;
 //    private ExpectiMiniMax miniMax;
 //

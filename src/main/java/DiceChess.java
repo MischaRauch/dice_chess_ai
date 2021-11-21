@@ -4,7 +4,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import logic.expectiminimax.ExpectiMiniMax;
 
 import java.io.IOException;
 
@@ -24,9 +23,6 @@ public class DiceChess extends Application {
         stage.setTitle("Dice Chess!");
         stage.setScene(scene);
         stage.show();
-
-
-
 
     }
 

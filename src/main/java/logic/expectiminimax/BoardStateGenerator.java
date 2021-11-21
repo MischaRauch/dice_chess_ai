@@ -105,17 +105,26 @@ public class BoardStateGenerator {
         return possibleStates;
     }
 
-    public List<Integer> getPossibleBoardStatesWeights(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
+    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
-//        Map<Piece,Integer> possibleBoardStatesWeights = new HashMap<>();
 
         List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare,color,diceRoll,state);
 
-        for (List<PieceAndSquareTuple> s : possibleBoardStates) {
-            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(s, color, diceRoll);
+        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState,color);
+            //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
+            //int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumberOfSpecificPiece(boardState, color, diceRoll);
             possibleBoardStatesWeights.add(newBoardPieceStateWeights);
         }
+        printPossibleBoardStatesWeights(possibleBoardStatesWeights);
         return possibleBoardStatesWeights;
+    }
+    public void printPossibleBoardStatesWeights(List<Integer> possibleBoardStatesWeights) {
+        System.out.println("newBoardPieceStateWeights: ");
+        for (int i = 0; i < possibleBoardStatesWeights.size(); i++) {
+            System.out.print(possibleBoardStatesWeights.get(i) + " ");
+        }
+        System.out.println();
     }
 
     public void printPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare){
