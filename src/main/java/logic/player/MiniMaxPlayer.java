@@ -24,7 +24,7 @@ public class MiniMaxPlayer extends AIPlayer {
         System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
         int initialDiceRoll = state.diceRoll;
         MiniMax miniMax = new MiniMax();
-        miniMax.constructTree(8,state);
+        miniMax.constructTree(20,state);
         Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren(),state.diceRoll);
         System.out.println("Optimal Move: " + bestChild.getMove().toString());
 
