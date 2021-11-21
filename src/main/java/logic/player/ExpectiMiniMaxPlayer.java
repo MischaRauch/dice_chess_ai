@@ -9,6 +9,7 @@ import logic.State;
 import logic.expectiminimax.BoardStateEvaluator;
 import logic.expectiminimax.BoardStateGenerator;
 import logic.expectiminimax.ExpectiMiniMax;
+import logic.expectiminimax.Node;
 import logic.game.Game;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         super(color);
     }
 
-    // track state
+
     @Override
     public Move chooseMove(State state) {
         System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
@@ -35,6 +36,24 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
         ExpectiMiniMax miniMax = new ExpectiMiniMax();
         miniMax.constructTree(3,state);
+        Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren());
+        System.out.println("Optimal Move: " + bestChild.getMove().toString());;
+        System.out.println();
+
+        Move chosenMove = bestChild.getMove();
+        updatePieceAndSquareState(state,chosenMove);
+        return chosenMove;
+    }
+
+    public Move chooseMoveOld(State state) {
+        System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
+        BoardStateGenerator gen = new BoardStateGenerator();
+        gen.getPossibleBoardStates(state.getPieceAndSquare(),state.color,state.diceRoll,state);
+
+        ExpectiMiniMax miniMax = new ExpectiMiniMax();
+        miniMax.constructTree(3,state);
+        Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren());
+        System.out.println("Optimal Move: " + bestChild.getMove().toString());;
 
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
@@ -56,31 +75,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
                 }
 
                 //// TODO not sure if we should update board pieces before or after updating state
-//                for (PieceAndSquareTuple t : pieceAndSquare) {
-//                    // if there is a square in state that is the same as origin
-//                    if (t.getSquare() == validMoves.get(i).getOrigin()) {
-//                        System.out.println("ExpectiMiniMaxPlayer: removing: " + t.getPiece().toString() + t.getSquare().toString());
-//                        state.getPieceAndSquare().remove(t);
-//                    }
-//
-//                    // p is piece at my destination square
-//                    Piece p = (Piece) t.getPiece();
-//                    if (t.getSquare() == validMoves.get(i).getDestination() && p.getColorOfPiece() == Side.getOpposite(color)) {
-//                        // if there is such a tuple
-//                        PieceAndSquareTuple comparison = new PieceAndSquareTuple(p,t.getSquare());
-//                        if (t.equals(comparison)) {
-//                            System.out.println("ExpectiMiniMaxPlayer: removing: " + t.getPiece().toString() + t.getSquare().toString());
-//                            state.getPieceAndSquare().remove(t);
-//                        }
-//                    }
-//
-//                    // add new pos
-//                    if (t.getSquare() == validMoves.get(i).getDestination()) {
-//                        System.out.println("ExpectiMiniMaxPlayer: adding: " + (new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination())).getPiece().toString() +
-//                                (new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination())).getSquare().toString());
-//                        state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(), validMoves.get(i).getDestination()));
-//                    }
-//                }
+
                 updatePieceAndSquareState(state,validMoves.get(i));
 
                 //state.getPieceAndSquare().add(new PieceAndSquareTuple(validMoves.get(i).getPiece(),validMoves.get(i).getDestination()));
@@ -152,6 +147,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
         return chosenMove;
     }
+
 
     private void updatePieceAndSquareState(State state, Move move) {
         state.printPieceAndSquare();

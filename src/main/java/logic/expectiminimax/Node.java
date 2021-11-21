@@ -1,5 +1,6 @@
 package logic.expectiminimax;
 
+import logic.Move;
 import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -18,13 +19,15 @@ public class Node {
     private int diceRoll;
     private int boardEvaluationNumber;
     private State state;
+    private Move move;
 
-    public Node(boolean isMaxPlayer, int diceRoll, int boardEvaluationNumber, State state) {
+    public Node(boolean isMaxPlayer, int diceRoll, int boardEvaluationNumber, State state, Move move) {
         this.isMaxPlayer = isMaxPlayer;
         this.diceRoll = diceRoll;
         this.boardEvaluationNumber = boardEvaluationNumber;
         this.state = state;
         this.children = new ArrayList<>();
+        this.move=move;
     }
 
     // for root
@@ -35,39 +38,9 @@ public class Node {
         this.children = new ArrayList<>();
     }
 
-
-//    public Piece[][] getBoardPieceState() {
-//        return boardPieceState;
-//    }
-
     public int getBoardEvaluationNumber() {
         return boardEvaluationNumber;
     }
-
-    //    public void setEvaluationNumberAndBoardStateMappings(Map<Integer, Piece[][]> evaluationNumberAndBoardStateMappings) {
-//        this.evaluationNumberAndBoardStateMappings = evaluationNumberAndBoardStateMappings;
-//    }
-
-
-
-//    public Node(List<Integer> evaluationNumbers, List<Piece[][]> boardPieceStates, Side color, int diceRoll, boolean isMaxPlayer) {
-//        this.isMaxPlayer = isMaxPlayer;
-//        this.color=color;
-//        this.diceRoll=diceRoll;
-//        this.evaluationNumbers=evaluationNumbers;
-//        this.boardPieceStates=boardPieceStates;
-//        children = new ArrayList<>();
-//        // tree map auto sorts
-//        evaluationNumberAndBoardStateMappings = new TreeMap<>();
-//        // add states to map
-//        for (int i = 0; i < evaluationNumbers.size(); i++) {
-//            evaluationNumberAndBoardStateMappings.put(evaluationNumbers.get(i),boardPieceStates.get(i));
-//        }
-//        // sort accending
-//        // evaluationNumberAndBoardStateMappings = new TreeMap<Integer, Piece[][]>(evaluationNumberAndBoardStateMappings);
-//        // sort decending, max first
-//        evaluationNumberAndBoardStateMappings = new TreeMap<Integer, Piece[][]>(Collections.reverseOrder());
-//    }
 
 
     public void addChild(Node child) {
@@ -108,5 +81,9 @@ public class Node {
 
     public State getState() {
         return state;
+    }
+
+    public Move getMove() {
+        return move;
     }
 }

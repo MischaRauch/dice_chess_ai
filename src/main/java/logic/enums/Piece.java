@@ -72,7 +72,6 @@ public enum Piece {
         this.type = type;
         this.color = color;
         this.charType = charType;
-
     }
 
     Piece() {

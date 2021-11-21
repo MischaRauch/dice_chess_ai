@@ -89,40 +89,18 @@ public class BoardStateGenerator {
             Piece p = (Piece) t.getPiece();
             Square s = (Square) t.getSquare(); //origin
             // get all piece types with their dice numbers
+            Piece coloredPiece = Piece.getPieceFromDice(diceRoll,color);
+            if (p==coloredPiece) {
+                List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
+                printLegalMoves(legalMoves);
 
-//            List<Integer> diceNumbers = new ArrayList<>();
-//            for (PieceAndSquareTuple tDice : nodePieceAndSquareCopyDiceNumbers) {
-//                //friendly pieces
-//                if(Piece.getColorOfPiece((Piece)tDice.getPiece())==state.color) {
-//                    int dice = Piece.getDiceFromPiece((Piece)tDice.getPiece());
-//                    if(!diceNumbers.contains(dice)) {
-//                        diceNumbers.add(dice);
-//                    }
-//                }
-//            }
+                List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2,legalMoves,p,s);
 
-            //System.out.println("BoardStateGenerator; Dice numbers: " + diceNumbers);
-
-            // loop for each dice roll number and generate states and add states
-
-            // if friendly
-//            for (int i = 0; i < diceNumbers.size(); i++) {
-//                if (p == Piece.getPieceFromDice(diceNumbers.get(i), color)) {
-//                   System.out.println("\nPiece: " + p.toString());
-                    Piece coloredPiece = Piece.getPieceFromDice(diceRoll,color);
-                    if (p==coloredPiece) {
-                        List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
-                        printLegalMoves(legalMoves);
-
-                        List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2,legalMoves,p,s);
-
-                        for (int j = 0; j < states.size(); j++) {
-                            possibleStates.add(states.get(j));
-                            //printPieceAndSquare(states.get(j));
-                        }
-                    }
-//                }
-//            }
+                for (int j = 0; j < states.size(); j++) {
+                    possibleStates.add(states.get(j));
+                    //printPieceAndSquare(states.get(j));
+                }
+            }
         }
         return possibleStates;
     }
@@ -133,11 +111,6 @@ public class BoardStateGenerator {
 
         List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare,color,diceRoll,state);
 
-//        for (Piece p : possibleBoardStates.keySet()) {
-//            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(possibleBoardStates.get(p), color, diceRoll);
-//            possibleBoardStatesWeights.put(Piece.getPieceFromDice(diceRoll,color), newBoardPieceStateWeights);
-//        }
-//
         for (List<PieceAndSquareTuple> s : possibleBoardStates) {
             int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(s, color, diceRoll);
             possibleBoardStatesWeights.add(newBoardPieceStateWeights);
