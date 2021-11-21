@@ -2,14 +2,7 @@ package logic.expectiminimax;
 
 import logic.Move;
 import logic.State;
-import logic.enums.Piece;
-import logic.enums.Side;
-import logic.game.Game;
-
 import java.util.*;
-
-import static logic.enums.Piece.*;
-import static logic.enums.Piece.BLACK_ROOK;
 
 public class Node {
 
@@ -21,6 +14,7 @@ public class Node {
     private State state;
     private Move move;
 
+    // for children
     public Node(boolean isMaxPlayer, int diceRoll, int boardEvaluationNumber, State state, Move move) {
         this.isMaxPlayer = isMaxPlayer;
         this.diceRoll = diceRoll;
@@ -42,7 +36,6 @@ public class Node {
         return boardEvaluationNumber;
     }
 
-
     public void addChild(Node child) {
         children.add(child);
     }
@@ -51,24 +44,8 @@ public class Node {
         return isMaxPlayer;
     }
 
-    public void setMaxPlayer(boolean maxPlayer) {
-        isMaxPlayer = maxPlayer;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public List<Node> getChildren() {
         return children;
-    }
-
-    public void setChildren(List<Node> children) {
-        this.children = children;
     }
 
     public int getDiceRoll() {

@@ -2,25 +2,15 @@ package logic.expectiminimax;
 
 import logic.LegalMoveGenerator;
 import logic.PieceAndSquareTuple;
-import logic.PieceAndTurnDeathTuple;
 import logic.State;
-import logic.board.Board;
-import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.game.Game;
-
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
-
-import static logic.enums.Side.WHITE;
 
 // generates all possible states of the board for n turns ahead
 public class BoardStateGenerator {
-
-    //game independent
 
     // move piece and return array
     public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square>legalMoves, Piece piece, Square origin) {
@@ -38,7 +28,6 @@ public class BoardStateGenerator {
             if (t.getSquare() == origin && t.getPiece() == piece) {
                 // loop through legal moves
                 for (int i = 0; i < legalMoves.size(); i++) {
-
                     // update piece and square
 
                     // remove previous location
@@ -60,7 +49,6 @@ public class BoardStateGenerator {
                     }
 
                     // add updated pieceAndSquare (state) for (Squares) legalmoves.get(i) to list
-                    //possibleStates.put((Piece)t.getPiece(),nodePieceAndSquareCopy3);
                     possibleStates.add(nodePieceAndSquareCopy3);
 
                     // reset
@@ -68,10 +56,6 @@ public class BoardStateGenerator {
                 }
             }
         }
-//        for (int i = 0; i < possibleStates.size(); i++) {
-//            System.out.print("Piece: " + possibleStates.get(i).get(0).getPiece().toString());
-//            printPieceAndSquare(possibleStates.get(i));
-//        }
         return possibleStates;
     }
 
@@ -81,7 +65,6 @@ public class BoardStateGenerator {
         List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = (List<PieceAndSquareTuple>) nodePieceAndSquare.stream().collect(Collectors.toList());
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
-
         //printPieceAndSquare(nodePieceAndSquareCopy);
 
         for (PieceAndSquareTuple t : nodePieceAndSquareCopy) {
@@ -113,12 +96,12 @@ public class BoardStateGenerator {
         for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
             int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState,color);
             //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
-            //int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumberOfSpecificPiece(boardState, color, diceRoll);
             possibleBoardStatesWeights.add(newBoardPieceStateWeights);
         }
         printPossibleBoardStatesWeights(possibleBoardStatesWeights);
         return possibleBoardStatesWeights;
     }
+
     public void printPossibleBoardStatesWeights(List<Integer> possibleBoardStatesWeights) {
         System.out.println("newBoardPieceStateWeights: ");
         for (int i = 0; i < possibleBoardStatesWeights.size(); i++) {

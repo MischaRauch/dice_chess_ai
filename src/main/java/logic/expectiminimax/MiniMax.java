@@ -7,7 +7,6 @@ import logic.enums.Square;
 import java.util.List;
 import java.util.*;
 
-
 public class MiniMax {
 
     private Tree tree;
@@ -31,7 +30,6 @@ public class MiniMax {
         if(!DEBUG)System.out.println("DEPTH " + depth);
         while(this.depth>0) {
             BoardStateGenerator gen = new BoardStateGenerator();
-            System.out.println("DEPTH " + depth);
 
             List<List<BoardStateAndEvaluationNumberTuple>> totalTupleList = new ArrayList<>();
             List<BoardStateAndEvaluationNumberTuple> tupleList = new ArrayList<>();
@@ -327,21 +325,12 @@ public class MiniMax {
 //        }
 //    }
 
-    private static int getMaxFromList(List<Node> children) {
-        int max = Integer.MIN_VALUE;
-        for (Node n : children) {
-            if (n.getBoardEvaluationNumber() > max) {
-                max=n.getBoardEvaluationNumber();
-            }
-        }
-        return max;
-    }
-
     public Node findBestChild(boolean isMaxPlayer, List<Node> children, int diceRoll) {
         Node bestChild = null;
         if (isMaxPlayer) {
             int max = Integer.MIN_VALUE;
             for (Node child : children) {
+                // remove child.getDiceRoll()==diceRoll) to make OP :) 100% win rate
                 if (child.getBoardEvaluationNumber()>max && child.getDiceRoll()==diceRoll) {
                     max=child.getBoardEvaluationNumber();
                     bestChild=child;
@@ -350,6 +339,7 @@ public class MiniMax {
         } else {
             int min = Integer.MAX_VALUE;
             for (Node child : children) {
+                // remove child.getDiceRoll()==diceRoll) to make OP :) 100% win rate
                 if (child.getBoardEvaluationNumber()<min  && child.getDiceRoll()==diceRoll) {
                     min=child.getBoardEvaluationNumber();
                     bestChild=child;

@@ -4,14 +4,11 @@ import logic.PieceAndSquareTuple;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.game.Game;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BoardStateEvaluator {
 
+    // out dated
     public static int getBoardEvaluationNumberOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
         //Map<Piece,Integer> map = new HashMap<>();
         int val = 0;
