@@ -46,6 +46,15 @@ public class Qtable {
         }
     }
 
+    public ArrayList<Integer> accessActionSpace(Piece pieceName) {
+        for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
+            if (entry.getKey() == pieceName) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Piece[][]> createStateSpace(int depth) { // later will implement the depth feature, atm only 1 move
         Game game = Game.getInstance();
         Piece[][] currentState = game.getCurrentState().getBoardPieces();
@@ -57,6 +66,7 @@ public class Qtable {
         }
         return stateSpace;
     }
+
 
     public PieceAndMove createActionSpace() { // creating full action space
         actionSpace = new PieceAndMove(currentSide);

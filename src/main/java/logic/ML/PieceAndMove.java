@@ -5,11 +5,14 @@ import logic.enums.Side;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 public class PieceAndMove {
     Map<Piece, ArrayList<Integer>> actionSpace;
 
+    List<Integer> WHITE_PAWN;
+    
     public PieceAndMove(Side currentSide) {
         actionSpace = new Hashtable<>();
 
