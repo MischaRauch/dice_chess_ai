@@ -1,9 +1,10 @@
 package gui.controllers;
 
-import javafx.scene.image.Image;
 import logic.enums.GameType;
 import logic.enums.Piece;
 import logic.enums.Side;
+import logic.expectiminimax.BoardStateEvaluator;
+import logic.expectiminimax.BoardStateGenerator;
 import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
@@ -22,6 +23,8 @@ import logic.Move;
 import logic.PieceAndTurnDeathTuple;
 import logic.player.ExpectiMiniMaxPlayer;
 import logic.player.QTablePlayer;
+import logic.player.BasicAIPlayer;
+import logic.player.MiniMaxPlayer;
 import logic.player.RandomMovesPlayer;
 
 import java.io.IOException;
@@ -92,17 +95,18 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new ExpectiMiniMaxPlayer(WHITE), new QTablePlayer(Side.BLACK));
+                Game game = new AiAiGame(new BasicAIPlayer(WHITE), new MiniMaxPlayer(Side.BLACK));
             }
-
             case HUMAN_V_AI -> {
-                Game game = new AIGame(new ExpectiMiniMaxPlayer(Side.BLACK));
+                Game game = new AIGame(new MiniMaxPlayer(Side.BLACK));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();
             }
 
         }
+
+
 
         board = new Chessboard(type);
         chessBoardContainer.getChildren().add(board);
@@ -118,7 +122,6 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
 
-        updateTurn(WHITE);
     }
 
     @FXML

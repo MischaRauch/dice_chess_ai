@@ -1,74 +1,89 @@
 package logic.expectiminimax;
 
+import logic.Move;
+import logic.State;
+import logic.enums.Piece;
+import logic.enums.Side;
+import logic.game.Game;
+
+import java.util.*;
+
+import static logic.enums.Piece.*;
+import static logic.enums.Piece.BLACK_ROOK;
+
 public class Node {
 
-    private int value;
-    private Node PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING;
+    private boolean isMaxPlayer;
+    private int score;
+    private List<Node> children;
+    private int diceRoll;
+    private int boardEvaluationNumber;
+    private State state;
+    private Move move;
 
-//    public Node (int n, Node PAWN, Node KNIGHT, Node BISHOP, Node ROOK, Node QUEEN, Node KING) {
-//        value = n;
-//        PAWN = null; KNIGHT = null; BISHOP = null; ROOK = null; QUEEN = null; KING = null;
-//    }
-
-    public Node(int n) {
-        Node temp = new Node(n);
-        temp.value = n;
-        temp.PAWN = null; temp.KNIGHT = null; temp.BISHOP = null; temp.ROOK = null; temp.QUEEN = null; temp.KING = null;
+    public Node(boolean isMaxPlayer, int diceRoll, int boardEvaluationNumber, State state, Move move) {
+        this.isMaxPlayer = isMaxPlayer;
+        this.diceRoll = diceRoll;
+        this.boardEvaluationNumber = boardEvaluationNumber;
+        this.state = state;
+        this.children = new ArrayList<>();
+        this.move=move;
     }
 
-    public int getValue() {
-        return value;
+    // for root
+    public Node(int diceRoll, boolean isMaxPlayer, State state) {
+        this.diceRoll=diceRoll;
+        this.isMaxPlayer=isMaxPlayer;
+        this.state = state;
+        this.children = new ArrayList<>();
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public int getBoardEvaluationNumber() {
+        return boardEvaluationNumber;
     }
 
-    public Node getPAWN() {
-        return PAWN;
+
+    public void addChild(Node child) {
+        children.add(child);
     }
 
-    public void setPAWN(Node PAWN) {
-        this.PAWN = PAWN;
+    public boolean isMaxPlayer() {
+        return isMaxPlayer;
     }
 
-    public Node getKNIGHT() {
-        return KNIGHT;
+    public void setMaxPlayer(boolean maxPlayer) {
+        isMaxPlayer = maxPlayer;
     }
 
-    public void setKNIGHT(Node KNIGHT) {
-        this.KNIGHT = KNIGHT;
+    public int getScore() {
+        return score;
     }
 
-    public Node getBISHOP() {
-        return BISHOP;
+    public void setScore(int score) {
+        this.score = score;
     }
 
-    public void setBISHOP(Node BISHOP) {
-        this.BISHOP = BISHOP;
+    public List<Node> getChildren() {
+        return children;
     }
 
-    public Node getROOK() {
-        return ROOK;
+    public void setChildren(List<Node> children) {
+        this.children = children;
     }
 
-    public void setROOK(Node ROOK) {
-        this.ROOK = ROOK;
+    public int getDiceRoll() {
+        return diceRoll;
     }
 
-    public Node getQUEEN() {
-        return QUEEN;
+    public void setDiceRoll(int diceRoll) {
+        this.diceRoll = diceRoll;
     }
 
-    public void setQUEEN(Node QUEEN) {
-        this.QUEEN = QUEEN;
+    public State getState() {
+        return state;
     }
 
-    public Node getKING() {
-        return KING;
-    }
-
-    public void setKING(Node KING) {
-        this.KING = KING;
+    public Move getMove() {
+        return move;
     }
 }

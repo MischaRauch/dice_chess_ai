@@ -1,6 +1,5 @@
 package logic.game;
 
-import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -9,20 +8,18 @@ import logic.*;
 
 import java.util.Stack;
 
-import static logic.enums.Piece.*;
-import static logic.enums.Side.*;
+import static logic.enums.Piece.BLACK_ROOK;
 
 public abstract class Game {
 
     public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-    //public static String openingFEN = "8/8/8/8/8/PPPPPPPP/1p6/NNN5 w KQkq - 0 1 1";
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates;
     protected final Stack<State> redoStates;
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
-
+    protected boolean gameOver = false;
 
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
@@ -37,15 +34,20 @@ public abstract class Game {
 
     public Game() {
         this(openingFEN);
+//        initializeCurrentStatePieceAndSquare();
+        System.out.println("GAME const default");
     }
 
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         currentState.diceRoll = Dice.roll(currentState, Side.WHITE);
-        System.out.println("Initial dice roll: " + currentState.diceRoll);
         previousStates = new Stack<>();
         redoStates = new Stack<>();
         CURRENT_GAME = this;
+//        if (!currentState.getPieceAndSquare().isEmpty()) {
+//            initializeCurrentStatePieceAndSquare();
+//        }
+        System.out.println("GAME const fen");
     }
 
     public void undoState() {
@@ -63,21 +65,43 @@ public abstract class Game {
         }
     }
 
-    public boolean gameDone = false;
-    public Side winner = NEUTRAL;
-
-    public void checkGameOver(Move move) {
-        Board board = currentState.getBoard();
-        Piece destPiece = board.getPieceAt(move.getDestination());
-        if (destPiece.getType() == KING) {
-            gameDone = true;
-            winner = move.getSide();
-        }
-    }
-
-    public boolean isGameOver() {
-        return gameDone;
-    }
+//    private void initializeCurrentStatePieceAndSquare() {
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.a8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.b8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.c8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_QUEEN, Square.d8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_KING, Square.e8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.f8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.g8));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.h8));
+//
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.a7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.b7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.c7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.d7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.e7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.f7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.g7));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.h7));
+//
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.a2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.b2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.c2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.d2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.e2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.f2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.g2));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.h2));
+//
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.a1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.b1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.c1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_QUEEN, Square.d1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_KING, Square.e1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.f1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.g1));
+//        currentState.getPieceAndSquare().add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.h1));
+//    }
 
     protected void processCastling() {
         //check if castling was performed

@@ -150,20 +150,16 @@ public class Chessboard extends GridPane {
                 }
             }
 
-//            if (game.getCurrentState().getGameOver() != 0) {
-//                //showEndGame(logic.game.getCurrentState().getGameOver());
-//                //Stage stage = (Stage) getScene().getWindow();
-//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
-//            }
-
-            if (game.isGameOver())
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
-
+            if (game.getCurrentState().getGameOver() != 0) {
+                //showEndGame(logic.game.getCurrentState().getGameOver());
+                //Stage stage = (Stage) getScene().getWindow();
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
+            }
         }
     }
 
     // you only move selected tile ever
-    private void move(Tile tile) {
+    private void move(Tile tile) throws CloneNotSupportedException {
 
         switch (gameType) {
             case HUMAN_V_HUMAN -> {
@@ -271,14 +267,22 @@ public class Chessboard extends GridPane {
                         } else {
                             //capture
                             recolorBoard();
-                            move(tile);
+                            try {
+                                move(tile);
+                            } catch (CloneNotSupportedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
             } else {
                 if (Tile.selectedTile != null) {
                     recolorBoard();
-                    move(tile);
+                    try {
+                        move(tile);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

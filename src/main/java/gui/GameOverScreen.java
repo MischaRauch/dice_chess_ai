@@ -1,6 +1,5 @@
-package gui.controllers;
+package gui;
 
-import logic.enums.Side;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,9 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
+import logic.enums.Side;
 import java.io.IOException;
-
 import static logic.enums.Side.WHITE;
 
 public class GameOverScreen extends AnchorPane {

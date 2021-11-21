@@ -11,14 +11,10 @@ import java.util.ArrayList;
 import static logic.enums.Piece.*;
 public class Dice {
 
-    //index of diceToPiece[] correspond to the corresponding dice roll - 1 (arrays start at 0 >_< )
     public static Piece[] diceToPiece = {PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING};
 
     /**
-     * Rolls a random integer in range 1-6.
-     * Math.random() * 6 returns a double between 0 and 5.999..., Casting that to an int is similar to Math.floor(),
-     * so the resulting integer always rounds down rather than up, so e.g. 5.9999 becomes 5. Then adding 1 adjusts the
-     * result so that it is an integer in range 1-6
+     * Need to only return valid piece types. We need some way to check if the number returned is valid
      *
      * @return dice number
      */
@@ -28,23 +24,13 @@ public class Dice {
 
     public static int roll(State state, Side side) {
         ArrayList<Integer> validRolls = new ArrayList<>();
-
-        for (int i = 0; i < diceToPiece.length; i++)
-            if (canMove(diceToPiece[i].getColoredPiece(side), state))
-                validRolls.add(i + 1); //valid dice rolls are in range 1-6, and i starts at 0
-
+        for (int i = 1; i < diceToPiece.length; i++)
+            if (canMove(diceToPiece[i-1].getColoredPiece(side), state))
+                validRolls.add(i);
         return validRolls.get((int) (Math.random() * validRolls.size()));
 
     }
 
-    //TODO: method originally copy-pasted from AIPlayer class, however it is out of date and lacks most special move types
-    //TODO: need to add en-passant check to see if a pawn can move if there are no other quiet or capture moves
-    /**
-     * Indicates if a given piece is able to move. Necessary in order to roll appropriate dice rolls
-     * @param piece piece type for which to check
-     * @param state current game state
-     * @return True if at least one piece of the indicated piece type has a legal move
-     */
     public static boolean canMove(Piece piece, State state) {
         Board board = state.getBoard();
         Board0x88 b = (Board0x88) board;
@@ -56,33 +42,30 @@ public class Dice {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        boolean canMove = false;
-
-                        //check if a pawn can do a quiet move
+                        //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
-                        if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
-                            canMove = true;
-                        }
+                        if (board.isEmpty(naturalMove))
+                            return true;
 
-                        //check if pawns can capture
                         for (int k = 1; k < 3; k++) {
-                            Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
-                            if (validTarget != Square.INVALID && board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor())) {
-                                canMove = true;
+                            if (!board.isOffBoard(location.getSquareNumber() + piece.getOffsets()[k])) {
+                                Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
+                                if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
+                                    return true;
                             }
                         }
 
-                        return canMove;
+                        return false;
                     }
 
                     case KNIGHT, BISHOP, ROOK, QUEEN, KING -> {
                         for (int offset : piece.getOffsets()) {
-                            Square target = Square.getSquare(location.getSquareNumber() + offset);
-                            if (target != Square.INVALID) {
-                                if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor()))
+                            if (!board.isOffBoard(location.getSquareNumber() + offset)) {
+                                Square target = Square.getSquare(location.getSquareNumber() + offset);
+                                if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
                                     return true;
+                                }
                             }
-
                         }
                     }
                 }

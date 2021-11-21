@@ -13,8 +13,8 @@ public class Move {
     Square destination;
     int diceRoll;
 
-    public Piece promotionPiece;
-    public boolean promotionMove = false;
+    Piece promotionPiece;
+    boolean promotionMove = false;
 
     Side side;
     Validity status;
@@ -95,6 +95,8 @@ public class Move {
     }
 
     public String stylized() {
-        return origin + " ➞ " + destination;
+        return piece.getUnicode() +
+                " " + origin +
+                " to " + destination;
     }
 }
