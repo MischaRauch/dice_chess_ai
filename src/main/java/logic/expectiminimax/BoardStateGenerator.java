@@ -75,7 +75,7 @@ public class BoardStateGenerator {
             Piece coloredPiece = Piece.getPieceFromDice(diceRoll,color);
             if (p==coloredPiece) {
                 List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
-                printLegalMoves(legalMoves);
+                //printLegalMoves(legalMoves);
 
                 List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2,legalMoves,p,s);
 
@@ -99,7 +99,7 @@ public class BoardStateGenerator {
             //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
             possibleBoardStatesWeights.add(newBoardPieceStateWeights);
         }
-        printPossibleBoardStatesWeights(possibleBoardStatesWeights);
+        //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
         return possibleBoardStatesWeights;
     }
 

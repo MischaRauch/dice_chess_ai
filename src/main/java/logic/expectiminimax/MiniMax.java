@@ -26,7 +26,6 @@ public class MiniMax {
     }
 
     private void constructTree(Node parentNode,int depth) {
-        if(DEBUG)System.out.println("THIS DEPTH " + this.depth);
         if(!DEBUG)System.out.println("DEPTH " + depth);
         while(this.depth>0) {
             BoardStateGenerator gen = new BoardStateGenerator();
@@ -49,7 +48,7 @@ public class MiniMax {
                         gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
                                 parentNode.getState().color,i,parentNode.getState());
                 if(DEBUG)System.out.println("parent node piece and square :");
-                printPieceAndSquare(parentNode.getState().getPieceAndSquare());
+                //printPieceAndSquare(parentNode.getState().getPieceAndSquare());
                 // possible board states fir ith dice roll
                 List<List<PieceAndSquareTuple>> possibleBoardStates =
                         gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),
@@ -101,12 +100,12 @@ public class MiniMax {
                                 parentNode.getState().isLongCastlingBlack(),
                                 parentNode.getState().isShortCastlingWhite(),
                                 parentNode.getState().castling,
-                                parentNode.getState().getPieceAndSquare()
+                                listOfAllPossibleBoardStates.get(j).get(i)
                         );
                         if(DEBUG) System.out.println("Index of generated State for given piece : " + i);
                         if(DEBUG)System.out.println("totalTupleList.get(j) size: " + totalTupleList.get(0).size());
-                        if(!DEBUG)System.out.println("dice roll number: " + diceNo);
-                        if(!DEBUG)System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
+                        if(DEBUG)System.out.println("dice roll number: " + diceNo);
+                        if(DEBUG)System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
                         int evalNo = (int) totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().get(i);
 
                         List<PieceAndSquareTuple> currentBoardState = listOfAllPossibleBoardStates.get(j).get(i);
@@ -175,12 +174,12 @@ public class MiniMax {
                                 parentNode.getState().isLongCastlingBlack(),
                                 parentNode.getState().isShortCastlingWhite(),
                                 parentNode.getState().castling,
-                                parentNode.getState().getPieceAndSquare()
+                                listOfAllPossibleBoardStates.get(j).get(i)
                         );
                         if(DEBUG)System.out.println("Index of generated State for given piece : " + i);
                         if(DEBUG)System.out.println("totalTupleList.get(j) size: " + totalTupleList.get(0).size());
-                        if(!DEBUG)System.out.println("dice roll number: " + diceNo);
-                        if(!DEBUG)System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
+                        if(DEBUG)System.out.println("dice roll number: " + diceNo);
+                        if(DEBUG)System.out.println("eval numbers: " + totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().toString());
                         int evalNo = (int) totalTupleList.get(0).get(diceNo-1).getEvaluationNumbers().get(i);
 
                         List<PieceAndSquareTuple> currentBoardState = listOfAllPossibleBoardStates.get(j).get(i);
@@ -247,24 +246,30 @@ public class MiniMax {
     }
 
     private void printEvaluationNumbers(List<Integer> possibleEvaluationNumbers) {
-        System.out.println("ExpectiMiniMax; possibleEvaluationNumbers: ");
-        for (int i = 0; i < possibleEvaluationNumbers.size(); i++) {
-            System.out.print(possibleEvaluationNumbers.get(i) + " ");
+        // for visual appeal
+        if (possibleEvaluationNumbers.size()!=0) {
+            System.out.println("ExpectiMiniMax; possibleEvaluationNumbers: ");
+            for (int i = 0; i < possibleEvaluationNumbers.size(); i++) {
+                System.out.print(possibleEvaluationNumbers.get(i) + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 
     private void printBoardStates(List<List<PieceAndSquareTuple>> possibleBoardStates, int diceRoll) {
-        System.out.println("ExpectiMiniMax; possibleBoardStates: Size: " + possibleBoardStates.size());
-        for (int i = 0; i < possibleBoardStates.size(); i++) {
-            System.out.println("ExpectiMiniMax; Piece Type: " + Piece.getNeutralPieceFromDice(diceRoll).toString());
+        // for visual appeal
+        if(possibleBoardStates.size()!=0) {
+            System.out.println("ExpectiMiniMax; possibleBoardStates: Size: " + possibleBoardStates.size());
+            for (int i = 0; i < possibleBoardStates.size(); i++) {
+                System.out.println("ExpectiMiniMax; Piece Type: " + Piece.getNeutralPieceFromDice(diceRoll).toString());
                 printPieceAndSquare(possibleBoardStates.get(i));
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 
     public void printPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare){
-        System.out.println(" BoardStateGenerator; pieceAndSquare: Size: " + pieceAndSquare.size());
+        System.out.println(" Minimax; pieceAndSquare: Size: " + pieceAndSquare.size());
         for (PieceAndSquareTuple t : pieceAndSquare) {
             System.out.print(t.toString() + " | ");
         }
