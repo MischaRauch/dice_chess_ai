@@ -18,7 +18,7 @@ import java.io.IOException;
  * The constructor of a controller class gets called before any of the @FXML fields get populated, so use the @FXML initialize
  * method instead. Generally static controllers don't have constructors anyways though.
  */
-public class MenuController {
+public class OldMenuController {
 
     @FXML
     private Button newGameBtn;
