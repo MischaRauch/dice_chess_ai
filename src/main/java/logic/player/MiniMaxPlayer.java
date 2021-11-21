@@ -14,9 +14,11 @@ public class MiniMaxPlayer extends AIPlayer {
 
     private final boolean DEBUG = false;
     private final boolean DEBUG2 = false;
+    private int depth;
 
-    public MiniMaxPlayer(Side color) {
+    public MiniMaxPlayer(int depth, Side color) {
         super(color);
+        this.depth=depth;
     }
 
     @Override
@@ -25,7 +27,7 @@ public class MiniMaxPlayer extends AIPlayer {
         int initialDiceRoll = state.diceRoll;
         long start = System.nanoTime();
         MiniMax miniMax = new MiniMax();
-        miniMax.constructTree(20,state);
+        miniMax.constructTree(depth,state);
         Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren(),state.diceRoll);
         System.out.println("Optimal Move: " + bestChild.getMove().toString());
         Move chosenMove = bestChild.getMove();

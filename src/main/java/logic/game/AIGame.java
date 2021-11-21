@@ -11,8 +11,8 @@ public class AIGame extends HumanGame {
 
     private final AIPlayer aiPlayer;
 
-    public AIGame() {
-        this(new MiniMaxPlayer(Side.BLACK));
+    public AIGame(int depth) {
+        this(new MiniMaxPlayer(depth,Side.BLACK));
     }
 
     public AIGame(AIPlayer aiPlayer) {

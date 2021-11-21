@@ -85,10 +85,10 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new BasicAIPlayer(Side.WHITE), new MiniMaxPlayer(Side.BLACK));
+                Game game = new AiAiGame(new BasicAIPlayer(Side.WHITE), new MiniMaxPlayer(8,Side.BLACK));
             }
             case HUMAN_V_AI -> {
-                Game game = new AIGame(new MiniMaxPlayer(Side.BLACK));
+                Game game = new AIGame(new MiniMaxPlayer(8,Side.BLACK));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();
