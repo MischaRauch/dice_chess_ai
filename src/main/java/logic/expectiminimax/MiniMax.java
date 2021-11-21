@@ -337,12 +337,12 @@ public class MiniMax {
         return max;
     }
 
-    public Node findBestChild(boolean isMaxPlayer, List<Node> children) {
+    public Node findBestChild(boolean isMaxPlayer, List<Node> children, int diceRoll) {
         Node bestChild = null;
         if (isMaxPlayer) {
             int max = Integer.MIN_VALUE;
             for (Node child : children) {
-                if (child.getBoardEvaluationNumber()>max) {
+                if (child.getBoardEvaluationNumber()>max && child.getDiceRoll()==diceRoll) {
                     max=child.getBoardEvaluationNumber();
                     bestChild=child;
                 }
@@ -350,7 +350,7 @@ public class MiniMax {
         } else {
             int min = Integer.MAX_VALUE;
             for (Node child : children) {
-                if (child.getBoardEvaluationNumber()<min) {
+                if (child.getBoardEvaluationNumber()<min  && child.getDiceRoll()==diceRoll) {
                     min=child.getBoardEvaluationNumber();
                     bestChild=child;
                 }

@@ -23,16 +23,16 @@ public class MiniMaxPlayer extends AIPlayer {
     @Override
     public Move chooseMove(State state) {
         System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
-        BoardStateGenerator gen = new BoardStateGenerator();
-        gen.getPossibleBoardStates(state.getPieceAndSquare(),state.color,state.diceRoll,state);
-
+        int initialDiceRoll = state.diceRoll;
         MiniMax miniMax = new MiniMax();
         miniMax.constructTree(3,state);
-        Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren());
-        System.out.println("Optimal Move: " + bestChild.getMove().toString());;
-        System.out.println();
+        Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren(),state.diceRoll);
+        System.out.println("Optimal Move: " + bestChild.getMove().toString());
 
         Move chosenMove = bestChild.getMove();
+        System.out.println("Dice roll initial: " + initialDiceRoll);
+        System.out.println("Dice roll of best child: " + bestChild.getDiceRoll());
+        System.out.println("Dice roll of best child move: " + bestChild.getMove().getDiceRoll());
         updatePieceAndSquareState(state,chosenMove);
         return chosenMove;
     }
