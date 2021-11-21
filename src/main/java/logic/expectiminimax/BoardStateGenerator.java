@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 // generates all possible states of the board for n turns ahead
 public class BoardStateGenerator {
 
-    // move piece and return array
+    // move piece and return array of all possible states for all possible moves a given piece can make taking into account its origin square
     public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square>legalMoves, Piece piece, Square origin) {
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
@@ -59,7 +59,7 @@ public class BoardStateGenerator {
         return possibleStates;
     }
 
-    // list of piece states for given dice roll and color
+    // list of piece states for a given dice roll and side color, used in minimax
     public List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = (List<PieceAndSquareTuple>) nodePieceAndSquare.stream().collect(Collectors.toList());
         List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = (List<PieceAndSquareTuple>) nodePieceAndSquare.stream().collect(Collectors.toList());
@@ -88,6 +88,7 @@ public class BoardStateGenerator {
         return possibleStates;
     }
 
+    // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
     public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
 

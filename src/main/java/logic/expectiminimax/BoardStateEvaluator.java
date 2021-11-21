@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BoardStateEvaluator {
 
-    // out dated
+    // outdated
     public static int getBoardEvaluationNumberOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
         //Map<Piece,Integer> map = new HashMap<>();
         int val = 0;
@@ -43,6 +43,7 @@ public class BoardStateEvaluator {
         return val;
     }
 
+    // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color) {
         int evalNo = 0;
         for (PieceAndSquareTuple ps : nodePieceAndSquare) {
