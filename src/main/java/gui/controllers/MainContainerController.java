@@ -92,7 +92,7 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new RandomMovesPlayer(WHITE), new QTablePlayer(Side.BLACK));
+                Game game = new AiAiGame(new ExpectiMiniMaxPlayer(WHITE), new QTablePlayer(Side.BLACK));
             }
 
             case HUMAN_V_AI -> {

@@ -4,43 +4,38 @@ import logic.Move;
 import logic.State;
 import logic.enums.Side;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import static logic.enums.Piece.*;
 
 public class QTablePlayer extends AIPlayer {
 
     private final boolean DEBUG = true;
+    private Map<Move, Integer> moveMap = new HashMap<Move, Integer>();
 
     public QTablePlayer(Side color) { super(color);}
 
     @Override
     public Move chooseMove(State state) {
-        System.out.println("HELLLLOOOO ");
         List<Move> validMoves = getValidMoves(state);
-        //int[][] qTable = buildQTable(state);
-        int[] test = new int[validMoves.size()];
-        ArrayList<Move> goodMoves = new ArrayList<>(validMoves.size());
+        //at the beginning of a move clear the map
+        moveMap.clear();
         for (Move move : validMoves) {
-            if (!state.getBoard().isEmpty(move.getDestination())) {
-                //test[i] = 20;
-                System.out.println("good move "+move);
-                goodMoves.add(move);
+            moveMap.put(move,0);
+        }
 
-            }
-        }
-        Arrays.sort(test);
-        //System.out.println("Test "+ Arrays.toString(test));
-        if (DEBUG) {
-            System.out.println("Size "+goodMoves.size());
-        }
-        if (goodMoves.size() != 0) {
-            System.out.println("CHOSSEN "+ goodMoves.get(0));
-            System.out.println("CHOSSEN "+ goodMoves.get(0));
-            return goodMoves.get(0);
+        //Move bestCapture = bestCapture(state,validMoves);
+        bestCapture(state,validMoves);
+        //get the best capture move
+        Move key = Collections.max(moveMap.entrySet(), Map.Entry.comparingByValue()).getKey();
+        System.out.println("KEY "+key);
+        System.out.println("Value "+moveMap.get(key));
+        if (moveMap.get(key) != 0) {
+            return key;
         }
         else {
-            return validMoves.get(test.length -1);
+            ExpectiMiniMaxPlayer ept = new ExpectiMiniMaxPlayer(this.color);
+            return ept.chooseMove(state);
         }
     }
 
@@ -50,5 +45,47 @@ public class QTablePlayer extends AIPlayer {
 
 
         return table;
+    }
+
+    public void bestCapture(State state, List<Move> validMoves) {
+        int bestMoveScore = 0;
+        for (Move move : validMoves) {
+            if (!state.getBoard().isEmpty(move.getDestination())) {
+                System.out.println("good move "+move);
+                System.out.println("Target PIECE "+state.getBoard().getPieceAt(move.getDestination()).getType());
+                switch (state.getBoard().getPieceAt(move.getDestination()).getType()) {
+                    case PAWN -> {
+                        if (bestMoveScore < 100) {
+                            moveMap.put(move,100);
+                            bestMoveScore = 100;
+                        }
+                    }
+                    case KNIGHT, BISHOP -> {
+                        if (bestMoveScore < 350) {
+                            moveMap.put(move,350);
+                            bestMoveScore = 350;
+                        }
+                    }
+                    case ROOK -> {
+                        if (bestMoveScore < 525) {
+                            moveMap.put(move,525);
+                            bestMoveScore = 525;
+                        }
+                    }
+                    case QUEEN -> {
+                        if (bestMoveScore < 1000) {
+                            moveMap.put(move,1000);
+                            bestMoveScore = 1000;
+                        }
+                    }
+                    case KING -> {
+                        if (bestMoveScore < 10000) {
+                            moveMap.put(move,10000);
+                            bestMoveScore = 10000;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
