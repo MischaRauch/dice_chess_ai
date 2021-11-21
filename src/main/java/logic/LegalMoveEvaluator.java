@@ -66,7 +66,11 @@ public class LegalMoveEvaluator {
                             move.promotionPiece = move.getPiece().promote(move.getDiceRoll());
                         } else {
                             //ask user what they want to promote to in case of pawn or king dice roll
-                            move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
+                            // TODO Fix promotion prompt bug
+                            //  the problem is I think that when generating possible board states when calling this method
+                            //  it sees that pawn is moving into promotion prompt and the dice roll is pawn or king and it tries to make a new promotion prompt
+                            //  the prompt is shown for human v ai game and locked the game, but error for ai vs ai
+                            // move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
                         }
                         move.promotionMove = true;
                     }

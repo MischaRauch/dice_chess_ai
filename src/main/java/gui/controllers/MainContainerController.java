@@ -93,7 +93,6 @@ public class MainContainerController extends AnchorPane {
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();
             }
-
         }
 
         board = new Chessboard(type);
