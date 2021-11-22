@@ -33,9 +33,6 @@ public class AiAiGame extends Game {
             currentState = newState;
             move.setStatus(Validity.VALID);
 
-
-
-
             processCastling();
 
             //update GUI, need to use Platform.runLater because we are in a separate thread here,

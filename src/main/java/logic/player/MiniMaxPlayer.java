@@ -4,26 +4,36 @@ import logic.PieceAndSquareTuple;
 import logic.enums.Side;
 import logic.Move;
 import logic.State;
-
+import logic.expectiminimax.MiniMax;
+import logic.expectiminimax.Node;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class RandomMovesPlayer extends AIPlayer {
+public class MiniMaxPlayer extends AIPlayer {
 
+    private final boolean DEBUG = false;
     private final boolean DEBUG2 = false;
-    private final static Random randomly = new Random();
-    public RandomMovesPlayer(Side color) {
+
+    public MiniMaxPlayer(Side color) {
         super(color);
     }
 
     @Override
     public Move chooseMove(State state) {
-        List<Move> validMoves = getValidMoves(state);
-        Move move = validMoves.get(randomly.nextInt(validMoves.size()));
-        updatePieceAndSquareState(state, move);
-        return move;
+        System.out.println("ExpectiMiniMaxPlayer;  chooseMove(State state): ");
+        int initialDiceRoll = state.diceRoll;
+        MiniMax miniMax = new MiniMax();
+        miniMax.constructTree(20,state);
+        Node bestChild = miniMax.findBestChild(true,miniMax.getTree().getRoot().getChildren(),state.diceRoll);
+        System.out.println("Optimal Move: " + bestChild.getMove().toString());
+
+        Move chosenMove = bestChild.getMove();
+        System.out.println("Dice roll initial: " + initialDiceRoll);
+        System.out.println("Dice roll of best child: " + bestChild.getDiceRoll());
+        System.out.println("Dice roll of best child move: " + bestChild.getMove().getDiceRoll());
+        updatePieceAndSquareState(state,chosenMove);
+        return chosenMove;
     }
 
     private void updatePieceAndSquareState(State state, Move move) {

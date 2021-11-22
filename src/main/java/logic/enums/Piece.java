@@ -28,6 +28,7 @@ public enum Piece {
     static Map<Character, Piece> charPieceMap = new HashMap<>();
     static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);
     private static final char[] diceToPiece = {'p', 'n', 'b', 'r', 'q', 'k'};
+
     static {
         charPieceMap.put('P', WHITE_PAWN);
         charPieceMap.put('N', WHITE_KNIGHT);
@@ -71,7 +72,6 @@ public enum Piece {
         this.type = type;
         this.color = color;
         this.charType = charType;
-
     }
 
     Piece() {
@@ -79,9 +79,48 @@ public enum Piece {
         color = Side.NEUTRAL;
     }
 
+    public static Piece getPieceFromDice(int diceRoll, Side color) {
+        if (diceRoll==1 && color==Side.BLACK) {return BLACK_PAWN;}
+        else if (diceRoll==1 && color==Side.WHITE) {return WHITE_PAWN;}
+        else if (diceRoll==2 && color==Side.BLACK) {return BLACK_KNIGHT;}
+        else if (diceRoll==2 && color==Side.WHITE) {return WHITE_KNIGHT;}
+        else if (diceRoll==3 && color==Side.BLACK) {return BLACK_BISHOP;}
+        else if (diceRoll==3 && color==Side.WHITE) {return WHITE_BISHOP;}
+        else if (diceRoll==4 && color==Side.BLACK) {return BLACK_ROOK;}
+        else if (diceRoll==4 && color==Side.WHITE) {return WHITE_ROOK;}
+        else if (diceRoll==5 && color==Side.BLACK) {return BLACK_QUEEN;}
+        else if (diceRoll==5 && color==Side.WHITE) {return WHITE_QUEEN;}
+        else if (diceRoll==6 && color==Side.WHITE) {return BLACK_KING;}
+        else if (diceRoll==6 && color==Side.WHITE) {return WHITE_KING;}
+        return null;
+    }
+
+    public static Piece getNeutralPieceFromDice(int diceRoll) {
+        if (diceRoll==1) {return PAWN;}
+        else if (diceRoll==2) {return KNIGHT;}
+        else if (diceRoll==3) {return BISHOP;}
+        else if (diceRoll==4) {return ROOK;}
+        else if (diceRoll==5) {return QUEEN;}
+        else if (diceRoll==6) {return KING;}
+        return null;
+    }
+
+    public static int getDiceFromPiece(Piece piece) {
+        return switch (piece) {
+            case WHITE_PAWN,BLACK_PAWN -> 1;
+            case WHITE_KNIGHT,BLACK_KNIGHT -> 2;
+            case WHITE_BISHOP,BLACK_BISHOP -> 3;
+            case WHITE_ROOK,BLACK_ROOK -> 4;
+            case WHITE_QUEEN,BLACK_QUEEN -> 5;
+            case WHITE_KING,BLACK_KING -> 6;
+            default -> -99999;
+        };
+    }
+
     public static Piece getPieceFromChar(char c) {
         return charPieceMap.get(c);
     }
+
     public char getCharType() {return this.charType;}
 
     //honestly can probably change it to just return type automatically, but not sure if above constructor is used
@@ -102,17 +141,24 @@ public enum Piece {
             case WHITE_BISHOP -> 350;
             case WHITE_ROOK -> 525;
             case WHITE_QUEEN -> 1000;
-            case WHITE_KING -> 10000;
+            case WHITE_KING -> 20000;
             case BLACK_PAWN -> 100;
             case BLACK_KNIGHT -> 350;
             case BLACK_BISHOP -> 350;
             case BLACK_ROOK -> 525;
             case BLACK_QUEEN -> 1000;
-            case BLACK_KING -> 10000;
+            case BLACK_KING -> 20000;
             default -> 0;
         };
     }
 
+    public static Side getColorOfPiece(Piece piece) {
+        return switch (piece) {
+            case WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING -> Side.WHITE;
+            case BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING -> Side.BLACK;
+            default -> Side.NEUTRAL;
+        };
+    }
 
 
     public int[] getOffsets() {

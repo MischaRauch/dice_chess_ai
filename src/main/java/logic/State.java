@@ -5,12 +5,8 @@ import logic.enums.Side;
 import logic.enums.Square;
 import logic.enums.Piece;
 import logic.game.Game;
-
-import static logic.enums.Piece.BLACK_KING;
-import static logic.enums.Piece.WHITE_KING;
-import static logic.enums.Side.BLACK;
-import static logic.enums.Side.WHITE;
-import static logic.enums.Piece.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class State {
 
@@ -21,44 +17,58 @@ public class State {
     private boolean shortCastlingBlack = true;
     private boolean longCastlingBlack = true;
     public Square castling = Square.INVALID;
-    // doesn't contain pieces or empty square positions
     public Board board;
     public int diceRoll;
     public Side color;
     public Square enPassant = Square.INVALID;
-    // todo piece tracking on board for en passant and calstling
-    public static Piece[][] boardPieces = {
-            {WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK},
-            {WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,WHITE_PAWN,},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY},
-            {BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN,BLACK_PAWN},
-            {BLACK_ROOK,BLACK_KNIGHT,BLACK_BISHOP,BLACK_QUEEN,BLACK_KING,BLACK_BISHOP,BLACK_KNIGHT,BLACK_ROOK}};
+    private List<PieceAndSquareTuple> pieceAndSquare = new ArrayList<>();
 
-    public Piece[][] getBoardPieces() {
-        return boardPieces;
-    }
-
-    public void boardPiecesToString() {
-        //Piece[][] temp = flipVerticalAxis(boardPieces);
-        for (int file = 0; file < 8; file++) {
-            for (int rank = 0; rank < 8; rank++) {
-                System.out.print(boardPieces[file][rank] + " ");
-            }
-            System.out.print("\n");
-        }
-    }
-
+    // initial
     public State(Board board, int diceRoll, Side color) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
+        // TODO optional: add updatePieceAndSquareFromFen so we can load different states
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.a8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.b8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.c8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_QUEEN, Square.d8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KING, Square.e8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.f8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.g8));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.h8));
+
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.a7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.b7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.c7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.d7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.e7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.f7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.g7));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.h7));
+
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.a2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.b2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.c2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.d2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.e2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.f2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.g2));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.h2));
+
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.a1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.b1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.c1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_QUEEN, Square.d1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KING, Square.e1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.f1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.g1));
+        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.h1));
     }
 
+    // for state updation
     public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite,
-                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, Piece[][] boardPieces) {
+                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, List<PieceAndSquareTuple> pieceAndSquare) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
@@ -68,7 +78,48 @@ public class State {
         this.longCastlingBlack = longCastlingBlack;
         this.longCastlingWhite = longCastlingWhite;
         this.castling = castling;
-        this.boardPieces = boardPieces;
+        this.pieceAndSquare = pieceAndSquare;
+    }
+
+    public void printPieceAndSquare(){
+        System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            System.out.print(t.toString() + " | ");
+        }
+        printPieceCounts(pieceAndSquare);
+    }
+
+    public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
+        int pawn = 0;
+        int knight = 0;
+        int rook = 0;
+        int bishop = 0;
+        int king = 0;
+        int queen = 0;
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if(t.getPiece().equals(Piece.BLACK_QUEEN)||t.getPiece().equals(Piece.WHITE_QUEEN)) {
+                queen++;
+            }else if (t.getPiece().equals(Piece.WHITE_BISHOP)||t.getPiece().equals(Piece.BLACK_BISHOP)) {
+                bishop++;
+            }else if (t.getPiece().equals(Piece.WHITE_KING)||t.getPiece().equals(Piece.BLACK_KING)) {
+                king++;
+            }else if (t.getPiece().equals(Piece.WHITE_ROOK)||t.getPiece().equals(Piece.BLACK_ROOK)) {
+                rook++;
+            }else if (t.getPiece().equals(Piece.WHITE_PAWN)||t.getPiece().equals(Piece.BLACK_PAWN)) {
+                pawn++;
+            }else if (t.getPiece().equals(Piece.WHITE_KNIGHT)||t.getPiece().equals(Piece.BLACK_KNIGHT)) {
+                knight++;
+            }
+        }
+        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+    }
+
+    public List<PieceAndSquareTuple> getPieceAndSquare() {
+        return pieceAndSquare;
+    }
+
+    public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
+        this.pieceAndSquare = pieceAndSquare;
     }
 
     public Board getBoard() {
@@ -99,7 +150,6 @@ public class State {
 
     public void setLongCastlingBlack(boolean longCastlingBlack) { this.longCastlingBlack = longCastlingBlack; }
 
-
     public State applyMove(Move move) {
         //check if last move was castling
         if (Game.castlingPerformed != 0) {
@@ -119,23 +169,23 @@ public class State {
         //extract castling en passant dice roll
 
         //check if king got captured
-        if (board.getPieceAt(move.getDestination()) == WHITE_KING) {
+        if (board.getPieceAt(move.getDestination()) == Piece.WHITE_KING) {
             gameOver = -1;
         }
 
-        if (board.getPieceAt(move.getDestination()) == BLACK_KING) {
+        if (board.getPieceAt(move.getDestination()) == Piece.BLACK_KING) {
             gameOver = 1;
         }
 
         int newRoll = Dice.roll();
 
-        Side nextTurn = color == WHITE ? BLACK : WHITE;
+        Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
 
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
 
         if (move.enPassantCapture) {
-            newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
+            newBoard.removePiece(color == Side.WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
         }
         //check if castling has happend and the rook needs to move
         if (applyCastling) {
@@ -147,26 +197,26 @@ public class State {
             if (this.castling != Square.INVALID) {
                 //check which rook has to move based on the setted square
                 if (this.castling == Square.f1) {
-                    newBoard.setPiece(EMPTY, Square.h1);
-                    newBoard.setPiece(WHITE_ROOK, this.castling);
+                    newBoard.setPiece(Piece.EMPTY, Square.h1);
+                    newBoard.setPiece(Piece.WHITE_ROOK, this.castling);
                     longCastlingWhite = false;
                     move.castling = this.castling;
                 }
                 if (this.castling == Square.d1) {
-                    newBoard.setPiece(EMPTY, Square.a1);
-                    newBoard.setPiece(WHITE_ROOK, this.castling);
+                    newBoard.setPiece(Piece.EMPTY, Square.a1);
+                    newBoard.setPiece(Piece.WHITE_ROOK, this.castling);
                     shortCastlingWhite = false;
                     move.castling = this.castling;
                 }
                 if (this.castling == Square.f8) {
-                    newBoard.setPiece(EMPTY, Square.h8);
-                    newBoard.setPiece(BLACK_ROOK, Square.f8);
+                    newBoard.setPiece(Piece.EMPTY, Square.h8);
+                    newBoard.setPiece(Piece.BLACK_ROOK, Square.f8);
                     longCastlingBlack = false;
                     move.castling = this.castling;
                 }
                 if (this.castling == Square.d8) {
-                    newBoard.setPiece(EMPTY, Square.a8);
-                    newBoard.setPiece(BLACK_ROOK, this.castling);
+                    newBoard.setPiece(Piece.EMPTY, Square.a8);
+                    newBoard.setPiece(Piece.BLACK_ROOK, this.castling);
                     shortCastlingBlack = false;
                     move.castling = this.castling;
                 }
@@ -179,7 +229,7 @@ public class State {
         }
 
         State nextState = new State(newBoard, newRoll, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
-                longCastlingBlack, longCastlingWhite, castling, this.boardPieces);
+                longCastlingBlack, longCastlingWhite, castling, this.pieceAndSquare);
 
         if (move.enPassantMove) {
             nextState.enPassant = move.enPassant;
@@ -187,30 +237,30 @@ public class State {
 
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        newBoard.printBoard();
+        //newBoard.printBoard();
         return nextState;
     }
 
     public String toFEN() {
         String fen = "";
-        Piece prev = OFF_BOARD;
+        Piece prev = Piece.OFF_BOARD;
         int emptySpaces = 0;
 
         for (int i = 0; i < board.getBoard().length; i++) {
             Piece p = board.getBoard()[i];
-            if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
+            if (prev == Piece.OFF_BOARD && p == Piece.OFF_BOARD && i < 116) {
                 fen += "/"; //reached end of rank
                 i += 6;     //skip forward over off logic.board pieces to next rank
                 emptySpaces = 0;   //reset empty spaces
             }
 
-            if (p == EMPTY)
+            if (p == Piece.EMPTY)
                 emptySpaces++;
 
-            if (prev == EMPTY && p != EMPTY)
+            if (prev == Piece.EMPTY && p != Piece.EMPTY)
                 fen += emptySpaces + "";   //reached end of empty spaces, print amount
 
-            if (p != EMPTY && p != OFF_BOARD) {
+            if (p != Piece.EMPTY && p != Piece.OFF_BOARD) {
                 fen += p.getCharType();     //non-empty piece
                 emptySpaces = 0;            //reset empty spaces counter
             }

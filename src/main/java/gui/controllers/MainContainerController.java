@@ -3,9 +3,6 @@ package gui.controllers;
 import logic.enums.GameType;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.expectiminimax.BoardStateEvaluator;
-import logic.expectiminimax.BoardStateGenerator;
-import logic.expectiminimax.ExpectiMiniMax;
 import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
@@ -22,13 +19,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.Move;
 import logic.PieceAndTurnDeathTuple;
-import logic.player.ExpectiMiniMaxPlayer;
-import logic.player.RandomMovesPlayer;
-
+import logic.player.BasicAIPlayer;
+import logic.player.MiniMaxPlayer;
 import java.io.IOException;
 import java.util.Stack;
-
-import static logic.enums.Side.WHITE;
 
 public class MainContainerController extends AnchorPane {
 
@@ -91,23 +85,16 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new RandomMovesPlayer(WHITE), new ExpectiMiniMaxPlayer(Side.BLACK));
-                ExpectiMiniMax miniMax = new ExpectiMiniMax();
-                miniMax.constructTree(1,3);
+                Game game = new AiAiGame(new BasicAIPlayer(Side.WHITE), new MiniMaxPlayer(Side.BLACK));
             }
             case HUMAN_V_AI -> {
-                Game game = new AIGame(new ExpectiMiniMaxPlayer(Side.BLACK));
-                ExpectiMiniMax miniMax = new ExpectiMiniMax();
-                miniMax.constructTree(1,3);
-                //miniMax.constructTree(BoardStateEvaluator.getBoardEvaluationNumber(game.getCurrentState().getBoardPieces()));
+                Game game = new AIGame(new MiniMaxPlayer(Side.BLACK));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();
             }
 
         }
-
-
 
         board = new Chessboard(type);
         chessBoardContainer.getChildren().add(board);
@@ -122,7 +109,6 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMouseExited(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
-
     }
 
     @FXML
@@ -152,7 +138,7 @@ public class MainContainerController extends AnchorPane {
     public void movePieceOut(Piece piece, Side color) {
         ImageView view;
         Game game = Game.getInstance();
-        if (color == WHITE) {
+        if (color == Side.WHITE) {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             /// it was setInFlowPaneB, fixed, was this intentional?
             setInFlowPaneW(view);
@@ -198,7 +184,7 @@ public class MainContainerController extends AnchorPane {
         if(!game.getRedoDeadWhitePieces().isEmpty()){
             if(game.getRedoDeadWhitePieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
                 //move the piece out that was dead
-                movePieceOut(game.getRedoDeadWhitePieces().peek().getPiece(), WHITE);
+                movePieceOut(game.getRedoDeadWhitePieces().peek().getPiece(), Side.WHITE);
                 PieceAndTurnDeathTuple temp = game.getRedoDeadWhitePieces().peek();
                 // add the piece that is dead again into the dead pieces, now it's dead again
                 game.getDeadWhitePieces().push(temp);
@@ -242,13 +228,10 @@ public class MainContainerController extends AnchorPane {
     //used in ChessBoard
     //adds move string to previous moves stack
     public void setInScrollPane(Move move) {
-//        guiStringHistoryOfPreviousMoves.push(move.toString());
         guiStringHistoryOfPreviousMoves.push(move.stylized());
         Label newL = new Label(move.stylized());
         newL.setFont(new Font("Arial", 16));
         moveHistory.getChildren().add(newL);
-        //moveHistory.setAlignment(Pos.TOP_CENTER);
-        //System.out.println("scrollVBox size: " + moveHistory.getChildren().size());
     }
 
     //only visual gui string tracking of moves

@@ -24,11 +24,9 @@ public class Dice {
 
     public static int roll(State state, Side side) {
         ArrayList<Integer> validRolls = new ArrayList<>();
-
         for (int i = 1; i < diceToPiece.length; i++)
             if (canMove(diceToPiece[i-1].getColoredPiece(side), state))
                 validRolls.add(i);
-        System.out.println(validRolls.size());
         return validRolls.get((int) (Math.random() * validRolls.size()));
 
     }

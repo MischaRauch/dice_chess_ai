@@ -15,7 +15,7 @@ public class DiceChess extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/testMenu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/mainMenu.fxml"));
 
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image("/images/DiceChessIcon.png"));
@@ -23,8 +23,6 @@ public class DiceChess extends Application {
         stage.setTitle("Dice Chess!");
         stage.setScene(scene);
         stage.show();
-
-
 
     }
 
