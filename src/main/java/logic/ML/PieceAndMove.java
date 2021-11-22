@@ -4,29 +4,32 @@ import logic.enums.Piece;
 import logic.enums.Side;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PieceAndMove {
-    Map<Piece, ArrayList<Integer>> actionSpace;
+    HashMap<Piece, ArrayList<Integer>> actionSpace; // saving each pieces' possible actions
+    Side currentSide;
 
-    List<Integer> WHITE_PAWN;
-    
     public PieceAndMove(Side currentSide) {
-        actionSpace = new Hashtable<>();
+        this.currentSide = currentSide;
+    }
 
-        if (currentSide == Side.WHITE) {
+    public HashMap<Piece, ArrayList<Integer>> createActionSpace() { // creating map depending on side colour
+        actionSpace = new HashMap<>();
+        ArrayList<Integer> temp;
+
+        if (currentSide == Side.WHITE) { // if white
             //pawn
-            ArrayList<Integer> temp = new ArrayList<>();
+            temp = new ArrayList<>();
             temp.add(16);
             temp.add(15);
             temp.add(17);
             actionSpace.put(Piece.WHITE_PAWN, temp);
             // knight
             temp = new ArrayList<>();
-            temp.add(33); // KnightUpRight
-            temp.add(31); // KnightUpLeft
+            temp.add(33);
+            temp.add(31);
             temp.add(18);
             temp.add(14);
             temp.add(-33);
@@ -78,17 +81,17 @@ public class PieceAndMove {
             temp.add(-16);
             temp.add(-1);
             actionSpace.put(Piece.WHITE_KING, temp);
-        } else {
+        } else { // if black
             //pawn
-            ArrayList<Integer> temp = new ArrayList<>();
+            temp = new ArrayList<>();
             temp.add(16);
             temp.add(15);
             temp.add(17);
             actionSpace.put(Piece.BLACK_PAWN, temp);
             // knight
             temp = new ArrayList<>();
-            temp.add(33); // KnightUpRight
-            temp.add(31); // KnightUpLeft
+            temp.add(33);
+            temp.add(31);
             temp.add(18);
             temp.add(14);
             temp.add(-33);
@@ -141,6 +144,6 @@ public class PieceAndMove {
             temp.add(-1);
             actionSpace.put(Piece.BLACK_KING, temp);
         }
-
+    return actionSpace;
     }
 }

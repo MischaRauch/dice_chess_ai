@@ -1,5 +1,6 @@
 package logic.ML;
 
+import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.game.Game;
@@ -9,41 +10,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static logic.expectiminimax.BoardStateGenerator.getPossibleBoardStates;
-
 public class Qtable {
 
-    Map<Piece, ArrayList<Integer>> actionSpace;
-    HashMap<Piece[][], PieceAndMove> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
-    ArrayList<Piece[][]> stateSpace;
+    HashMap<Piece, ArrayList<Integer>> actionSpace;
+    HashMap<State, PieceAndMove> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
+    ArrayList<State> stateSpace;
     Side currentSide;
-    int StepCounter = 0; // would be good to use this to increase negative reward each turn
+    PieceAndMove pieceAndMove;
 
-
-    public Qtable(Side side) {
+    public Qtable(Side side, int depth) {
         Qtable = new HashMap<>();
         currentSide = side;
-        actionSpace = new PieceAndMove(currentSide); // creating all action space
+        pieceAndMove = new PieceAndMove(currentSide);
+
+        actionSpace = pieceAndMove.createActionSpace(); // creating all action space
+        ConstructQtable(actionSpace, depth);
     }
 
-    public void ConstructQtable(Map<Piece, ArrayList<Integer>> actionSpace) { // this table doesn't contain values, only info
-        stateSpace = createStateSpace( 1);
+    public void ConstructQtable(Map<Piece, ArrayList<Integer>> actionSpace, int depth) { // this table doesn't contain values, only info
+        stateSpace = createStateSpace(depth);
 
         for (int i=0; i<stateSpace.size(); i++) {
             for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
                 Qtable.put(stateSpace.get(i), (PieceAndMove) entry);
             }
         }
-    }
 
-    public void getMove(Map<Piece, ArrayList<Integer>> actionSpace) { // this table doesn't contain values, only info
-        stateSpace = createStateSpace( 1);
-
-        for (int i=0; i<stateSpace.size(); i++) {
-            for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
-                Qtable.put(stateSpace.get(i), (PieceAndMove) entry);
-            }
-        }
     }
 
     public ArrayList<Integer> accessActionSpace(Piece pieceName) {
@@ -55,29 +47,43 @@ public class Qtable {
         return null;
     }
 
-    public ArrayList<Piece[][]> createStateSpace(int depth) { // later will implement the depth feature, atm only 1 move
-        Game game = Game.getInstance();
-        Piece[][] currentState = game.getCurrentState().getBoardPieces();
-        stateSpace.add(currentState);
-        ArrayList<Piece[][]> possibleStatesOfCurrentBoard = getPossibleBoardStates(currentState);
+    public ArrayList<Integer> accessStateSpace(State state) {
+        for ( Map.Entry<State, PieceAndMove> entry : Qtable.entrySet()) {
+            if (entry.getKey() == state) {
+                // return entry.getKey();
+            }
+        }
+        return null;
+    }
 
-        for (int i=0; i<possibleStatesOfCurrentBoard.size(); i++) {
-            stateSpace.add(possibleStatesOfCurrentBoard.get(i));
+    public ArrayList<State> createStateSpace(int depth) { // here may happen small index errors, needs test
+        Game game = Game.getInstance();
+        State currentState = game.getCurrentState(); // get current state
+        stateSpace.add(currentState);
+        ArrayList<State> possibleStatesOfCurrentBoard;
+        ArrayList<Integer> indexOfDepth = new ArrayList<Integer>(); // this shows from which index the first state of that depth
+        // starts and at which index it ends. Ex: indexOfDepth[2] will return e.g. 125, this means states of depth 2 ends
+        // at 125, to get where it starts just do indexOfDepth[2] - indexOfDepth[1]
+        indexOfDepth.add(0);
+
+        for (int i = 0; i < depth; i++) {
+            possibleStatesOfCurrentBoard = getPossibleBoardStates(currentState);
+            indexOfDepth.add(possibleStatesOfCurrentBoard.size() - indexOfDepth.get(i));
+
+            for (int j = 0; j < possibleStatesOfCurrentBoard.size(); j++) {
+                stateSpace.add(possibleStatesOfCurrentBoard.get(j));
+            }
         }
         return stateSpace;
     }
 
-
-    public PieceAndMove createActionSpace() { // creating full action space
-        actionSpace = new PieceAndMove(currentSide);
-        return actionSpace;
-    }
-
-    public Map<String, Integer> actionPruning() { // remove actions that's not possible
+    private ArrayList<State> getPossibleBoardStates(State currentState) {
+        // TODO, implement a new method that returns all possible states from the current state
         return null;
     }
 
-    public void addZeros() {
-        // for (int i; i<)
+    // TODO
+    public HashMap<Piece, ArrayList<Integer>> actionPruning(State state) { // remove actions that's not possible for that state
+        return null;
     }
 }
