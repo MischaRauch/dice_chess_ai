@@ -1,17 +1,19 @@
 package logic.player;
 
+import logic.Dice;
+import logic.Move;
+import logic.PieceAndSquareTuple;
+import logic.State;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.Dice;
-import logic.Move;
-import logic.State;
-
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static logic.enums.Piece.EMPTY;
 import static logic.enums.Square.INVALID;
@@ -86,7 +88,7 @@ public abstract class AIPlayer {
                             if (!board.isOffBoard(location.getSquareNumber() + offset)) {
                                 Square target = Square.getSquare(location.getSquareNumber() + offset);
 
-                                while (target != INVALID && board.isEmpty(target) ) {
+                                while (target != INVALID && board.isEmpty(target)) {
                                     validMoves.add(new Move(p, location, target, state.diceRoll, color));
                                     target = Square.getSquare(target.getSquareNumber() + offset);
                                 }
@@ -103,5 +105,34 @@ public abstract class AIPlayer {
         }
 
         return validMoves;
+    }
+
+    public State getUpdatedPieceAndSquareState(State state, Move move) {
+        List<PieceAndSquareTuple> list = new CopyOnWriteArrayList<PieceAndSquareTuple>();
+        ListIterator litr = state.getPieceAndSquare().listIterator();
+        while (litr.hasNext()) {
+            PieceAndSquareTuple t = (PieceAndSquareTuple) litr.next();
+            if (t.getSquare() == move.getOrigin()) {
+            } else {
+                list.add(t);
+            }
+        }
+        PieceAndSquareTuple tupleForLeavingSquare = new PieceAndSquareTuple(move.getPiece(), move.getDestination());
+        list.add(tupleForLeavingSquare);
+        List<PieceAndSquareTuple> list2 = new CopyOnWriteArrayList<PieceAndSquareTuple>();
+        ListIterator litr2 = list.listIterator();
+        while (litr2.hasNext()) {
+            PieceAndSquareTuple t = (PieceAndSquareTuple) litr2.next();
+            if (tupleForLeavingSquare.getSquare() == t.getSquare() && litr2.nextIndex() == list.size() - 1) {
+                litr2.next();
+            } else if (tupleForLeavingSquare.getSquare() != t.getSquare() && litr2.nextIndex() != list.size() - 1) {
+                list2.add(t);
+            } else if (litr2.nextIndex() == list.size() - 1) {
+                list2.add(t);
+            }
+        }
+        list2.add(tupleForLeavingSquare);
+        state.setPieceAndSquare(list2);
+        return state;
     }
 }

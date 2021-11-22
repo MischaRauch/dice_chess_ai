@@ -1,26 +1,27 @@
 package logic;
 
 import logic.board.Board;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.enums.Piece;
 import logic.game.Game;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class State {
 
     public static int gameOver;
-    private boolean applyCastling = false;
-    private boolean shortCastlingWhite = true;
-    private boolean longCastlingWhite = true;
-    private boolean shortCastlingBlack = true;
-    private boolean longCastlingBlack = true;
     public Square castling = Square.INVALID;
     public Board board;
     public int diceRoll;
     public Side color;
     public Square enPassant = Square.INVALID;
+    private boolean applyCastling = false;
+    private boolean shortCastlingWhite = true;
+    private boolean longCastlingWhite = true;
+    private boolean shortCastlingBlack = true;
+    private boolean longCastlingBlack = true;
     private List<PieceAndSquareTuple> pieceAndSquare = new ArrayList<>();
 
     // initial
@@ -81,7 +82,7 @@ public class State {
         this.pieceAndSquare = pieceAndSquare;
     }
 
-    public void printPieceAndSquare(){
+    public void printPieceAndSquare() {
         System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
         for (PieceAndSquareTuple t : pieceAndSquare) {
             System.out.print(t.toString() + " | ");
@@ -97,17 +98,17 @@ public class State {
         int king = 0;
         int queen = 0;
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            if(t.getPiece().equals(Piece.BLACK_QUEEN)||t.getPiece().equals(Piece.WHITE_QUEEN)) {
+            if (t.getPiece().equals(Piece.BLACK_QUEEN) || t.getPiece().equals(Piece.WHITE_QUEEN)) {
                 queen++;
-            }else if (t.getPiece().equals(Piece.WHITE_BISHOP)||t.getPiece().equals(Piece.BLACK_BISHOP)) {
+            } else if (t.getPiece().equals(Piece.WHITE_BISHOP) || t.getPiece().equals(Piece.BLACK_BISHOP)) {
                 bishop++;
-            }else if (t.getPiece().equals(Piece.WHITE_KING)||t.getPiece().equals(Piece.BLACK_KING)) {
+            } else if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
                 king++;
-            }else if (t.getPiece().equals(Piece.WHITE_ROOK)||t.getPiece().equals(Piece.BLACK_ROOK)) {
+            } else if (t.getPiece().equals(Piece.WHITE_ROOK) || t.getPiece().equals(Piece.BLACK_ROOK)) {
                 rook++;
-            }else if (t.getPiece().equals(Piece.WHITE_PAWN)||t.getPiece().equals(Piece.BLACK_PAWN)) {
+            } else if (t.getPiece().equals(Piece.WHITE_PAWN) || t.getPiece().equals(Piece.BLACK_PAWN)) {
                 pawn++;
-            }else if (t.getPiece().equals(Piece.WHITE_KNIGHT)||t.getPiece().equals(Piece.BLACK_KNIGHT)) {
+            } else if (t.getPiece().equals(Piece.WHITE_KNIGHT) || t.getPiece().equals(Piece.BLACK_KNIGHT)) {
                 knight++;
             }
         }
@@ -129,26 +130,48 @@ public class State {
     public int getGameOver() {
         return gameOver;
     }
+
     //Getter for castling
-    public boolean isApplyCastling() { return applyCastling; }
+    public boolean isApplyCastling() {
+        return applyCastling;
+    }
 
-    public boolean isShortCastlingWhite() { return shortCastlingWhite; }
-
-    public boolean isLongCastlingWhite() { return longCastlingWhite; }
-
-    public boolean isShortCastlingBlack() { return shortCastlingBlack; }
-
-    public boolean isLongCastlingBlack() { return longCastlingBlack; }
     //Setter for castling
-    public void setApplyCastling(boolean applyCastling) { this.applyCastling = applyCastling; }
+    public void setApplyCastling(boolean applyCastling) {
+        this.applyCastling = applyCastling;
+    }
 
-    public void setShortCastlingWhite(boolean shortCastlingWhite) { this.shortCastlingWhite = shortCastlingWhite; }
+    public boolean isShortCastlingWhite() {
+        return shortCastlingWhite;
+    }
 
-    public void setLongCastlingWhite(boolean longCastlingWhite) { this.longCastlingWhite = longCastlingWhite; }
+    public void setShortCastlingWhite(boolean shortCastlingWhite) {
+        this.shortCastlingWhite = shortCastlingWhite;
+    }
 
-    public void setShortCastlingBlack(boolean shortCastlingBlack) { this.shortCastlingBlack = shortCastlingBlack; }
+    public boolean isLongCastlingWhite() {
+        return longCastlingWhite;
+    }
 
-    public void setLongCastlingBlack(boolean longCastlingBlack) { this.longCastlingBlack = longCastlingBlack; }
+    public void setLongCastlingWhite(boolean longCastlingWhite) {
+        this.longCastlingWhite = longCastlingWhite;
+    }
+
+    public boolean isShortCastlingBlack() {
+        return shortCastlingBlack;
+    }
+
+    public void setShortCastlingBlack(boolean shortCastlingBlack) {
+        this.shortCastlingBlack = shortCastlingBlack;
+    }
+
+    public boolean isLongCastlingBlack() {
+        return longCastlingBlack;
+    }
+
+    public void setLongCastlingBlack(boolean longCastlingBlack) {
+        this.longCastlingBlack = longCastlingBlack;
+    }
 
     public State applyMove(Move move) {
         //check if last move was castling
@@ -177,7 +200,10 @@ public class State {
             gameOver = 1;
         }
 
+
         int newRoll = Dice.roll();
+        System.out.println("State; applyMove; Dice.roll(): " + newRoll);
+
 
         Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
 

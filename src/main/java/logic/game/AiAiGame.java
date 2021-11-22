@@ -51,7 +51,8 @@ public class AiAiGame extends Game {
 
             //this part just adds a pause between moves so you can watch the logic.game instead of it instantly being over
             try {
-                Thread.sleep(1000);
+                // the higher the depth the more time AI needs or game just freezes
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

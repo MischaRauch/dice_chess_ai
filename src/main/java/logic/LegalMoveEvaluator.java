@@ -5,13 +5,9 @@ import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import gui.controllers.PromotionPrompt;
-import javafx.application.Platform;
-
+import logic.expectiminimax.Node;
 
 import java.util.ArrayList;
-
-import static logic.enums.Piece.WHITE_KING;
 
 public class LegalMoveEvaluator {
 
@@ -345,7 +341,7 @@ public class LegalMoveEvaluator {
 
         //check for castling
         if (state.isLongCastlingWhite() || state.isLongCastlingBlack() || state.isShortCastlingBlack() || state.isShortCastlingWhite()) {
-            if (move.getPiece() == WHITE_KING) {
+            if (move.getPiece() == Piece.WHITE_KING) {
                 if (move.getOrigin().getSquareNumber() == 4) {
                     if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingWhite()) {
                         if (isActualMove) {
