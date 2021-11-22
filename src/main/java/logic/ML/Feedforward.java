@@ -1,4 +1,5 @@
 package logic.ML;
+import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.graph.MergeVertex;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
@@ -12,7 +13,10 @@ import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.dataset.api.DataSetPreProcessor;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.learning.config.AdaGrad;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
@@ -20,33 +24,69 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
+import java.io.IOException;
+import java.util.List;
+
 public class Feedforward {
 
-public static void main(String[] args) {
+public static void main(String[] args) throws IOException,NullPointerException {
 
-    INDArray x0 = Nd4j.linspace(-10, 10, 500).reshape(500,1);
-    INDArray y0 = Nd4j.linspace(-10, 10, 500).reshape(300,2);
-    System.out.println(y0);
-    MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-            .seed(12345)
-            .weightInit(WeightInit.XAVIER)
+    //setting the Parameters
+
+   final int rows = 20;
+   final int cols = 20;
+   int outputNumber = 10;
+   int size = 100; // input feed per learning step
+   int times = 10; // no. of time pass through the entire data
+    int initializeSeed = 100; //initialization
+
+   //load data into training data and test data
+
+    DataSetIterator train = new MnistDataSetIterator(size,true,initializeSeed);
+    DataSetIterator test  = new MnistDataSetIterator(size,false,initializeSeed);
+
+    // Network Configuration
+
+    MultiLayerConfiguration con = new NeuralNetConfiguration.Builder()
+              .seed(initializeSeed)
             .updater(new AdaGrad(0.5))
-            .activation(Activation.RELU)
+            .weightInit(WeightInit.XAVIER)
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-            .l2(0.0001)
+            .activation(Activation.RELU)
+            .l2(0.002)
             .list()
-            .layer(0, new DenseLayer.Builder().nIn(784).nOut(250).weightInit(WeightInit.XAVIER).activation(Activation.RELU) //First hidden layer
+    //Addition of Layers
+            //hidden layer
+            .layer(0,new DenseLayer.Builder()
+                    .nIn(rows*cols).nOut(200)
+                    .weightInit(WeightInit.XAVIER)
+                    .activation(Activation.RELU)
                     .build())
-            .layer(1, new OutputLayer.Builder().nIn(250).nOut(10).weightInit(WeightInit.XAVIER).activation(Activation.SOFTMAX) //Output layer
-                    .lossFunction(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+            //Output layer
+            .layer(1,new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                            .nIn(200).nOut(outputNumber)
+                            .weightInit(WeightInit.XAVIER)
+                            .activation(Activation.SOFTMAX)
                     .build())
             .build();
-    MultiLayerNetwork network = new MultiLayerNetwork(conf);
-    network.init();
-    network.setListeners(new ScoreIterationListener(1));
-    network.fit(new DataSet(x0,y0));
-    System.out.println(network.output(x0));
 
+    // initialization of  the network
+    MultiLayerNetwork neuralNetwork = new MultiLayerNetwork(con);
+    neuralNetwork.init();
+    System.out.println(neuralNetwork.summary());
+    for(int i=0;i<times;i++)
+    {
+        neuralNetwork.fit(train);
+    }
+     // Evaluating the Network
+    Evaluation evaluate = new Evaluation(outputNumber);
+    while(test.hasNext())
+    {
+        DataSet data = test.next();
+        INDArray output = neuralNetwork.output(data.getFeaturesMaskArray());
+        evaluate.eval(data.getLabels(),output);
+    }
+    evaluate.stats();
 }
 
 
