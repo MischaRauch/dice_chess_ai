@@ -22,8 +22,6 @@ public class RandomMovesPlayer extends AIPlayer {
         Move chosenMove = validMoves.get(randomly.nextInt(validMoves.size()));
         long end = System.nanoTime();
         System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
-        // update piece and square state
-        state = getUpdatedPieceAndSquareState(state, chosenMove);
         state.printPieceAndSquare();
         return chosenMove;
     }

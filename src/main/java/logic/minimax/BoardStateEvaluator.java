@@ -1,4 +1,4 @@
-package logic.expectiminimax;
+package logic.minimax;
 
 import logic.PieceAndSquareTuple;
 import logic.enums.Piece;
@@ -8,43 +8,8 @@ import java.util.List;
 
 public class BoardStateEvaluator {
 
-    // outdated
-    public static int getBoardEvaluationNumberOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
-        //Map<Piece,Integer> map = new HashMap<>();
-        int val = 0;
-        // loop through each piece and square tuple in entire board state
-        for (PieceAndSquareTuple t : nodePieceAndSquare) {
-            // if the piece in the board is the color and piece type as our dice roll e.i. black knight
-            if (t.getPiece()==Piece.getPieceFromDice(diceRoll, color)) {
-                Piece piece = (Piece) t.getPiece();
-                // update it's eval number using weight from piece
-                val += piece.getWeight();
-                Square s = (Square) t.getSquare();
-                // update it's weight due to being on favourable location on board
-                switch (piece) {
-                    case BLACK_PAWN -> val += getCorrectWeights(pawnBoardWeightsW, Side.BLACK)[s.getRank()-1][s.getFile()];
-                    case BLACK_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW, Side.BLACK)[s.getRank()-1][s.getFile()];
-                    case BLACK_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW, Side.BLACK)[s.getRank()-1][s.getFile()];
-                    case BLACK_ROOK -> val += getCorrectWeights(rookBoardWeightsW, Side.BLACK)[s.getRank()-1][s.getFile()];
-                    case BLACK_QUEEN -> val += getCorrectWeights(queenBoardWeightsW, Side.BLACK)[s.getRank()-1][s.getFile()];
-                    //// TODO figure out how to distiguish between middle and end game
-                    case BLACK_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                    case WHITE_PAWN -> val += getCorrectWeights(pawnBoardWeightsW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                    case WHITE_KNIGHT -> val += getCorrectWeights(knightBoardWeightsW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                    case WHITE_BISHOP -> val += getCorrectWeights(bishopBoardWeightsW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                    case WHITE_ROOK -> val += getCorrectWeights(rookBoardWeightsW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                    case WHITE_QUEEN -> val += getCorrectWeights(queenBoardWeightsW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                    //// TODO figure out how to distiguish between middle and end game
-                    case WHITE_KING -> val += getCorrectWeights(kingBoardWeightsMiddleGameW, Side.WHITE)[s.getRank()-1][s.getFile()];
-                }
-            }
-        }
-        System.out.println("final val" + val);
-        return val;
-    }
-
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
-    public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color) {
+    public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {
         int evalNo = 0;
         for (PieceAndSquareTuple ps : nodePieceAndSquare) {
             Piece p = (Piece) ps.getPiece();
@@ -62,9 +27,11 @@ public class BoardStateEvaluator {
                     evalNo += getCorrectWeights(rookBoardWeightsW,color)[s.getRank()-1][s.getFile()];
                 } else if (p==Piece.BLACK_QUEEN || p==Piece.WHITE_QUEEN) {
                     evalNo += getCorrectWeights(queenBoardWeightsW,color)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING) {
+                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING && turn <= 50) {
                     evalNo += getCorrectWeights(kingBoardWeightsMiddleGameW,color)[s.getRank()-1][s.getFile()];
-                } //TODO king end game weights
+                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING && turn >= 50) {
+                    evalNo += getCorrectWeights(kingBoardWeightsEndGameW,color)[s.getRank()-1][s.getFile()];
+                }
             } else {
                 evalNo -= p.getWeight();
                 if(p==Piece.BLACK_PAWN || p==Piece.WHITE_PAWN) {
@@ -77,9 +44,11 @@ public class BoardStateEvaluator {
                     evalNo -= getCorrectWeights(rookBoardWeightsW,color)[s.getRank()-1][s.getFile()];
                 } else if (p==Piece.BLACK_QUEEN || p==Piece.WHITE_QUEEN) {
                     evalNo -= getCorrectWeights(queenBoardWeightsW,color)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING) {
+                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING  && turn <= 50) {
                     evalNo -= getCorrectWeights(kingBoardWeightsMiddleGameW,color)[s.getRank()-1][s.getFile()];
-                } //TODO king end game weights
+                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING && turn >= 50) {
+                    evalNo -= getCorrectWeights(kingBoardWeightsEndGameW,color)[s.getRank()-1][s.getFile()];
+                }
             }
         }
         return evalNo;

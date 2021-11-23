@@ -1,4 +1,4 @@
-package logic.expectiminimax;
+package logic.minimax;
 
 import logic.LegalMoveGenerator;
 import logic.PieceAndSquareTuple;
@@ -61,6 +61,7 @@ public class BoardStateGenerator {
     public List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
         List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = nodePieceAndSquare.stream().collect(Collectors.toList());
+        LegalMoveGenerator generator = new LegalMoveGenerator();
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
         //printPieceAndSquare(nodePieceAndSquareCopy);
@@ -72,7 +73,7 @@ public class BoardStateGenerator {
             // get all piece types with their dice numbers
             Piece coloredPiece = Piece.getPieceFromDice(diceRoll, color);
             if (p == coloredPiece) {
-                List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
+                List<Square> legalMoves = generator.getLegalMoves(state, s, p, color);
                 //printLegalMoves(legalMoves);
 
                 List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2, legalMoves, p, s);
@@ -93,7 +94,7 @@ public class BoardStateGenerator {
         List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
 
         for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
-            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color);
+            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
             //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
             possibleBoardStatesWeights.add(newBoardPieceStateWeights);
         }

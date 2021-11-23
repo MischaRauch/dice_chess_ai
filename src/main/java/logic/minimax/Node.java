@@ -1,4 +1,4 @@
-package logic.expectiminimax;
+package logic.minimax;
 
 import logic.Move;
 import logic.State;

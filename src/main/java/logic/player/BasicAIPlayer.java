@@ -10,75 +10,22 @@ import java.util.List;
 public class BasicAIPlayer extends AIPlayer {
 
     private final boolean DEBUG = false;
-    private final int[][] knightBoardWeightsW = {
-            {-50, -40, -30, -30, -30, -30, -40, -50},
-            {-40, -20, 0, 0, 0, 0, -20, -40},
-            {-30, 0, 10, 15, 15, 10, 0, -30},
-            {-30, 5, 15, 20, 20, 15, 5, -30},
-            {-30, 0, 15, 20, 20, 15, 0, -30},
-            {-30, 5, 10, 15, 15, 10, 5, -30},
-            {-40, -20, 0, 5, 5, 0, -20, -40},
-            {-50, -40, -30, -30, -30, -30, -40, -50}};
-    private final int[][] queenBoardWeightsW = {
-            {-20, -10, -10, -5, -5, -10, -10, -20},
-            {-10, 0, 0, 0, 0, 0, 0, -10},
-            {-10, 0, 5, 5, 5, 5, 0, -10},
-            {-5, 0, 5, 5, 5, 5, 0, -5},
-            {0, 0, 5, 5, 5, 5, 0, -5},
-            {-10, 5, 5, 5, 5, 5, 0, -10},
-            {-10, 0, 5, 0, 0, 0, 0, -10},
-            {-20, -10, -10, -5, -5, -10, -10, -20}};
-    private final int[][] bishopBoardWeightsW = {
-            {-20, -10, -10, -10, -10, -10, -10, -20},
-            {-10, 0, 0, 0, 0, 0, 0, -10},
-            {-10, 0, 5, 10, 10, 5, 0, -10},
-            {-10, 5, 5, 10, 10, 5, 5, -10},
-            {-10, 0, 10, 10, 10, 10, 0, -10},
-            {-10, 10, 10, 10, 10, 10, 10, -10},
-            {-10, 5, 0, 0, 0, 0, 5, -10},
-            {-20, -10, -10, -10, -10, -10, -10, -20}};
-    private final int[][] pawnBoardWeightsW = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {50, 50, 50, 50, 50, 50, 50, 50},
-            {10, 10, 20, 30, 30, 20, 10, 10},
-            {5, 5, 10, 25, 25, 10, 5, 5},
-            {0, 0, 0, 20, 20, 0, 0, 0},
-            {5, -5, -10, 0, 0, -10, -5, 5},
-            {5, 10, 10, -20, -20, 10, 10, 5},
-            {0, 0, 0, 0, 0, 0, 0, 0}};
-    private final int[][] rookBoardWeightsW = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {5, 10, 10, 10, 10, 10, 10, 5},
-            {-5, 0, 0, 0, 0, 0, 0, -5},
-            {-5, 0, 0, 0, 0, 0, 0, -5},
-            {-5, 0, 0, 0, 0, 0, 0, -5},
-            {-5, 0, 0, 0, 0, 0, 0, -5},
-            {-5, 0, 0, 0, 0, 0, 0, -5},
-            {0, 0, 0, 5, 5, 0, 0, 0}};
-    private final int[][] kingBoardWeightsMiddleGameW = {
-            {-30, -40, -40, -50, -50, -40, -40, -30},
-            {-30, -40, -40, -50, -50, -40, -40, -30},
-            {-30, -40, -40, -50, -50, -40, -40, -30},
-            {-30, -40, -40, -50, -50, -40, -40, -30},
-            {-20, -30, -30, -40, -40, -30, -30, -20},
-            {-10, -20, -20, -20, -20, -20, -20, -10},
-            {20, 20, 0, 0, 0, 0, 20, 20},
-            {20, 30, 10, 0, 0, 10, 30, 20}};
-    private final int[][] kingBoardWeightsEndGameW = {
-            {-50, -40, -30, -20, -20, -30, -40, -50},
-            {-30, -20, -10, 0, 0, -10, -20, -30},
-            {-30, -10, 20, 30, 30, 20, -10, -30},
-            {-30, -10, 30, 40, 40, 30, -10, -30},
-            {-30, -10, 30, 40, 40, 30, -10, -30},
-            {-30, -10, 20, 30, 30, 20, -10, -30},
-            {-30, -30, 0, 0, 0, 0, -30, -30},
-            {-50, -30, -30, -30, -30, -30, -30, -50}};
+
     public BasicAIPlayer(Side color) {
         super(color);
     }
 
     @Override
     public Move chooseMove(State state) {
+        long start = System.nanoTime();
+        Move chosenMove = getBasicAIMove(state);
+        long end = System.nanoTime();
+        System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        state.printPieceAndSquare();
+        return chosenMove;
+    }
+
+    public Move getBasicAIMove(State state){
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
         if (DEBUG) {
@@ -88,7 +35,7 @@ public class BasicAIPlayer extends AIPlayer {
         for (int i = 0; i < validMoves.size(); i++) {
             // if target piece not friendly and target destination is not empty then capture always (not sure if we need the empty condition)
             if (!state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color) && state.getBoard().getPieceAt(validMoves.get(i).getDestination()) != Piece.EMPTY) {
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(i));
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(i));
                 state.printPieceAndSquare();
                 // return first set of legal moves
                 return validMoves.get(i);
@@ -104,7 +51,7 @@ public class BasicAIPlayer extends AIPlayer {
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(pawnBoardWeightsW, color));
                 // gets max value of most favorable move position
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
                 state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
@@ -114,8 +61,8 @@ public class BasicAIPlayer extends AIPlayer {
                 }
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(knightBoardWeightsW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
+//                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case BISHOP -> {
@@ -124,7 +71,7 @@ public class BasicAIPlayer extends AIPlayer {
                 }
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
                 state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
@@ -134,8 +81,8 @@ public class BasicAIPlayer extends AIPlayer {
                 }
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(rookBoardWeightsW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
+//                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case QUEEN -> {
@@ -144,8 +91,8 @@ public class BasicAIPlayer extends AIPlayer {
                 }
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(queenBoardWeightsW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
+//                state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KING -> {
@@ -155,14 +102,13 @@ public class BasicAIPlayer extends AIPlayer {
                 }
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
-                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
+//                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
                 state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
         }
         // optimize later, rn takes first index
         Move chosenMove = validMoves.get(0);
-        state.printPieceAndSquare();
         return chosenMove;
     }
 
@@ -215,5 +161,75 @@ public class BasicAIPlayer extends AIPlayer {
         }
         return pos;
     }
+
+    private final int[][] knightBoardWeightsW = {
+            {-50, -40, -30, -30, -30, -30, -40, -50},
+            {-40, -20, 0, 0, 0, 0, -20, -40},
+            {-30, 0, 10, 15, 15, 10, 0, -30},
+            {-30, 5, 15, 20, 20, 15, 5, -30},
+            {-30, 0, 15, 20, 20, 15, 0, -30},
+            {-30, 5, 10, 15, 15, 10, 5, -30},
+            {-40, -20, 0, 5, 5, 0, -20, -40},
+            {-50, -40, -30, -30, -30, -30, -40, -50}};
+
+    private final int[][] queenBoardWeightsW = {
+            {-20, -10, -10, -5, -5, -10, -10, -20},
+            {-10, 0, 0, 0, 0, 0, 0, -10},
+            {-10, 0, 5, 5, 5, 5, 0, -10},
+            {-5, 0, 5, 5, 5, 5, 0, -5},
+            {0, 0, 5, 5, 5, 5, 0, -5},
+            {-10, 5, 5, 5, 5, 5, 0, -10},
+            {-10, 0, 5, 0, 0, 0, 0, -10},
+            {-20, -10, -10, -5, -5, -10, -10, -20}};
+
+    private final int[][] bishopBoardWeightsW = {
+            {-20, -10, -10, -10, -10, -10, -10, -20},
+            {-10, 0, 0, 0, 0, 0, 0, -10},
+            {-10, 0, 5, 10, 10, 5, 0, -10},
+            {-10, 5, 5, 10, 10, 5, 5, -10},
+            {-10, 0, 10, 10, 10, 10, 0, -10},
+            {-10, 10, 10, 10, 10, 10, 10, -10},
+            {-10, 5, 0, 0, 0, 0, 5, -10},
+            {-20, -10, -10, -10, -10, -10, -10, -20}};
+
+    private final int[][] pawnBoardWeightsW = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {50, 50, 50, 50, 50, 50, 50, 50},
+            {10, 10, 20, 30, 30, 20, 10, 10},
+            {5, 5, 10, 25, 25, 10, 5, 5},
+            {0, 0, 0, 20, 20, 0, 0, 0},
+            {5, -5, -10, 0, 0, -10, -5, 5},
+            {5, 10, 10, -20, -20, 10, 10, 5},
+            {0, 0, 0, 0, 0, 0, 0, 0}};
+
+    private final int[][] rookBoardWeightsW = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {5, 10, 10, 10, 10, 10, 10, 5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {-5, 0, 0, 0, 0, 0, 0, -5},
+            {0, 0, 0, 5, 5, 0, 0, 0}};
+
+    private final int[][] kingBoardWeightsMiddleGameW = {
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-20, -30, -30, -40, -40, -30, -30, -20},
+            {-10, -20, -20, -20, -20, -20, -20, -10},
+            {20, 20, 0, 0, 0, 0, 20, 20},
+            {20, 30, 10, 0, 0, 10, 30, 20}};
+
+    private final int[][] kingBoardWeightsEndGameW = {
+            {-50, -40, -30, -20, -20, -30, -40, -50},
+            {-30, -20, -10, 0, 0, -10, -20, -30},
+            {-30, -10, 20, 30, 30, 20, -10, -30},
+            {-30, -10, 30, 40, 40, 30, -10, -30},
+            {-30, -10, 30, 40, 40, 30, -10, -30},
+            {-30, -10, 20, 30, 30, 20, -10, -30},
+            {-30, -30, 0, 0, 0, 0, -30, -30},
+            {-50, -30, -30, -30, -30, -30, -30, -50}};
 }
 

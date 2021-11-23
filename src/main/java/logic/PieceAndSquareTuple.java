@@ -10,6 +10,9 @@ public class PieceAndSquareTuple<Piece, Square> {
         this.piece = piece;
         this.square = square;
     }
+    public PieceAndSquareTuple(PieceAndSquareTuple toClone) {
+        this((Piece)toClone.getPiece(),(Square)toClone.getSquare());
+    }
     public Piece getPiece() {
         return piece;
     }

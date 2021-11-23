@@ -32,7 +32,6 @@ import static logic.enums.Side.WHITE;
 public class Chessboard extends GridPane {
 
     public static Chessboard chessboard;
-
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
@@ -124,6 +123,7 @@ public class Chessboard extends GridPane {
 
             if (move.isPromotionMove()) {
                 destination.setPiece(move.getPromotionPiece());
+                System.out.println("is promotion move");
             }
 
             //move rook if castling was performed
@@ -234,6 +234,7 @@ public class Chessboard extends GridPane {
     class MovePieceHandler implements EventHandler<MouseEvent> {
 
         Tile tile;
+        private final LegalMoveGenerator generator = new LegalMoveGenerator();
 
         public MovePieceHandler(Tile tile) {
             this.tile = tile;
@@ -251,11 +252,8 @@ public class Chessboard extends GridPane {
                             //can only select your own pieces
                             tile.select();
 
-                            //LegalMoveGenerator gen = new LegalMoveGenerator();
-                            //ArrayList<Square> legalMoves = gen.getLegalMoves(logic.game.getCurrentState(), tile.getSquare(), tile.getPiece(), tile.getPiece().getColor());
-
                             //color legal moves green
-                            List<Square> legalMoves = LegalMoveGenerator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
+                            List<Square> legalMoves = generator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
                             for (Square s : legalMoves)
                                 tileBoard[8 - s.getRank()][s.getFile()].colorGreen();
                         }
