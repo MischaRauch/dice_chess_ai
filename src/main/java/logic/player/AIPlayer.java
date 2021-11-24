@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static logic.enums.Piece.EMPTY;
+import static logic.enums.Piece.KNIGHT;
 import static logic.enums.Square.INVALID;
 import static logic.enums.Square.getSquare;
 
@@ -70,8 +71,6 @@ public abstract class AIPlayer {
                         }
                     }
 
-                        }
-                    }
 
                     //TODO: seperate King into different case in order to incorporate Castling Generation and possibly check escape
                     case KNIGHT -> {

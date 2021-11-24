@@ -21,7 +21,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.Move;
 import logic.PieceAndTurnDeathTuple;
-import logic.player.ExpectiMiniMaxPlayer;
+//import logic.player.ExpectiMiniMaxPlayer;
 import logic.player.QTablePlayer;
 import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
@@ -95,7 +95,7 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new BasicAIPlayer(WHITE), new MiniMaxPlayer(Side.BLACK));
+                Game game = new AiAiGame(new QTablePlayer(WHITE), new MiniMaxPlayer(Side.BLACK));
             }
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new MiniMaxPlayer(Side.BLACK));

@@ -34,7 +34,7 @@ public class QTablePlayer extends AIPlayer {
             return key;
         }
         else {
-            ExpectiMiniMaxPlayer ept = new ExpectiMiniMaxPlayer(this.color);
+            MiniMaxPlayer ept = new MiniMaxPlayer(this.color);
             return ept.chooseMove(state);
         }
     }
