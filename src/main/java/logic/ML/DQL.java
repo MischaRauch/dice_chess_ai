@@ -7,6 +7,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.expectiminimax.BoardStateEvaluator;
+import logic.game.Game;
 
 import java.util.*;
 
@@ -28,24 +29,26 @@ public class DQL {
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
         double explorationDecay = 0.001;
-        double minExplorationProb = 0.01;
+        double minExplorationProb = 0.01; // prob. of exploration can go down until 0.01
 
-        double gamma = 0.99;
+        double gamma = 0.99; // discount factor, helps the algo to strive for a long-term high reward (0<gamma<1)
         double learningRate = 0.1;
 
         ArrayList<Double> totalRewardsOfEachEpisode = new ArrayList<Double>(); // to test the performance of the agent
 
-        Board currentState = state.getBoard();
+        Game game = Game.getInstance();
+        State initialState = game.getCurrentState(); // get current state
+        State currentState;
 
         Random rnd = new Random();
         Move action = null;
 
-        for (int i=0; i < numOfEpisodes; i++) {
+        for (int i=0; i < numOfEpisodes; i++) { // this will be handled when changed to DQL
 
-
+            currentState = initialState;
             double reward = 0;
             double episodesTotalReward = 0;
-            boolean finished = false;
+            boolean finished = false; // turn to true if king captured
 
             for (int j=0; j < maxIterationOfEpisode; j++) {
 
@@ -55,8 +58,10 @@ public class DQL {
                     action = new Move(Piece.WHITE_KNIGHT, Square.b2, Square.a3, 4, Side.WHITE);
                     // (Piece piece, Square origin, Square destination, int diceRoll, Side side)
                 } else {
-                    // TODO, get action info with index
+
                     int index = argmax(Qvalues, 0);
+                    currentQtable.accessStateValue(currentState);
+
                     action = new Move(Piece.WHITE_KNIGHT, Square.b2, Square.a3, 4, Side.WHITE);
                 }
 
@@ -91,7 +96,7 @@ public class DQL {
        return count;
     }
 
-    public int maxValue (State stae) {
+    public int maxValue (State state) {
         return 0;
     }
 }

@@ -31,14 +31,15 @@ public class Qtable {
         stateSpace = createStateSpace(depth);
 
         for (int i=0; i<stateSpace.size(); i++) {
+            PieceAndMove temp = new PieceAndMove(currentSide);
             for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
-                Qtable.put(stateSpace.get(i), (PieceAndMove) entry);
+                Qtable.put(stateSpace.get(i), temp); // just adding full size action space
             }
         }
 
     }
 
-    public ArrayList<Integer> accessActionSpace(Piece pieceName) {
+    public ArrayList<Integer> accessActionValue(Piece pieceName) {
         for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
             if (entry.getKey() == pieceName) {
                 return entry.getValue();
@@ -47,12 +48,12 @@ public class Qtable {
         return null;
     }
 
-    public ArrayList<Integer> accessStateSpace(State state) {
+    public ArrayList<Integer> accessStateValue(State state) {
         for ( Map.Entry<State, PieceAndMove> entry : Qtable.entrySet()) {
             if (entry.getKey() == state) {
-                // return entry.getKey();
+                entry.getValue();
+                }
             }
-        }
         return null;
     }
 
@@ -82,7 +83,7 @@ public class Qtable {
         return null;
     }
 
-    // TODO
+    // TODO, here can possibly prune the moves with getting validmoves method
     public HashMap<Piece, ArrayList<Integer>> actionPruning(State state) { // remove actions that's not possible for that state
         return null;
     }

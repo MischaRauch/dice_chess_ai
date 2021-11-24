@@ -5,7 +5,7 @@ import logic.enums.Side;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
 
 public class PieceAndMove {
     HashMap<Piece, ArrayList<Integer>> actionSpace; // saving each pieces' possible actions
