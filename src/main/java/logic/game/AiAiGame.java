@@ -50,7 +50,7 @@ public class AiAiGame extends Game {
             // main thread sleeps
             try {
                 // the higher the depth the more time AI needs or game just freezes
-                Thread.sleep(300);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

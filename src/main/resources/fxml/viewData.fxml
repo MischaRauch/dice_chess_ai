@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.viewDataController">
+    <children>
+        <TableView id="tableView" fx:id="tableView" prefHeight="411.0" prefWidth="862.0">
+            <columns>
+                <TableColumn id="gameId" fx:id="id" prefWidth="71.61015295982361" text="Game Id" />
+                <TableColumn id="gameType" fx:id="gameType" prefWidth="191.87891387939453" text="Game Type" />
+                <TableColumn id="algUsed" fx:id="alg" prefWidth="183.12103271484375" text="Alg Used" />
+                <TableColumn id="gameWinner" fx:id="winner" prefWidth="118.6370849609375" text="Winner" />
+                <TableColumn id="numTurnsToWin" fx:id="turns" prefWidth="130.7177734375" text="Turns to Win" />
+                <TableColumn id="timeToWin" fx:id="time" prefWidth="193.7176513671875" text="Time To Win" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>

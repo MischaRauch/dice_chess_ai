@@ -1,9 +1,7 @@
 package gui;
 
-import logic.enums.GameType;
-import logic.enums.Piece;
-import logic.enums.Square;
-import logic.enums.Validity;
+import dataCollection.csvHandler;
+import logic.enums.*;
 import logic.game.*;
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
@@ -35,6 +33,7 @@ public class Chessboard extends GridPane {
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
+    private csvHandler handle;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
@@ -42,7 +41,8 @@ public class Chessboard extends GridPane {
         game = Game.getInstance();
         this.gameType = type;
         chessboard = this;
-
+        handle = new csvHandler();
+        handle.readTheCsv();
         setStyle("-fx-background-color: #ffffff");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard.fxml"));
@@ -100,6 +100,8 @@ public class Chessboard extends GridPane {
     public void updateGUI(Move move) {
         if (move.getStatus() == Validity.VALID) {
 
+            game.setNumTurns(game.getNumTurns() + 1);
+
             MainContainerController.getInstance().setInScrollPane(move);
             //mainContainerController.setGameForTurn(logic.game);
 
@@ -151,9 +153,17 @@ public class Chessboard extends GridPane {
             }
 
             if (game.getCurrentState().getGameOver() != 0) {
+                System.out.println("HELLO 1");
                 //showEndGame(logic.game.getCurrentState().getGameOver());
                 //Stage stage = (Stage) getScene().getWindow();
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
+                Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
+                //Writing CSV file
+                handle = new csvHandler(gameType.name(), "MiniMax" ,winner.name(), game.getNumTurns());
+                //TODO : alg used
+                handle.addToCsv();
+                System.out.println("HELLO 2");
+
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
             }
         }
     }
