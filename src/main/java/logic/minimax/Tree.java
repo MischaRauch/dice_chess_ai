@@ -1,4 +1,4 @@
-package logic.expectiminimax;
+package logic.minimax;
 
 public class Tree {
 

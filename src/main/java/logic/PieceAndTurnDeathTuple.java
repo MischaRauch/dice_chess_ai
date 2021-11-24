@@ -8,6 +8,7 @@ public class PieceAndTurnDeathTuple<Piece, Integer> {
         this.x = x;
         this.y = (int) y;
     }
+
     public Piece getPiece() {
         return x;
     }

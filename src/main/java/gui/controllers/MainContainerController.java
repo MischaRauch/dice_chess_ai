@@ -1,9 +1,5 @@
 package gui.controllers;
 
-import logic.enums.GameType;
-import logic.enums.Piece;
-import logic.enums.Side;
-import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
 import javafx.event.ActionEvent;
@@ -19,8 +15,17 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.Move;
 import logic.PieceAndTurnDeathTuple;
+import logic.enums.GameType;
+import logic.enums.Piece;
+import logic.enums.Side;
+import logic.game.AIGame;
+import logic.game.AiAiGame;
+import logic.game.Game;
+import logic.game.HumanGame;
 import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
+import logic.player.RandomMovesPlayer;
+
 import java.io.IOException;
 import java.util.Stack;
 
@@ -31,12 +36,26 @@ public class MainContainerController extends AnchorPane {
     public static AnchorPane modal;
 
     private static MainContainerController instance;
-
-    public GameType type;
-    private Chessboard board;
-
     private final Stack<String> guiStringHistoryOfPreviousMoves = new Stack<>();
     private final Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
+    public GameType type;
+    private Chessboard board;
+    @FXML
+    private Button undoButton;
+    @FXML
+    private Button redoButton;
+    @FXML
+    private ImageView diceImage;
+    @FXML
+    private VBox moveHistory;
+    @FXML
+    private VBox chessBoardContainer;
+    @FXML
+    private FlowPane whiteGraveyard;
+    @FXML
+    private FlowPane blackGraveyard;
+    @FXML
+    private AnchorPane modalDialog;
 
     public MainContainerController(GameType type) throws IOException {
         this.type = type;
@@ -47,30 +66,9 @@ public class MainContainerController extends AnchorPane {
         loader.load();
     }
 
-    @FXML
-    private Button undoButton;
-
-    @FXML
-    private Button redoButton;
-
-    @FXML
-    private ImageView diceImage;
-
-    @FXML
-    private VBox moveHistory;
-
-    @FXML
-    private VBox chessBoardContainer;
-
-    @FXML
-    private FlowPane whiteGraveyard;
-
-    @FXML
-    private FlowPane blackGraveyard;
-
-    @FXML
-    private AnchorPane modalDialog;
-
+    public static MainContainerController getInstance() {
+        return instance;
+    }
 
     @FXML
     void rollDice(ActionEvent event) {
@@ -85,15 +83,14 @@ public class MainContainerController extends AnchorPane {
     void initialize() throws IOException {
         switch (type) {
             case AI_V_AI -> {
-                Game game = new AiAiGame(new BasicAIPlayer(Side.WHITE), new MiniMaxPlayer(Side.BLACK));
+                Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE), new MiniMaxPlayer(100, Side.BLACK));
             }
             case HUMAN_V_AI -> {
-                Game game = new AIGame(new MiniMaxPlayer(Side.BLACK));
+                Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
             }
             case HUMAN_V_HUMAN -> {
                 Game game = new HumanGame();
             }
-
         }
 
         board = new Chessboard(type);
@@ -162,14 +159,14 @@ public class MainContainerController extends AnchorPane {
     public void setInFlowPaneB(ImageView piece) {
         piece.setFitWidth(60);
         piece.setFitHeight(60);
-        blackGraveyard.getChildren().add(piece);;
+        blackGraveyard.getChildren().add(piece);
     }
 
     // adds previously dead piece, now dead again, piece back to flow panel
     public void redoInFlowPanelB() {
         Game game = Game.getInstance();
-        if(!game.getRedoDeadBlackPieces().isEmpty()){
-            if(game.getRedoDeadBlackPieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
+        if (!game.getRedoDeadBlackPieces().isEmpty()) {
+            if (game.getRedoDeadBlackPieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
                 movePieceOut(game.getRedoDeadBlackPieces().peek().getPiece(), Side.BLACK);
                 PieceAndTurnDeathTuple temp = game.getRedoDeadBlackPieces().peek();
                 game.getDeadBlackPieces().push(temp);
@@ -181,8 +178,8 @@ public class MainContainerController extends AnchorPane {
     // adds previously dead piece, now dead again, piece back to flow panel
     public void redoInFlowPanelW() {
         Game game = Game.getInstance();
-        if(!game.getRedoDeadWhitePieces().isEmpty()){
-            if(game.getRedoDeadWhitePieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
+        if (!game.getRedoDeadWhitePieces().isEmpty()) {
+            if (game.getRedoDeadWhitePieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
                 //move the piece out that was dead
                 movePieceOut(game.getRedoDeadWhitePieces().peek().getPiece(), Side.WHITE);
                 PieceAndTurnDeathTuple temp = game.getRedoDeadWhitePieces().peek();
@@ -200,7 +197,7 @@ public class MainContainerController extends AnchorPane {
         Game game = Game.getInstance();
         if (!game.getDeadWhitePieces().isEmpty()) {
             // if the last piece that died, died on a turn that has more than current turn
-            if (game.getDeadWhitePieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size() && whiteGraveyard.getChildren().size()!=0) {
+            if (game.getDeadWhitePieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size() && whiteGraveyard.getChildren().size() != 0) {
                 whiteGraveyard.getChildren().remove(whiteGraveyard.getChildren().size() - 1, whiteGraveyard.getChildren().size());
                 PieceAndTurnDeathTuple temp = game.getDeadWhitePieces().peek();
                 game.getRedoDeadWhitePieces().push(temp);
@@ -215,8 +212,8 @@ public class MainContainerController extends AnchorPane {
         Game game = Game.getInstance();
         if (!game.getDeadBlackPieces().isEmpty()) {
             // if the last piece that died, died on a turn that has more than current turn
-            if(game.getDeadBlackPieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size()  && blackGraveyard.getChildren().size()!=0) {
-                blackGraveyard.getChildren().remove(blackGraveyard.getChildren().size()-1,blackGraveyard.getChildren().size());
+            if (game.getDeadBlackPieces().peek().getTurnDeath() > guiStringHistoryOfPreviousMoves.size() && blackGraveyard.getChildren().size() != 0) {
+                blackGraveyard.getChildren().remove(blackGraveyard.getChildren().size() - 1, blackGraveyard.getChildren().size());
                 PieceAndTurnDeathTuple temp = game.getDeadBlackPieces().peek();
                 game.getRedoDeadBlackPieces().push(temp);
                 game.getDeadBlackPieces().pop();
@@ -251,7 +248,7 @@ public class MainContainerController extends AnchorPane {
     //only visual gui string tracking of moves
     //removes the last move string in previous moves stack
     private void removeLastInScrollPane() {
-        if(!guiStringHistoryOfPreviousMoves.isEmpty()) {
+        if (!guiStringHistoryOfPreviousMoves.isEmpty()) {
             String current = guiStringHistoryOfPreviousMoves.peek();
             guiStringHistoryOfRedoMoves.push(current);
             guiStringHistoryOfPreviousMoves.pop();
@@ -261,10 +258,6 @@ public class MainContainerController extends AnchorPane {
 
     public void setDiceImage(ImageView img) {
         diceImage.setImage(img.getImage());
-    }
-
-    public static MainContainerController getInstance() {
-        return instance;
     }
 
 }
