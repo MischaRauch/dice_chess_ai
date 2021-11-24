@@ -129,10 +129,12 @@ public abstract class AIPlayer {
                                 //SHORT WHITE
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(6)) && state.isShortCastlingWhite()) {
                                     validMoves.add(new Move(p, location, getSquare(6), state.getDiceRoll(), color));
+                                    state.setApplyCastling(true);
                                 }
                                 //LONG WHITE
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
                                     validMoves.add(new Move(p, location, getSquare(2), state.getDiceRoll(), color));
+                                    state.setApplyCastling(true);
                                 }
                             }
                         }
@@ -141,10 +143,12 @@ public abstract class AIPlayer {
                                 //SHORT BLACK
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
                                     validMoves.add(new Move(p, location, getSquare(118), state.getDiceRoll(), color));
+                                    state.setApplyCastling(true);
                                 }
                                 //LONG BLACK
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
                                     validMoves.add(new Move(p, location, getSquare(114), state.getDiceRoll(), color));
+                                    state.setApplyCastling(true);
                                 }
                             }
                         }
