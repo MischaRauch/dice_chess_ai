@@ -199,7 +199,6 @@ public class State {
             newBoard.removePiece(color == Side.WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
         }
 
-
         //check if castling has happend and the rook needs to move
         if (applyCastling) {
             // (1) if (shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite) {
@@ -271,6 +270,8 @@ public class State {
             nextState.enPassant = move.enPassant;
         }
 
+        //get legal dice rolls according to updated new state
+        //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
         //newBoard.printBoard();

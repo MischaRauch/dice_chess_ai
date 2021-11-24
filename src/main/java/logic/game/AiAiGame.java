@@ -13,14 +13,23 @@ import logic.player.AIPlayer;
 public class AiAiGame extends Game {
 
     private final AIPlayer white, black;
+    private int playTill = 2;
+    private int played = 0;
 
     public AiAiGame(AIPlayer white, AIPlayer black) {
         super(openingFEN);
         this.white = white;
         this.black = black;
     }
+    public AiAiGame(AIPlayer white, AIPlayer black, int played) {
+        super(openingFEN);
+        this.white = white;
+        this.black = black;
+        this.played = played;
+    }
 
     public void start() {
+        boolean gameOver = false;
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         while (!gameOver) {
@@ -50,12 +59,18 @@ public class AiAiGame extends Game {
             // main thread sleeps
             try {
                 // the higher the depth the more time AI needs or game just freezes
-                Thread.sleep(2000);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("\n\n\nGameOver\n\n\n");
 
-        System.out.println("GameOver");
+        if (played <= playTill) {
+            AiAiGame game = new AiAiGame(this.white, this.black, played +1);
+            currentState.gameOver = 0;
+            game.start();
+        }
+
     }
 }
