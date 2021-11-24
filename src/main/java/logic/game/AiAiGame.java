@@ -10,9 +10,6 @@ import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
 
-import static logic.enums.Piece.EMPTY;
-
-//TODO: Rename this class lol
 public class AiAiGame extends Game {
 
     private final AIPlayer white, black;
@@ -50,8 +47,10 @@ public class AiAiGame extends Game {
             nextPlayer = (nextPlayer == white) ? black : white;
 
             //this part just adds a pause between moves so you can watch the logic.game instead of it instantly being over
+            // main thread sleeps
             try {
-                Thread.sleep(3000);
+                // the higher the depth the more time AI needs or game just freezes
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

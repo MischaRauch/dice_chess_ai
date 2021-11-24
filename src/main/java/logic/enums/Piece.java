@@ -90,7 +90,7 @@ public enum Piece {
         else if (diceRoll==4 && color==Side.WHITE) {return WHITE_ROOK;}
         else if (diceRoll==5 && color==Side.BLACK) {return BLACK_QUEEN;}
         else if (diceRoll==5 && color==Side.WHITE) {return WHITE_QUEEN;}
-        else if (diceRoll==6 && color==Side.WHITE) {return BLACK_KING;}
+        else if (diceRoll==6 && color==Side.BLACK) {return BLACK_KING;}
         else if (diceRoll==6 && color==Side.WHITE) {return WHITE_KING;}
         return null;
     }

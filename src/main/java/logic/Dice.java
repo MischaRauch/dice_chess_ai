@@ -24,7 +24,8 @@ public class Dice {
 
     public static int roll(State state, Side side) {
         ArrayList<Integer> validRolls = new ArrayList<>();
-        for (int i = 1; i < diceToPiece.length; i++)
+        // fixed bug never selected king: diceToPiece.length+1 not diceToPiece.length
+        for (int i = 1; i < diceToPiece.length+1; i++)
             if (canMove(diceToPiece[i-1].getColoredPiece(side), state))
                 validRolls.add(i);
         return validRolls.get((int) (Math.random() * validRolls.size()));
