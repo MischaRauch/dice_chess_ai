@@ -103,6 +103,16 @@ public abstract class AIPlayer {
                         }
                     }
 
+                    case KNIGHT -> {
+                        for (int offset : piece.getOffsets()) {
+                            Square target = Square.getSquare(location.getSquareNumber() + offset);
+                            if (target != Square.INVALID) {
+                                if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(color))
+                                    validMoves.add(new Move(p, location, target, state.getDiceRoll(), color));
+                            }
+                        }
+                    }
+
                     case KING -> {
                         for (int offset : piece.getOffsets()) {
                             if (!board.isOffBoard(location.getSquareNumber() + offset)) {

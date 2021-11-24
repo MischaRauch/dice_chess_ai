@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class State {
 
-    //public static int gameOver;
+    public int gameOver;
     public Square castling = Square.INVALID;
     public Board board;
     public int diceRoll;
@@ -117,9 +117,13 @@ public class State {
         return this.board;
     }
 
-//    public int getGameOver() {
-//        return gameOver;
-//    }
+    public int getGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(int gameOver) {
+        this.gameOver = gameOver;
+    }
     //Getter for castling
     public boolean isApplyCastling() {
         return applyCastling;

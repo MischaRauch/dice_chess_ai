@@ -1,5 +1,6 @@
 package logic.game;
 
+import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -8,7 +9,8 @@ import logic.*;
 
 import java.util.Stack;
 
-import static logic.enums.Piece.BLACK_ROOK;
+import static logic.enums.Piece.*;
+import static logic.enums.Side.*;
 
 public abstract class Game {
 
@@ -19,12 +21,12 @@ public abstract class Game {
     protected final Stack<State> redoStates;
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
-    protected boolean gameOver = false;
+
 
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
     //2 = shortCastlingBlack, 3 = longCastlingWhite, 4 = longCastlingBlack
-    private int castlingPerformed = 0;
+    public static int castlingPerformed = 0;
 
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> deadBlackPieces = new Stack<>();
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> deadWhitePieces = new Stack<>();
@@ -59,6 +61,22 @@ public abstract class Game {
             currentState = redoStates.pop();            //update the current state
 
         }
+    }
+
+    public boolean gameDone = false;
+    public Side winner = NEUTRAL;
+
+    public void checkGameOver(Move move) {
+        Board board = currentState.getBoard();
+        Piece destPiece = board.getPieceAt(move.getDestination());
+        if (destPiece.getType() == KING) {
+            gameDone = true;
+            winner = move.getSide();
+        }
+    }
+
+    public boolean isGameOver() {
+        return gameDone;
     }
 
     protected void processCastling() {

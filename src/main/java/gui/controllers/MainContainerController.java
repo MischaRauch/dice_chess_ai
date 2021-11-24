@@ -71,6 +71,9 @@ public class MainContainerController extends AnchorPane {
     @FXML
     private AnchorPane modalDialog;
 
+    @FXML
+    private Label turnIndicator;
+
     public MainContainerController(GameType type) throws IOException {
         this.type = type;
         instance = this;
@@ -290,10 +293,6 @@ public class MainContainerController extends AnchorPane {
             turnIndicator.setText("White's");
         else
             turnIndicator.setText("Black's");
-    }
-
-    public static MainContainerController getInstance() {
-        return instance;
     }
 
 }
