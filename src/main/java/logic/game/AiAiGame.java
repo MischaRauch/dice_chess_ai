@@ -55,7 +55,7 @@ public class AiAiGame extends Game {
                 MainContainerController.getInstance().updateTurn(move.getSide());
             });
 
-            //update the value for gameOver so we eventually exit this loop
+            //update the value for gameOver,so we eventually exit this loop
             gameOver = isGameOver();
 
             //switch players
@@ -74,8 +74,8 @@ public class AiAiGame extends Game {
 
         if (played < playTill) {
             AiAiGame game = new AiAiGame(this.white, this.black, played +1);
-            currentState.setGameOver(0);
-            game.start();
+            //currentState.setGameOver(0);
+            game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?
         }
 
     }

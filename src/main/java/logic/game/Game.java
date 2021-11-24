@@ -22,7 +22,6 @@ public abstract class Game {
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
 
-
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
     //2 = shortCastlingBlack, 3 = longCastlingWhite, 4 = longCastlingBlack
@@ -59,7 +58,6 @@ public abstract class Game {
         if (!redoStates.isEmpty()) {
             previousStates.push(currentState);          //add current state to previous states stack
             currentState = redoStates.pop();            //update the current state
-
         }
     }
 
@@ -146,6 +144,5 @@ public abstract class Game {
     public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getDeadWhitePieces() {
         return deadWhitePieces;
     }
-
 
 }
