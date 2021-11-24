@@ -1,11 +1,16 @@
 package logic;
 
+import gui.controllers.MainContainerController;
 import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.game.Game;
 
+import static logic.enums.Piece.BLACK_KING;
+import static logic.enums.Piece.WHITE_KING;
+import static logic.enums.Piece.*;
+import static logic.enums.Side.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -13,12 +18,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class State {
 
-    public static int gameOver;
-    private Square castling = Square.INVALID;
-    private Board board;
-    private int diceRoll;
-    private Side color;
-    private Square enPassant = Square.INVALID;
+    //public static int gameOver;
+    public Square castling = Square.INVALID;
+    public Board board;
+    public int diceRoll;
+    public Side color;
+    public Square enPassant = Square.INVALID;
     private boolean applyCastling = false;
     private boolean shortCastlingWhite = true;
     private boolean longCastlingWhite = true;
@@ -112,10 +117,9 @@ public class State {
         return this.board;
     }
 
-    public int getGameOver() {
-        return gameOver;
-    }
-
+//    public int getGameOver() {
+//        return gameOver;
+//    }
     //Getter for castling
     public boolean isApplyCastling() {
         return applyCastling;
@@ -189,14 +193,13 @@ public class State {
         int newRoll = Dice.roll();
         System.out.println("State; applyMove; Dice.roll(): " + newRoll);
 
-
-        Side nextTurn = color == Side.WHITE ? Side.BLACK : Side.WHITE;
+        Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
         Board newBoard = board.movePiece(move.origin, move.destination);
 
         if (move.enPassantCapture) {
-            newBoard.removePiece(color == Side.WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
+            newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
         }
 
         //check if castling has happend and the rook needs to move
@@ -209,26 +212,26 @@ public class State {
             if (this.castling != Square.INVALID) {
                 //check which rook has to move based on the setted square
                 if (this.castling == Square.f1) {
-                    newBoard.setPiece(Piece.EMPTY, Square.h1);
-                    newBoard.setPiece(Piece.WHITE_ROOK, this.castling);
+                    newBoard.setPiece(EMPTY, Square.h1);
+                    newBoard.setPiece(WHITE_ROOK, this.castling);
                     longCastlingWhite = false;
                     move.castling = this.castling;
                 }
                 if (this.castling == Square.d1) {
-                    newBoard.setPiece(Piece.EMPTY, Square.a1);
-                    newBoard.setPiece(Piece.WHITE_ROOK, this.castling);
+                    newBoard.setPiece(EMPTY, Square.a1);
+                    newBoard.setPiece(WHITE_ROOK, this.castling);
                     shortCastlingWhite = false;
                     move.castling = this.castling;
                 }
                 if (this.castling == Square.f8) {
-                    newBoard.setPiece(Piece.EMPTY, Square.h8);
-                    newBoard.setPiece(Piece.BLACK_ROOK, Square.f8);
+                    newBoard.setPiece(EMPTY, Square.h8);
+                    newBoard.setPiece(BLACK_ROOK, Square.f8);
                     longCastlingBlack = false;
                     move.castling = this.castling;
                 }
                 if (this.castling == Square.d8) {
-                    newBoard.setPiece(Piece.EMPTY, Square.a8);
-                    newBoard.setPiece(Piece.BLACK_ROOK, this.castling);
+                    newBoard.setPiece(EMPTY, Square.a8);
+                    newBoard.setPiece(BLACK_ROOK, this.castling);
                     shortCastlingBlack = false;
                     move.castling = this.castling;
                 }
@@ -274,7 +277,7 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        //newBoard.printBoard();
+        newBoard.printBoard();
         return nextState;
     }
 
@@ -316,24 +319,24 @@ public class State {
 
     public String toFEN() {
         String fen = "";
-        Piece prev = Piece.OFF_BOARD;
+        Piece prev = OFF_BOARD;
         int emptySpaces = 0;
 
         for (int i = 0; i < board.getBoard().length; i++) {
             Piece p = board.getBoard()[i];
-            if (prev == Piece.OFF_BOARD && p == Piece.OFF_BOARD && i < 116) {
+            if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
                 fen += "/"; //reached end of rank
-                i += 6;     //skip forward over off logic.board pieces to next rank
+                i += 6;     //skip forward over off-board pieces to next rank
                 emptySpaces = 0;   //reset empty spaces
             }
 
-            if (p == Piece.EMPTY)
+            if (p == EMPTY)
                 emptySpaces++;
 
-            if (prev == Piece.EMPTY && p != Piece.EMPTY)
+            if (prev == EMPTY && p != EMPTY)
                 fen += emptySpaces + "";   //reached end of empty spaces, print amount
 
-            if (p != Piece.EMPTY && p != Piece.OFF_BOARD) {
+            if (p != EMPTY && p != OFF_BOARD) {
                 fen += p.getCharType();     //non-empty piece
                 emptySpaces = 0;            //reset empty spaces counter
             }
@@ -360,9 +363,9 @@ public class State {
         return enPassant;
     }
 
-    public static void setGameOver(int gameOver) {
-        State.gameOver = gameOver;
-    }
+//    public static void setGameOver(int gameOver) {
+//        State.gameOver = gameOver;
+//    }
 
     public void setCastling(Square castling) {
         this.castling = castling;

@@ -1,5 +1,10 @@
 package gui.controllers;
 
+import javafx.scene.image.Image;
+import logic.enums.GameType;
+import logic.enums.Piece;
+import logic.enums.Side;
+import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
 import javafx.event.ActionEvent;
@@ -22,8 +27,6 @@ import logic.game.AIGame;
 import logic.game.AiAiGame;
 import logic.game.Game;
 import logic.game.HumanGame;
-//import logic.player.ExpectiMiniMaxPlayer;
-import logic.player.QTablePlayer;
 import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
 import logic.player.RandomMovesPlayer;
@@ -97,6 +100,7 @@ public class MainContainerController extends AnchorPane {
                 Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE), new MiniMaxPlayer(100, Side.BLACK));
                 //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
             }
+
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
             }
@@ -119,7 +123,7 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
 
-        //updateTurn(WHITE);
+        updateTurn(WHITE);
     }
 
     @FXML
@@ -239,10 +243,17 @@ public class MainContainerController extends AnchorPane {
     //used in ChessBoard
     //adds move string to previous moves stack
     public void setInScrollPane(Move move) {
+//        guiStringHistoryOfPreviousMoves.push(move.toString());
         guiStringHistoryOfPreviousMoves.push(move.stylized());
         Label newL = new Label(move.stylized());
         newL.setFont(new Font("Arial", 16));
+        ImageView pieceIcon = ChessIcons.load(move.getPiece());
+        pieceIcon.setFitWidth(20);
+        pieceIcon.setFitHeight(20);
+        newL.setGraphic(pieceIcon);
         moveHistory.getChildren().add(newL);
+        //moveHistory.setAlignment(Pos.TOP_CENTER);
+        //System.out.println("scrollVBox size: " + moveHistory.getChildren().size());
     }
 
     //only visual gui string tracking of moves
@@ -252,8 +263,8 @@ public class MainContainerController extends AnchorPane {
             String temp = guiStringHistoryOfRedoMoves.peek();
             Label newL = new Label(temp);
             newL.setFont(new Font("Arial", 16));
+            //newL.setGraphic(ChessIcons.load(move.getPiece()));
             moveHistory.getChildren().add(newL);
-            //moveHistory.setAlignment(Pos.TOP_CENTER);
             guiStringHistoryOfPreviousMoves.push(temp);
             guiStringHistoryOfRedoMoves.pop();
         }
@@ -272,6 +283,17 @@ public class MainContainerController extends AnchorPane {
 
     public void setDiceImage(ImageView img) {
         diceImage.setImage(img.getImage());
+    }
+
+    public void updateTurn(Side color) {
+        if (color == WHITE)
+            turnIndicator.setText("White's");
+        else
+            turnIndicator.setText("Black's");
+    }
+
+    public static MainContainerController getInstance() {
+        return instance;
     }
 
 }
