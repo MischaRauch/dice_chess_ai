@@ -20,6 +20,9 @@ public class AIGame extends HumanGame {
         this.aiPlayer = aiPlayer;
     }
 
+    public AIPlayer getAiPlayerAiGame(){ return aiPlayer;}
+    public Side getAiPlayerSide(){ return  Side.BLACK;}
+
     //should ideally be called immediately in the GUI controller after the makeHumanMove returns
     //actually could be done just using Player objects instead of this class probably
     public Move makeAIMove() {

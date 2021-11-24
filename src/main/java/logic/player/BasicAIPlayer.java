@@ -25,6 +25,11 @@ public class BasicAIPlayer extends AIPlayer {
         return chosenMove;
     }
 
+    @Override
+    public String getNameAi() {
+        return "Basic AI";
+    }
+
     public Move getBasicAIMove(State state){
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function

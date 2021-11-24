@@ -35,4 +35,9 @@ public class MiniMaxPlayer extends AIPlayer {
         return chosenMove;
     }
 
+    @Override
+    public String getNameAi() {
+        return "MiniMax";
+    }
+
 }

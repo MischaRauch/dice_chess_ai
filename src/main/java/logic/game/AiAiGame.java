@@ -20,6 +20,9 @@ public class AiAiGame extends Game {
         this.black = black;
     }
 
+    public AIPlayer getAIPlayerWhite(){return white;}
+    public AIPlayer getAIPlayerBlack(){return black;}
+
     public void start() {
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button

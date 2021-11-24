@@ -42,7 +42,12 @@ public class Chessboard extends GridPane {
         this.gameType = type;
         chessboard = this;
         handle = new csvHandler();
-        handle.readTheCsv();
+
+        if(type == GameType.AI_V_AI)
+            handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
+        else
+            handle.readTheCsv();
+
         setStyle("-fx-background-color: #ffffff");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard.fxml"));
@@ -153,15 +158,25 @@ public class Chessboard extends GridPane {
             }
 
             if (game.getCurrentState().getGameOver() != 0) {
-                System.out.println("HELLO 1");
+
                 //showEndGame(logic.game.getCurrentState().getGameOver());
                 //Stage stage = (Stage) getScene().getWindow();
                 Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
                 //Writing CSV file
-                handle = new csvHandler(gameType.name(), "MiniMax" ,winner.name(), game.getNumTurns());
-                //TODO : alg used
-                handle.addToCsv();
-                System.out.println("HELLO 2");
+                if(gameType == GameType.AI_V_AI) {
+                    AiAiGame aiAiGame = (AiAiGame) game;
+                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+                    handle.aiVsAiCsvWrite();
+                }
+                else if(gameType == GameType.HUMAN_V_AI){
+                    AIGame aiGame = (AIGame) game;
+                    handle = new csvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
+                    handle.addToCsv();
+                }
+                else {
+                    handle = new csvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
+                    handle.addToCsv();
+                }
 
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
             }

@@ -22,13 +22,13 @@ public class viewDataController implements Initializable {
 
 
     @FXML
-    private TableColumn<GameInfo, Integer> id;
-
-    @FXML
     private TableColumn<GameInfo, String> gameType;
 
     @FXML
     private TableColumn<GameInfo, String> alg;
+
+    @FXML
+    private TableColumn<GameInfo, String> side;
 
     @FXML
     private TableColumn<GameInfo, String> winner;
@@ -37,23 +37,20 @@ public class viewDataController implements Initializable {
     private TableColumn<GameInfo, Integer> turns;
 
     @FXML
-    private TableColumn<GameInfo, Double> time;
-
-    @FXML
     private TableView<GameInfo> tableView;
 
 
     public static ObservableList<GameInfo> gameList = FXCollections.observableArrayList();
+    public static ObservableList<GameInfo> aiAiGameList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        id.setCellValueFactory(new PropertyValueFactory<GameInfo, Integer>("gameID"));
         gameType.setCellValueFactory(new PropertyValueFactory<GameInfo, String>("gameType"));
         alg.setCellValueFactory(new PropertyValueFactory<GameInfo, String>("algUsed"));
+        side.setCellValueFactory(new PropertyValueFactory<GameInfo, String>("algSide"));
         winner.setCellValueFactory(new PropertyValueFactory<GameInfo, String>("gameWinner"));
         turns.setCellValueFactory(new PropertyValueFactory<GameInfo, Integer>("numTurnsToWin"));
-        time.setCellValueFactory(new PropertyValueFactory<GameInfo, Double>("timeToWin"));
 
         tableView.setItems(gameList);
     }
