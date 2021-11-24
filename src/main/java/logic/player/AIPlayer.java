@@ -68,7 +68,6 @@ public abstract class AIPlayer {
                     }
 
 
-                    //TODO: seperate King into different case in order to incorporate Castling Generation and possibly check escape
                     case KNIGHT -> {
                         for (int offset : piece.getOffsets()) {
                             if (!board.isOffBoard(location.getSquareNumber() + offset)) {
@@ -87,7 +86,7 @@ public abstract class AIPlayer {
                                 Square target = Square.getSquare(location.getSquareNumber() + offset);
 
                                 if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
-                                    validMoves.add(new Move(p, location, target, state.diceRoll, color));
+                                    validMoves.add(new Move(p, location, target, state.getDiceRoll(), color));
                                 }
                             }
                         }
@@ -96,11 +95,11 @@ public abstract class AIPlayer {
                             if (location.getSquareNumber() == 4) {
                                 //SHORT WHITE
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(6)) && state.isShortCastlingWhite()) {
-                                    validMoves.add(new Move(p, location, getSquare(6), state.diceRoll, color));
+                                    validMoves.add(new Move(p, location, getSquare(6), state.getDiceRoll(), color));
                                 }
                                 //LONG WHITE
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
-                                    validMoves.add(new Move(p, location, getSquare(2), state.diceRoll, color));
+                                    validMoves.add(new Move(p, location, getSquare(2), state.getDiceRoll(), color));
                                 }
                             }
                         }
@@ -108,11 +107,11 @@ public abstract class AIPlayer {
                             if (location.getSquareNumber() == 116) {
                                 //SHORT BLACK
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
-                                    validMoves.add(new Move(p, location, getSquare(118), state.diceRoll, color));
+                                    validMoves.add(new Move(p, location, getSquare(118), state.getDiceRoll(), color));
                                 }
                                 //LONG BLACK
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
-                                    validMoves.add(new Move(p, location, getSquare(114), state.diceRoll, color));
+                                    validMoves.add(new Move(p, location, getSquare(114), state.getDiceRoll(), color));
                                 }
                             }
                         }
