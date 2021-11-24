@@ -1,5 +1,6 @@
 package logic.game;
 
+import logic.enums.Piece;
 import logic.enums.Validity;
 import gui.controllers.MainContainerController;
 import gui.ChessIcons;
@@ -54,9 +55,11 @@ public class AiAiGame extends Game {
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
-            //this part just adds a pause between moves, so you can watch the game instead of it instantly being over
+            //this part just adds a pause between moves so you can watch the logic.game instead of it instantly being over
+            // main thread sleeps
             try {
-                Thread.sleep(1000);
+                // the higher the depth the more time AI needs or game just freezes
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

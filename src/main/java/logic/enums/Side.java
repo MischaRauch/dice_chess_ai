@@ -5,7 +5,7 @@ public enum Side {
     BLACK,
     NEUTRAL;
 
-    public Side getOpposite(Side color) {
+    public static Side getOpposite(Side color) {
         if (color==Side.WHITE) {
             return Side.BLACK;
         }

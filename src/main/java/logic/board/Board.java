@@ -23,7 +23,6 @@ public abstract class Board {
 
     public abstract Piece[] getBoard();
 
-
     //not sure if this belongs in Square enum or here. Right now it's in both places
     public Square getSquareAbove(Square square) {
         return Square.getSquare(square.getSquareNumber() + 16);

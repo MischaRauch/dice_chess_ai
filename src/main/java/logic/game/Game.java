@@ -15,7 +15,6 @@ import static logic.enums.Side.*;
 public abstract class Game {
 
     public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-    //public static String openingFEN = "8/8/8/8/8/PPPPPPPP/1p6/NNN5 w KQkq - 0 1 1";
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates;
@@ -37,15 +36,16 @@ public abstract class Game {
 
     public Game() {
         this(openingFEN);
+        System.out.println("GAME const default");
     }
 
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
-        currentState.diceRoll = Dice.roll(currentState, Side.WHITE);
-        System.out.println("Initial dice roll: " + currentState.diceRoll);
+        currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
         previousStates = new Stack<>();
         redoStates = new Stack<>();
         CURRENT_GAME = this;
+        System.out.println("GAME const fen");
     }
 
     public void undoState() {
@@ -82,24 +82,24 @@ public abstract class Game {
     protected void processCastling() {
         //check if castling was performed
         if (currentState.isApplyCastling()) {
-            if (currentState.castling == Square.f8) {
+            if (currentState.getCastling() == Square.f8) {
                 System.out.println("SHORT CASTLING BLACK WAS PERFROMED 09");
                 castlingPerformed = 2;
             }
-            if (currentState.castling == Square.d8) {
+            if (currentState.getCastling() == Square.d8) {
                 System.out.println("LONG CASTLING BLACK WAS PERFORMED 09");
                 castlingPerformed = 4;
             }
-            if (currentState.castling == Square.f1) {
+            if (currentState.getCastling() == Square.f1) {
                 System.out.println("SHORT CASTLING WHITE WAS PERFORMED 09");
                 castlingPerformed = 1;
             }
-            if (currentState.castling == Square.d1) {
+            if (currentState.getCastling() == Square.d1) {
                 System.out.println("LONG CASTLING WHITE WAS PERFORMED 09");
                 castlingPerformed = 3;
             }
+            currentState.setCastling(Square.INVALID);
 
-            currentState.castling = Square.INVALID;
         }
     }
 
@@ -112,11 +112,11 @@ public abstract class Game {
     }
 
     public Side getTurn() {
-        return currentState.color;
+        return currentState.getColor();
     }
 
     public int getDiceRoll() {
-        return currentState.diceRoll;
+        return currentState.getDiceRoll();
     }
 
     public Stack<State> getPreviousStates() {

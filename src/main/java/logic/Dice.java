@@ -56,23 +56,24 @@ public class Dice {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        boolean canMove = false;
+                        //boolean canMove = false;
 
                         //check if a pawn can do a quiet move
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
-                            canMove = true;
+                            return true;
+                            //canMove = true;
                         }
 
                         //check if pawns can capture
                         for (int k = 1; k < 3; k++) {
                             Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
                             if (validTarget != Square.INVALID && board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor())) {
-                                canMove = true;
+                                return true;
                             }
                         }
 
-                        return canMove;
+                        return false;
                     }
 
                     case KNIGHT, BISHOP, ROOK, QUEEN, KING -> {
@@ -82,7 +83,6 @@ public class Dice {
                                 if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor()))
                                     return true;
                             }
-
                         }
                     }
                 }

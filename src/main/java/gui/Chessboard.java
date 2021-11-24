@@ -124,6 +124,7 @@ public class Chessboard extends GridPane {
 
             if (move.isPromotionMove()) {
                 destination.setPiece(move.getPromotionPiece());
+                System.out.println("is promotion move");
             }
 
             //move rook if castling was performed
@@ -163,7 +164,7 @@ public class Chessboard extends GridPane {
     }
 
     // you only move selected tile ever
-    private void move(Tile tile) {
+    private void move(Tile tile) throws CloneNotSupportedException {
 
         switch (gameType) {
             case HUMAN_V_HUMAN -> {
@@ -255,9 +256,6 @@ public class Chessboard extends GridPane {
                             //can only select your own pieces
                             tile.select();
 
-                            //LegalMoveGenerator gen = new LegalMoveGenerator();
-                            //ArrayList<Square> legalMoves = gen.getLegalMoves(logic.game.getCurrentState(), tile.getSquare(), tile.getPiece(), tile.getPiece().getColor());
-
                             //color legal moves green
                             List<Square> legalMoves = LegalMoveGenerator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
                             for (Square s : legalMoves)
@@ -271,14 +269,22 @@ public class Chessboard extends GridPane {
                         } else {
                             //capture
                             recolorBoard();
-                            move(tile);
+                            try {
+                                move(tile);
+                            } catch (CloneNotSupportedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
             } else {
                 if (Tile.selectedTile != null) {
                     recolorBoard();
-                    move(tile);
+                    try {
+                        move(tile);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
