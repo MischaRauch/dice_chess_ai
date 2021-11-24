@@ -1,10 +1,5 @@
 package gui.controllers;
 
-import javafx.scene.image.Image;
-import logic.enums.GameType;
-import logic.enums.Piece;
-import logic.enums.Side;
-import logic.game.*;
 import gui.ChessIcons;
 import gui.Chessboard;
 import javafx.event.ActionEvent;
@@ -43,10 +38,22 @@ public class MainContainerController extends AnchorPane {
     public static AnchorPane modal;
 
     private static MainContainerController instance;
-    private final Stack<String> guiStringHistoryOfPreviousMoves = new Stack<>();
-    private final Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
+
     public GameType type;
     private Chessboard board;
+
+    private final Stack<String> guiStringHistoryOfPreviousMoves = new Stack<>();
+    private final Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
+
+    public MainContainerController(GameType type) throws IOException {
+        this.type = type;
+        instance = this;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainContainer.fxml"));
+        loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
+        loader.setRoot(this);       //this class is also the Parent node of the FXML view
+        loader.load();
+    }
+
     @FXML
     private Button undoButton;
 
@@ -74,19 +81,6 @@ public class MainContainerController extends AnchorPane {
     @FXML
     private Label turnIndicator;
 
-    public MainContainerController(GameType type) throws IOException {
-        this.type = type;
-        instance = this;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainContainer.fxml"));
-        loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
-        loader.setRoot(this);       //this class is also the Parent node of the FXML view
-        loader.load();
-    }
-
-    public static MainContainerController getInstance() {
-        return instance;
-    }
-
     @FXML
     void rollDice(ActionEvent event) {
         if (!inputBlock) {
@@ -103,7 +97,6 @@ public class MainContainerController extends AnchorPane {
                 Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE), new MiniMaxPlayer(100, Side.BLACK));
                 //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
             }
-
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
             }
@@ -255,8 +248,6 @@ public class MainContainerController extends AnchorPane {
         pieceIcon.setFitHeight(20);
         newL.setGraphic(pieceIcon);
         moveHistory.getChildren().add(newL);
-        //moveHistory.setAlignment(Pos.TOP_CENTER);
-        //System.out.println("scrollVBox size: " + moveHistory.getChildren().size());
     }
 
     //only visual gui string tracking of moves
@@ -293,6 +284,10 @@ public class MainContainerController extends AnchorPane {
             turnIndicator.setText("White's");
         else
             turnIndicator.setText("Black's");
+    }
+
+    public static MainContainerController getInstance() {
+        return instance;
     }
 
 }

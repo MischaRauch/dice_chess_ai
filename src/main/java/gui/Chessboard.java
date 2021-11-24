@@ -150,11 +150,15 @@ public class Chessboard extends GridPane {
                 }
             }
 
-            if (game.getCurrentState().getGameOver() != 0) {
-                //showEndGame(logic.game.getCurrentState().getGameOver());
-                //Stage stage = (Stage) getScene().getWindow();
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
-            }
+//            if (game.getCurrentState().getGameOver() != 0) {
+//                //showEndGame(logic.game.getCurrentState().getGameOver());
+//                //Stage stage = (Stage) getScene().getWindow();
+//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
+//            }
+
+            if (game.isGameOver())
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
+
         }
     }
 
@@ -253,7 +257,7 @@ public class Chessboard extends GridPane {
                             tile.select();
 
                             //color legal moves green
-                            List<Square> legalMoves = generator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
+                            List<Square> legalMoves = LegalMoveGenerator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
                             for (Square s : legalMoves)
                                 tileBoard[8 - s.getRank()][s.getFile()].colorGreen();
                         }
