@@ -1,33 +1,56 @@
 package logic.game;
 
+import gui.controllers.MainContainerController;
+import logic.PieceAndSquareTuple;
+import logic.enums.Piece;
+import logic.enums.Side;
+import logic.enums.Square;
+import logic.enums.Validity;
 import logic.Move;
 import logic.State;
-import logic.enums.Validity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HumanGame extends Game {
 
-    int num=1;
+    private final boolean DEBUG = false;
+
     // called for GUI to moves Tile
-    @Override
     public Move makeHumanMove(Move move) {
-        if (evaluator.isLegalMove(move, currentState, true)) { //move legal
-            System.out.println("a");
-            System.out.println(move.getSide());
-            System.out.println(num);
-            num++;
+        if (evaluator.isLegalMove(move, currentState, true,false)) { //move legal
 
             State newState = currentState.applyMove(move);
-
             previousStates.push(currentState);
+
+            checkGameOver(move);
+            // update pieceAndSquare in state
+//            updatePieceAndSquareState(newState,move);
+            newState.printPieceAndSquare();
+
             currentState = newState;
             move.setStatus(Validity.VALID);
 
+            // could also update pieceAndSquare here idk if it would make a difference
+
+            processCastling();
+            MainContainerController.getInstance().updateTurn(currentState.getColor());
         } else {
             move.setInvalid();
         }
 
         //send back to GUI with updated validity flag
         return move;
+    }
+
+    private void printArray(List<PieceAndSquareTuple> pieceAndSquare){
+        System.out.println("printArray: ");
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            System.out.print(t.toString() + " | ");
+        }
+        System.out.println("Size: " + pieceAndSquare.size());
     }
 
 }

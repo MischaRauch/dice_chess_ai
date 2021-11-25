@@ -1,30 +1,29 @@
 package logic;
 
-import gui.PromotionPrompt;
+
+import gui.controllers.PromotionPrompt;
 import javafx.application.Platform;
 import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import java.util.ArrayList;
-import java.util.Iterator;
 
-import static logic.enums.Piece.WHITE_KING;
+import java.util.ArrayList;
 
 public class LegalMoveEvaluator {
 
     Move move;
     State state;
     boolean isActualMove;
-    private final boolean DEBUG = false;
+    private boolean isAi;
 
     /**
      * @param move  move object
-     * @param state board state
+     * @param state logic.board state
      * @return true if piece can be moved to tile
      */
-    public boolean isLegalMove(Move move, State state, boolean isActualMove) {
-
+    public boolean isLegalMove(Move move, State state, boolean isActualMove, boolean isAi) {
+        this.isAi = isAi;
         this.move = move;
         this.state = state;
         this.isActualMove = isActualMove;
@@ -33,7 +32,7 @@ public class LegalMoveEvaluator {
         if (move.getOrigin() == move.getDestination())
             return false;
 
-        //player trying to move opponents piece
+        //logic.player trying to move opponents piece
         if (move.getPiece().getColor() != move.getSide())
             return false;
 
@@ -49,11 +48,15 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalPawnMove() {
-        Board b = state.board;
+        Board b = state.getBoard();
 
         //check if pawn is trying to move in its own file
         if (b.getFile(move.getOrigin()).contains(move.getDestination())) {
             Square nextSquare = Square.getSquare(move.origin.getSquareNumber() + move.piece.getOffsets()[0]); //can return INVALID
+            if(nextSquare==Square.INVALID) {
+                return false;
+            }
+            // when it returns invalid it returns index 99999
             if (b.isEmpty(nextSquare)) {
                 //pawn can only move if next square is empty
                 if (nextSquare == move.destination) {
@@ -63,11 +66,12 @@ public class LegalMoveEvaluator {
                         if (move.getDiceRoll() != 1 && move.getDiceRoll() != 6) {
                             //if dice roll is not pawn or king, then automatically promote piece
                             move.promotionPiece = move.getPiece().promote(move.getDiceRoll());
-                        } else {
+                        } else if (!isAi) {
                             //ask user what they want to promote to in case of pawn or king dice roll
-                            if(isActualMove) {
-                                move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
-                            }
+                            move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
+                        /// TODO right now auto promotes to queen
+                        } else if (isAi) {
+                            move.promotionPiece = move.getPiece().promote(5);
                         }
                         move.promotionMove = true;
                     }
@@ -92,7 +96,7 @@ public class LegalMoveEvaluator {
                 if (validTarget == move.destination) {
                     switch (b.getPieceAt(validTarget)) {
                         case EMPTY -> {
-                            if (state.enPassant == move.destination) {
+                            if (state.getEnPassant() == move.destination) {
                                 move.enPassantCapture = true;
                                 return true;
                             }
@@ -112,7 +116,7 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalKnightMove() {
-        Board b = state.board;
+        Board b = state.getBoard();
         ArrayList<Square> options = new ArrayList<>();
 
         options.add(move.getOrigin().getSquareAbove().getLeftUp());
@@ -145,7 +149,7 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalQueenMove() {
-        Board b = state.board;
+        Board b = state.getBoard();
         boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
         boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
@@ -165,33 +169,34 @@ public class LegalMoveEvaluator {
         return false; // meaning not even on same rank, file or diagonal
     }
 
+    //TODO: (Bug) castling is disabled even in case of invalid move
     public boolean isLegalRookMove() {
         if (isActualMove) {
             if (state.isLongCastlingWhite() || state.isLongCastlingBlack() || state.isShortCastlingBlack() || state.isShortCastlingWhite()) {
                 if (move.getPiece().getColor() == Side.WHITE) {
                     if (move.getOrigin().getSquareNumber() == 0) {
                         state.setLongCastlingWhite(false);
-                        if (DEBUG) System.out.println("long castling: " + state.isLongCastlingWhite());
+                        System.out.println("long castling: " + state.isLongCastlingWhite());
                     }
                     else if (move.getOrigin().getSquareNumber() == 7) {
                         state.setShortCastlingWhite(false);
-                        if (DEBUG) System.out.println("short castling: " + state.isShortCastlingWhite());
+                        System.out.println("short castling: " + state.isShortCastlingWhite());
                     }
                 } else {
                     if (move.getOrigin().getSquareNumber() == 112) {
                         state.setLongCastlingBlack(false);
-                        if (DEBUG) System.out.println("long castling: " + state.isLongCastlingBlack());
+                        System.out.println("long castling: " + state.isLongCastlingBlack());
                     }
                     else if (move.getOrigin().getSquareNumber() == 119) {
                         state.setShortCastlingBlack(false);
-                        if (DEBUG) System.out.println("short castling: " + state.isShortCastlingBlack());
+                        System.out.println("short castling: " + state.isShortCastlingBlack());
                     }
                 }
             }
         }
 
 
-        Board b = state.board;
+        Board b = state.getBoard();
         boolean sameFile = move.getOrigin().getFile() == move.getDestination().getFile();
         boolean sameRank = move.getOrigin().getRank() == move.getDestination().getRank();
 
@@ -207,7 +212,7 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalBishopMove() {
-        Board b = state.board;
+        Board b = state.getBoard();
         boolean sameDiagonal = move.getOrigin().getLeftDiagonals(move.getOrigin()).equals(move.getDestination().getLeftDiagonals(move.getDestination()))
                 || move.getOrigin().getRightDiagonals(move.getOrigin()).equals(move.getDestination().getRightDiagonals(move.getDestination()));
 
@@ -268,7 +273,7 @@ public class LegalMoveEvaluator {
     }
 
     public boolean isLegalKingMove() {
-        Board b = state.board;
+        Board b = state.getBoard();
 
         Square squareAbove = move.getOrigin().getSquareAbove();
         Square squareBelow = move.getOrigin().getSquareBelow();
@@ -341,44 +346,46 @@ public class LegalMoveEvaluator {
 
         //check for castling
         if (state.isLongCastlingWhite() || state.isLongCastlingBlack() || state.isShortCastlingBlack() || state.isShortCastlingWhite()) {
-            if (move.getPiece() == WHITE_KING) {
+            if (move.getPiece() == Piece.WHITE_KING) {
                 if (move.getOrigin().getSquareNumber() == 4) {
                     if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingWhite()) {
                         if (isActualMove) {
                             state.setApplyCastling(true);
                             //state.setShortCastlingWhite(false);
-                            state.castling = Square.f1;
+                            state.setCastling(Square.f1);
                         }
-                        if (DEBUG) System.out.println("SHORT CASTLING WHITE");
+                        System.out.println("SHORT CASTLING WHITE");
                         return true;
                     } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && state.isLongCastlingWhite()) {
                         if (isActualMove) {
                             state.setApplyCastling(true);
                             //state.setLongCastlingWhite(false);
-                            state.castling = Square.d1;
+                            state.setCastling(Square.d1);
                         }
-                        if (DEBUG) System.out.println("LONG CASTLING WHITE");
+                        System.out.println("LONG CASTLING WHITE");
                         return true;
                     }
                 }
-            } else {
-                if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingBlack()) {
-                    if (isActualMove) {
-                        state.setApplyCastling(true);
-                        //state.setShortCastlingBlack(false);
-                        state.castling = Square.f8;
-                    }
-                    if (DEBUG) System.out.println("SHORT CASTLING Black");
-                    return true;
-                } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && state.isLongCastlingBlack()) {
-                    if (isActualMove) {
-                        state.setApplyCastling(true);
-                        //state.setLongCastlingBlack(false);
-                        state.castling = Square.d8;
-                    }
-                    if (DEBUG) System.out.println("LONG CASTLING Black");
-                    return true;
+            } else if (move.getPiece() == Piece.BLACK_KING) {
+                if (move.getOrigin().getSquareNumber() == 116) {
+                    if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingBlack()) {
+                        if (isActualMove) {
+                            state.setApplyCastling(true);
+                            //state.setShortCastlingBlack(false);
+                            state.setCastling(Square.f8);
+                        }
+                        System.out.println("SHORT CASTLING Black");
+                        return true;
+                    } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && state.isLongCastlingBlack()) {
+                        if (isActualMove) {
+                            state.setApplyCastling(true);
+                            //state.setLongCastlingBlack(false);
+                            state.setCastling(Square.d8);
+                        }
+                        System.out.println("LONG CASTLING Black");
+                        return true;
 
+                    }
                 }
             }
         }

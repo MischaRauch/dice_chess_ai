@@ -3,6 +3,7 @@ package gui;
 import javafx.scene.image.ImageView;
 import logic.enums.Piece;
 import logic.enums.Side;
+
 import java.util.EnumMap;
 
 import static logic.enums.Piece.*;
@@ -57,14 +58,14 @@ public class ChessIcons {
     }
 
     /**
-     * Another static load method which should display load an ImageView associated with the dice roll and player whose
+     * Another static load method which should display load an ImageView associated with the dice roll and logic.player whose
      * turn it is. It uses the static diceToPiece char array to get the char for the roll number, and then converts that
      * char to upper case if the Side == WHITE. Then it uses the above load method with the char in order to return the
      * relevant ImageView
      *
      * @param diceRoll integer in range of 1-6
-     * @param side     Enum Side of the player who rolled
-     * @return ImageView associated with the piece of the roll number with the color of the player who rolled.
+     * @param side     Enum Side of the logic.player who rolled
+     * @return ImageView associated with the piece of the roll number with the color of the logic.player who rolled.
      */
     public static ImageView load(int diceRoll, Side side) {
         //syntax is a little weird here bc I wanted to one-line all the methods in this class, but if you are not familiar

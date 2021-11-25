@@ -1,20 +1,24 @@
 package logic.game;
 
-import logic.Move;
-import logic.State;
+import gui.controllers.MainContainerController;
 import logic.enums.Side;
 import logic.enums.Validity;
+import logic.Move;
+import logic.State;
 import logic.player.AIPlayer;
-import logic.player.ExpectiMiniMaxPlayer;
-import logic.player.RandomMovesPlayer;
+import logic.player.MiniMaxPlayer;
 
 public class AIGame extends HumanGame {
 
-    AIPlayer aiPlayer;
+    private final AIPlayer aiPlayer;
 
-    public AIGame() {
+    public AIGame(int depth) {
+        this(new MiniMaxPlayer(depth,Side.BLACK));
+    }
+
+    public AIGame(AIPlayer aiPlayer) {
         super();
-        aiPlayer = new ExpectiMiniMaxPlayer(Side.BLACK);
+        this.aiPlayer = aiPlayer;
     }
 
     //should ideally be called immediately in the GUI controller after the makeHumanMove returns
@@ -23,8 +27,13 @@ public class AIGame extends HumanGame {
         Move move = aiPlayer.chooseMove(currentState);
         State newState = currentState.applyMove(move);
         previousStates.push(currentState);
+
+        checkGameOver(move);
+
         currentState = newState;
         move.setStatus(Validity.VALID);
+        processCastling();
+        MainContainerController.getInstance().updateTurn(currentState.getColor());
         return move;
     }
 

@@ -46,7 +46,7 @@ public class Board0x88 extends Board {
         loadFromFEN(FEN);
     }
 
-    //easy cloning of board
+    //easy cloning of logic.board
     public Board0x88(Piece[] board) {
         this.board = Arrays.copyOf(board, board.length);
     }
@@ -54,7 +54,7 @@ public class Board0x88 extends Board {
     @Override
     public Board loadFromFEN(String FEN) {
         //This splits the FEN String into an array of Strings; the first 8 (0-7) indices contain
-        //the FEN encoding of that rank. The rest of the indices are not used for the board
+        //the FEN encoding of that rank. The rest of the indices are not used for the logic.board
 
         String[] info = FEN.split("/|\\s"); //either split on "/" or on " " (whitespace)
 
@@ -117,7 +117,7 @@ public class Board0x88 extends Board {
         String files = "\n　 　　A　B　C　D　E　F　G　H  \n";
         System.out.println(files);
 
-        int rank = 8; //print board from top to bottom (white perspective)
+        int rank = 8; //print logic.board from top to bottom (white perspective)
         Piece prev = Piece.OFF_BOARD;
 
         for (Piece p : board) {

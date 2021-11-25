@@ -20,7 +20,7 @@ public enum Square {
     static Map<Integer, Square> squareMap = new HashMap<>();
     static Map<Integer, Square> boardIndexMap = new HashMap<>();
 
-    //gets board index by bit shifting, masking, and adding
+    //gets logic.board index by bit shifting, masking, and adding
     public int getIndex() {
         return ((ordinal() >> 3) << 4) + (ordinal() & 7); //(ordinal() / 8) * 16 + ordinal() % 8
     }
@@ -42,11 +42,11 @@ public enum Square {
     final int boardIndex;
 
     /**
-     * Private constructor for Square enums. This constructor is automagically called with the values specified in the
+     * Private constructor for Square logic.enums. This constructor is automagically called with the values specified in the
      * enum declarations above.
      *
      * @param square 0x88 square number
-     * @param index  index of square in the board array
+     * @param index  index of square in the logic.board array
      */
     Square(int square, int index) {
         this.squareNumber = square;
@@ -65,6 +65,50 @@ public enum Square {
         return boardIndexMap.getOrDefault(squareNumber, INVALID);
     }
 
+
+    // todo optimize these lmao
+    // 1 indexed
+    public static int getSquareRank(Square s) {
+        int index = 0;
+        for (int j = 0; j < 128; j++) {
+            if (Square.getBoardIndexMap().get(j) == s) {
+                index = j;
+            }
+        }
+        int rank = 0;
+        int file = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (s == Square.getSquare(j, i)) {
+                    rank = j;
+                    file = i;
+                }
+            }
+        }
+        return rank + 1;
+    }
+
+    // 0 indexed
+    public static int getSquareFile(Square s) {
+        int index = 0;
+        for (int j = 0; j < 128; j++) {
+            if (Square.getBoardIndexMap().get(j) == s) {
+                index = j;
+            }
+        }
+        int rank = 0;
+        int file = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (s == Square.getSquare(j, i)) {
+                    rank = j;
+                    file = i;
+                }
+            }
+        }
+        return file;
+    }
+
     /**
      * Gets the file of the square, where file_a = 0 and file_h = 7;
      *
@@ -81,6 +125,14 @@ public enum Square {
      */
     public int getRank() {
         return (squareNumber >> 4) + 1; //to make this 0-indexed, subtract 1
+    }
+
+    public static Map<Integer, Square> getSquareMap() {
+        return squareMap;
+    }
+
+    public static Map<Integer, Square> getBoardIndexMap() {
+        return boardIndexMap;
     }
 
     public int getSquareNumber() {

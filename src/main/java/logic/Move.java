@@ -1,5 +1,6 @@
 package logic;
 
+
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -12,8 +13,8 @@ public class Move {
     Square destination;
     int diceRoll;
 
-    Piece promotionPiece;
-    boolean promotionMove = false;
+    public Piece promotionPiece;
+    public boolean promotionMove = false;
 
     Side side;
     Validity status;
@@ -91,5 +92,9 @@ public class Move {
         return "Moved: " + piece +
                 " from: " + origin +
                 ", to: " + destination;
+    }
+
+    public String stylized() {
+        return origin + " ➞ " + destination;
     }
 }
