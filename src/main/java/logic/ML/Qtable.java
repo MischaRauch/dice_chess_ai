@@ -22,36 +22,40 @@ public class Qtable {
         Qtable = new HashMap<>();
         currentSide = side;
         pieceAndMove = new PieceAndMove(currentSide);
-
-        actionSpace = pieceAndMove.createActionSpace(); // creating all action space
-        ConstructQtable(actionSpace, depth);
+        ConstructQtable(depth);
     }
 
-    public void ConstructQtable(Map<Piece, ArrayList<Integer>> actionSpace, int depth) { // this table doesn't contain values, only info
+
+    public void ConstructQtable(int depth) { // this table doesn't contain values, only info
         stateSpace = createStateSpace(depth);
 
         for (int i=0; i<stateSpace.size(); i++) {
-            PieceAndMove temp = new PieceAndMove(currentSide);
-            for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
-                Qtable.put(stateSpace.get(i), temp); // just adding full size action space
+            actionSpace = createActionSpace(stateSpace.get(i));
+
+            for ( int j=0; j<actionSpace.size(); j++) {
+                Qtable.put(stateSpace.get(i), actionSpace); // adding actionSpace of the state
             }
         }
 
     }
 
-    public ArrayList<Integer> accessActionValue(Piece pieceName) {
-        for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
-            if (entry.getKey() == pieceName) {
-                return entry.getValue();
-            }
-        }
+    public ArrayList<originAndDest> createActionSpace(State state) {
+        // TODO, get all possible originAndDest tuple of the state
         return null;
     }
+//    public ArrayList<Integer> accessActionValue(Piece pieceName) {
+//        for ( Map.Entry<Piece, ArrayList<Integer>> entry : actionSpace.entrySet()) {
+//            if (entry.getKey() == pieceName) {
+//                return entry.getValue();
+//            }
+//        }
+//        return null;
+//    }
 
-    public ArrayList<Integer> accessStateValue(State state) {
-        for ( Map.Entry<State, PieceAndMove> entry : Qtable.entrySet()) {
+    public ArrayList<originAndDest> accessStateValue(State state) {
+        for ( Map.Entry<State, ArrayList<originAndDest>> entry : Qtable.entrySet()) {
             if (entry.getKey() == state) {
-                entry.getValue();
+                return entry.getValue();
                 }
             }
         return null;
