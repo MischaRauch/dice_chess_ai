@@ -16,6 +16,9 @@ public class QTablePlayer extends AIPlayer {
     public QTablePlayer(Side color) { super(color);}
 
     @Override
+    public String getNameAi() { return "QTablePlayer";}
+
+    @Override
     public Move chooseMove(State state) {
         List<Move> validMoves = getValidMoves(state);
         //at the beginning of a move clear the map
@@ -38,6 +41,7 @@ public class QTablePlayer extends AIPlayer {
             return ept.chooseMove(state);
         }
     }
+
 
     public int[][] buildQTable(State state) {
 

@@ -163,32 +163,51 @@ public class Chessboard extends GridPane {
 //                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
 //            }
 
-            if (game.isGameOver())
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
-
-            if (game.getCurrentState().getGameOver() != 0) {
-
+            if (game.isGameOver()) {
                 //showEndGame(logic.game.getCurrentState().getGameOver());
                 //Stage stage = (Stage) getScene().getWindow();
                 Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
                 //Writing CSV file
-                if(gameType == GameType.AI_V_AI) {
+                if (gameType == GameType.AI_V_AI) {
                     AiAiGame aiAiGame = (AiAiGame) game;
-                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+                    //handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
                     handle.aiVsAiCsvWrite();
-                }
-                else if(gameType == GameType.HUMAN_V_AI){
+                } else if (gameType == GameType.HUMAN_V_AI) {
                     AIGame aiGame = (AIGame) game;
                     handle = new csvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
                     handle.addToCsv();
-                }
-                else {
+                } else {
                     handle = new csvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
                     handle.addToCsv();
                 }
-
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
+                game.setGameOver(false);
             }
+
+//            if (game.getCurrentState().getGameOver() != 0) {
+//
+//                //showEndGame(logic.game.getCurrentState().getGameOver());
+//                //Stage stage = (Stage) getScene().getWindow();
+//                Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
+//                //Writing CSV file
+//                if(gameType == GameType.AI_V_AI) {
+//                    AiAiGame aiAiGame = (AiAiGame) game;
+//                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+//                    handle.aiVsAiCsvWrite();
+//                }
+//                else if(gameType == GameType.HUMAN_V_AI){
+//                    AIGame aiGame = (AIGame) game;
+//                   handle = new csvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
+//                    handle.addToCsv();
+//                }
+//                else {
+//                    handle = new csvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
+//                    handle.addToCsv();
+//                }
+//
+//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
+//            }
         }
     }
 

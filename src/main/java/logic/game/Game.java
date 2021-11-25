@@ -82,6 +82,7 @@ public abstract class Game {
     public boolean isGameOver() {
         return gameDone;
     }
+    public void setGameOver(boolean newGame) { gameDone = newGame;}
 
     protected void processCastling() {
         //check if castling was performed
