@@ -11,9 +11,6 @@ public class Board0x88 extends Board {
 
     static Map<Integer, Integer> boardIndexMap = new HashMap<>();
 
-    static String tricky = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
-    static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-
     static {
         //populate the boardIndexMap
         for (int i = 0; i < 8; i++) {
@@ -32,6 +29,7 @@ public class Board0x88 extends Board {
     }
 
     public Board0x88() {
+        super();
         board = new Piece[128];
         for (int i = 0x00; i < board.length; i++) {
             if ((i & 0x88) == 0)
@@ -44,10 +42,12 @@ public class Board0x88 extends Board {
     public Board0x88(String FEN) {
         this();
         loadFromFEN(FEN);
+        this.setFEN(FEN);
     }
 
     //easy cloning of logic.board
     public Board0x88(Piece[] board) {
+        super();
         this.board = Arrays.copyOf(board, board.length);
     }
 

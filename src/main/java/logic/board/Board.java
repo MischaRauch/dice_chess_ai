@@ -8,6 +8,8 @@ import java.util.EnumSet;
 
 public abstract class Board {
 
+    private String FEN;
+
     public abstract void removePiece(Square location);
 
     public abstract boolean isEmpty(Square square);
@@ -63,5 +65,11 @@ public abstract class Board {
 
     public abstract void printBoard();
 
+    public String getFEN() {
+        return FEN;
+    }
 
+    public void setFEN(String FEN) {
+        this.FEN = FEN;
+    }
 }

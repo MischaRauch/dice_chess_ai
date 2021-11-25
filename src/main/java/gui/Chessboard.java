@@ -59,7 +59,7 @@ public class Chessboard extends GridPane {
     //This stuff gets called after the constructor has finished loading the FXML file
     @FXML
     void initialize() {
-        loadBoard(Game.openingFEN);
+        loadBoard(Game.getInstance().getFEN());
     }
 
     //populates the GridPane (which is actually this class) with Tile objects
@@ -113,7 +113,7 @@ public class Chessboard extends GridPane {
             Tile origin = getTileAt(8 - move.getOrigin().getRank(), move.getOrigin().getFile());
             Tile destination = getTileAt(8 - move.getDestination().getRank(), move.getDestination().getFile());
 
-            if ((destination.getPiece() != Piece.EMPTY) && (destination.getPiece().getColor() != origin.getPiece().getColor())) {
+            if ((destination.getPiece() != Piece.EMPTY) && (destination.getPiece().getColor() != origin.getPiece().getColor()) && !move.isPromotionMove()) {
                 //capture piece so move piece to the flowpanel
                 //System.out.println("tile not empty and tile color not selected color");
                 MainContainerController.getInstance().movePieceOut(destination.getPiece(), destination.getPiece().getColor());

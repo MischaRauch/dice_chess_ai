@@ -14,11 +14,13 @@ import static logic.enums.Side.*;
 
 public abstract class Game {
 
-    public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //public static String openingFEN = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
+    private String FEN;
     protected static Game CURRENT_GAME;
 
-    protected final Stack<State> previousStates;
-    protected final Stack<State> redoStates;
+    protected final Stack<State> previousStates = new Stack<>();
+    protected final Stack<State> redoStates = new Stack<>();
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
     protected boolean gameOver = false;
@@ -35,21 +37,14 @@ public abstract class Game {
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadBlackPieces = new Stack<>();
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadWhitePieces = new Stack<>();
 
-    public Game() {
-        this(openingFEN);
-        System.out.println("GAME const default");
-        numTurns = 0;
-    }
-
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
-        previousStates = new Stack<>();
-        redoStates = new Stack<>();
         CURRENT_GAME = this;
-        numTurns = 0;
+        this.FEN=initialPosition;
         System.out.println("GAME const fen");
     }
+
 
     public void undoState() {
         if (!previousStates.isEmpty()) {
@@ -74,9 +69,14 @@ public abstract class Game {
         Board board = currentState.getBoard();
         Piece destPiece = board.getPieceAt(move.getDestination());
         if (destPiece.getType() == KING) {
+            System.out.println("gameDone = true");
             gameDone = true;
             winner = move.getSide();
         }
+//        if (currentState.getKingCount(currentState.getPieceAndSquare())!=2) {
+//            gameDone = true;
+//            winner = move.getSide();
+//        }
     }
 
     public boolean isGameOver() {
@@ -154,5 +154,7 @@ public abstract class Game {
     public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getDeadWhitePieces() {
         return deadWhitePieces;
     }
-
+    public String getFEN() {
+        return FEN;
+    }
 }
