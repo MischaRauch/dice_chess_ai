@@ -1,5 +1,6 @@
 package logic.game;
 
+import gui.controllers.MainContainerController;
 import logic.PieceAndSquareTuple;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -24,6 +25,7 @@ public class HumanGame extends Game {
             State newState = currentState.applyMove(move);
             previousStates.push(currentState);
 
+            checkGameOver(move);
             // update pieceAndSquare in state
 //            updatePieceAndSquareState(newState,move);
             newState.printPieceAndSquare();
@@ -34,7 +36,7 @@ public class HumanGame extends Game {
             // could also update pieceAndSquare here idk if it would make a difference
 
             processCastling();
-
+            MainContainerController.getInstance().updateTurn(currentState.getColor());
         } else {
             move.setInvalid();
         }

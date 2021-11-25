@@ -66,7 +66,6 @@ public class LegalMoveEvaluator {
                         if (move.getDiceRoll() != 1 && move.getDiceRoll() != 6) {
                             //if dice roll is not pawn or king, then automatically promote piece
                             move.promotionPiece = move.getPiece().promote(move.getDiceRoll());
-                            System.out.println();
                         } else if (!isAi) {
                             //ask user what they want to promote to in case of pawn or king dice roll
                             move.promotionPiece = (Piece) Platform.enterNestedEventLoop(new PromotionPrompt(move.getPiece().getColor()));
@@ -170,6 +169,7 @@ public class LegalMoveEvaluator {
         return false; // meaning not even on same rank, file or diagonal
     }
 
+    //TODO: (Bug) castling is disabled even in case of invalid move
     public boolean isLegalRookMove() {
         if (isActualMove) {
             if (state.isLongCastlingWhite() || state.isLongCastlingBlack() || state.isShortCastlingBlack() || state.isShortCastlingWhite()) {
@@ -366,7 +366,7 @@ public class LegalMoveEvaluator {
                         return true;
                     }
                 }
-            } else if ((move.getPiece() == Piece.WHITE_KING)) {
+            } else if (move.getPiece() == Piece.BLACK_KING) {
                 if (move.getOrigin().getSquareNumber() == 116) {
                     if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingBlack()) {
                         if (isActualMove) {

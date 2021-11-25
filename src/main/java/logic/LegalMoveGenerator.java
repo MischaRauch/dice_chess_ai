@@ -13,6 +13,7 @@ import java.util.List;
 import static logic.enums.Piece.EMPTY;
 import static logic.enums.Piece.getDiceFromPiece;
 import static logic.enums.Square.INVALID;
+import static logic.enums.Square.getSquare;
 
 public class LegalMoveGenerator {
 
@@ -50,7 +51,16 @@ public class LegalMoveGenerator {
         return legalMoves;
     }
 
-    public List<Square> getMoves(State state, Square origin, Piece piece) {
+    //TODO: method more or less copied from AIPlayer class which is more update to date with better move gen, so this is outdated for now
+    /**
+     * Motivation for this method is to avoid the pitfalls of running the legal move eval on every possible move, due to how the
+     * legal move eval creates GUI prompts and stores static variables which could affect the state of the game unintentionally
+     * @param state Current game state
+     * @param origin Square at which piece in question is located on
+     * @param piece The piece whose legal moves should be retrieved from
+     * @return List of Square enums corresponding to the legal move destinations of that Piece
+     */
+    public static List<Square> getMoves(State state, Square origin, Piece piece) {
         List<Square> validMoves = new LinkedList<>();
         Board board = state.getBoard();
 
@@ -77,7 +87,44 @@ public class LegalMoveGenerator {
                 }
             }
 
-            case KNIGHT, KING -> {
+            case KING -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+                //CHECK FOR CASTLING
+                if (piece.getColor() == Side.WHITE) {
+                    if (origin.getSquareNumber() == 4) {
+                        //SHORT WHITE
+                        if (board.isEmpty(origin.getSquareRight()) && board.isEmpty(getSquare(6)) && state.isShortCastlingWhite()) {
+                            validMoves.add(getSquare(6));
+                        }
+                        //LONG WHITE
+                        if (board.isEmpty(origin.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
+                            validMoves.add(getSquare(2));
+                        }
+                    }
+                }
+                else {
+                    if (origin.getSquareNumber() == 116) {
+                        //SHORT BLACK
+                        if (board.isEmpty(origin.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
+                            validMoves.add(getSquare(118));
+                        }
+                        //LONG BLACK
+                        if (board.isEmpty(origin.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
+                            validMoves.add(getSquare(114));
+                        }
+                    }
+                }
+            }
+
+            case KNIGHT -> {
                 for (int offset : piece.getOffsets()) {
                     if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
                         Square target = Square.getSquare(origin.getSquareNumber() + offset);

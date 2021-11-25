@@ -29,6 +29,8 @@ import logic.player.RandomMovesPlayer;
 import java.io.IOException;
 import java.util.Stack;
 
+import static logic.enums.Side.WHITE;
+
 public class MainContainerController extends AnchorPane {
 
     public static boolean inputBlock = false;
@@ -36,26 +38,12 @@ public class MainContainerController extends AnchorPane {
     public static AnchorPane modal;
 
     private static MainContainerController instance;
-    private final Stack<String> guiStringHistoryOfPreviousMoves = new Stack<>();
-    private final Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
+
     public GameType type;
     private Chessboard board;
-    @FXML
-    private Button undoButton;
-    @FXML
-    private Button redoButton;
-    @FXML
-    private ImageView diceImage;
-    @FXML
-    private VBox moveHistory;
-    @FXML
-    private VBox chessBoardContainer;
-    @FXML
-    private FlowPane whiteGraveyard;
-    @FXML
-    private FlowPane blackGraveyard;
-    @FXML
-    private AnchorPane modalDialog;
+
+    private final Stack<String> guiStringHistoryOfPreviousMoves = new Stack<>();
+    private final Stack<String> guiStringHistoryOfRedoMoves = new Stack<>();
 
     public MainContainerController(GameType type) throws IOException {
         this.type = type;
@@ -66,9 +54,32 @@ public class MainContainerController extends AnchorPane {
         loader.load();
     }
 
-    public static MainContainerController getInstance() {
-        return instance;
-    }
+    @FXML
+    private Button undoButton;
+
+    @FXML
+    private Button redoButton;
+
+    @FXML
+    private ImageView diceImage;
+
+    @FXML
+    private VBox moveHistory;
+
+    @FXML
+    private VBox chessBoardContainer;
+
+    @FXML
+    private FlowPane whiteGraveyard;
+
+    @FXML
+    private FlowPane blackGraveyard;
+
+    @FXML
+    private AnchorPane modalDialog;
+
+    @FXML
+    private Label turnIndicator;
 
     @FXML
     void rollDice(ActionEvent event) {
@@ -84,6 +95,7 @@ public class MainContainerController extends AnchorPane {
         switch (type) {
             case AI_V_AI -> {
                 Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE), new MiniMaxPlayer(100, Side.BLACK));
+                //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
             }
             case HUMAN_V_AI -> {
                 Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
@@ -106,6 +118,8 @@ public class MainContainerController extends AnchorPane {
         redoButton.setOnMouseExited(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMousePressed(event -> redoButton.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
         redoButton.setOnMouseReleased(event -> redoButton.setStyle("-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;"));
+
+        updateTurn(WHITE);
     }
 
     @FXML
@@ -135,7 +149,7 @@ public class MainContainerController extends AnchorPane {
     public void movePieceOut(Piece piece, Side color) {
         ImageView view;
         Game game = Game.getInstance();
-        if (color == Side.WHITE) {
+        if (color == WHITE) {
             view = piece != Piece.EMPTY ? ChessIcons.load(piece) : new ImageView();
             /// it was setInFlowPaneB, fixed, was this intentional?
             setInFlowPaneW(view);
@@ -181,7 +195,7 @@ public class MainContainerController extends AnchorPane {
         if (!game.getRedoDeadWhitePieces().isEmpty()) {
             if (game.getRedoDeadWhitePieces().peek().getTurnDeath() == guiStringHistoryOfPreviousMoves.size()) {
                 //move the piece out that was dead
-                movePieceOut(game.getRedoDeadWhitePieces().peek().getPiece(), Side.WHITE);
+                movePieceOut(game.getRedoDeadWhitePieces().peek().getPiece(), WHITE);
                 PieceAndTurnDeathTuple temp = game.getRedoDeadWhitePieces().peek();
                 // add the piece that is dead again into the dead pieces, now it's dead again
                 game.getDeadWhitePieces().push(temp);
@@ -225,9 +239,14 @@ public class MainContainerController extends AnchorPane {
     //used in ChessBoard
     //adds move string to previous moves stack
     public void setInScrollPane(Move move) {
+//        guiStringHistoryOfPreviousMoves.push(move.toString());
         guiStringHistoryOfPreviousMoves.push(move.stylized());
         Label newL = new Label(move.stylized());
         newL.setFont(new Font("Arial", 16));
+        ImageView pieceIcon = ChessIcons.load(move.getPiece());
+        pieceIcon.setFitWidth(20);
+        pieceIcon.setFitHeight(20);
+        newL.setGraphic(pieceIcon);
         moveHistory.getChildren().add(newL);
     }
 
@@ -238,8 +257,8 @@ public class MainContainerController extends AnchorPane {
             String temp = guiStringHistoryOfRedoMoves.peek();
             Label newL = new Label(temp);
             newL.setFont(new Font("Arial", 16));
+            //newL.setGraphic(ChessIcons.load(move.getPiece()));
             moveHistory.getChildren().add(newL);
-            //moveHistory.setAlignment(Pos.TOP_CENTER);
             guiStringHistoryOfPreviousMoves.push(temp);
             guiStringHistoryOfRedoMoves.pop();
         }
@@ -258,6 +277,17 @@ public class MainContainerController extends AnchorPane {
 
     public void setDiceImage(ImageView img) {
         diceImage.setImage(img.getImage());
+    }
+
+    public void updateTurn(Side color) {
+        if (color == WHITE)
+            turnIndicator.setText("White's");
+        else
+            turnIndicator.setText("Black's");
+    }
+
+    public static MainContainerController getInstance() {
+        return instance;
     }
 
 }
