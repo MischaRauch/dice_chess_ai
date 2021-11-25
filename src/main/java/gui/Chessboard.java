@@ -1,9 +1,7 @@
 package gui;
 
-import logic.enums.GameType;
-import logic.enums.Piece;
-import logic.enums.Square;
-import logic.enums.Validity;
+import dataCollection.csvHandler;
+import logic.enums.*;
 import logic.game.*;
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
@@ -35,6 +33,7 @@ public class Chessboard extends GridPane {
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
+    private csvHandler handle;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
@@ -42,6 +41,12 @@ public class Chessboard extends GridPane {
         game = Game.getInstance();
         this.gameType = type;
         chessboard = this;
+        handle = new csvHandler();
+
+        if(type == GameType.AI_V_AI)
+            handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
+        else
+            handle.readTheCsv();
 
         setStyle("-fx-background-color: #ffffff");
 
@@ -99,6 +104,8 @@ public class Chessboard extends GridPane {
 
     public void updateGUI(Move move) {
         if (move.getStatus() == Validity.VALID) {
+
+            game.setNumTurns(game.getNumTurns() + 1);
 
             MainContainerController.getInstance().setInScrollPane(move);
             //mainContainerController.setGameForTurn(logic.game);
@@ -159,6 +166,29 @@ public class Chessboard extends GridPane {
             if (game.isGameOver())
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
 
+            if (game.getCurrentState().getGameOver() != 0) {
+
+                //showEndGame(logic.game.getCurrentState().getGameOver());
+                //Stage stage = (Stage) getScene().getWindow();
+                Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
+                //Writing CSV file
+                if(gameType == GameType.AI_V_AI) {
+                    AiAiGame aiAiGame = (AiAiGame) game;
+                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+                    handle.aiVsAiCsvWrite();
+                }
+                else if(gameType == GameType.HUMAN_V_AI){
+                    AIGame aiGame = (AIGame) game;
+                    handle = new csvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
+                    handle.addToCsv();
+                }
+                else {
+                    handle = new csvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
+                    handle.addToCsv();
+                }
+
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
+            }
         }
     }
 
@@ -257,7 +287,7 @@ public class Chessboard extends GridPane {
                             tile.select();
 
                             //color legal moves green
-                            List<Square> legalMoves = LegalMoveGenerator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
+                            List<Square> legalMoves = generator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
                             for (Square s : legalMoves)
                                 tileBoard[8 - s.getRank()][s.getFile()].colorGreen();
                         }

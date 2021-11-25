@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static logic.enums.Side.WHITE;
+import dataCollection.csvHandler;
 
 public class GameOverScreen extends AnchorPane {
 
@@ -36,6 +37,7 @@ public class GameOverScreen extends AnchorPane {
     @FXML
     void initialize() {
         resultLabel.setText(winner == WHITE ? "White wins!" : "Black wins!");
+
     }
 
     @FXML
@@ -57,6 +59,16 @@ public class GameOverScreen extends AnchorPane {
         //TODO: reset all the static variables in State and Game
         Stage stage = (Stage) playAgainButton.getScene().getWindow();
         Parent root = new MainContainerController(MainContainerController.getInstance().type);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+    }
+
+    @FXML
+    private Button historyButton;
+    @FXML
+    void historyButtonAction(ActionEvent evenrt) throws IOException {
+        Stage stage = (Stage) historyButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/viewData.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }

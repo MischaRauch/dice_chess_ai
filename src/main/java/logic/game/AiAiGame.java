@@ -28,6 +28,9 @@ public class AiAiGame extends Game {
         this.played = played;
     }
 
+    public AIPlayer getAIPlayerWhite(){return white;}
+    public AIPlayer getAIPlayerBlack(){return black;}
+
     public void start() {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
@@ -65,7 +68,7 @@ public class AiAiGame extends Game {
             // main thread sleeps
             try {
                 // the higher the depth the more time AI needs or game just freezes
-                Thread.sleep(300);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

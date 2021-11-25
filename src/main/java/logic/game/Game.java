@@ -21,6 +21,8 @@ public abstract class Game {
     protected final Stack<State> redoStates;
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
+    protected boolean gameOver = false;
+    protected int numTurns;
 
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
@@ -36,6 +38,7 @@ public abstract class Game {
     public Game() {
         this(openingFEN);
         System.out.println("GAME const default");
+        numTurns = 0;
     }
 
     public Game(String initialPosition) {
@@ -44,6 +47,7 @@ public abstract class Game {
         previousStates = new Stack<>();
         redoStates = new Stack<>();
         CURRENT_GAME = this;
+        numTurns = 0;
         System.out.println("GAME const fen");
     }
 
@@ -51,6 +55,7 @@ public abstract class Game {
         if (!previousStates.isEmpty()) {
             redoStates.push(currentState);              //push current state to redo stack in case user wants to redo
             currentState = previousStates.pop();        //pop the previous state off the stack
+            numTurns--;
         }
     }
 
@@ -58,6 +63,7 @@ public abstract class Game {
         if (!redoStates.isEmpty()) {
             previousStates.push(currentState);          //add current state to previous states stack
             currentState = redoStates.pop();            //update the current state
+            numTurns++;
         }
     }
 
@@ -112,6 +118,9 @@ public abstract class Game {
     public Side getTurn() {
         return currentState.getColor();
     }
+
+    public int getNumTurns(){ return numTurns; }
+    public void setNumTurns(int numTurns){ this.numTurns = numTurns;}
 
     public int getDiceRoll() {
         return currentState.getDiceRoll();
