@@ -1,5 +1,6 @@
 package logic;
 
+import logic.ML.OriginAndDestSquare;
 import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
@@ -16,7 +17,7 @@ import static logic.enums.Square.INVALID;
 public class LegalMoveGenerator {
 
     //for GUI
-    public List<Square> getLegalMoves(logic.State state, Square squareOrigin, Piece piece, Side side) {
+    public static List<Square> getLegalMoves(logic.State state, Square squareOrigin, Piece piece, Side side) {
         LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
         ArrayList<Square> legalMoves = new ArrayList<>();
         for (int file = 0; file < 8; file++) {
@@ -24,6 +25,25 @@ public class LegalMoveGenerator {
                 // TODO Test this: Passing 99999 or arbitrary number as move diceroll get's neglected instead of 1 for diceroll causes index out of bounds in evaluator
                 if(evaluator.isLegalMove(new Move(piece,squareOrigin,Square.getSquare(rank,file),getDiceFromPiece(piece),side),state,false,true)) {
                     legalMoves.add(Square.getSquare(rank,file));
+                }
+            }
+        }
+        return legalMoves;
+    }
+
+    public static ArrayList<OriginAndDestSquare> getAllLegalMoves(State state, Side side) { // for ML
+
+        ArrayList<OriginAndDestSquare> legalMoves = new ArrayList<>();
+        OriginAndDestSquare originAndDestSquare;
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                Piece p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
+                Square origin = Square.getSquare(rank, file);
+                ArrayList<Square> moves = (ArrayList<Square>) getLegalMoves(state, origin, p, side); // may cause error?
+
+                for (int i=0; i<moves.size(); i++) {
+                    originAndDestSquare = new OriginAndDestSquare(origin, moves.get(i));
+                    legalMoves.add(originAndDestSquare);
                 }
             }
         }

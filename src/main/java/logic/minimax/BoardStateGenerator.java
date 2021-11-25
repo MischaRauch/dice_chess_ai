@@ -1,6 +1,8 @@
 package logic.minimax;
 
 import logic.LegalMoveGenerator;
+import logic.ML.OriginAndDestSquare;
+import logic.Move;
 import logic.PieceAndSquareTuple;
 import logic.State;
 import logic.enums.Piece;
@@ -13,6 +15,25 @@ import java.util.stream.Collectors;
 
 // generates all possible states of the board for n turns ahead
 public class BoardStateGenerator {
+
+    public static ArrayList<State> getPossibleBoardStates(State state, Side side) { // for ML
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
+        ArrayList<State> answer = new ArrayList<State>();
+        OriginAndDestSquare tempMove;
+        State tempState;
+        Move move1;
+
+        for (int i=0; i<originAndDestSquares.size(); i++) {
+
+            tempMove = originAndDestSquares.get(i);
+            Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
+
+            move1 = new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), side);
+            tempState = state.applyMove(move1);
+            answer.add(tempState);
+        }
+        return answer;
+    }
 
     // move piece and return array of all possible states for all possible moves a given piece can make taking into account its origin square
     public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {

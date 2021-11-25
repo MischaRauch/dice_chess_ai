@@ -2,12 +2,11 @@ package logic.ML;
 
 import logic.Move;
 import logic.State;
-import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.expectiminimax.BoardStateEvaluator;
 import logic.game.Game;
+import logic.minimax.BoardStateGenerator;
 
 import java.util.*;
 
@@ -15,13 +14,14 @@ import java.util.*;
 public class DQL {
 
     State state;
+    Qtable currentQtable;
 
     public void algo(Side side, int depth) {
-        Qtable currentQtable = new Qtable(side , depth);
+        currentQtable = new Qtable(side , depth);
         int stateSize = currentQtable.stateSpace.size();
         int actionSize = 4672; // 8x8x(8x7+8+9), this is the total possible actions a state can have at most
 
-        int [][] Qvalues = new int [stateSize][actionSize]; // save the q-values in a separate table
+        double [][] Qvalues = new double[stateSize][actionSize]; // save the q-values in a separate table
         Arrays.fill(Qvalues, 0); // fill the table with 0
 
         int numOfEpisodes = 400;
@@ -43,7 +43,7 @@ public class DQL {
         Random rnd = new Random();
         Move action = null;
 
-        for (int i=0; i < numOfEpisodes; i++) { // this will be handled when changed to DQL
+        for (int i=0; i < numOfEpisodes; i++) {
 
             currentState = initialState;
 
@@ -55,23 +55,31 @@ public class DQL {
 
                 // take learned path or explore new actions
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
-                    // TODO, insert random move generator
-                    action = new Move(Piece.WHITE_KNIGHT, Square.b2, Square.a3, 4, Side.WHITE);
+                    action = currentQtable.randomMoveGenerator(currentState);
                     // (Piece piece, Square origin, Square destination, int diceRoll, Side side)
                 } else {
 
-                    int index = argmax(Qvalues, 0);
-                    currentQtable.accessStateValue(currentState);
+                    int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState));
+                    ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState);
+                    OriginAndDestSquare tempMove = originAndDestSquares.get(index);
+                    Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
 
-                    action = new Move(Piece.WHITE_KNIGHT, Square.b2, Square.a3, 4, Side.WHITE);
+                    action = new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), side);
                 }
 
-                // TODO, apply chosen action and return the next state, reward and true if the episode is ended
+                //apply chosen action and return the next state, reward and true if the episode is ended
                 State newState = state.applyMove(action);
-                // update value of Qtable
-                currentQtable[currentState, action] = (1-learningRate) * currentQtable[currentState, action] +learningRate*(reward + gamma* maxValue(Qvalues[newState]));
-                episodesTotalReward += reward;
+                reward = BoardStateGenerator.getBoardEvaluationNumber(newState); // TODO, to be added
+                finished = didStateEnd(newState);
 
+                // update value of Qtable
+                int indexOfState = currentQtable.accessStateIndex(currentState);
+                OriginAndDestSquare tempOriginAndDestSquare = new OriginAndDestSquare(action.getOrigin(), action.getDestination());
+                int indexOfAction = currentQtable.accessActionIndex(currentState, tempOriginAndDestSquare);
+
+                Qvalues[indexOfState][indexOfAction] = (1-learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate*(reward + gamma* maxValue(Qvalues, currentQtable.accessStateIndex(currentState)));
+
+                episodesTotalReward += reward;
                 currentState = newState;
                 if (finished) {
                     break;
@@ -86,18 +94,31 @@ public class DQL {
 
     }
 
-    public int argmax (int [][] qvalues, int stateIndex) {
-        int count = 0;
+    public boolean didStateEnd(State state) {
+        return (currentQtable.checkIfStateLastDepth(state) || currentQtable.checkIfKingExist(state));
+    }
+
+    public int argmax (double [][] qvalues, int stateIndex) {
+        double count = 0;
+        int indexOfMaxAction = -1;
+
+        for(int i = 0; i < qvalues[stateIndex].length; i++){
+            if(qvalues[stateIndex][i] > count){
+                count = qvalues[stateIndex][i];
+                indexOfMaxAction = i;
+            }
+        }
+       return indexOfMaxAction;
+    }
+
+    public double maxValue (double [][] qvalues, int stateIndex) {
+        double count = 0;
 
         for(int i = 0; i < qvalues[stateIndex].length; i++){
             if(qvalues[stateIndex][i] > count){
                 count = qvalues[stateIndex][i];
             }
         }
-       return count;
-    }
-
-    public int maxValue (State state) {
-        return 0;
+        return count;
     }
 }
