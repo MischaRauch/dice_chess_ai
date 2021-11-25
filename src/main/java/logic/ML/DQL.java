@@ -46,6 +46,7 @@ public class DQL {
         for (int i=0; i < numOfEpisodes; i++) { // this will be handled when changed to DQL
 
             currentState = initialState;
+
             double reward = 0;
             double episodesTotalReward = 0;
             boolean finished = false; // turn to true if king captured

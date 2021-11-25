@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class Qtable {
 
-    HashMap<Piece, ArrayList<Integer>> actionSpace;
-    HashMap<State, PieceAndMove> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
+    ArrayList<originAndDest> actionSpace;
+    HashMap<State, ArrayList<originAndDest>> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
     ArrayList<State> stateSpace;
     Side currentSide;
     PieceAndMove pieceAndMove;
@@ -83,8 +83,12 @@ public class Qtable {
         return null;
     }
 
-    // TODO, here can possibly prune the moves with getting validmoves method
+    // TODO, here can possibly prune the moves with getting valid moves method
     public HashMap<Piece, ArrayList<Integer>> actionPruning(State state) { // remove actions that's not possible for that state
         return null;
+    }
+
+    public ArrayList<originAndDest> getActionSpace(Side side) {
+
     }
 }
