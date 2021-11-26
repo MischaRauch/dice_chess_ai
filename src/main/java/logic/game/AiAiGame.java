@@ -1,6 +1,7 @@
 package logic.game;
 
 import dataCollection.CsvHandler;
+import logic.Config;
 import logic.enums.Side;
 import logic.enums.Validity;
 import gui.controllers.MainContainerController;
@@ -19,7 +20,7 @@ public class AiAiGame extends Game {
 
     private final AIPlayer white, black;
     //will play AIvsAI 50 times
-    private int playTill = 49;
+    private int playTill = Config.SIMULATION_SIZE;
     private int played = 0;
     private CsvHandler handle;
 
@@ -76,7 +77,7 @@ public class AiAiGame extends Game {
             // main thread sleeps
             try {
                 // the higher the depth the more time AI needs or game just freezes
-                Thread.sleep(1);
+                Thread.sleep(Config.THREAD_DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

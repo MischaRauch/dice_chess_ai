@@ -22,7 +22,8 @@ public class AIGame extends HumanGame {
     }
 
     public AIPlayer getAiPlayerAiGame(){ return aiPlayer;}
-    public Side getAiPlayerSide(){ return  Side.BLACK;}
+    //public Side getAiPlayerSide(){ return  Side.BLACK;}
+    public Side getAiPlayerSide(){ return aiPlayer.getColor();}
 
     //should ideally be called immediately in the GUI controller after the makeHumanMove returns
     //actually could be done just using Player objects instead of this class probably

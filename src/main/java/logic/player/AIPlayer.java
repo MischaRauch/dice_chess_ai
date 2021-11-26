@@ -209,4 +209,8 @@ public abstract class AIPlayer {
         }
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
+
+    public Side getColor() {
+        return color;
+    }
 }
