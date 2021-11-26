@@ -1,13 +1,11 @@
 package dataCollection;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import gui.controllers.viewDataController;
-import logic.enums.GameType;
+import gui.controllers.ViewDataController;
 
-public class csvHandler extends viewDataController{
+public class CsvHandler extends ViewDataController {
     private SimpleStringProperty type;
     private SimpleStringProperty alg;
     private SimpleStringProperty algTwo;
@@ -15,9 +13,9 @@ public class csvHandler extends viewDataController{
     private SimpleStringProperty winner;
     private SimpleIntegerProperty turns;
 
-    public csvHandler(){}
+    public CsvHandler(){}
 
-    public csvHandler(String type, String alg, String algSide, String winner, int turns) {
+    public CsvHandler(String type, String alg, String algSide, String winner, int turns) {
         this.type = new SimpleStringProperty(type);
         this.alg = new SimpleStringProperty(alg);
         this.algSide = new SimpleStringProperty(algSide);
@@ -25,7 +23,7 @@ public class csvHandler extends viewDataController{
         this.turns = new SimpleIntegerProperty(turns);
     }
 
-    public csvHandler(String alg, String algTwo, String winner, int turns){
+    public CsvHandler(String alg, String algTwo, String winner, int turns){
         this.alg = new SimpleStringProperty(alg);
         this.algTwo = new SimpleStringProperty(algTwo);
         this.winner = new SimpleStringProperty(winner);

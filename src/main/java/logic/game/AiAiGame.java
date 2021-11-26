@@ -1,7 +1,6 @@
 package logic.game;
 
-import dataCollection.csvHandler;
-import logic.enums.Piece;
+import dataCollection.CsvHandler;
 import logic.enums.Side;
 import logic.enums.Validity;
 import gui.controllers.MainContainerController;
@@ -11,12 +10,10 @@ import javafx.application.Platform;
 import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
 import logic.player.QTablePlayer;
 
-import static logic.enums.Side.BLACK;
-import static logic.enums.Side.WHITE;
+import static logic.enums.Side.*;
 
 public class AiAiGame extends Game {
 
@@ -24,7 +21,7 @@ public class AiAiGame extends Game {
     //will play AIvsAI 50 times
     private int playTill = 49;
     private int played = 0;
-    private csvHandler handle;
+    private CsvHandler handle;
 
 
     public AiAiGame(AIPlayer white, AIPlayer black) {
@@ -98,8 +95,16 @@ public class AiAiGame extends Game {
     }
 
     public void updateCsvFile(AiAiGame game ) {
-        Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
-        handle = new csvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+        //I prefer game over to not be an integer property of the State class but instead a Side from the Game class
+        //Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK; -> old version
+
+        //better used this: since I've deleted all game over stuff from the State class:
+        //Side winner = game.isGameOver() ? game.getWinner() : NEUTRAL;
+
+        //do we even need to check if game is over at this point? Or does this method only run when games are finished?
+        //in which case:
+        Side winner = game.getWinner();
+        handle = new CsvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
         handle.aiVsAiCsvWrite();
     }
 }

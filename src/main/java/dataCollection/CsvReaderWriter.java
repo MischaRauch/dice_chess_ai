@@ -3,9 +3,9 @@ package dataCollection;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
-import gui.controllers.viewDataController;
+import gui.controllers.ViewDataController;
 
-public class CsvReaderWriter extends viewDataController {
+public class CsvReaderWriter extends ViewDataController {
 
     public static void writeCsv(String filePath){
 

@@ -18,7 +18,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class State {
 
-    public int gameOver;
     public Square castling = Square.INVALID;
     public Board board;
     public int diceRoll;
@@ -117,13 +116,6 @@ public class State {
         return this.board;
     }
 
-    public int getGameOver() {
-        return gameOver;
-    }
-//
-//    public void setGameOver(int gameOver) {
-//        this.gameOver = gameOver;
-//    }
     //Getter for castling
     public boolean isApplyCastling() {
         return applyCastling;
@@ -184,15 +176,6 @@ public class State {
             }
         }
         //extract castling en passant dice roll
-
-        //check if king got captured
-//        if (board.getPieceAt(move.getDestination()) == Piece.WHITE_KING) {
-//            gameOver = -1;
-//        }
-//
-//        if (board.getPieceAt(move.getDestination()) == Piece.BLACK_KING) {
-//            gameOver = 1;
-//        }
 
         int newRoll = Dice.roll();
         System.out.println("State; applyMove; Dice.roll(): " + newRoll);
@@ -366,10 +349,6 @@ public class State {
     public Square getEnPassant() {
         return enPassant;
     }
-
-//    public static void setGameOver(int gameOver) {
-//        State.gameOver = gameOver;
-//    }
 
     public void setCastling(Square castling) {
         this.castling = castling;

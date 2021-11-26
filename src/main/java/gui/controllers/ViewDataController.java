@@ -18,7 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class viewDataController implements Initializable {
+public class ViewDataController implements Initializable {
 
 
     @FXML

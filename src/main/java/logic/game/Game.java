@@ -21,8 +21,13 @@ public abstract class Game {
     protected final Stack<State> redoStates;
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     protected State currentState;
-    protected boolean gameOver = false;
+    //protected boolean gameOver = false;
     protected int numTurns;
+
+    //this boolean determines if the game is finished
+    public boolean gameDone = false;
+    //This variable is the winner of the game, neutral by default
+    public Side winner = NEUTRAL;
 
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
@@ -67,9 +72,6 @@ public abstract class Game {
         }
     }
 
-    public boolean gameDone = false;
-    public Side winner = NEUTRAL;
-
     public void checkGameOver(Move move) {
         Board board = currentState.getBoard();
         Piece destPiece = board.getPieceAt(move.getDestination());
@@ -81,6 +83,10 @@ public abstract class Game {
 
     public boolean isGameOver() {
         return gameDone;
+    }
+
+    public Side getWinner() {
+        return winner;
     }
     public void setGameOver(boolean newGame) { gameDone = newGame;}
 
