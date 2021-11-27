@@ -133,9 +133,9 @@ public class Menu {
         return switch (player) {
             case "Random AI" -> new RandomMovesPlayer(color);
             case "Basic AI" -> new BasicAIPlayer(color);
-            case "MiniMax AI" -> new MiniMaxPlayer(9, color);
+            case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(11,color);
             default -> new RandomMovesPlayer(color);
         };
     }
