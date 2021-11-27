@@ -157,12 +157,6 @@ public class Chessboard extends GridPane {
                 }
             }
 
-//            if (game.getCurrentState().getGameOver() != 0) {
-//                //showEndGame(logic.game.getCurrentState().getGameOver());
-//                //Stage stage = (Stage) getScene().getWindow();
-//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
-//            }
-
             if (game.isGameOver()) {
                 //showEndGame(logic.game.getCurrentState().getGameOver());
                 //Stage stage = (Stage) getScene().getWindow();
@@ -181,6 +175,7 @@ public class Chessboard extends GridPane {
                     handle = new CsvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
                     handle.addToCsv();
                 }
+
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
                 game.setGameOver(false);
             }
