@@ -130,14 +130,6 @@ public class LegalMoveEvaluator {
 
         options.removeIf(option -> option == Square.INVALID);
 
-        //int i = 0;
-//        while (i < options.size()) {
-//            if (b.isOffBoard(options.get(i).getSquareNumber())) {
-//                options.remove(i);
-//            }
-//            i++;
-//        }
-
         int i = 0;
         while (i < options.size()) {
             if (options.get(i) == move.getDestination()) {

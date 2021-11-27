@@ -26,12 +26,12 @@ public class AiAiGame extends Game {
 
 
     public AiAiGame(AIPlayer white, AIPlayer black) {
-        super(openingFEN);
+        super();
         this.white = white;
         this.black = black;
     }
     public AiAiGame(AIPlayer white, AIPlayer black, int played) {
-        super(openingFEN);
+        super();
         this.white = white;
         this.black = black;
         this.played = played;

@@ -14,7 +14,7 @@ import static logic.enums.Side.*;
 
 public abstract class Game {
 
-    public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates;
@@ -41,9 +41,9 @@ public abstract class Game {
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadWhitePieces = new Stack<>();
 
     public Game() {
-        this(openingFEN);
+        this(Config.OPENING_FEN);
         System.out.println("GAME const default");
-        numTurns = 0;
+        //numTurns = 0;
     }
 
     public Game(String initialPosition) {
