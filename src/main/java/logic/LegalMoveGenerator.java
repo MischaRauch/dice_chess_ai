@@ -48,7 +48,7 @@ public class LegalMoveGenerator {
             case PAWN -> {
                 //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
                 Square naturalMove = Square.getSquare(origin.getSquareNumber() + piece.getOffsets()[0]);
-                if (board.isEmpty(naturalMove)) {
+                if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
                     validMoves.add(naturalMove);
 
                     //double jumping
@@ -58,11 +58,17 @@ public class LegalMoveGenerator {
                 }
 
                 for (int k = 1; k < 3; k++) {
+
                     if (!board.isOffBoard(origin.getSquareNumber() + piece.getOffsets()[k])) {
                         Square validTarget = Square.getSquare(origin.getSquareNumber() + piece.getOffsets()[k]);
 
                         if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
                             validMoves.add(validTarget);
+
+                        if (board.getPieceAt(validTarget) == EMPTY && state.getEnPassant() != INVALID) {
+                            if (state.getEnPassant() == validTarget)
+                                validMoves.add(state.getEnPassant());
+                        }
                     }
                 }
             }

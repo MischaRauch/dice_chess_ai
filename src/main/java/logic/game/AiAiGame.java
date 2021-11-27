@@ -11,7 +11,6 @@ import javafx.application.Platform;
 import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
 import logic.player.QTablePlayer;
 
@@ -26,12 +25,12 @@ public class AiAiGame extends Game {
     private CsvHandler handle;
 
 
-    public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
+    public AiAiGame(AIPlayer white, AIPlayer black) {
         super(FEN);
         this.white = white;
         this.black = black;
     }
-    public AiAiGame(AIPlayer white, AIPlayer black, int played, String FEN) {
+    public AiAiGame(AIPlayer white, AIPlayer black, int played) {
         super(FEN);
         this.white = white;
         this.black = black;
@@ -59,7 +58,11 @@ public class AiAiGame extends Game {
 
             State newState = currentState.applyMove(move);
             previousStates.push(currentState);
+
+            //need to check if the destination capture move was a king, and in the next state the state the king might
+            //be dead already. so we can't check it was captured
             checkGameOver(move);
+
             //after checking if king was captured, we can updated the currentState
             currentState = newState;
             move.setStatus(Validity.VALID);

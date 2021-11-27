@@ -18,6 +18,7 @@ public class Move {
 
     Side side;
     Validity status;
+
     public Square enPassant = Square.INVALID;
     boolean enPassantMove = false;
     boolean enPassantCapture = false;
@@ -85,6 +86,26 @@ public class Move {
 
     public Side getSide() {
         return side;
+    }
+
+    public Square getEnPassant() {
+        return enPassant;
+    }
+
+    public void setEnPassant(Square enPassant) {
+        this.enPassant = enPassant;
+    }
+
+    public boolean isEnPassantMove() {
+        return enPassantMove;
+    }
+
+    public void setEnPassantMove(boolean enPassantMove) {
+        this.enPassantMove = enPassantMove;
+    }
+
+    public void setEnPassantCapture(boolean enPassantCapture) {
+        this.enPassantCapture = enPassantCapture;
     }
 
     @Override

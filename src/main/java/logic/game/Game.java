@@ -14,9 +14,7 @@ import static logic.enums.Side.*;
 
 public abstract class Game {
 
-    //public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-    //public static String openingFEN = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
-    private String FEN;
+    public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates = new Stack<>();
@@ -42,14 +40,21 @@ public abstract class Game {
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadBlackPieces = new Stack<>();
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadWhitePieces = new Stack<>();
 
+    public Game() {
+        this(openingFEN);
+        System.out.println("GAME const default");
+        numTurns = 0;
+    }
+
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
+        previousStates = new Stack<>();
+        redoStates = new Stack<>();
         CURRENT_GAME = this;
         this.FEN=initialPosition;
         System.out.println("GAME const fen");
     }
-
 
     public void undoState() {
         if (!previousStates.isEmpty()) {
@@ -75,10 +80,6 @@ public abstract class Game {
             gameDone = true;
             winner = move.getSide();
         }
-//        if (currentState.getKingCount(currentState.getPieceAndSquare())!=2) {
-//            gameDone = true;
-//            winner = move.getSide();
-//        }
     }
 
     public boolean isGameOver() {

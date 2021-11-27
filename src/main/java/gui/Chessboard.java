@@ -59,7 +59,7 @@ public class Chessboard extends GridPane {
     //This stuff gets called after the constructor has finished loading the FXML file
     @FXML
     void initialize() {
-        loadBoard(Game.getInstance().getFEN());
+        loadBoard(Config.OPENING_FEN);
     }
 
     //populates the GridPane (which is actually this class) with Tile objects
@@ -181,6 +181,7 @@ public class Chessboard extends GridPane {
                     handle = new CsvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
                     handle.addToCsv();
                 }
+
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
                 game.setGameOver(false);
             }
