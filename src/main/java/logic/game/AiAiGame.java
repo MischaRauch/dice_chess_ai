@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
+import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
 import logic.player.QTablePlayer;
 
@@ -25,13 +26,13 @@ public class AiAiGame extends Game {
     private CsvHandler handle;
 
 
-    public AiAiGame(AIPlayer white, AIPlayer black) {
-        super(openingFEN);
+    public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
+        super(FEN);
         this.white = white;
         this.black = black;
     }
-    public AiAiGame(AIPlayer white, AIPlayer black, int played) {
-        super(openingFEN);
+    public AiAiGame(AIPlayer white, AIPlayer black, int played, String FEN) {
+        super(FEN);
         this.white = white;
         this.black = black;
         this.played = played;
@@ -45,20 +46,30 @@ public class AiAiGame extends Game {
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         while (!gameOver) {
+            //update the value for gameOver,so we eventually exit this loop
             Move move = nextPlayer.chooseMove(currentState);
-            State newState = currentState.applyMove(move);
-            previousStates.push(currentState);
+
+            // TODO MAKE evaluator legal move not modify the state for castling
+            //  the state should track all castling not the evaluator
+            if (evaluator.isLegalMove(move, currentState, true,true)) {
 
             //need to check if the destination capture move was a king, and in the next state the state the king might
-            //be dead already. so we can't check it was captured
-            checkGameOver(move);
+            //be dead already. so we can't check it was capture
+             /// TODO FIX BUG (if FEN loaded with only 2 kings game freezes)
 
+            State newState = currentState.applyMove(move);
+            previousStates.push(currentState);
+            checkGameOver(move);
             //after checking if king was captured, we can updated the currentState
             currentState = newState;
             move.setStatus(Validity.VALID);
 
             processCastling();
 
+            //MainContainerController.getInstance().updateTurn(currentState.getColor());
+            } else {
+                move.setInvalid();
+            }
             //update GUI, need to use Platform.runLater because we are in a separate thread here,
             //and the GUI can only be updated from the main JavaFX thread. So we queue the GUI updates here
             Platform.runLater(() -> {
@@ -88,7 +99,8 @@ public class AiAiGame extends Game {
 
         if (played < playTill) {
             //AiAiGame game = new AiAiGame(new BasicAIPlayer(WHITE), this.black, played +1);
-            AiAiGame game = new AiAiGame(new QTablePlayer(WHITE), new MiniMaxPlayer(10,BLACK), played +1);
+            AiAiGame game = new AiAiGame(this.white, this.black, played +1, this.getFEN());
+            //currentState.setGameOver(0);
             game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?
             updateCsvFile(game);
         }

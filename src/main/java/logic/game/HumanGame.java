@@ -18,6 +18,10 @@ public class HumanGame extends Game {
 
     private final boolean DEBUG = false;
 
+    public HumanGame(String FEN) {
+        super(FEN);
+    }
+
     // called for GUI to moves Tile
     public Move makeHumanMove(Move move) {
         if (evaluator.isLegalMove(move, currentState, true,false)) { //move legal

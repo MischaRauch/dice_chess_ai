@@ -1,4 +1,4 @@
-package logic.minimax;
+package logic.algorithms.minimax;
 
 import logic.Move;
 

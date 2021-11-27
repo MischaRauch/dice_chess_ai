@@ -18,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class State {
 
+    public int gameOver;
     public Square castling = Square.INVALID;
     public Board board;
     public int diceRoll;
@@ -37,8 +38,44 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         // TODO optional: add updatePieceAndSquareFromFen so we can load different states
-        initializePieceAndSquare();
+        //initializePieceAndSquare();
+        loadPieceAndSquareFromFEN(board.getFEN());
+        //loadPieceAndSquareFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1");
+        printPieceAndSquare();
         this.cumulativeTurn = 0;
+    }
+
+    private void loadPieceAndSquareFromFEN(String FEN) {
+        String[] info = FEN.split("/|\\s"); //either split on "/" or on " " (whitespace)
+        for (int i = 0; i < 8; i++) {
+            char[] row = info[i].toCharArray();
+            int file = 0;
+            for (char c : row) {
+                if (c==57) { file += 8;
+                } else if (c==49) { file++; // 49 is same as '1'
+                } else if (c==50) { file+=2;
+                } else if (c==51) { file+=3;
+                } else if (c==52) { file+=4;
+                } else if (c==53) { file+=5;
+                } else if (c==54) { file+=6;
+                } else if (c==55) { file+=7;
+                } else if (c=='p') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_PAWN,Square.getSquare(7-i,file))); file++;
+                } else if (c=='n') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KNIGHT,Square.getSquare(7-i,file))); file++;
+                } else if (c=='b') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_BISHOP,Square.getSquare(7-i,file))); file++;
+                } else if (c=='r') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_ROOK,Square.getSquare(7-i,file))); file++;
+                } else if (c=='q') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_QUEEN,Square.getSquare(7-i,file))); file++;
+                } else if (c=='k') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KING,Square.getSquare(7-i,file))); file++;
+
+                } else if (c=='P') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_PAWN,Square.getSquare(7-i,file))); file++;
+                } else if (c=='N') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_KNIGHT,Square.getSquare(7-i,file))); file++;
+                } else if (c=='B') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_BISHOP,Square.getSquare(7-i,file))); file++;
+                } else if (c=='R') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_ROOK,Square.getSquare(7-i,file))); file++;
+                } else if (c=='Q') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_QUEEN,Square.getSquare(7-i,file))); file++;
+                } else if (c=='K') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_KING,Square.getSquare(7-i,file))); file++;
+                }
+            }
+        }
+
     }
 
     // for state updation
@@ -116,6 +153,13 @@ public class State {
         return this.board;
     }
 
+    public int getGameOver() {
+        return gameOver;
+    }
+//
+//    public void setGameOver(int gameOver) {
+//        this.gameOver = gameOver;
+//    }
     //Getter for castling
     public boolean isApplyCastling() {
         return applyCastling;
@@ -160,26 +204,22 @@ public class State {
 
     public State applyMove(Move move) {
 
-        //check if last move was castling
-        if (Game.getInstance().getCastlingPerformed() != 0) {
-            if (Game.getInstance().getCastlingPerformed() == 1) {
-                this.setShortCastlingWhite(false);
+            //check if last move was castling
+            if (Game.getInstance().getCastlingPerformed() != 0) {
+                if (Game.getInstance().getCastlingPerformed() == 1) {
+                    this.setShortCastlingWhite(false);
+                }
+                if (Game.getInstance().getCastlingPerformed() == 2) {
+                    this.setShortCastlingBlack(false);
+                }
+                if (Game.getInstance().getCastlingPerformed() == 3) {
+                    this.setLongCastlingWhite(false);
+                }
+                if (Game.getInstance().getCastlingPerformed() == 4) {
+                    this.setLongCastlingBlack(false);
+                }
             }
-            if (Game.getInstance().getCastlingPerformed() == 2) {
-                this.setShortCastlingBlack(false);
-            }
-            if (Game.getInstance().getCastlingPerformed() == 3) {
-                this.setLongCastlingWhite(false);
-            }
-            if (Game.getInstance().getCastlingPerformed() == 4) {
-                this.setLongCastlingBlack(false);
-            }
-        }
-        //extract castling en passant dice roll
-
-        int newRoll = Dice.roll();
-        System.out.println("State; applyMove; Dice.roll(): " + newRoll);
-
+        
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
@@ -227,33 +267,29 @@ public class State {
         }
 
 
-        // update state
-        cumulativeTurn++;
-        if (move.promotionMove) {
-            newBoard.setPiece(move.promotionPiece, move.destination);
-            updatePieceAndSquareState(new Move(move.promotionPiece,move.getOrigin(),move.getDestination(),move.getDiceRoll(),move.getSide()));
-        } else {
-            updatePieceAndSquareState(move);
-        }
-
-        // in piece and square the last pieces are the pieces that moved always :)
-        // after calling updatePieceAndSquareState if king white (king moved) disable castling
-        if(pieceAndSquare.get(pieceAndSquare.size()-1).getPiece()==Piece.WHITE_KING) {
-            System.out.println("CASTLING DISABLED WHITE");
-            setLongCastlingWhite(false);
-            setShortCastlingWhite(false);
-        } else if (pieceAndSquare.get(pieceAndSquare.size()-1).getPiece()==Piece.BLACK_KING) {
-            System.out.println("CASTLING DISABLED BLACK");
-            setLongCastlingBlack(false);
-            setShortCastlingBlack(false);
-        }
-
+            // update state
+            cumulativeTurn++;
+            if (move.promotionMove) {
+                newBoard.setPiece(move.promotionPiece, move.destination);
+                updatePieceAndSquareState(new Move(move.promotionPiece, move.getOrigin(), move.getDestination(), move.getDiceRoll(), move.getSide()));
+            } else {
+                updatePieceAndSquareState(move);
+                printPieceAndSquare();
+            if (applyCastling && this.castling != Square.INVALID) {
+                System.out.println("updated piece and square castling: ");
+                if (this.castling == Square.f1) updatePieceAndSquareStateForCastling(Square.h1,Square.f1); // short white
+                if (this.castling == Square.d1) updatePieceAndSquareStateForCastling(Square.a1,Square.d1); // long white
+                if (this.castling == Square.f8) updatePieceAndSquareStateForCastling(Square.h8,Square.f8); // short black
+                if (this.castling == Square.d8) updatePieceAndSquareStateForCastling(Square.a8,Square.d8); // long black
+            }
+                System.out.println("size: " + pieceAndSquare.size());
+            }
 
         // update piece and square for move
 
 
         System.out.println("Real cumulative turn: " + cumulativeTurn);
-        State nextState = new State(newBoard, newRoll, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
+        State nextState = new State(newBoard, -1, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
                 longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn);
 
         if (move.enPassantMove) {
@@ -264,44 +300,36 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        newBoard.printBoard();
-        return nextState;
+            newBoard.printBoard();
+            return nextState;
+        //}
+        //return this;
+    }
+
+    private void updatePieceAndSquareStateForCastling(Square rookSquareOld, Square rookSquareNew) {
+        PieceAndSquareTuple rookToNewSquare = new PieceAndSquareTuple(WHITE_ROOK, rookSquareNew);
+        List<PieceAndSquareTuple> newState = new ArrayList<>();
+        // add all tuples except for the old rook that moved
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if(!(t.getPiece()==WHITE_ROOK && t.getSquare()==rookSquareOld)) {
+                newState.add(t);
+            }
+        }
+        newState.add(rookToNewSquare);
+        pieceAndSquare=newState;
     }
 
     private void updatePieceAndSquareState(Move move){
-        List<PieceAndSquareTuple> list = new CopyOnWriteArrayList<PieceAndSquareTuple>();
-        ListIterator litr = pieceAndSquare.listIterator();
-        // loop thorugh pieceAndSquareState
-        while(litr.hasNext()) {
-            PieceAndSquareTuple t = (PieceAndSquareTuple) litr.next();
-            if (t.getSquare() == move.getOrigin()) {
-//                if(DEBUG)System.out.println("skipped: " + t.getPiece().toString() + " " + t.getSquare().toString());
-            } else {
-                list.add((PieceAndSquareTuple)t);
-//                if(DEBUG)System.out.println("added: " + t.getPiece().toString() + " " + t.getSquare().toString());
+        PieceAndSquareTuple destination = new PieceAndSquareTuple(move.getPiece(),move.getDestination());
+        List<PieceAndSquareTuple> newState = new ArrayList<>();
+        // skip over tuple that is in origin square or is in destination square
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if (!(t.getPiece()==move.getPiece() && t.getSquare()==move.getOrigin()) && t.getSquare()!=move.getDestination()) {
+                newState.add(t);
             }
         }
-        PieceAndSquareTuple tupleForLeavingSquare = new PieceAndSquareTuple(move.getPiece(), move.getDestination());
-        list.add(tupleForLeavingSquare);
-        List<PieceAndSquareTuple> list2 = new CopyOnWriteArrayList<PieceAndSquareTuple>();
-        // shuffles around pieces in array list and also in memory
-        ListIterator litr2 = list.listIterator();
-        while(litr2.hasNext()) {
-            PieceAndSquareTuple t = (PieceAndSquareTuple) litr2.next();
-            if (tupleForLeavingSquare.getSquare()==t.getSquare() &&  litr2.nextIndex()==list.size()-1) {
-                litr2.next();
-//                if(DEBUG)System.out.println("skipped:2 " + t.getPiece().toString() +" " + t.getSquare().toString());
-            } else if (tupleForLeavingSquare.getSquare()!=t.getSquare() && litr2.nextIndex()!=list.size()-1){
-                list2.add(t);
-//                if(DEBUG)System.out.println("added:3 " + t.getPiece().toString() + " " + t.getSquare().toString());
-            } else if (litr2.nextIndex()==list.size()-1){
-                list2.add(t);
-//                if(DEBUG)System.out.println("added:4" + t.getPiece().toString() + " " + t.getSquare().toString());
-            }
-        }
-        list2.add(tupleForLeavingSquare);
-//        if(DEBUG)System.out.println("added:5" + tupleForLeavingSquare.getPiece().toString() + " " + tupleForLeavingSquare.getSquare().toString());
-        setPieceAndSquare(list2);
+        newState.add(destination);
+        pieceAndSquare=newState;
     }
 
     public String toFEN() {
@@ -350,6 +378,10 @@ public class State {
         return enPassant;
     }
 
+//    public static void setGameOver(int gameOver) {
+//        State.gameOver = gameOver;
+//    }
+
     public void setCastling(Square castling) {
         this.castling = castling;
     }
@@ -370,45 +402,7 @@ public class State {
         this.enPassant = enPassant;
     }
 
-    private void initializePieceAndSquare() {
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.a8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.b8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.c8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_QUEEN, Square.d8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KING, Square.e8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_BISHOP, Square.f8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_KNIGHT, Square.g8));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_ROOK, Square.h8));
-
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.a7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.b7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.c7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.d7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.e7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.f7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.g7));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.BLACK_PAWN, Square.h7));
-
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.a2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.b2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.c2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.d2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.e2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.f2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.g2));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_PAWN, Square.h2));
-
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.a1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.b1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.c1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_QUEEN, Square.d1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KING, Square.e1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_BISHOP, Square.f1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_KNIGHT, Square.g1));
-        pieceAndSquare.add(new PieceAndSquareTuple(Piece.WHITE_ROOK, Square.h1));
-    }
-
-    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
+    public int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
         int king = 0;
         for (PieceAndSquareTuple t : pieceAndSquare) {
             if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {

@@ -12,12 +12,8 @@ public class AIGame extends HumanGame {
 
     private final AIPlayer aiPlayer;
 
-    public AIGame(int depth) {
-        this(new MiniMaxPlayer(depth,Side.BLACK));
-    }
-
-    public AIGame(AIPlayer aiPlayer) {
-        super();
+    public AIGame(AIPlayer aiPlayer, String FEN) {
+        super(FEN);
         this.aiPlayer = aiPlayer;
     }
 
@@ -29,15 +25,22 @@ public class AIGame extends HumanGame {
     //actually could be done just using Player objects instead of this class probably
     public Move makeAIMove() {
         Move move = aiPlayer.chooseMove(currentState);
-        State newState = currentState.applyMove(move);
-        previousStates.push(currentState);
+        if (evaluator.isLegalMove(move, currentState, true,true)) {
+            State newState = currentState.applyMove(move);
+            previousStates.push(currentState);
 
-        checkGameOver(move);
+            checkGameOver(move);
 
-        currentState = newState;
-        move.setStatus(Validity.VALID);
-        processCastling();
-        MainContainerController.getInstance().updateTurn(currentState.getColor());
+            currentState = newState;
+            move.setStatus(Validity.VALID);
+
+            processCastling();
+            MainContainerController.getInstance().updateTurn(currentState.getColor());
+        } else {
+            move.setInvalid();
+        }
+
+        // send back to GUI
         return move;
     }
 
