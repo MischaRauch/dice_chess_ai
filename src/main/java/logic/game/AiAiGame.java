@@ -51,6 +51,9 @@ public class AiAiGame extends Game {
 
             Move move = nextPlayer.chooseMove(currentState);
             System.out.println(move.toString());
+
+            // TODO MAKE evaluator legal move not modify the state for castling
+            //  the state should track all castling not the evaluator
             if (evaluator.isLegalMove(move, currentState, true,true)) {
 
             //need to check if the destination capture move was a king, and in the next state the state the king might

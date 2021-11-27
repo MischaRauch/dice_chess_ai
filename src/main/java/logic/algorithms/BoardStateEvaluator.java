@@ -1,4 +1,4 @@
-package logic.minimax;
+package logic.algorithms;
 
 import logic.PieceAndSquareTuple;
 import logic.enums.Piece;
@@ -79,7 +79,6 @@ public class BoardStateEvaluator {
             {-40,-20,  0,  5,  5,  0,-20,-40},
             {-50,-40,-30,-30,-30,-30,-40,-50} };
 
-
     private static int[][] queenBoardWeightsB = {
             {-20,-10,-10, -5, -5,-10,-10,-20},
             {-10,  0,  5,  0,  0,  0,  0,-10},
@@ -155,8 +154,6 @@ public class BoardStateEvaluator {
             {-5,  0,  0,  0,  0,  0,  0, -5},
             {5, 10, 10, 10, 10, 10, 10,  5},
             {0,  0,  0,  0,  0,  0,  0,  0} };
-            
-            
             
     private static int[][] kingBoardWeightsMiddleGameW = {
             {-30,-40,-40,-50,-50,-40,-40,-30},

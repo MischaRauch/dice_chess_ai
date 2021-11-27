@@ -1,4 +1,2 @@
 Alg, AlgTwo, Winner, Turns 
-Random AI,MiniMax,BLACK,18
-Random AI,MiniMax,BLACK,42
-Random AI,MiniMax,BLACK,43
+MiniMax,MiniMax,BLACK,24

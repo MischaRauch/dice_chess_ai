@@ -1,9 +1,10 @@
-package logic.minimax;
+package logic.algorithms.minimax;
 
 import logic.BoardStateAndEvaluationNumberTuple;
 import logic.Move;
 import logic.PieceAndSquareTuple;
 import logic.State;
+import logic.algorithms.BoardStateGenerator;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -81,7 +82,7 @@ public class MiniMax {
                 int lastPieceIndex = possibleBoardStates.size() - 1;
                 int diceNo = Piece.getDiceFromPiece((Piece) possibleBoardStates.get(lastPieceIndex).getPiece());
                 State newState = new State(
-                        parentNode.getState().getBoard(), diceNo, Side.getOpposite(parentNode.getState().getColor()), parentNode.getState().isApplyCastling(),
+                        parentNode.getState().getBoard(), diceNo, parentNode.getState().getColor(), parentNode.getState().isApplyCastling(),
                         parentNode.getState().isShortCastlingBlack(), parentNode.getState().isShortCastlingWhite(), parentNode.getState().isLongCastlingBlack(),
                         parentNode.getState().isShortCastlingWhite(), parentNode.getState().getCastling(), possibleBoardStates,parentNode.getState().getCumulativeTurn());
                 int evalNo = (int) allStatesAndBoardEvaluationsForGivenPieceType.get(diceNo - 1).getEvaluationNumbers().get(i);
