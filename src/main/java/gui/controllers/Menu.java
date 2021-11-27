@@ -28,7 +28,7 @@ import static logic.enums.Side.WHITE;
 
 public class Menu {
 
-    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "Minimax AI", "QTable AI", "ExpectiMiniMax AI"};
+    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI"};
 
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
@@ -65,11 +65,11 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("Human");
-        blackPlayerChoice.setValue("Human");
+        whitePlayerChoice.setValue("ExpectiMiniMax AI");
+        blackPlayerChoice.setValue("MiniMax AI");
     }
 
-    private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
 
     @FXML
     void start(ActionEvent event) {
@@ -106,16 +106,16 @@ public class Menu {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                new AiAiGame(white, black, StartingFEN);
+                new AiAiGame(white, black, Config.OPENING_FEN);
             }
             case HUMAN_V_AI -> {
                 AIPlayer aiPlayer = getPlayer(blackPlayer, BLACK);
-                new AIGame(aiPlayer,StartingFEN);
+                new AIGame(aiPlayer,Config.OPENING_FEN);
             }
             case HUMAN_V_HUMAN -> {
-                new HumanGame(StartingFEN);
+                new HumanGame(Config.OPENING_FEN);
             }
-            default -> new HumanGame(StartingFEN);
+            default -> new HumanGame(Config.OPENING_FEN);
         }
 
         try {
@@ -133,7 +133,7 @@ public class Menu {
         return switch (player) {
             case "Random AI" -> new RandomMovesPlayer(color);
             case "Basic AI" -> new BasicAIPlayer(color);
-            case "Minimax AI" -> new MiniMaxPlayer(9, color);
+            case "MiniMax AI" -> new MiniMaxPlayer(9, color);
             case "QTable AI" -> new QTablePlayer(color);
             case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
             default -> new RandomMovesPlayer(color);

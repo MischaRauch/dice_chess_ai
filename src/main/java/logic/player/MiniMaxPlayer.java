@@ -1,5 +1,6 @@
 package logic.player;
 
+import logic.LegalMoveEvaluator;
 import logic.Move;
 import logic.State;
 import logic.enums.Side;
@@ -7,6 +8,7 @@ import logic.algorithms.minimax.MiniMax;
 import logic.algorithms.minimax.MiniMaxThread;
 public class MiniMaxPlayer extends AIPlayer {
 
+    private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private final int depth;
     MiniMax miniMax = new MiniMax();
 
@@ -31,6 +33,9 @@ public class MiniMaxPlayer extends AIPlayer {
             e.printStackTrace();
         }
         Move chosenMove = thread.getBestMove();
+        // TODO make evalautor not update moves
+        // to promote en passant moves
+        evaluator.isLegalMove(chosenMove, state, true, true);
         state.printPieceAndSquare();
         return chosenMove;
     }
