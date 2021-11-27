@@ -1,12 +1,62 @@
 package logic.minimax;
 
+import logic.LegalMoveGenerator;
+import logic.ML.OriginAndDestSquare;
 import logic.PieceAndSquareTuple;
+import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class BoardStateEvaluator {
+
+    public static int getBoardEvaluationNumber(State state, Side side) { // for ML
+        int evalNo = 0;
+
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
+
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
+            Square s = (Square) tempMove.getOrigin();
+            Piece p = state.getBoard().getPieceAt(s);
+
+            if (p.getColor() == side) {
+                evalNo += p.getWeight();
+                if(p==Piece.BLACK_PAWN || p==Piece.WHITE_PAWN) {
+                    evalNo += getCorrectWeights(pawnBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_KNIGHT || p==Piece.WHITE_KNIGHT) {
+                    evalNo += getCorrectWeights(knightBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_BISHOP || p==Piece.WHITE_BISHOP) {
+                    evalNo += getCorrectWeights(bishopBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_ROOK || p==Piece.WHITE_ROOK) {
+                    evalNo += getCorrectWeights(rookBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_QUEEN || p==Piece.WHITE_QUEEN) {
+                    evalNo += getCorrectWeights(queenBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING) { // TODO, implement turn number to QL
+                    evalNo += getCorrectWeights(kingBoardWeightsMiddleGameW, side)[s.getRank()-1][s.getFile()];
+                }
+            } else {
+                evalNo -= p.getWeight();
+                if(p==Piece.BLACK_PAWN || p==Piece.WHITE_PAWN) {
+                    evalNo -= getCorrectWeights(pawnBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_KNIGHT || p==Piece.WHITE_KNIGHT) {
+                    evalNo -= getCorrectWeights(knightBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_BISHOP || p==Piece.WHITE_BISHOP) {
+                    evalNo -= getCorrectWeights(bishopBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_ROOK || p==Piece.WHITE_ROOK) {
+                    evalNo -= getCorrectWeights(rookBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_QUEEN || p==Piece.WHITE_QUEEN) {
+                    evalNo -= getCorrectWeights(queenBoardWeightsW, side)[s.getRank()-1][s.getFile()];
+                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING) {
+                    evalNo -= getCorrectWeights(kingBoardWeightsMiddleGameW, side)[s.getRank()-1][s.getFile()];
+                }
+            }
+        }
+        return evalNo;
+    }
+
 
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {

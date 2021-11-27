@@ -19,13 +19,10 @@ public class BoardStateGenerator {
     public static ArrayList<State> getPossibleBoardStates(State state, Side side) { // for ML
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
         ArrayList<State> answer = new ArrayList<State>();
-        OriginAndDestSquare tempMove;
         State tempState;
         Move move1;
 
-        for (int i=0; i<originAndDestSquares.size(); i++) {
-
-            tempMove = originAndDestSquares.get(i);
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
             Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
 
             move1 = new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), side);

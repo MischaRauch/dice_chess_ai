@@ -6,6 +6,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.game.Game;
+import logic.minimax.BoardStateEvaluator;
 import logic.minimax.BoardStateGenerator;
 
 import java.util.*;
@@ -69,7 +70,7 @@ public class DQL {
 
                 //apply chosen action and return the next state, reward and true if the episode is ended
                 State newState = state.applyMove(action);
-                reward = BoardStateGenerator.getBoardEvaluationNumber(newState); // TODO, to be added
+                reward = BoardStateEvaluator.getBoardEvaluationNumber(newState, currentQtable.currentSide); // TODO, to be added
                 finished = didStateEnd(newState);
 
                 // update value of Qtable
