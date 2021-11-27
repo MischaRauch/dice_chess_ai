@@ -14,12 +14,15 @@ import static logic.enums.Side.*;
 
 public abstract class Game {
 
-    public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //public static String openingFEN = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
+    private String FEN;
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates = new Stack<>();
     protected final Stack<State> redoStates = new Stack<>();
     protected final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+    protected State firstState;
     protected State currentState;
     //protected boolean gameOver = false;
     protected int numTurns;
@@ -40,21 +43,25 @@ public abstract class Game {
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadBlackPieces = new Stack<>();
     protected Stack<PieceAndTurnDeathTuple<Piece, Integer>> redoDeadWhitePieces = new Stack<>();
 
-    public Game() {
-        this(openingFEN);
-        System.out.println("GAME const default");
-        numTurns = 0;
-    }
-
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
         currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
-        previousStates = new Stack<>();
-        redoStates = new Stack<>();
+        // First time game gets initialized game instance is null so make this the first state
+        if (Game.getInstance()==null) {
+            firstState = new State(currentState);
+            System.out.println("GAME INSTANCE NULL, FIRST STATE INITIALIZED");
+            numTurns = 0;
+        }
         CURRENT_GAME = this;
         this.FEN=initialPosition;
         System.out.println("GAME const fen");
     }
+
+    // not abstract method as  AiAi game will never use this
+    public void resetCurrentStateToFirstState() {
+        currentState = new State(firstState);
+    }
+
 
     public void undoState() {
         if (!previousStates.isEmpty()) {
@@ -80,6 +87,10 @@ public abstract class Game {
             gameDone = true;
             winner = move.getSide();
         }
+//        if (currentState.getKingCount(currentState.getPieceAndSquare())!=2) {
+//            gameDone = true;
+//            winner = move.getSide();
+//        }
     }
 
     public boolean isGameOver() {
@@ -89,6 +100,7 @@ public abstract class Game {
     public Side getWinner() {
         return winner;
     }
+
     public void setGameOver(boolean newGame) { gameDone = newGame;}
 
     protected void processCastling() {
@@ -128,6 +140,7 @@ public abstract class Game {
     }
 
     public int getNumTurns(){ return numTurns; }
+
     public void setNumTurns(int numTurns){ this.numTurns = numTurns;}
 
     public int getDiceRoll() {
@@ -161,7 +174,9 @@ public abstract class Game {
     public Stack<PieceAndTurnDeathTuple<Piece, Integer>> getDeadWhitePieces() {
         return deadWhitePieces;
     }
+
     public String getFEN() {
         return FEN;
     }
+
 }

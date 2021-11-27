@@ -6,7 +6,6 @@ import logic.PieceAndSquareTuple;
 import logic.State;
 import logic.algorithms.BoardStateGenerator;
 import logic.enums.Piece;
-import logic.enums.Side;
 import logic.enums.Square;
 
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ public class MiniMax {
     private int minCount;
     private int totalCount;
     private int initialDepth;
+    private Node bestNode;
 
     // first recursive method call
     public void constructTree(int depth, State state) {
@@ -31,13 +31,16 @@ public class MiniMax {
         tree.setRoot(root);
         constructTree(root, depth);
         // to test built in pruning
-        initialDepth=depth;
-        maxCount=0;
-        minCount=0;
-        totalCount=0;
+        initialDepth = depth;
+        maxCount = 0;
+        minCount = 0;
+        totalCount = 0;
     }
 
     private void constructTree(Node parentNode, int depth) {
+        if (depth == 0) {
+            bestNode = parentNode;
+        }
         while (this.depth > 0) {
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
             // loop through for all 6 dice numbers and generate all possible states
@@ -60,12 +63,14 @@ public class MiniMax {
             if (isChildMaxPlayer) {
                 Node bestChild = parentNode;
                 bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, isChildMaxPlayer, bestChild, Integer.MAX_VALUE);
+                bestNode = bestChild;
                 this.depth -= 1;
                 constructTree(bestChild, this.depth);
             }// adding children for min player
             else if (!isChildMaxPlayer) {
                 Node bestChild = parentNode;
                 bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, isChildMaxPlayer, bestChild, Integer.MIN_VALUE);
+                bestNode = bestChild;
                 this.depth -= 1;
                 constructTree(bestChild, this.depth);
             }
@@ -84,7 +89,7 @@ public class MiniMax {
                 State newState = new State(
                         parentNode.getState().getBoard(), diceNo, parentNode.getState().getColor(), parentNode.getState().isApplyCastling(),
                         parentNode.getState().isShortCastlingBlack(), parentNode.getState().isShortCastlingWhite(), parentNode.getState().isLongCastlingBlack(),
-                        parentNode.getState().isShortCastlingWhite(), parentNode.getState().getCastling(), possibleBoardStates,parentNode.getState().getCumulativeTurn());
+                        parentNode.getState().isShortCastlingWhite(), parentNode.getState().getCastling(), possibleBoardStates, parentNode.getState().getCumulativeTurn());
                 int evalNo = (int) allStatesAndBoardEvaluationsForGivenPieceType.get(diceNo - 1).getEvaluationNumbers().get(i);
                 List<PieceAndSquareTuple> prevBoardState = parentNode.getState().getPieceAndSquare();
                 PieceAndSquareTuple lastPieceAndSquareTuple = possibleBoardStates.get(lastPieceIndex);
@@ -104,14 +109,23 @@ public class MiniMax {
                 // add each child for each different board state for each different piece type
                 // built in pruning as we only ever add better children, not all children
                 // if eval number smaller
-                if(CheckOutPruning) {totalCount++; System.out.println("child evaluated: " + totalCount);}
+                if (CheckOutPruning) {
+                    totalCount++;
+                    System.out.println("child evaluated: " + totalCount);
+                }
                 if (isChildMaxPlayer && evalNo <= finalEvalNo) {
-                    if(CheckOutPruning) {minCount++; System.out.println("min player children added: " + minCount);}
+                    if (CheckOutPruning) {
+                        minCount++;
+                        System.out.println("min player children added: " + minCount);
+                    }
                     finalEvalNo = evalNo;
                     bestChild = newNode;
-                // if eval number bigger
+                    // if eval number bigger
                 } else if (!isChildMaxPlayer && evalNo >= finalEvalNo) {
-                    if(CheckOutPruning) {maxCount++; System.out.println("max player children added: " + maxCount);}
+                    if (CheckOutPruning) {
+                        maxCount++;
+                        System.out.println("max player children added: " + maxCount);
+                    }
                     finalEvalNo = evalNo;
                     bestChild = newNode;
                 }

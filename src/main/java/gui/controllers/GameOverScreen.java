@@ -52,6 +52,8 @@ public class GameOverScreen extends AnchorPane {
         Platform.exit();
     }
 
+
+    // TODO When you restart MiniMax starts behaving wierdly, king moves like knight, queen backstabs it's own king ;)
     @FXML
     void restart(ActionEvent event) throws IOException {
         Stage stage = (Stage) playAgainButton.getScene().getWindow();

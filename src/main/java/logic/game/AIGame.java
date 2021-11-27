@@ -24,6 +24,7 @@ public class AIGame extends HumanGame {
     //should ideally be called immediately in the GUI controller after the makeHumanMove returns
     //actually could be done just using Player objects instead of this class probably
     public Move makeAIMove() {
+        System.out.println(currentState.toFEN());
         Move move = aiPlayer.chooseMove(currentState);
         if (evaluator.isLegalMove(move, currentState, true,true)) {
             State newState = currentState.applyMove(move);
@@ -43,5 +44,9 @@ public class AIGame extends HumanGame {
         // send back to GUI
         return move;
     }
+
+//    public void resetCurrentState() {
+//        currentState=firstState;
+//    }
 
 }

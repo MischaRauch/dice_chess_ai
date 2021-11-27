@@ -30,7 +30,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         }
         Move chosenMove = thread.getBestMove();
         state.printPieceAndSquare();
-        System.out.println("ExpectiMiniMaxPlayer: Next optimal Move: " + chosenMove.toString());
+        System.out.println("ExpectiMiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove.toString());
         return chosenMove;
     }
 

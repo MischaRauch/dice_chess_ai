@@ -28,7 +28,7 @@ import static logic.enums.Side.WHITE;
 
 public class Menu {
 
-    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "Minimax AI", "QTable AI"};
+    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "Minimax AI", "QTable AI", "ExpectiMiniMax AI"};
 
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
@@ -69,6 +69,8 @@ public class Menu {
         blackPlayerChoice.setValue("Human");
     }
 
+    private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+
     @FXML
     void start(ActionEvent event) {
 
@@ -84,7 +86,8 @@ public class Menu {
             type = GameType.AI_V_AI;
 
             if (aiMatchType.getSelectedToggle() == singleGameOption) {
-                Config.SIMULATION_SIZE = 1;
+                // setting to 0 to fix turn bug
+                Config.SIMULATION_SIZE = 0;
                 Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
             } else {
                 Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
@@ -99,28 +102,21 @@ public class Menu {
             type = GameType.HUMAN_V_AI;
         }
 
-
-
         switch (type) {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                new AiAiGame(white, black);
-
-                //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
+                new AiAiGame(white, black, StartingFEN);
             }
             case HUMAN_V_AI -> {
                 AIPlayer aiPlayer = getPlayer(blackPlayer, BLACK);
-                new AIGame(aiPlayer);
-
-                //game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
+                new AIGame(aiPlayer,StartingFEN);
             }
             case HUMAN_V_HUMAN -> {
-                new HumanGame();
+                new HumanGame(StartingFEN);
             }
-            default -> new HumanGame();
+            default -> new HumanGame(StartingFEN);
         }
-
 
         try {
             Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
@@ -137,8 +133,9 @@ public class Menu {
         return switch (player) {
             case "Random AI" -> new RandomMovesPlayer(color);
             case "Basic AI" -> new BasicAIPlayer(color);
-            case "Minimax AI" -> new MiniMaxPlayer(100, color);
+            case "Minimax AI" -> new MiniMaxPlayer(9, color);
             case "QTable AI" -> new QTablePlayer(color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
             default -> new RandomMovesPlayer(color);
         };
     }

@@ -113,7 +113,7 @@ public class Chessboard extends GridPane {
             Tile origin = getTileAt(8 - move.getOrigin().getRank(), move.getOrigin().getFile());
             Tile destination = getTileAt(8 - move.getDestination().getRank(), move.getDestination().getFile());
 
-            if ((destination.getPiece() != Piece.EMPTY) && (destination.getPiece().getColor() != origin.getPiece().getColor()) && !move.isPromotionMove()) {
+            if ((destination.getPiece() != Piece.EMPTY) && (destination.getPiece().getColor() != origin.getPiece().getColor())) {// && !move.isPromotionMove()
                 //capture piece so move piece to the flowpanel
                 //System.out.println("tile not empty and tile color not selected color");
                 MainContainerController.getInstance().movePieceOut(destination.getPiece(), destination.getPiece().getColor());
@@ -167,6 +167,7 @@ public class Chessboard extends GridPane {
                 //showEndGame(logic.game.getCurrentState().getGameOver());
                 //Stage stage = (Stage) getScene().getWindow();
                 Side winner = game.getWinner();
+
                 //Writing CSV file
                 if (gameType == GameType.AI_V_AI) {
                     AiAiGame aiAiGame = (AiAiGame) game;
@@ -183,7 +184,15 @@ public class Chessboard extends GridPane {
                 }
 
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
-                game.setGameOver(false);
+
+                // if gameover true then the winner has also been set by the checkGameOver( method in Game, so we can reset state here
+               if(gameType!=GameType.AI_V_AI) {
+                   game.resetCurrentStateToFirstState();
+                   game.setGameOver(false);
+               }
+
+            }
+
             }
 
 //            if (game.getCurrentState().getGameOver() != 0) {
@@ -210,7 +219,6 @@ public class Chessboard extends GridPane {
 //                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
 //            }
         }
-    }
 
     // you only move selected tile ever
     private void move(Tile tile) throws CloneNotSupportedException {
@@ -265,7 +273,6 @@ public class Chessboard extends GridPane {
 
         return board;
     }
-
 
     public void showEndGame(int winner) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

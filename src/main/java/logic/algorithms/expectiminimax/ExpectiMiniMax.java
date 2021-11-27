@@ -212,17 +212,18 @@ public class ExpectiMiniMax {
     }
 
     public Move getBestMoveForBestNode() {
-        // ONLY WORKS AFTER FIRST TURN - CAN JUST GET PIECE AT END OF PIECE & SQUARE LIST
-        if (bestNode.getPreviousState().getPieceAndSquare().size()<=31) {
-            Move bestMove = bestNode.getPossibleMovesForGivenPiece().get(getBestBoardEvaluationIndexFromBestNode());
-            return bestMove;
-        }
+//        // ONLY WORKS AFTER FIRST TURN - CAN JUST GET PIECE AT END OF PIECE & SQUARE LIST
+//        if (bestNode.getPreviousState().getPieceAndSquare().size()<=31) {
+//            Move bestMove = bestNode.getPossibleMovesForGivenPiece().get(getBestBoardEvaluationIndexFromBestNode());
+//            return bestMove;
+//        }
         // FOR FIRST TURN
         List<Move> allMoveForGivenPiece = gen.getValidMovesForGivenPiece(bestNode.getPreviousState(),bestNode.getPiece());
         List<PieceAndSquareTuple> bestStatePAS = bestNode.getPossibleBoardStatesForGivenPiece().get(getBestBoardEvaluationIndexFromBestNode());
         for (PieceAndSquareTuple t : bestStatePAS) {
+            Piece coloredPiece = (Piece) t.getPiece();
             for (Move m : allMoveForGivenPiece) {
-                if (t.getSquare()==m.getDestination() && t.getPiece() == m.getPiece()) {
+                if (t.getSquare()==m.getDestination() && t.getPiece() == m.getPiece() && bestNode.getPiece().getColor()==coloredPiece.getColor()) {
                     return m;
                 }
             }

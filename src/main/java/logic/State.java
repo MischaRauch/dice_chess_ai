@@ -1,24 +1,21 @@
 package logic;
 
-import gui.controllers.MainContainerController;
 import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.game.Game;
 
-import static logic.enums.Piece.BLACK_KING;
-import static logic.enums.Piece.WHITE_KING;
-import static logic.enums.Piece.*;
-import static logic.enums.Side.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.concurrent.CopyOnWriteArrayList;
+
+import static logic.enums.Piece.*;
+import static logic.enums.Side.BLACK;
+import static logic.enums.Side.WHITE;
 
 public class State {
 
-    public int gameOver;
+    //public boolean gameOver = false;
     public Square castling = Square.INVALID;
     public Board board;
     public int diceRoll;
@@ -37,50 +34,23 @@ public class State {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
-        // TODO optional: add updatePieceAndSquareFromFen so we can load different states
-        //initializePieceAndSquare();
         loadPieceAndSquareFromFEN(board.getFEN());
-        //loadPieceAndSquareFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1");
         printPieceAndSquare();
-        this.cumulativeTurn = 0;
+        cumulativeTurn = 0;
     }
 
-    private void loadPieceAndSquareFromFEN(String FEN) {
-        String[] info = FEN.split("/|\\s"); //either split on "/" or on " " (whitespace)
-        for (int i = 0; i < 8; i++) {
-            char[] row = info[i].toCharArray();
-            int file = 0;
-            for (char c : row) {
-                if (c==57) { file += 8;
-                } else if (c==49) { file++; // 49 is same as '1'
-                } else if (c==50) { file+=2;
-                } else if (c==51) { file+=3;
-                } else if (c==52) { file+=4;
-                } else if (c==53) { file+=5;
-                } else if (c==54) { file+=6;
-                } else if (c==55) { file+=7;
-                } else if (c=='p') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_PAWN,Square.getSquare(7-i,file))); file++;
-                } else if (c=='n') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KNIGHT,Square.getSquare(7-i,file))); file++;
-                } else if (c=='b') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_BISHOP,Square.getSquare(7-i,file))); file++;
-                } else if (c=='r') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_ROOK,Square.getSquare(7-i,file))); file++;
-                } else if (c=='q') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_QUEEN,Square.getSquare(7-i,file))); file++;
-                } else if (c=='k') {pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KING,Square.getSquare(7-i,file))); file++;
-
-                } else if (c=='P') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_PAWN,Square.getSquare(7-i,file))); file++;
-                } else if (c=='N') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_KNIGHT,Square.getSquare(7-i,file))); file++;
-                } else if (c=='B') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_BISHOP,Square.getSquare(7-i,file))); file++;
-                } else if (c=='R') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_ROOK,Square.getSquare(7-i,file))); file++;
-                } else if (c=='Q') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_QUEEN,Square.getSquare(7-i,file))); file++;
-                } else if (c=='K') {pieceAndSquare.add(new PieceAndSquareTuple(WHITE_KING,Square.getSquare(7-i,file))); file++;
-                }
-            }
-        }
-
+    // deep cloning initial state
+    public State(State that) {
+        cumulativeTurn = 0;
+        board = that.getBoard();
+        diceRoll = that.getDiceRoll();
+        color = that.getColor();
+        loadPieceAndSquareFromFEN(that.getBoard().getFEN());
     }
 
     // for state updation
     public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite,
-                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, List<PieceAndSquareTuple> pieceAndSquare,int cumulativeTurn) {
+                 boolean longCastlingBlack, boolean longCastlingWhite, Square castling, List<PieceAndSquareTuple> pieceAndSquare, int cumulativeTurn) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
@@ -94,17 +64,77 @@ public class State {
         this.cumulativeTurn = cumulativeTurn;
     }
 
-    public State(State toClone) {
-        this(toClone.getBoard(),toClone.getDiceRoll(),toClone.getColor(),toClone.isApplyCastling(),toClone.isShortCastlingBlack(),toClone.isShortCastlingWhite(),
-                toClone.isLongCastlingBlack(),toClone.isLongCastlingWhite(),toClone.getCastling(),toClone.getPieceAndSquare(),toClone.getCumulativeTurn());
-    }
-
     public void printPieceAndSquare() {
         System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
         for (PieceAndSquareTuple t : pieceAndSquare) {
             System.out.print(t.toString() + " | ");
         }
         printPieceCounts(pieceAndSquare);
+    }
+
+    private void loadPieceAndSquareFromFEN(String FEN) {
+        String[] info = FEN.split("/|\\s"); //either split on "/" or on " " (whitespace)
+        for (int i = 0; i < 8; i++) {
+            char[] row = info[i].toCharArray();
+            int file = 0;
+            for (char c : row) {
+                if (c == 57) {
+                    file += 8;
+                } else if (c == 49) {
+                    file++; // 49 is same as '1'
+                } else if (c == 50) {
+                    file += 2;
+                } else if (c == 51) {
+                    file += 3;
+                } else if (c == 52) {
+                    file += 4;
+                } else if (c == 53) {
+                    file += 5;
+                } else if (c == 54) {
+                    file += 6;
+                } else if (c == 55) {
+                    file += 7;
+                } else if (c == 'p') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(BLACK_PAWN, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'n') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KNIGHT, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'b') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(BLACK_BISHOP, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'r') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(BLACK_ROOK, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'q') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(BLACK_QUEEN, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'k') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KING, Square.getSquare(7 - i, file)));
+                    file++;
+
+                } else if (c == 'P') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(WHITE_PAWN, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'N') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(WHITE_KNIGHT, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'B') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(WHITE_BISHOP, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'R') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(WHITE_ROOK, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'Q') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(WHITE_QUEEN, Square.getSquare(7 - i, file)));
+                    file++;
+                } else if (c == 'K') {
+                    pieceAndSquare.add(new PieceAndSquareTuple(WHITE_KING, Square.getSquare(7 - i, file)));
+                    file++;
+                }
+            }
+        }
+
     }
 
     public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
@@ -132,94 +162,25 @@ public class State {
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
-    public List<PieceAndSquareTuple> getPieceAndSquare() {
-        return pieceAndSquare;
-    }
-
-    public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
-        this.pieceAndSquare = pieceAndSquare;
-        printPieceAndSquare();
-    }
-
-    public int getCumulativeTurn() {
-        return cumulativeTurn;
-    }
-
-    public void setCumulativeTurn(int cumulativeTurn) {
-        this.cumulativeTurn = cumulativeTurn;
-    }
-
-    public Board getBoard() {
-        return this.board;
-    }
-
-    public int getGameOver() {
-        return gameOver;
-    }
-//
-//    public void setGameOver(int gameOver) {
-//        this.gameOver = gameOver;
-//    }
-    //Getter for castling
-    public boolean isApplyCastling() {
-        return applyCastling;
-    }
-
-    //Setter for castling
-    public void setApplyCastling(boolean applyCastling) {
-        this.applyCastling = applyCastling;
-    }
-
-    public boolean isShortCastlingWhite() {
-        return shortCastlingWhite;
-    }
-
-    public void setShortCastlingWhite(boolean shortCastlingWhite) {
-        this.shortCastlingWhite = shortCastlingWhite;
-    }
-
-    public boolean isLongCastlingWhite() {
-        return longCastlingWhite;
-    }
-
-    public void setLongCastlingWhite(boolean longCastlingWhite) {
-        this.longCastlingWhite = longCastlingWhite;
-    }
-
-    public boolean isShortCastlingBlack() {
-        return shortCastlingBlack;
-    }
-
-    public void setShortCastlingBlack(boolean shortCastlingBlack) {
-        this.shortCastlingBlack = shortCastlingBlack;
-    }
-
-    public boolean isLongCastlingBlack() {
-        return longCastlingBlack;
-    }
-
-    public void setLongCastlingBlack(boolean longCastlingBlack) {
-        this.longCastlingBlack = longCastlingBlack;
-    }
-
     public State applyMove(Move move) {
 
-            //check if last move was castling
-            if (Game.getInstance().getCastlingPerformed() != 0) {
-                if (Game.getInstance().getCastlingPerformed() == 1) {
-                    this.setShortCastlingWhite(false);
-                }
-                if (Game.getInstance().getCastlingPerformed() == 2) {
-                    this.setShortCastlingBlack(false);
-                }
-                if (Game.getInstance().getCastlingPerformed() == 3) {
-                    this.setLongCastlingWhite(false);
-                }
-                if (Game.getInstance().getCastlingPerformed() == 4) {
-                    this.setLongCastlingBlack(false);
-                }
+
+        //check if last move was castling
+        if (Game.getInstance().getCastlingPerformed() != 0) {
+            if (Game.getInstance().getCastlingPerformed() == 1) {
+                this.setShortCastlingWhite(false);
             }
-        
+            if (Game.getInstance().getCastlingPerformed() == 2) {
+                this.setShortCastlingBlack(false);
+            }
+            if (Game.getInstance().getCastlingPerformed() == 3) {
+                this.setLongCastlingWhite(false);
+            }
+            if (Game.getInstance().getCastlingPerformed() == 4) {
+                this.setLongCastlingBlack(false);
+            }
+        }
+
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
@@ -263,34 +224,32 @@ public class State {
                     move.castling = this.castling;
                 }
             }
-            //applyCastling = false;
         }
 
-
-            // update state
-            cumulativeTurn++;
-            if (move.promotionMove) {
-                newBoard.setPiece(move.promotionPiece, move.destination);
-                updatePieceAndSquareState(new Move(move.promotionPiece, move.getOrigin(), move.getDestination(), move.getDiceRoll(), move.getSide()));
-            } else {
-                updatePieceAndSquareState(move);
-                printPieceAndSquare();
+        // update state in case of pawn pr
+        if (move.promotionMove) {
+            newBoard.setPiece(move.promotionPiece, move.destination);
+            updatePieceAndSquareState(new Move(move.promotionPiece, move.getOrigin(), move.getDestination(), move.getDiceRoll(), move.getSide()));
+        } else {
+            updatePieceAndSquareState(move);
+            printPieceAndSquare();
             if (applyCastling && this.castling != Square.INVALID) {
                 System.out.println("updated piece and square castling: ");
-                if (this.castling == Square.f1) updatePieceAndSquareStateForCastling(Square.h1,Square.f1); // short white
-                if (this.castling == Square.d1) updatePieceAndSquareStateForCastling(Square.a1,Square.d1); // long white
-                if (this.castling == Square.f8) updatePieceAndSquareStateForCastling(Square.h8,Square.f8); // short black
-                if (this.castling == Square.d8) updatePieceAndSquareStateForCastling(Square.a8,Square.d8); // long black
+                if (this.castling == Square.f1)
+                    updatePieceAndSquareStateForCastling(Square.h1, Square.f1); // short white
+                if (this.castling == Square.d1)
+                    updatePieceAndSquareStateForCastling(Square.a1, Square.d1); // long white
+                if (this.castling == Square.f8)
+                    updatePieceAndSquareStateForCastling(Square.h8, Square.f8); // short black
+                if (this.castling == Square.d8)
+                    updatePieceAndSquareStateForCastling(Square.a8, Square.d8); // long black
             }
-                System.out.println("size: " + pieceAndSquare.size());
-            }
-
-        // update piece and square for move
-
+            System.out.println("size: " + pieceAndSquare.size());
+        }
 
         System.out.println("Real cumulative turn: " + cumulativeTurn);
         State nextState = new State(newBoard, -1, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
-                longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn);
+                longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn + 1);
 
         if (move.enPassantMove) {
             nextState.enPassant = move.enPassant;
@@ -300,8 +259,8 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-            newBoard.printBoard();
-            return nextState;
+        newBoard.printBoard();
+        return nextState;
         //}
         //return this;
     }
@@ -311,25 +270,25 @@ public class State {
         List<PieceAndSquareTuple> newState = new ArrayList<>();
         // add all tuples except for the old rook that moved
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            if(!(t.getPiece()==WHITE_ROOK && t.getSquare()==rookSquareOld)) {
+            if (!(t.getPiece() == WHITE_ROOK && t.getSquare() == rookSquareOld)) {
                 newState.add(t);
             }
         }
         newState.add(rookToNewSquare);
-        pieceAndSquare=newState;
+        pieceAndSquare = newState;
     }
 
-    private void updatePieceAndSquareState(Move move){
-        PieceAndSquareTuple destination = new PieceAndSquareTuple(move.getPiece(),move.getDestination());
+    private void updatePieceAndSquareState(Move move) {
+        PieceAndSquareTuple destination = new PieceAndSquareTuple(move.getPiece(), move.getDestination());
         List<PieceAndSquareTuple> newState = new ArrayList<>();
         // skip over tuple that is in origin square or is in destination square
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (!(t.getPiece()==move.getPiece() && t.getSquare()==move.getOrigin()) && t.getSquare()!=move.getDestination()) {
+            if (!(t.getPiece() == move.getPiece() && t.getSquare() == move.getOrigin()) && t.getSquare() != move.getDestination()) {
                 newState.add(t);
             }
         }
         newState.add(destination);
-        pieceAndSquare=newState;
+        pieceAndSquare = newState;
     }
 
     public String toFEN() {
@@ -366,36 +325,28 @@ public class State {
         return castling;
     }
 
-    public int getDiceRoll() {
-        return diceRoll;
-    }
-
-    public Side getColor() {
-        return color;
-    }
-
-    public Square getEnPassant() {
-        return enPassant;
-    }
-
-//    public static void setGameOver(int gameOver) {
-//        State.gameOver = gameOver;
-//    }
-
     public void setCastling(Square castling) {
         this.castling = castling;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public int getDiceRoll() {
+        return diceRoll;
     }
 
     public void setDiceRoll(int diceRoll) {
         this.diceRoll = diceRoll;
     }
 
+    public Side getColor() {
+        return color;
+    }
+
     public void setColor(Side color) {
         this.color = color;
+    }
+
+    public Square getEnPassant() {
+        return enPassant;
     }
 
     public void setEnPassant(Square enPassant) {
@@ -410,6 +361,73 @@ public class State {
             }
         }
         return king;
+    }
+
+    public List<PieceAndSquareTuple> getPieceAndSquare() {
+        return pieceAndSquare;
+    }
+
+    public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
+        this.pieceAndSquare = pieceAndSquare;
+        printPieceAndSquare();
+    }
+
+    public int getCumulativeTurn() {
+        return cumulativeTurn;
+    }
+
+    public void setCumulativeTurn(int cumulativeTurn) {
+        this.cumulativeTurn = cumulativeTurn;
+    }
+
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    //Getter for castling
+    public boolean isApplyCastling() {
+        return applyCastling;
+    }
+
+    //Setter for castling
+    public void setApplyCastling(boolean applyCastling) {
+        this.applyCastling = applyCastling;
+    }
+
+    public boolean isShortCastlingWhite() {
+        return shortCastlingWhite;
+    }
+
+    public void setShortCastlingWhite(boolean shortCastlingWhite) {
+        this.shortCastlingWhite = shortCastlingWhite;
+    }
+
+    public boolean isLongCastlingWhite() {
+        return longCastlingWhite;
+    }
+
+    public void setLongCastlingWhite(boolean longCastlingWhite) {
+        this.longCastlingWhite = longCastlingWhite;
+    }
+
+    public boolean isShortCastlingBlack() {
+        return shortCastlingBlack;
+    }
+
+    public void setShortCastlingBlack(boolean shortCastlingBlack) {
+        this.shortCastlingBlack = shortCastlingBlack;
+    }
+
+    public boolean isLongCastlingBlack() {
+        return longCastlingBlack;
+    }
+
+    public void setLongCastlingBlack(boolean longCastlingBlack) {
+        this.longCastlingBlack = longCastlingBlack;
     }
 
 }
