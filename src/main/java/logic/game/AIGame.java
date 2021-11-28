@@ -12,29 +12,41 @@ public class AIGame extends HumanGame {
 
     private final AIPlayer aiPlayer;
 
-    public AIGame(int depth) {
-        this(new MiniMaxPlayer(depth,Side.BLACK));
-    }
-
-    public AIGame(AIPlayer aiPlayer) {
-        super();
+    public AIGame(AIPlayer aiPlayer, String FEN) {
+        super(FEN);
         this.aiPlayer = aiPlayer;
     }
+
+    public AIPlayer getAiPlayerAiGame(){ return aiPlayer;}
+    //public Side getAiPlayerSide(){ return  Side.BLACK;}
+    public Side getAiPlayerSide(){ return aiPlayer.getColor();}
 
     //should ideally be called immediately in the GUI controller after the makeHumanMove returns
     //actually could be done just using Player objects instead of this class probably
     public Move makeAIMove() {
+        System.out.println(currentState.toFEN());
         Move move = aiPlayer.chooseMove(currentState);
-        State newState = currentState.applyMove(move);
-        previousStates.push(currentState);
+        if (evaluator.isLegalMove(move, currentState, true,true)) {
+            State newState = currentState.applyMove(move);
+            previousStates.push(currentState);
 
-        checkGameOver(move);
+            checkGameOver(move);
 
-        currentState = newState;
-        move.setStatus(Validity.VALID);
-        processCastling();
-        MainContainerController.getInstance().updateTurn(currentState.getColor());
+            currentState = newState;
+            move.setStatus(Validity.VALID);
+
+            processCastling();
+            MainContainerController.getInstance().updateTurn(currentState.getColor());
+        } else {
+            move.setInvalid();
+        }
+
+        // send back to GUI
         return move;
     }
+
+//    public void resetCurrentState() {
+//        currentState=firstState;
+//    }
 
 }

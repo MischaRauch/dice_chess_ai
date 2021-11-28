@@ -54,6 +54,15 @@ public class MainContainerController extends AnchorPane {
         loader.load();
     }
 
+    public MainContainerController(Game game) throws IOException {
+        //this.type = type;
+        instance = this;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainContainer.fxml"));
+        loader.setController(this); //this class is the controller for the FXML view that the FXMLLoader is loading
+        loader.setRoot(this);       //this class is also the Parent node of the FXML view
+        loader.load();
+    }
+
     @FXML
     private Button undoButton;
 
@@ -90,20 +99,23 @@ public class MainContainerController extends AnchorPane {
         }
     }
 
+    private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //private String StartingFEN = "r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1 1"; // castling tests
+    //private String StartingFEN = "4k3/8/8/8/K/8/pppppppp/8 w KQkq - 0 1 1";
     @FXML
     void initialize() throws IOException {
-        switch (type) {
-            case AI_V_AI -> {
-                Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE), new MiniMaxPlayer(100, Side.BLACK));
-                //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
-            }
-            case HUMAN_V_AI -> {
-                Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
-            }
-            case HUMAN_V_HUMAN -> {
-                Game game = new HumanGame();
-            }
-        }
+//        switch (type) {
+//            case AI_V_AI -> {
+//                Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE),new MiniMaxPlayer(100, Side.BLACK));
+//                //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
+//            }
+//            case HUMAN_V_AI -> {
+//                Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
+//            }
+//            case HUMAN_V_HUMAN -> {
+//                Game game = new HumanGame();
+//            }
+//        }
 
         board = new Chessboard(type);
         chessBoardContainer.getChildren().add(board);

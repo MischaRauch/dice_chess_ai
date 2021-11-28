@@ -3,14 +3,15 @@ package logic.player;
 import logic.Move;
 import logic.State;
 import logic.enums.Side;
-import logic.algorithms.minimax.MiniMax;
-import logic.algorithms.minimax.MiniMaxThread;
-public class MiniMaxPlayer extends AIPlayer {
+import logic.algorithms.expectiminimax.ExpectiMiniMax;
+import logic.algorithms.expectiminimax.ExpectiMiniMaxThread;
+
+public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     private final int depth;
-    MiniMax miniMax = new MiniMax();
+    ExpectiMiniMax expectiMiniMax = new ExpectiMiniMax();
 
-    public MiniMaxPlayer(int depth, Side color) {
+    public ExpectiMiniMaxPlayer(int depth, Side color) {
         super(color);
         this.depth = depth;
     }
@@ -18,10 +19,7 @@ public class MiniMaxPlayer extends AIPlayer {
     @Override
     public Move chooseMove(State state) {
         // java creates a seperate thread to compute minimax while main thread still computing
-        MiniMaxThread thread = new MiniMaxThread(depth,state);
-        // before thread :      94305800, 46340000, 37389000
-        // after first thread:  71309300, 20369700, 16032500
-        // thread also fixed game freezing
+        ExpectiMiniMaxThread thread = new ExpectiMiniMaxThread(depth,state);
         thread.start();
         try {
             // threads execute code in sequence
@@ -32,6 +30,7 @@ public class MiniMaxPlayer extends AIPlayer {
         }
         Move chosenMove = thread.getBestMove();
         state.printPieceAndSquare();
+        System.out.println("ExpectiMiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove.toString());
         return chosenMove;
     }
 

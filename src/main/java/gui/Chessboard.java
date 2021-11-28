@@ -1,9 +1,7 @@
 package gui;
 
-import logic.enums.GameType;
-import logic.enums.Piece;
-import logic.enums.Square;
-import logic.enums.Validity;
+import dataCollection.CsvHandler;
+import logic.enums.*;
 import logic.game.*;
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
@@ -35,6 +33,7 @@ public class Chessboard extends GridPane {
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
+    private CsvHandler handle;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
@@ -42,6 +41,12 @@ public class Chessboard extends GridPane {
         game = Game.getInstance();
         this.gameType = type;
         chessboard = this;
+        handle = new CsvHandler();
+
+        if(type == GameType.AI_V_AI)
+            handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
+        else
+            handle.readTheCsv();
 
         setStyle("-fx-background-color: #ffffff");
 
@@ -54,7 +59,7 @@ public class Chessboard extends GridPane {
     //This stuff gets called after the constructor has finished loading the FXML file
     @FXML
     void initialize() {
-        loadBoard(Game.openingFEN);
+        loadBoard(Config.OPENING_FEN);
     }
 
     //populates the GridPane (which is actually this class) with Tile objects
@@ -100,13 +105,15 @@ public class Chessboard extends GridPane {
     public void updateGUI(Move move) {
         if (move.getStatus() == Validity.VALID) {
 
+            game.setNumTurns(game.getNumTurns() + 1);
+
             MainContainerController.getInstance().setInScrollPane(move);
             //mainContainerController.setGameForTurn(logic.game);
 
             Tile origin = getTileAt(8 - move.getOrigin().getRank(), move.getOrigin().getFile());
             Tile destination = getTileAt(8 - move.getDestination().getRank(), move.getDestination().getFile());
 
-            if ((destination.getPiece() != Piece.EMPTY) && (destination.getPiece().getColor() != origin.getPiece().getColor())) {
+            if ((destination.getPiece() != Piece.EMPTY) && (destination.getPiece().getColor() != origin.getPiece().getColor())) {// && !move.isPromotionMove()
                 //capture piece so move piece to the flowpanel
                 //System.out.println("tile not empty and tile color not selected color");
                 MainContainerController.getInstance().movePieceOut(destination.getPiece(), destination.getPiece().getColor());
@@ -156,11 +163,62 @@ public class Chessboard extends GridPane {
 //                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
 //            }
 
-            if (game.isGameOver())
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.winner)));
+            if (game.isGameOver()) {
+                //showEndGame(logic.game.getCurrentState().getGameOver());
+                //Stage stage = (Stage) getScene().getWindow();
+                Side winner = game.getWinner();
 
+                //Writing CSV file
+                if (gameType == GameType.AI_V_AI) {
+                    AiAiGame aiAiGame = (AiAiGame) game;
+                    //handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+                    handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+                    handle.aiVsAiCsvWrite();
+                } else if (gameType == GameType.HUMAN_V_AI) {
+                    AIGame aiGame = (AIGame) game;
+                    handle = new CsvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
+                    handle.addToCsv();
+                } else {
+                    handle = new CsvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
+                    handle.addToCsv();
+                }
+
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
+
+                // if gameover true then the winner has also been set by the checkGameOver( method in Game, so we can reset state here
+               if(gameType!=GameType.AI_V_AI) {
+                   game.resetCurrentStateToFirstState();
+                   game.setGameOver(false);
+               }
+
+            }
+
+            }
+
+//            if (game.getCurrentState().getGameOver() != 0) {
+//
+//                //showEndGame(logic.game.getCurrentState().getGameOver());
+//                //Stage stage = (Stage) getScene().getWindow();
+//                Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
+//                //Writing CSV file
+//                if(gameType == GameType.AI_V_AI) {
+//                    AiAiGame aiAiGame = (AiAiGame) game;
+//                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
+//                    handle.aiVsAiCsvWrite();
+//                }
+//                else if(gameType == GameType.HUMAN_V_AI){
+//                    AIGame aiGame = (AIGame) game;
+//                   handle = new csvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
+//                    handle.addToCsv();
+//                }
+//                else {
+//                    handle = new csvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
+//                    handle.addToCsv();
+//                }
+//
+//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
+//            }
         }
-    }
 
     // you only move selected tile ever
     private void move(Tile tile) throws CloneNotSupportedException {
@@ -189,12 +247,6 @@ public class Chessboard extends GridPane {
             }
         }
 
-//        if (logic.game.getCurrentState().getGameOver() != 0) {
-//            showEndGame(logic.game.getCurrentState().getGameOver());
-//            Stage stage = (Stage) getScene().getWindow();
-//            stage.setScene(new Scene(new GameOverScreen(logic.game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
-//        }
-
     }
 
     public Tile getTileAt(int row, int col) {
@@ -221,7 +273,6 @@ public class Chessboard extends GridPane {
 
         return board;
     }
-
 
     public void showEndGame(int winner) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -257,7 +308,7 @@ public class Chessboard extends GridPane {
                             tile.select();
 
                             //color legal moves green
-                            List<Square> legalMoves = LegalMoveGenerator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
+                            List<Square> legalMoves = generator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
                             for (Square s : legalMoves)
                                 tileBoard[8 - s.getRank()][s.getFile()].colorGreen();
                         }

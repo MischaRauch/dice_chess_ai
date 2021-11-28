@@ -26,4 +26,9 @@ public class RandomMovesPlayer extends AIPlayer {
         return chosenMove;
     }
 
+    @Override
+    public String getNameAi() {
+        return "Random AI";
+    }
+
 }

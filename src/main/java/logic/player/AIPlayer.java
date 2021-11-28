@@ -28,7 +28,7 @@ public abstract class AIPlayer {
     }
 
     public abstract Move chooseMove(State state);
-
+    public abstract String getNameAi();
     //have not tested this
     //need to incorporate castling and promotion
     public List<Move> getValidMoves(State state) {
@@ -50,11 +50,12 @@ public abstract class AIPlayer {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
+                        //first check the natural move in the "forward" direction
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
                             Move natural = new Move(p, location, naturalMove, state.getDiceRoll(), color);
 
+                            //promote if possible
                             if (p.canPromote(naturalMove)) {
                                 //pawn is moving into promotion rank
                                 if (state.getDiceRoll() != 1 && state.getDiceRoll() != 6) {
@@ -65,39 +66,62 @@ public abstract class AIPlayer {
                                     //TODO: potentially give AI the choice to promote to knight in cases where it would lead to a king capture in the next turn
                                     natural.promotionPiece = Piece.QUEEN.getColoredPiece(color);
                                 }
-
                                 natural.promotionMove = true;
-
                             }
-
                             validMoves.add(natural);
 
                             //double jumping
                             Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
-                            if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(location))
-                                validMoves.add(new Move(p, location, doubleJump, state.getDiceRoll(), color));
+                            if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(location)) {
+                                Move move = new Move(p, location, doubleJump, state.getDiceRoll(), color);
+                                //set en-passant stuff
+                                move.setEnPassant(naturalMove);
+                                move.setEnPassantMove(true);
+                                validMoves.add(move);
+                            }
                         }
 
+                        //now consider pawn capture moves which put the pawn in a different file
                         for (int k = 1; k < 3; k++) {
+                            //loop through the two potential capture targets
                             Square captureTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
-                            if (captureTarget != Square.INVALID && board.getPieceAt(captureTarget) != EMPTY && !board.getPieceAt(captureTarget).isFriendly(color)) {
-                                Move capture = new Move(p, location, captureTarget, state.getDiceRoll(), color);
 
-                                if (p.canPromote(captureTarget)) {
-                                    //pawn is moving into promotion rank
-                                    if (state.getDiceRoll() != 1 && state.getDiceRoll() != 6) {
-                                        //if dice roll is not pawn or king, then automatically promote piece
-                                        capture.promotionPiece = p.promote(state.getDiceRoll());
-                                    } else {
-                                        //auto promote to Queen
-                                        //TODO: potentially give AI the choice to promote to knight in cases where it would lead to a king capture in the next turn
-                                        capture.promotionPiece = Piece.QUEEN.getColoredPiece(color);
+                            //only consider valid squares. Not sure if necessary since it's technically impossible for a pawn to be in the last rank
+                            //since it would immediately be promoted, but let's just be safe.
+                            if (captureTarget != Square.INVALID) {
+                                Piece atTarget = b.getPieceAt(captureTarget);
+
+                                if (atTarget == EMPTY) {
+                                    //no piece at target, but en-passant capture still possible
+                                    if (state.getEnPassant() != INVALID) {
+                                        Move capture = new Move(p, location, captureTarget, state.getDiceRoll(), color);
+                                        capture.setEnPassantCapture(true);
+                                        validMoves.add(capture);
                                     }
+                                } else {
+                                    //capture target square is occupied by enemy piece
+                                    if (!atTarget.isFriendly(color)) {
+                                        Move capture = new Move(p, location, captureTarget, state.getDiceRoll(), color);
 
-                                    capture.promotionMove = true;
+                                        //check if capture results in promotion and promote if so
+                                        if (p.canPromote(captureTarget)) {
+                                            //pawn is moving into promotion rank
+                                            if (state.getDiceRoll() != 1 && state.getDiceRoll() != 6) {
+                                                //if dice roll is not pawn or king, then automatically promote piece
+                                                capture.promotionPiece = p.promote(state.getDiceRoll());
+                                            } else {
+                                                //auto promote to Queen
+                                                //TODO: potentially give AI the choice to promote to knight in cases where it would lead to a king capture in the next turn
+                                                capture.promotionPiece = Piece.QUEEN.getColoredPiece(color);
+                                            }
+
+                                            capture.promotionMove = true;
+                                        }
+
+                                        //add capture move to the list of valid moves
+                                        validMoves.add(capture);
+                                    }
                                 }
-
-                                validMoves.add(capture);
                             }
 
                         }
@@ -137,8 +161,7 @@ public abstract class AIPlayer {
                                     state.setApplyCastling(true);
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             if (location.getSquareNumber() == 116) {
                                 //SHORT BLACK
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
@@ -208,5 +231,9 @@ public abstract class AIPlayer {
             }
         }
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+    }
+
+    public Side getColor() {
+        return color;
     }
 }

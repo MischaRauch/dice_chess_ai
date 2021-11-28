@@ -16,7 +16,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HumanGame extends Game {
 
-    private final boolean DEBUG = false;
+    public HumanGame(String FEN) {
+        super(FEN);
+    }
 
     // called for GUI to moves Tile
     public Move makeHumanMove(Move move) {
@@ -25,6 +27,7 @@ public class HumanGame extends Game {
             State newState = currentState.applyMove(move);
             previousStates.push(currentState);
 
+            // sets winner and sets gameover to true if game over
             checkGameOver(move);
             // update pieceAndSquare in state
 //            updatePieceAndSquareState(newState,move);
@@ -52,5 +55,9 @@ public class HumanGame extends Game {
         }
         System.out.println("Size: " + pieceAndSquare.size());
     }
+
+//    public void resetCurrentState() {
+//        currentState=firstState;
+//    }
 
 }
