@@ -1,6 +1,7 @@
 package logic.algorithms;
 
 import logic.*;
+import logic.ML.OriginAndDestSquare;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
@@ -18,6 +19,22 @@ import static logic.enums.Square.getSquare;
 
 // generates all possible states of the board for n turns ahead
 public class BoardStateGenerator {
+
+    public static ArrayList<State> getPossibleBoardStates(State state, Side side) { // for ML
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
+        ArrayList<State> answer = new ArrayList<State>();
+        State tempState;
+        Move move1;
+
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
+            Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
+
+            move1 = new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), side);
+            tempState = state.applyMove(move1);
+            answer.add(tempState);
+        }
+        return answer;
+    }
 
     public List<Move> getValidMovesForGivenPiece(State state, Piece piece) {
         List<Move> validMoves = new LinkedList<>();

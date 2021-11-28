@@ -18,6 +18,7 @@ import logic.player.AIPlayer;
 import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
 import logic.player.QTablePlayer;
+import logic.player.QLPlayer;
 
 import static logic.enums.Side.*;
 

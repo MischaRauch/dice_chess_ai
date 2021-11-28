@@ -13,47 +13,24 @@ import java.util.List;
 
 public class BoardStateEvaluator {
 
-    public static int getBoardEvaluationNumber(State state, Side side) { // for ML
+    public static int getBoardEvaluationNumber(State state, Side color) { // for ML
         int evalNo = 0;
+        int turn = 10;
 
-        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, color);
 
         for (OriginAndDestSquare tempMove : originAndDestSquares) {
             Square s = (Square) tempMove.getOrigin();
             Piece p = state.getBoard().getPieceAt(s);
 
-            if (p.getColor() == side) {
+            if (p.getColor()==color) {
                 evalNo += p.getWeight();
-                if(p==Piece.BLACK_PAWN || p==Piece.WHITE_PAWN) {
-                    evalNo += getCorrectWeights(pawnBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_KNIGHT || p==Piece.WHITE_KNIGHT) {
-                    evalNo += getCorrectWeights(knightBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_BISHOP || p==Piece.WHITE_BISHOP) {
-                    evalNo += getCorrectWeights(bishopBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_ROOK || p==Piece.WHITE_ROOK) {
-                    evalNo += getCorrectWeights(rookBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_QUEEN || p==Piece.WHITE_QUEEN) {
-                    evalNo += getCorrectWeights(queenBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING) { // TODO, implement turn number to QL
-                    evalNo += getCorrectWeights(kingBoardWeightsMiddleGameW, side)[s.getRank()-1][s.getFile()];
-                }
+                evalNo += getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
             } else {
                 evalNo -= p.getWeight();
-                if(p==Piece.BLACK_PAWN || p==Piece.WHITE_PAWN) {
-                    evalNo -= getCorrectWeights(pawnBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_KNIGHT || p==Piece.WHITE_KNIGHT) {
-                    evalNo -= getCorrectWeights(knightBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_BISHOP || p==Piece.WHITE_BISHOP) {
-                    evalNo -= getCorrectWeights(bishopBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_ROOK || p==Piece.WHITE_ROOK) {
-                    evalNo -= getCorrectWeights(rookBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_QUEEN || p==Piece.WHITE_QUEEN) {
-                    evalNo -= getCorrectWeights(queenBoardWeightsW, side)[s.getRank()-1][s.getFile()];
-                } else if (p==Piece.BLACK_KING || p==Piece.WHITE_KING) {
-                    evalNo -= getCorrectWeights(kingBoardWeightsMiddleGameW, side)[s.getRank()-1][s.getFile()];
-                }
+                evalNo -= getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
             }
-        }
+            }
         return evalNo;
     }
 

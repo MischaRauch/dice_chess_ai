@@ -6,8 +6,9 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.game.Game;
-import logic.minimax.BoardStateEvaluator;
-import logic.minimax.BoardStateGenerator;
+
+import logic.algorithms.BoardStateGenerator;
+import logic.algorithms.BoardStateEvaluator;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ public class DQL {
 
     State state;
     Qtable currentQtable;
+    double [][] Qvalues;
 
     public void algo(State initialState, Side side, int depth) {
         currentQtable = new Qtable(side , depth);
@@ -97,8 +99,15 @@ public class DQL {
         return (currentQtable.checkIfStateLastDepth(state) || currentQtable.checkIfKingExist(state));
     }
 
-    public Move getBestMove() {
-        return null;
+    public Move getBestMove(State state, Side color) {
+
+        int index = argmax(Qvalues, 0);
+        ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
+
+        OriginAndDestSquare tempMove = originAndDestSquares.get(index);
+        Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
+
+        return (new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), color));
     }
 
     public int argmax (double [][] qvalues, int stateIndex) {

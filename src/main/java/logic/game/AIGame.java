@@ -7,6 +7,7 @@ import logic.Move;
 import logic.State;
 import logic.player.AIPlayer;
 import logic.player.MiniMaxPlayer;
+import logic.player.QLPlayer;
 
 public class AIGame extends HumanGame {
 

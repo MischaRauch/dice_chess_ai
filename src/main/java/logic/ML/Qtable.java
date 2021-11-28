@@ -8,7 +8,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.game.Game;
-import logic.minimax.BoardStateGenerator;
+import logic.algorithms.BoardStateGenerator;
 
 
 import java.util.*;

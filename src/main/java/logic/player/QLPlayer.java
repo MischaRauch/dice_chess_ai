@@ -17,8 +17,13 @@ public class QLPlayer extends AIPlayer{
     @Override
     public Move chooseMove(State state){ // TODO, implement this
         ql.algo(state, state.getColor(), this.depth);
-        Move bestMove = ql.getBestMove();
+        Move bestMove = ql.getBestMove(state, this.color);
         return bestMove;
         }
+
+    @Override
+    public String getNameAi() {
+        return "QLPlayer";
+    }
 
 }
