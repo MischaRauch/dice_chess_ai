@@ -17,7 +17,7 @@ public class DQL {
     State state;
     Qtable currentQtable;
 
-    public void algo(Side side, int depth) {
+    public void algo(State initialState, Side side, int depth) {
         currentQtable = new Qtable(side , depth);
         int stateSize = currentQtable.stateSpace.size();
         int actionSize = 4672; // 8x8x(8x7+8+9), this is the total possible actions a state can have at most
@@ -37,8 +37,6 @@ public class DQL {
 
         ArrayList<Double> totalRewardsOfEachEpisode = new ArrayList<Double>(); // to test the performance of the agent
 
-        Game game = Game.getInstance();
-        State initialState = game.getCurrentState(); // get current state
         State currentState;
 
         Random rnd = new Random();
@@ -97,6 +95,10 @@ public class DQL {
 
     public boolean didStateEnd(State state) {
         return (currentQtable.checkIfStateLastDepth(state) || currentQtable.checkIfKingExist(state));
+    }
+
+    public Move getBestMove() {
+        return null;
     }
 
     public int argmax (double [][] qvalues, int stateIndex) {
