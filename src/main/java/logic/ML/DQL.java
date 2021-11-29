@@ -24,7 +24,7 @@ public class DQL {
         int stateSize = currentQtable.stateSpace.size();
         int actionSize = 4672; // 8x8x(8x7+8+9), this is the total possible actions a state can have at most
 
-        double [][] Qvalues = new double[stateSize][actionSize]; // save the q-values in a separate table
+        Qvalues = new double[stateSize][actionSize]; // save the q-values in a separate table
         Arrays.fill(Qvalues, 0); // fill the table with 0
 
         int numOfEpisodes = 400;
