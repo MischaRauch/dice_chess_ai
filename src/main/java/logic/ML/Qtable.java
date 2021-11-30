@@ -2,19 +2,13 @@ package logic.ML;
 
 import logic.LegalMoveGenerator;
 import logic.Move;
-import logic.PieceAndSquareTuple;
 import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.game.Game;
 import logic.algorithms.BoardStateGenerator;
 
-
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static logic.enums.Piece.getDiceFromPiece;
 
 public class Qtable {
 
@@ -36,15 +30,12 @@ public class Qtable {
 
     public void ConstructQtable(State currentState, int depth) { // this table doesn't contain values, only info
         stateSpace = createStateSpace(currentState, depth);
-        for (int i=0; i<stateSpace.size(); i++) {
-            // System.out.println(stateSpace.get(i).getBoard().getFEN());
-        }
 
-        for (int i=0; i<stateSpace.size(); i++) {
-            actionSpace = createActionSpace(stateSpace.get(i)); // for each state create actionSpace
+        for (State state : stateSpace) {
+            actionSpace = createActionSpace(state); // for each state create actionSpace
 
-            for ( int j=0; j<actionSpace.size(); j++) {
-                Qtable.put(stateSpace.get(i), actionSpace); // adding actionSpace of the state
+            for (int j = 0; j < actionSpace.size(); j++) {
+                Qtable.put(state, actionSpace); // adding actionSpace of the state
             }
         }
     }
@@ -107,7 +98,7 @@ public class Qtable {
     }
 
     public boolean checkIfKingExist(State state) {
-        Piece p = null;
+        Piece p;
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
@@ -126,21 +117,18 @@ public class Qtable {
         int num = r.nextInt(allMoves.size());
 
         tempMove = allMoves.get(num);
-        Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
-        return (new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), currentSide));
+        Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
+        return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), currentSide));
     }
 
     public ArrayList<State> createStateSpace(State currentState, int depth) {
-        /* TODO, fix this (general idea is to create all possible board states of the player,
-            then save next all possible states, then again apply from there
-        */
-        ArrayList<State> opponentState = new ArrayList<>();
-        ArrayList<Integer> opponentIndexOfDepth = new ArrayList<>();
 
-        stateSpace = new ArrayList<>();
         ArrayList<State> possibleStatesOfCurrentBoard;
 
+        ArrayList<State> opponentState = new ArrayList<>();
         ArrayList<Integer> indexOfDepthOfOpponent = new ArrayList<>();
+
+        stateSpace = new ArrayList<>();
         indexOfDepthOfAI = new ArrayList<>(); // this shows from which index the first state of that depth
         // starts and at which index it ends. Ex: indexOfDepth[2] will return e.g. 125, this means states of depth 2 ends
         // at 125, to get where it starts just do indexOfDepth[2] - indexOfDepth[1]
@@ -171,7 +159,7 @@ public class Qtable {
 
             }
 
-            else if (i % 2 == 1){ // for opponent side
+            else { // for opponent side
 
                 int totalStates = 0;
                 int toWhere;

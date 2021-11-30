@@ -4,10 +4,7 @@ import logic.Move;
 import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.enums.Square;
-import logic.game.Game;
 
-import logic.algorithms.BoardStateGenerator;
 import logic.algorithms.BoardStateEvaluator;
 
 import java.util.*;
@@ -15,7 +12,6 @@ import java.util.*;
 
 public class DQL {
 
-    State state;
     Qtable currentQtable;
     double [][] Qvalues;
 
@@ -40,17 +36,15 @@ public class DQL {
         double gamma = 0.99; // discount factor, helps the algo to strive for a long-term high reward (0<gamma<1)
         double learningRate = 0.1;
 
-        ArrayList<Double> totalRewardsOfEachEpisode = new ArrayList<Double>(); // to test the performance of the agent
+        ArrayList<Double> totalRewardsOfEachEpisode = new ArrayList<>(); // to test the performance of the agent
 
         State currentState;
-
-        Random rnd = new Random();
-        Move action = null;
+        Move action;
 
         for (int i=0; i < numOfEpisodes; i++) {
             currentState = initialState;
 
-            double reward = 0;
+            double reward;
             double episodesTotalReward = 0;
             boolean finished = false; // turn to true if king captured
 
@@ -66,9 +60,9 @@ public class DQL {
                     int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState));
                     ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState);
                     OriginAndDestSquare tempMove = originAndDestSquares.get(index);
-                    Piece p = currentState.getBoard().getPieceAt((Square) tempMove.getOrigin());
+                    Piece p = currentState.getBoard().getPieceAt(tempMove.getOrigin());
 
-                    action = new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), side);
+                    action = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
                 }
 
                 //apply chosen action and return the next state, reward and true if the episode is ended
@@ -111,14 +105,14 @@ public class DQL {
 
     public Move getBestMove(State state, Side color) {
 
-        int index = argmax(Qvalues, 0);
+        int index = argmax(Qvalues, 0); // TODO fix updating qValues
         System.out.println(index);
         ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
 
         OriginAndDestSquare tempMove = originAndDestSquares.get(index);
-        Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
+        Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
 
-        return (new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), color));
+        return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), color));
     }
 
     public int argmax (double [][] qvalues, int stateIndex) {
