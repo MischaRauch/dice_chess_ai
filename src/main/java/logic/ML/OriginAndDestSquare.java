@@ -1,19 +1,23 @@
 package logic.ML;
 
-public class OriginAndDestSquare<Square> {
-    private final Square origin;
-    private final Square dest;
+import logic.enums.Square;
 
-    public OriginAndDestSquare(Square x, Square y) {
-        this.origin = x;
-        this.dest = y;
-    }
+public class OriginAndDestSquare {
+        private final Square origin;
+        private final Square dest;
 
-    public Square getOrigin() {
-        return origin;
-    }
+        public OriginAndDestSquare(Square x, Square y) {
+            this.origin = x;
+            this.dest = y;
+        }
 
-    public Square getDest() {
-        return dest;
+        public Square getOrigin() {
+            return origin;
+        }
+
+        public Square getDest() {
+            return dest;
+        }
+
+
     }
-}

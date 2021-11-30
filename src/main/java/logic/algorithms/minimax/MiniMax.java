@@ -111,12 +111,12 @@ public class MiniMax {
                 // if eval number smaller
                 if (CheckOutPruning) {
                     totalCount++;
-                    System.out.println("child evaluated: " + totalCount);
+                    // System.out.println("child evaluated: " + totalCount);
                 }
                 if (isChildMaxPlayer && evalNo <= finalEvalNo) {
                     if (CheckOutPruning) {
                         minCount++;
-                        System.out.println("min player children added: " + minCount);
+                        // System.out.println("min player children added: " + minCount);
                     }
                     finalEvalNo = evalNo;
                     bestChild = newNode;
@@ -124,7 +124,7 @@ public class MiniMax {
                 } else if (!isChildMaxPlayer && evalNo >= finalEvalNo) {
                     if (CheckOutPruning) {
                         maxCount++;
-                        System.out.println("max player children added: " + maxCount);
+                        // System.out.println("max player children added: " + maxCount);
                     }
                     finalEvalNo = evalNo;
                     bestChild = newNode;

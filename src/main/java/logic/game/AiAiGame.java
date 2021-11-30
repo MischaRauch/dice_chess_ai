@@ -57,10 +57,10 @@ public class AiAiGame extends Game {
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         // FIXED BUG need to clone first state as when you call restart method you launch same game which has same state,
         // so game gets loaded from the state that the previous game was loaded from
-        System.out.println("AiAiGame; playTill: " + playTill);
-        System.out.println("AiAiGame; Played: " + played);
+        //System.out.println("AiAiGame; playTill: " + playTill);
+        //System.out.println("AiAiGame; Played: " + played);
         while (!gameOver) {
-            System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn());
+            //System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn());
 
             //update the value for gameOver,so we eventually exit this loop
             Move move = nextPlayer.chooseMove(currentState);

@@ -35,7 +35,7 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         loadPieceAndSquareFromFEN(board.getFEN());
-        printPieceAndSquare();
+        // printPieceAndSquare();
         cumulativeTurn = 0;
     }
 
@@ -159,7 +159,7 @@ public class State {
                 knight++;
             }
         }
-        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        // System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
     public State applyMove(Move move) {
@@ -232,7 +232,7 @@ public class State {
             updatePieceAndSquareState(new Move(move.promotionPiece, move.getOrigin(), move.getDestination(), move.getDiceRoll(), move.getSide()));
         } else {
             updatePieceAndSquareState(move);
-            printPieceAndSquare();
+            // printPieceAndSquare();
             if (applyCastling && this.castling != Square.INVALID) {
                 System.out.println("updated piece and square castling: ");
                 if (this.castling == Square.f1)
@@ -244,10 +244,10 @@ public class State {
                 if (this.castling == Square.d8)
                     updatePieceAndSquareStateForCastling(Square.a8, Square.d8); // long black
             }
-            System.out.println("size: " + pieceAndSquare.size());
+            // System.out.println("size: " + pieceAndSquare.size());
         }
 
-        System.out.println("Real cumulative turn: " + cumulativeTurn);
+        // System.out.println("Real cumulative turn: " + cumulativeTurn);
         State nextState = new State(newBoard, -1, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
                 longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn + 1);
 
@@ -259,7 +259,7 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        newBoard.printBoard();
+        // newBoard.printBoard();
         return nextState;
         //}
         //return this;
@@ -369,7 +369,7 @@ public class State {
 
     public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
         this.pieceAndSquare = pieceAndSquare;
-        printPieceAndSquare();
+        // printPieceAndSquare();
     }
 
     public int getCumulativeTurn() {

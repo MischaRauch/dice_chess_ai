@@ -267,17 +267,17 @@ public class BoardStateGenerator {
     }
 
     public void printPossibleBoardStatesWeights(List<Integer> possibleBoardStatesWeights) {
-        System.out.println("newBoardPieceStateWeights: ");
+        // System.out.println("newBoardPieceStateWeights: ");
         for (int i = 0; i < possibleBoardStatesWeights.size(); i++) {
-            System.out.print(possibleBoardStatesWeights.get(i) + " ");
+            // System.out.print(possibleBoardStatesWeights.get(i) + " ");
         }
-        System.out.println();
+        // System.out.println();
     }
 
     public void printPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
-        System.out.println(" BoardStateGenerator; pieceAndSquare: Size: " + pieceAndSquare.size());
+        // System.out.println(" BoardStateGenerator; pieceAndSquare: Size: " + pieceAndSquare.size());
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            System.out.print(t.toString() + " | ");
+            // System.out.print(t.toString() + " | ");
         }
         printPieceCounts(pieceAndSquare);
     }
@@ -304,7 +304,7 @@ public class BoardStateGenerator {
                 knight++;
             }
         }
-        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        // System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
     public void printLegalMoves(List<Square> legalMoves) {
@@ -312,7 +312,7 @@ public class BoardStateGenerator {
         for (int i = 0; i < legalMoves.size(); i++) {
             System.out.print(" " + legalMoves.get(i).toString());
         }
-        System.out.println();
+        // System.out.println();
     }
 
 }
