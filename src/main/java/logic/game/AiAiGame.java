@@ -59,14 +59,14 @@ public class AiAiGame extends Game {
         System.out.println("AiAiGame; playTill: " + playTill);
         System.out.println("AiAiGame; Played: " + played);
         while (!gameOver) {
-            System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn());
+            System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
 
             //update the value for gameOver,so we eventually exit this loop
             Move move = nextPlayer.chooseMove(currentState);
 
             // TODO MAKE evaluator legal move not modify the state for castling
             //  the state should track all castling not the evaluator
-            if (evaluator.isLegalMove(move, currentState, true, true)) {
+//            if (evaluator.isLegalMove(move, currentState, true, true)) {
 
             //need to check if the destination capture move was a king, and in the next state the state the king might
             //be dead already. so we can't check it was capture
@@ -82,9 +82,9 @@ public class AiAiGame extends Game {
                 processCastling();
 
                 //MainContainerController.getInstance().updateTurn(currentState.getColor());
-            } else {
-                move.setInvalid();
-            }
+//            } else {
+//                move.setInvalid();
+//            }
             //update GUI, need to use Platform.runLater because we are in a separate thread here,
             //and the GUI can only be updated from the main JavaFX thread. So we queue the GUI updates here
             Platform.runLater(() -> {
