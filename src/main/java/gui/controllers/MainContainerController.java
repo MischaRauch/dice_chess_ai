@@ -99,6 +99,9 @@ public class MainContainerController extends AnchorPane {
         }
     }
 
+    private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
+    //private String StartingFEN = "r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1 1"; // castling tests
+    //private String StartingFEN = "4k3/8/8/8/K/8/pppppppp/8 w KQkq - 0 1 1";
     @FXML
     void initialize() throws IOException {
 //        switch (type) {
