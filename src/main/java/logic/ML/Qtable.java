@@ -33,10 +33,8 @@ public class Qtable {
 
         for (State state : stateSpace) {
             actionSpace = createActionSpace(state); // for each state create actionSpace
+            Qtable.put(state, actionSpace); // adding actionSpace of the state
 
-            for (int j = 0; j < actionSpace.size(); j++) {
-                Qtable.put(state, actionSpace); // adding actionSpace of the state
-            }
         }
     }
 
@@ -56,8 +54,8 @@ public class Qtable {
     public int accessStateIndex(State state) {
         int answer = 0;
         for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            if (entry.getKey() == state) {
-                return answer;
+            if (entry.getKey().equals(state)) {
+                break;
             }
             answer++;
         }
@@ -78,7 +76,7 @@ public class Qtable {
                 }
             }
         }
-        return 0; // shouldn't happen
+        return -1; // shouldn't happen
     }
 
     public boolean checkIfStateLastDepth(State state) {
@@ -110,15 +108,15 @@ public class Qtable {
         return false;
     }
 
-    public Move randomMoveGenerator(State state) {
+    public Move randomMoveGenerator(State state, Side side) {
         Random r = new Random();
-        ArrayList<OriginAndDestSquare> allMoves = createActionSpace(state);
+        ArrayList<OriginAndDestSquare> allMoves = legalMoveGenerator.getAllLegalMoves(state, side);
         OriginAndDestSquare tempMove;
         int num = r.nextInt(allMoves.size());
 
         tempMove = allMoves.get(num);
         Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
-        return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), currentSide));
+        return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side));
     }
 
     public ArrayList<State> createStateSpace(State currentState, int depth) {
@@ -186,6 +184,9 @@ public class Qtable {
 
 
         }
+//        for (int a=0; a<stateSpace.size(); a++) {
+//            stateSpace.get(a).getBoard().printBoard();
+//        }
         return stateSpace;
     }
 
