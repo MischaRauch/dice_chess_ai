@@ -42,7 +42,7 @@ public class Chessboard extends GridPane {
         this.gameType = type;
         chessboard = this;
         handle = new CsvHandler();
-
+System.out.println("TYPE: " + type);
         if(type == GameType.AI_V_AI)
             handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
         else
