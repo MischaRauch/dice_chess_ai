@@ -27,7 +27,7 @@ public class DQL {
             Arrays.fill(row, 0);
         }
         int numOfEpisodes = 50;
-        int maxIterationOfEpisode = 10;
+        // int maxIterationOfEpisode = 10;
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
         double explorationDecay = 0.001;
@@ -48,9 +48,14 @@ public class DQL {
             double episodesTotalReward = 0;
             boolean finished = false; // turn to true if king captured
 
-            for (int j=0; j < maxIterationOfEpisode; j++) {
+            System.out.println("a");
+            for (int j=0; j <= depth; j++) {
+                /* TODO, problem is about the the loop after first one, for some reason the state we get
+                    is the last state, always
+                */
                 // take learned path or explore new actions
-                System.out.println(currentState);
+                // System.out.println(currentState);
+                System.out.println("b");
 
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
                     action = currentQtable.randomMoveGenerator(currentState);
@@ -68,7 +73,7 @@ public class DQL {
                 //apply chosen action and return the next state, reward and true if the episode is ended
                 State newState = currentState.applyMove(action);
 
-                reward = BoardStateEvaluator.getBoardEvaluationNumber(newState, currentQtable.currentSide); // TODO, to be added
+                reward = BoardStateEvaluator.getBoardEvaluationNumber(newState, currentQtable.currentSide);
                 finished = didStateEnd(newState);
 
                 // update value of Qtable
@@ -78,8 +83,8 @@ public class DQL {
                 // currentState.printPieceAndSquare();
                 int indexOfAction = currentQtable.accessActionIndex(currentState, tempOriginAndDestSquare);
 
-                // System.out.println(indexOfState);
-                // System.out.println(indexOfAction);
+                System.out.println(indexOfState);
+                System.out.println(Qvalues.length);
 
                 Qvalues[indexOfState][indexOfAction] = (1-learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate*(reward + gamma* maxValue(Qvalues, currentQtable.accessStateIndex(currentState)));
                 //System.out.println(Qvalues[indexOfState][indexOfAction]);
@@ -100,7 +105,7 @@ public class DQL {
     }
 
     public boolean didStateEnd(State state) {
-        return (currentQtable.checkIfStateLastDepth(state) || currentQtable.checkIfKingExist(state));
+        return !(currentQtable.checkIfKingExist(state));
     }
 
     public Move getBestMove(State state, Side color) {

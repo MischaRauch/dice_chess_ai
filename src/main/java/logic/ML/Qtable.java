@@ -56,10 +56,10 @@ public class Qtable {
     public int accessStateIndex(State state) {
         int answer = 0;
         for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            answer++;
             if (entry.getKey() == state) {
                 return answer;
             }
+            answer++;
         }
         return answer;
     }
