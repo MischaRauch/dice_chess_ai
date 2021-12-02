@@ -19,13 +19,11 @@ public class Qtable {
     LegalMoveGenerator legalMoveGenerator;
     ArrayList<Integer> indexOfDepthOfAI = new ArrayList<>();
     int depth;
-    State currentState;
 
     public Qtable(State currentState, Side side, int depth) {
         this.Qtable = new LinkedHashMap<>();
         this.currentSide = side;
         this.depth = depth;
-        this.currentState = currentState;
         ConstructQtable(currentState, depth);
     }
 
@@ -79,12 +77,12 @@ public class Qtable {
         return -1; // shouldn't happen
     }
 
-    public int getIndexOfBestMove(double[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p) {
+    public int getIndexOfBestMove(double[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p, State initial) {
         double count = 0;
         int indexOfMaxAction = -1; // if returns this somethings wrong
         int a = 0;
         for (OriginAndDestSquare move : moves) {
-            if (p == currentState.getBoard().getPieceAt(move.getOrigin())) {
+            if (p == initial.getBoard().getPieceAt(move.getOrigin())) {
                 if(qvalues[0][a] > count){
                     count = qvalues[0][a];
                     indexOfMaxAction = a;
@@ -92,7 +90,7 @@ public class Qtable {
             }
             a++;
         }
-        return a;
+        return indexOfMaxAction;
     }
 //    public boolean checkIfStateLastDepth(State state) {
 //        int a;

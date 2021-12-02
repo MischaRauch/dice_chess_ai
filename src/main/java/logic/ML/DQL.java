@@ -134,35 +134,11 @@ public class DQL {
         int a = currentQtable.accessStateIndex(initialState);
 
         ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
-        int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP);
+        int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP, initialState);
 
         OriginAndDestSquare tempMove = originAndDestSquares.get(index);
-        Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
-
-        return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), color));
+        return (new Move(tempP, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(tempP), color));
     }
-
-//    public int getIndexOfBestMove(double[][] qvalues, int stateIndex, Piece p) {
-//        double count = 0;
-//        int indexOfMaxAction = -1; // if returns this somethings wrong
-//
-//        ArrayList<OriginAndDestSquare> movesOfPieceP;
-//        ArrayList<OriginAndDestSquare> tempMoves = currentQtable.accessStateValue(intState);
-//        for (OriginAndDestSquare move: tempMoves) {
-//            if(p == initialState.getBoard().getPieceAt(move.getOrigin())) {
-//                movesOfPieceP.add(move);
-//            }
-//        }
-//
-//        for(int i = 0; i < qvalues[stateIndex].length; i++){
-//            if()
-//            if(qvalues[stateIndex][i] > count){
-//                count = qvalues[stateIndex][i];
-//                indexOfMaxAction = i;
-//            }
-//        }
-//        return indexOfMaxAction;
-//    }
 
     public int argmax (double [][] qvalues, int stateIndex) {
         double count = 0;
