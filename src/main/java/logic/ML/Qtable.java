@@ -13,17 +13,19 @@ import java.util.*;
 public class Qtable {
 
     ArrayList<OriginAndDestSquare> actionSpace;
-    HashMap<State, ArrayList<OriginAndDestSquare>> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
+    LinkedHashMap<State, ArrayList<OriginAndDestSquare>> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
     ArrayList<State> stateSpace;
     Side currentSide;
     LegalMoveGenerator legalMoveGenerator;
     ArrayList<Integer> indexOfDepthOfAI = new ArrayList<>();
     int depth;
+    State currentState;
 
     public Qtable(State currentState, Side side, int depth) {
-        this.Qtable = new HashMap<>();
+        this.Qtable = new LinkedHashMap<>();
         this.currentSide = side;
         this.depth = depth;
+        this.currentState = currentState;
         ConstructQtable(currentState, depth);
     }
 
@@ -42,16 +44,11 @@ public class Qtable {
     }
 
     public ArrayList<OriginAndDestSquare> accessStateValue(State state) {
-        for (State tempState: stateSpace) {
-            if (tempState.equals1(state)) {
-                return createActionSpace(state);
+        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+            if (entry.getKey().equals1(state)) {
+                return entry.getValue();
+                }
             }
-        }
-//        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-//            if (entry.getKey().equals1(state)) {
-//                return entry.getValue();
-//                }
-//            }
         return null;
     }
 
@@ -67,34 +64,36 @@ public class Qtable {
     }
 
     public int accessActionIndex(State state, OriginAndDestSquare originAndDestSquare) { // TODO, decide what to do with -1
-        ArrayList<OriginAndDestSquare> tempList;
-        for (State tempState: stateSpace) {
-            if (tempState.equals1(state)) {
-                tempList = createActionSpace(state);
-                int a = 0;
-                for (OriginAndDestSquare tempAction: tempList) {
-                    if (tempAction.getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
-                            && tempAction.getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
-                        return a;
+
+        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+            if (entry.getKey().equals1(state)) {
+                ArrayList<OriginAndDestSquare> temp = entry.getValue();
+                for (int i=0; i<temp.size(); i++) {
+                    if (temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
+                        && temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
+                        return i;
                     }
-                    a++;
                 }
             }
         }
-//        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-//            if (entry.getKey() == state) {
-//                ArrayList<OriginAndDestSquare> temp = entry.getValue();
-//                for (int i=0; i<temp.size(); i++) {
-//                    if (temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
-//                        && temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
-//                        return i;
-//                    }
-//                }
-//            }
-//        }
-        return -1; // doesn't exist
+        return -1; // shouldn't happen
     }
 
+    public int getIndexOfBestMove(double[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p) {
+        double count = 0;
+        int indexOfMaxAction = -1; // if returns this somethings wrong
+        int a = 0;
+        for (OriginAndDestSquare move : moves) {
+            if (p == currentState.getBoard().getPieceAt(move.getOrigin())) {
+                if(qvalues[0][a] > count){
+                    count = qvalues[0][a];
+                    indexOfMaxAction = a;
+                }
+            }
+            a++;
+        }
+        return a;
+    }
 //    public boolean checkIfStateLastDepth(State state) {
 //        int a;
 //        if (indexOfDepthOfAI.size() < 2) {
@@ -111,10 +110,8 @@ public class Qtable {
 //        return false;
 //    }
 
-    public boolean checkIfKingExist(State state) { // TODO, fix this
+    public boolean checkIfKingExist(State state) {
         Piece p;
-        boolean exists=false;
-
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 p = state.getBoard().getPieceAt(Square.getSquare(rank, file));

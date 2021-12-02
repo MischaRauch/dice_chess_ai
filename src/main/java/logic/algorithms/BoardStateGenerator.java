@@ -27,9 +27,9 @@ public class BoardStateGenerator {
         Move move1;
 
         for (OriginAndDestSquare tempMove : originAndDestSquares) {
-            Piece p = state.getBoard().getPieceAt((Square) tempMove.getOrigin());
+            Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
 
-            move1 = new Move(p, (Square) tempMove.getOrigin(), (Square) tempMove.getDest(), Piece.getDiceFromPiece(p), side);
+            move1 = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
             tempState = state.applyMove(move1);
             answer.add(tempState);
         }

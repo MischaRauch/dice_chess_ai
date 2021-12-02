@@ -61,8 +61,8 @@ public class DQL {
 //                currentQtable.stateSpace.get(0).board.printBoard();
 //                currentQtable.stateSpace.get(currentQtable.accessStateIndex(initialState)).board.printBoard();
                 System.out.println(currentQtable.accessStateIndex((initialState)));
-                currentQtable.stateSpace.get(1).getBoard().printBoard();
-                currentQtable.stateSpace.get(currentQtable.accessStateIndex(currentQtable.stateSpace.get(1))).getBoard().printBoard();
+                currentQtable.stateSpace.get(0).getBoard().printBoard();
+                currentQtable.stateSpace.get(currentQtable.accessStateIndex(currentQtable.stateSpace.get(0))).getBoard().printBoard();
                 //System.out.println("debugging");
                 // take learned path or explore new actions
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
@@ -129,22 +129,40 @@ public class DQL {
     }
 
     public Move getBestMove(State state, Side color) {
-    state.getDiceRoll();
-//        for(int i = 0; i < Qvalues[0].length; i++){
-//                System.out.println(Qvalues[0][i]);
-//            }
 
+        Piece tempP = Piece.getPieceFromDice(initialState.getDiceRoll(), initialState.getColor()); // get piece that needs to be equal
+        int a = currentQtable.accessStateIndex(initialState);
 
-        int index = argmax(Qvalues, currentQtable.accessStateIndex(initialState));
-        System.out.println(index);
-        System.out.println(Qvalues[0][index]);
         ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
+        int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP);
 
         OriginAndDestSquare tempMove = originAndDestSquares.get(index);
         Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
 
         return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), color));
     }
+
+//    public int getIndexOfBestMove(double[][] qvalues, int stateIndex, Piece p) {
+//        double count = 0;
+//        int indexOfMaxAction = -1; // if returns this somethings wrong
+//
+//        ArrayList<OriginAndDestSquare> movesOfPieceP;
+//        ArrayList<OriginAndDestSquare> tempMoves = currentQtable.accessStateValue(intState);
+//        for (OriginAndDestSquare move: tempMoves) {
+//            if(p == initialState.getBoard().getPieceAt(move.getOrigin())) {
+//                movesOfPieceP.add(move);
+//            }
+//        }
+//
+//        for(int i = 0; i < qvalues[stateIndex].length; i++){
+//            if()
+//            if(qvalues[stateIndex][i] > count){
+//                count = qvalues[stateIndex][i];
+//                indexOfMaxAction = i;
+//            }
+//        }
+//        return indexOfMaxAction;
+//    }
 
     public int argmax (double [][] qvalues, int stateIndex) {
         double count = 0;
