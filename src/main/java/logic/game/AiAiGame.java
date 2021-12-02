@@ -1,16 +1,13 @@
 package logic.game;
 
 import dataCollection.CsvHandler;
-import logic.Config;
-import logic.enums.Side;
-import logic.enums.Validity;
-import gui.controllers.MainContainerController;
 import gui.ChessIcons;
 import gui.Chessboard;
 import gui.controllers.MainContainerController;
 import javafx.application.Platform;
 import logic.Config;
 import logic.Move;
+import logic.PieceAndSquareTuple;
 import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
@@ -20,7 +17,10 @@ import logic.player.MiniMaxPlayer;
 import logic.player.QTablePlayer;
 import logic.player.QLPlayer;
 
-import static logic.enums.Side.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AiAiGame extends Game {
 
@@ -36,6 +36,7 @@ public class AiAiGame extends Game {
         this.white = white;
         this.black = black;
     }
+
     public AiAiGame(AIPlayer white, AIPlayer black, int played, String FEN) {
         super(FEN);
         this.white = white;
@@ -57,21 +58,23 @@ public class AiAiGame extends Game {
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         // FIXED BUG need to clone first state as when you call restart method you launch same game which has same state,
         // so game gets loaded from the state that the previous game was loaded from
-        //System.out.println("AiAiGame; playTill: " + playTill);
-        //System.out.println("AiAiGame; Played: " + played);
+        System.out.println("AiAiGame; playTill: " + playTill);
+        System.out.println("AiAiGame; Played: " + played);
         while (!gameOver) {
-            //System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn());
+            System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
+
+            List<PieceAndSquareTuple> first = currentState.getPieceAndSquare();
 
             //update the value for gameOver,so we eventually exit this loop
             Move move = nextPlayer.chooseMove(currentState);
 
             // TODO MAKE evaluator legal move not modify the state for castling
             //  the state should track all castling not the evaluator
-            if (evaluator.isLegalMove(move, currentState, true, true)) {
+//            if (evaluator.isLegalMove(move, currentState, true, true)) {
 
             //need to check if the destination capture move was a king, and in the next state the state the king might
             //be dead already. so we can't check it was capture
-             /// TODO FIX BUG (if FEN loaded with only 2 kings game freezes)
+            /// TODO FIX BUG (if FEN loaded with only 2 kings game freezes)
 
             State newState = currentState.applyMove(move);
             previousStates.push(currentState);
@@ -80,12 +83,16 @@ public class AiAiGame extends Game {
             currentState = newState;
             move.setStatus(Validity.VALID);
 
-                processCastling();
+            List<PieceAndSquareTuple> next = currentState.getPieceAndSquare();
 
-                //MainContainerController.getInstance().updateTurn(currentState.getColor());
-            } else {
-                move.setInvalid();
-            }
+
+            processCastling();
+
+
+            //MainContainerController.getInstance().updateTurn(currentState.getColor());
+//            } else {
+//                move.setInvalid();
+//            }
             //update GUI, need to use Platform.runLater because we are in a separate thread here,
             //and the GUI can only be updated from the main JavaFX thread. So we queue the GUI updates here
             Platform.runLater(() -> {
@@ -121,6 +128,27 @@ public class AiAiGame extends Game {
             updateCsvFile(game);
         }
 
+    }
+
+    public boolean isEqualState(List<PieceAndSquareTuple> first, List<PieceAndSquareTuple> second) {
+        List<PieceAndSquareTuple> firstCopy = first.stream().collect(Collectors.toList());
+
+        if (first.size() == second.size()) {
+            int size = first.size();
+            for (int i = 0; i < size; i++) {
+                int count = 0;
+                for (int j = 0; j < size; j++) {
+                    if (firstCopy.get(i).getPiece() == second.get(j).getPiece() && firstCopy.get(i).getSquare() == second.get(j).getSquare()) {
+                        count++;
+                    }
+                    Collections.rotate(firstCopy, 1);
+                }
+                if (count==size) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void updateCsvFile(AiAiGame game) {

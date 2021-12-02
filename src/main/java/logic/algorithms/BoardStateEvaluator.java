@@ -38,16 +38,14 @@ public class BoardStateEvaluator {
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {
         int evalNo = 0;
-        for (PieceAndSquareTuple ps : nodePieceAndSquare) {
-            Piece p = (Piece) ps.getPiece();
-            Square s = (Square) ps.getSquare();
+        for (PieceAndSquareTuple<Piece,Square> ps : nodePieceAndSquare) {
             // if piece friendly add weight, else subtract opposite weight
-            if (p.getColor()==color) {
-                evalNo += p.getWeight();
-                evalNo += getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
+            if (ps.getPiece().getColor()==color) {
+                evalNo += ps.getPiece().getWeight();
+                evalNo += getCorrectWeights(ps.getPiece(),turn)[ps.getSquare().getRank()-1][ps.getSquare().getFile()];
             } else {
-                evalNo -= p.getWeight();
-                evalNo -= getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
+                evalNo -= ps.getPiece().getWeight();
+                evalNo -= getCorrectWeights(ps.getPiece(),turn)[ps.getSquare().getRank()-1][ps.getSquare().getFile()];
             }
         }
         return evalNo;
@@ -72,19 +70,6 @@ public class BoardStateEvaluator {
             case BLACK_QUEEN -> queenBoardWeightsW;
             default -> null;
         };
-    }
-
-    // flips the weight matrix horizontally so if can be used for either black or white
-    private static int[][] flipMatrixHorizontal(int[][] matrix) {
-        int temp = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length / 2; j++) {
-                temp = matrix[i][j];
-                matrix[i][j] = matrix[i][matrix.length - 1 - j];
-                matrix[i][matrix.length - 1 -j] = temp;
-            }
-        }
-        return matrix;
     }
 
     private static int[][] knightBoardWeightsB = {
