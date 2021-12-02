@@ -7,6 +7,8 @@ import logic.enums.Side;
 import java.util.List;
 import java.util.Random;
 
+// based on https://towardsdatascience.com/implementing-a-chess-engine-from-scratch-be38cbdae91
+
 public class RandomMovesPlayer extends AIPlayer {
 
     private final static Random randomly = new Random();
