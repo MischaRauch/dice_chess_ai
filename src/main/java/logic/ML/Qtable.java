@@ -77,7 +77,53 @@ public class Qtable {
         return -1; // shouldn't happen
     }
 
-    public int getIndexOfBestMove(double[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p, State initial) {
+    public int addPieceWeights(State state, Side side) {
+        int totalWeights = 0;
+
+        Piece[] pieceList = state.getBoard().getBoard();
+        for (Piece p: pieceList) {
+            totalWeights += getWeightOf(side, p);
+        }
+        return totalWeights;
+    }
+
+
+    public int getWeightOf(Side side, Piece p) {
+        if (side == Side.BLACK) {
+            return switch (p) {
+                case BLACK_PAWN -> 1000;
+                case BLACK_KNIGHT, BLACK_BISHOP -> 3500;
+                case BLACK_ROOK -> 5250;
+                case BLACK_QUEEN -> 10000;
+                case BLACK_KING -> 2000000;
+
+                case WHITE_PAWN -> -1000;
+                case WHITE_KNIGHT, WHITE_BISHOP -> -3500;
+                case WHITE_ROOK -> -5250;
+                case WHITE_QUEEN -> -10000;
+                case WHITE_KING -> -2000000;
+                default -> 0;
+            };
+        } else if(side == Side.WHITE) {
+            return switch (p) {
+                case BLACK_PAWN -> -1000;
+                case BLACK_KNIGHT, BLACK_BISHOP -> -3500;
+                case BLACK_ROOK -> -5250;
+                case BLACK_QUEEN -> -10000;
+                case BLACK_KING -> -2000000;
+
+                case WHITE_PAWN -> 1000;
+                case WHITE_KNIGHT, WHITE_BISHOP -> 3500;
+                case WHITE_ROOK -> 5250;
+                case WHITE_QUEEN -> 10000;
+                case WHITE_KING -> 2000000;
+                default -> 0;
+            };
+        }
+        return 0;
+    }
+
+    public int getIndexOfBestMove(int[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p, State initial) {
         double count = 0;
         int indexOfMaxAction = -1; // if returns this somethings wrong
         int a = 0;
@@ -108,17 +154,22 @@ public class Qtable {
 //        return false;
 //    }
 
-    public boolean checkIfKingExist(State state) {
+    public boolean checkIfKingsExist(State state) {
         Piece p;
+        boolean WExist = false;
+        boolean BExist = false;
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
-                if (p == Piece.WHITE_KING || p == Piece.BLACK_KING) {
-                    return true;
+                if (p == Piece.WHITE_KING) {
+                    WExist = true;
+                }
+                if (p == Piece.BLACK_KING) {
+                    BExist = true;
                 }
             }
         }
-        return false;
+        return (WExist && BExist);
     }
 
     public Move randomMoveGenerator(State state, Side side) {

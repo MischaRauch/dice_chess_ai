@@ -15,12 +15,12 @@ public class BoardStateEvaluator {
 
     public static int getBoardEvaluationNumber(State state, Side color) { // for ML
         int evalNo = 0;
-        int turn = 10;
+        int turn = 1;
 
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, color);
 
         for (OriginAndDestSquare tempMove : originAndDestSquares) {
-            Square s = (Square) tempMove.getOrigin();
+            Square s = tempMove.getOrigin();
             Piece p = state.getBoard().getPieceAt(s);
 
             if (p.getColor()==color) {
