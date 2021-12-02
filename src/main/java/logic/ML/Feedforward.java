@@ -27,6 +27,12 @@ import org.nd4j.linalg.factory.Nd4j;
 import java.io.IOException;
 import java.util.List;
 
+
+
+//Eclipse Deeplearning4j Development Team. Deeplearning4j: Open-source distributed deep learning for the JVM, Apache Software Foundation License 2.0.
+// code for network configuration from https://deeplearning4j.konduit.ai/v/en-1.0.0-beta7/models/multilayernetwork
+// based on https://www.youtube.com/watch?v=PEEsve1Xv4s&t=987s
+
 public class Feedforward {
 
 public static void main(String[] args) throws IOException,NullPointerException {
