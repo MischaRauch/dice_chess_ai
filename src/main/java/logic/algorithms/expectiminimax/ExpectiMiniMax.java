@@ -29,7 +29,7 @@ public class ExpectiMiniMax {
             bestNode = parentNode;
         }
         while (depth != 0) {
-            if (getKingCount(parentNode.getPreviousState().getPieceAndSquare()) != 2) {constructTree(parentNode, 0);;}
+//            if (getKingCount(parentNode.getPreviousState().getPieceAndSquare()) != 2) {constructTree(parentNode, 0);;}
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = generateAllPossibleStatesForGivenNode(parentNode);
             List<Piece> pieceList = generatePieceTypesForGivenNode(parentNode);
 

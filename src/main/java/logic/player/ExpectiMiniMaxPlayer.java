@@ -33,7 +33,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         Move chosenMove = thread.getBestMove();
         // TODO make evalautor not update moves
         // to promote en passant moves
-        evaluator.isLegalMove(chosenMove, state, true, true);
+//        evaluator.isLegalMove(chosenMove, state, true, true);
         state.printPieceAndSquare();
         System.out.println("ExpectiMiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove.toString());
         return chosenMove;

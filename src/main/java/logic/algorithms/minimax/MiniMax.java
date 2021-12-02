@@ -42,7 +42,7 @@ public class MiniMax {
             bestNode = parentNode;
         }
         while (this.depth > 0) {
-            if (getKingCount(parentNode.getState().getPieceAndSquare()) != 2) {constructTree(parentNode, 0);;}
+//            if (getKingCount(parentNode.getState().getPieceAndSquare()) != 2) {constructTree(parentNode, 0);;}
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
             // loop through for all 6 dice numbers and generate all possible states
             for (int i = 1; i < 7; i++) {
