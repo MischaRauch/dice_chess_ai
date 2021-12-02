@@ -1,22 +1,23 @@
 package logic.game;
 
+import logic.*;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.*;
 
 import java.util.Stack;
 
-import static logic.enums.Piece.*;
-import static logic.enums.Side.*;
+import static logic.enums.Piece.KING;
+import static logic.enums.Side.NEUTRAL;
+import static logic.enums.Side.WHITE;
 
 public abstract class Game {
 
     //public static String openingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
     //public static String openingFEN = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 1";
-    private String FEN;
+    private final String FEN;
     protected static Game CURRENT_GAME;
 
     protected final Stack<State> previousStates = new Stack<>();
@@ -45,15 +46,16 @@ public abstract class Game {
 
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
-        currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
+        //currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
+        currentState.setDiceRoll(Dice.roll(currentState, WHITE));
         // First time game gets initialized game instance is null so make this the first state
-        if (Game.getInstance()==null) {
+        if (Game.getInstance() == null) {
             firstState = new State(currentState);
             System.out.println("GAME INSTANCE NULL, FIRST STATE INITIALIZED");
             numTurns = 0;
         }
         CURRENT_GAME = this;
-        this.FEN=initialPosition;
+        this.FEN = initialPosition;
         System.out.println("GAME const fen");
     }
 
@@ -106,7 +108,7 @@ public abstract class Game {
 
     protected void processCastling() {
         //check if castling was performed
-        if (currentState.isCanCastle()) {
+        if (currentState.isCanCastleBlack()) {
             if (currentState.getCastling() == Square.f8) {
                 System.out.println("SHORT CASTLING BLACK WAS PERFROMED 09");
                 castlingPerformed = 2;
@@ -115,6 +117,9 @@ public abstract class Game {
                 System.out.println("LONG CASTLING BLACK WAS PERFORMED 09");
                 castlingPerformed = 4;
             }
+            currentState.setCastling(Square.INVALID);
+        }
+        if (currentState.isCanCastleWhite()) {
             if (currentState.getCastling() == Square.f1) {
                 System.out.println("SHORT CASTLING WHITE WAS PERFORMED 09");
                 castlingPerformed = 1;
@@ -124,7 +129,6 @@ public abstract class Game {
                 castlingPerformed = 3;
             }
             currentState.setCastling(Square.INVALID);
-
         }
     }
 

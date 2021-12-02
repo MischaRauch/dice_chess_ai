@@ -1,12 +1,17 @@
 package logic.player;
 
-import logic.*;
+import logic.Dice;
+import logic.Move;
+import logic.PieceAndSquareTuple;
+import logic.State;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import java.util.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static logic.enums.Piece.EMPTY;
 import static logic.enums.Square.*;
@@ -157,8 +162,11 @@ public abstract class AIPlayer {
                                 }
                                 //LONG WHITE
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
-                                    validMoves.add(new Move(p, location, getSquare(2), state.getDiceRoll(), color));
-                                    state.setCanCastle(true);
+                                    //validMoves.add(new Move(p, location, getSquare(2), state.getDiceRoll(), color));
+                                    //state.setCanCastle(true);
+                                    Move m = new Move(p, location, Square.c1, state.getDiceRoll(), color);
+                                    m.castlingRookDestination = d1;
+                                    validMoves.add(m);
                                 }
                             }
                             //TODO: check if black can castle before generating the move
@@ -166,13 +174,20 @@ public abstract class AIPlayer {
                             if (location.getSquareNumber() == 116) {
                                 //SHORT BLACK
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
-                                    validMoves.add(new Move(p, location, getSquare(118), state.getDiceRoll(), color));
-                                    state.setCanCastle(true);
+                                    //validMoves.add(new Move(p, location, getSquare(118), state.getDiceRoll(), color));
+                                    //state.setCanCastle(true);
+                                    Move m = new Move(p, location, Square.g8, state.getDiceRoll(), color);
+                                    m.castlingRookDestination = f8;
+                                    validMoves.add(m);
+
                                 }
                                 //LONG BLACK
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
-                                    validMoves.add(new Move(p, location, getSquare(114), state.getDiceRoll(), color));
-                                    state.setCanCastle(true);
+                                    //validMoves.add(new Move(p, location, getSquare(114), state.getDiceRoll(), color));
+                                    //state.setCanCastle(true);
+                                    Move m = new Move(p, location, Square.c8, state.getDiceRoll(), color);
+                                    m.castlingRookDestination = d8;
+                                    validMoves.add(m);
                                 }
                             }
                         }
