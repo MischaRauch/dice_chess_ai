@@ -203,25 +203,25 @@ public class State {
                     newBoard.setPiece(EMPTY, Square.h1);
                     newBoard.setPiece(WHITE_ROOK, this.castling);
                     longCastlingWhite = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
                 }
                 if (this.castling == Square.d1) {
                     newBoard.setPiece(EMPTY, Square.a1);
                     newBoard.setPiece(WHITE_ROOK, this.castling);
                     shortCastlingWhite = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
                 }
                 if (this.castling == Square.f8) {
                     newBoard.setPiece(EMPTY, Square.h8);
                     newBoard.setPiece(BLACK_ROOK, Square.f8);
                     longCastlingBlack = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
                 }
                 if (this.castling == Square.d8) {
                     newBoard.setPiece(EMPTY, Square.a8);
                     newBoard.setPiece(BLACK_ROOK, this.castling);
                     shortCastlingBlack = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
                 }
             }
         }
@@ -230,22 +230,24 @@ public class State {
         if (move.promotionMove) {
             newBoard.setPiece(move.promotionPiece, move.destination);
             updatePieceAndSquareState(new Move(move.promotionPiece, move.getOrigin(), move.getDestination(), move.getDiceRoll(), move.getSide()));
-        } else {
-            updatePieceAndSquareState(move);
-            printPieceAndSquare();
-            if (applyCastling && this.castling != Square.INVALID) {
-                System.out.println("updated piece and square castling: ");
-                if (this.castling == Square.f1)
-                    updatePieceAndSquareStateForCastling(Square.h1, Square.f1); // short white
-                if (this.castling == Square.d1)
-                    updatePieceAndSquareStateForCastling(Square.a1, Square.d1); // long white
-                if (this.castling == Square.f8)
-                    updatePieceAndSquareStateForCastling(Square.h8, Square.f8); // short black
-                if (this.castling == Square.d8)
-                    updatePieceAndSquareStateForCastling(Square.a8, Square.d8); // long black
-            }
-            System.out.println("size: " + pieceAndSquare.size());
         }
+
+        updatePieceAndSquareState(move);
+        printPieceAndSquare();
+
+        if (applyCastling && this.castling != Square.INVALID) {
+            System.out.println("updated piece and square castling: ");
+            if (this.castling == Square.f1)
+                updatePieceAndSquareStateForCastling(Square.h1, Square.f1); // short white
+            if (this.castling == Square.d1)
+                updatePieceAndSquareStateForCastling(Square.a1, Square.d1); // long white
+            if (this.castling == Square.f8)
+                updatePieceAndSquareStateForCastling(Square.h8, Square.f8); // short black
+            if (this.castling == Square.d8)
+                updatePieceAndSquareStateForCastling(Square.a8, Square.d8); // long black
+        }
+        System.out.println("size: " + pieceAndSquare.size());
+
 
         System.out.println("Real cumulative turn: " + cumulativeTurn);
         State nextState = new State(newBoard, -1, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
