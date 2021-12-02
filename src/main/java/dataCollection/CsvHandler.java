@@ -52,23 +52,18 @@ public class CsvHandler extends ViewDataController {
         }
     }
 
-    public void aiVsAiCsvRead() {
-        //AICsvReaderWriter.readCsv("aiVsAi.csv");
-        try {
-            AICsvReaderWriter.readCsv(getClass().getResource("/data/aiVsAi.csv").toURI().getPath());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+    /*public void aiVsAiCsvRead() {
+        AICsvReaderWriter.readCsv("aiVsAi.csv");
     }
 
     public void aiVsAiCsvWrite(){
         GameInfo aiAiGame = new GameInfo(alg, algTwo, winner, turns);
-        aiAiGameList.add(aiAiGame);
-       //AICsvReaderWriter.writeCsv("aiVsAi.csv");
-       try {
+        //aiAiGameList.add(aiAiGame);
+       AICsvReaderWriter.writeCsv("aiVsAi.csv");
+       /*try {
             AICsvReaderWriter.writeCsv(getClass().getResource("/data/aiVsAi.csv").toURI().getPath());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

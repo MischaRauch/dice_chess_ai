@@ -26,11 +26,11 @@ public class GameInfo {
         this.numTurnsToWin = numTurnsToWin;
     }
 
-    public GameInfo(SimpleStringProperty alg, SimpleStringProperty algTwo, SimpleStringProperty winner, SimpleIntegerProperty turns){
-        this.algUsed = alg;
-        this.algTwo = algTwo;
-        this.gameWinner = winner;
-        this.numTurnsToWin = turns;
+    public GameInfo(String alg, String algTwo, String winner, int turns){
+        this.algUsed = new SimpleStringProperty(alg);
+        this.algTwo = new SimpleStringProperty(algTwo);
+        this.gameWinner = new SimpleStringProperty(winner);
+        this.numTurnsToWin = new SimpleIntegerProperty(turns);
     }
 
 

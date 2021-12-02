@@ -1,6 +1,8 @@
 package gui;
 
+import dataCollection.AICsvReaderWriter;
 import dataCollection.CsvHandler;
+import dataCollection.GameInfo;
 import logic.enums.*;
 import logic.game.*;
 import gui.controllers.GameOverScreen;
@@ -14,7 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import logic.*;
-
+import gui.controllers.ViewDataController;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class Chessboard extends GridPane {
         handle = new CsvHandler();
 
         if(type == GameType.AI_V_AI)
-            handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
+           AICsvReaderWriter.readCsv("aiVsAi.csv");// handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
         else
             handle.readTheCsv();
 
@@ -172,8 +174,10 @@ public class Chessboard extends GridPane {
                 if (gameType == GameType.AI_V_AI) {
                     AiAiGame aiAiGame = (AiAiGame) game;
                     //handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
-                    handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
-                    handle.aiVsAiCsvWrite();
+                    //handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+                    //handle.aiVsAiCsvWrite();
+                    GameInfo gameInfo = new GameInfo(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+                    aiAiGameList.add(gameInfo);
                 } else if (gameType == GameType.HUMAN_V_AI) {
                     AIGame aiGame = (AIGame) game;
                     handle = new CsvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
