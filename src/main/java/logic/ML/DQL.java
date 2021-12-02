@@ -84,7 +84,6 @@ public class DQL {
                 //newState = newState.applyMove(help.chooseMove(newState));
 //                System.out.println(currentQtable.accessStateIndex(newState)+"needs to be 0<x<400 for step 1");
 //                System.out.println();
-                System.out.println("here?");
 
                 //reward = getReward(BoardStateEvaluator.getBoardEvaluationNumber(newState, currentQtable.currentSide);
                 reward = getReward(newState, side);
@@ -116,9 +115,7 @@ public class DQL {
                 if (finished) {
                     break;
                 }
-
              }
-
             //explorationProb = Math.max(minExplorationProb, Math.exp(-explorationDecay*Math.exp(1)));
             explorationProb -= max(explorationDecay, minExplorationProb);
             totalRewardsOfEachEpisode.add(gamesTotalReward);
@@ -133,7 +130,7 @@ public class DQL {
 
     public int getReward(State state, Side side) {
         int reward = 0;
-        reward += BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide)/10;
+        reward += BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide)/5;
         reward += currentQtable.addPieceWeights(state, side);
         return reward;
     }
