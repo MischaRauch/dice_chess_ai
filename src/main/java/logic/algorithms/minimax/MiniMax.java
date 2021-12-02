@@ -88,7 +88,7 @@ public class MiniMax {
                 int lastPieceIndex = possibleBoardStates.size() - 1;
                 int diceNo = Piece.getDiceFromPiece((Piece) possibleBoardStates.get(lastPieceIndex).getPiece());
                 State newState = new State(
-                        parentNode.getState().getBoard(), diceNo, parentNode.getState().getColor(), parentNode.getState().isApplyCastling(),
+                        parentNode.getState().getBoard(), diceNo, parentNode.getState().getColor(), parentNode.getState().isCanCastle(),
                         parentNode.getState().isShortCastlingBlack(), parentNode.getState().isShortCastlingWhite(), parentNode.getState().isLongCastlingBlack(),
                         parentNode.getState().isShortCastlingWhite(), parentNode.getState().getCastling(), possibleBoardStates, parentNode.getState().getCumulativeTurn());
                 int evalNo = (int) allStatesAndBoardEvaluationsForGivenPieceType.get(diceNo - 1).getEvaluationNumbers().get(i);
