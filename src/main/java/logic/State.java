@@ -17,11 +17,16 @@ public class State {
 
     //public boolean gameOver = false;
     public Square castling = Square.INVALID;
+    //TODO: only use move.castlingRookDestination
     public Board board;
     public int diceRoll;
     public Side color;
     public Square enPassant = Square.INVALID;
-    private boolean applyCastling = false;
+    //private boolean canCastle = true;
+    private boolean canCastleWhite = true;
+    private boolean canCastleBlack = true;
+    //TODO: canCastleBlack, canCastleBlack : boolean
+    //they should be true until king moved and false forever
     private boolean shortCastlingWhite = true;
     private boolean longCastlingWhite = true;
     private boolean shortCastlingBlack = true;
@@ -49,12 +54,13 @@ public class State {
     }
 
     // for state updation
-    public State(Board board, int diceRoll, Side color, boolean applyCastling, boolean shortCastlingBlack, boolean shortCastlingWhite,
+    public State(Board board, int diceRoll, Side color, boolean canCastleWhite, boolean canCastleBlack, boolean shortCastlingBlack, boolean shortCastlingWhite,
                  boolean longCastlingBlack, boolean longCastlingWhite, Square castling, List<PieceAndSquareTuple> pieceAndSquare, int cumulativeTurn) {
         this.board = board;
         this.diceRoll = diceRoll;
         this.color = color;
-        this.applyCastling = applyCastling;
+        this.canCastleWhite = canCastleWhite;
+        this.canCastleWhite = canCastleBlack;
         this.shortCastlingBlack = shortCastlingBlack;
         this.shortCastlingWhite = shortCastlingWhite;
         this.longCastlingBlack = longCastlingBlack;
@@ -164,7 +170,6 @@ public class State {
 
     public State applyMove(Move move) {
 
-
         //check if last move was castling
         if (Game.getInstance().getCastlingPerformed() != 0) {
             if (Game.getInstance().getCastlingPerformed() == 1) {
@@ -191,37 +196,52 @@ public class State {
         }
 
         //check if castling has happend and the rook needs to move
-        if (applyCastling) {
+        if (canCastleWhite) {
             // (1) if (shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite) {
             // (2) if ((shortCastlingWhite || shortCastlingBlack || longCastlingBlack || longCastlingWhite)) = false {
             // (1) would check till all castle moves are not possible anymore at the beginning of the logic.game, while
             //(2) would check till the end of the logic.game if castling is possible --> I created a new applyCastling boolean
             //to check if castling was done - more efficient over the long run but not optimal
-            if (this.castling != Square.INVALID) {
+            //if (this.castling != Square.INVALID) {
+            this.castling = move.castlingRookDestination;
+            if (move.castlingRookDestination != Square.INVALID) {
                 //check which rook has to move based on the setted square
                 if (this.castling == Square.f1) {
                     newBoard.setPiece(EMPTY, Square.h1);
-                    newBoard.setPiece(WHITE_ROOK, this.castling);
+                    newBoard.setPiece(WHITE_ROOK, move.castlingRookDestination);
                     longCastlingWhite = false;
-                    move.castling = this.castling;
+                    //move.castlingRookDestination = this.castling;
+                    updatePieceAndSquareStateForCastling(Square.h1, Square.f1, WHITE_ROOK); // short white
+                    canCastleWhite = false;
                 }
                 if (this.castling == Square.d1) {
                     newBoard.setPiece(EMPTY, Square.a1);
                     newBoard.setPiece(WHITE_ROOK, this.castling);
                     shortCastlingWhite = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
+                    updatePieceAndSquareStateForCastling(Square.a1, Square.d1, WHITE_ROOK); // long white
+                    canCastleWhite = false;
                 }
+            }
+        }
+        if (canCastleBlack) {
+            this.castling = move.castlingRookDestination;
+            if (move.castlingRookDestination != Square.INVALID) {
                 if (this.castling == Square.f8) {
                     newBoard.setPiece(EMPTY, Square.h8);
                     newBoard.setPiece(BLACK_ROOK, Square.f8);
                     longCastlingBlack = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
+                    updatePieceAndSquareStateForCastling(Square.h8, Square.f8, BLACK_ROOK); // short black
+                    canCastleBlack = false;
                 }
                 if (this.castling == Square.d8) {
                     newBoard.setPiece(EMPTY, Square.a8);
                     newBoard.setPiece(BLACK_ROOK, this.castling);
                     shortCastlingBlack = false;
-                    move.castling = this.castling;
+                    move.castlingRookDestination = this.castling;
+                    updatePieceAndSquareStateForCastling(Square.a8, Square.d8, BLACK_ROOK); // long black
+                    canCastleBlack = false;
                 }
             }
         }
@@ -230,25 +250,20 @@ public class State {
         if (move.promotionMove) {
             newBoard.setPiece(move.promotionPiece, move.destination);
             updatePieceAndSquareState(new Move(move.promotionPiece, move.getOrigin(), move.getDestination(), move.getDiceRoll(), move.getSide()));
-        } else {
-            updatePieceAndSquareState(move);
-            printPieceAndSquare();
-            if (applyCastling && this.castling != Square.INVALID) {
-                System.out.println("updated piece and square castling: ");
-                if (this.castling == Square.f1)
-                    updatePieceAndSquareStateForCastling(Square.h1, Square.f1); // short white
-                if (this.castling == Square.d1)
-                    updatePieceAndSquareStateForCastling(Square.a1, Square.d1); // long white
-                if (this.castling == Square.f8)
-                    updatePieceAndSquareStateForCastling(Square.h8, Square.f8); // short black
-                if (this.castling == Square.d8)
-                    updatePieceAndSquareStateForCastling(Square.a8, Square.d8); // long black
-            }
-            System.out.println("size: " + pieceAndSquare.size());
         }
 
+        updatePieceAndSquareState(move);
+        printPieceAndSquare();
+
+
+
+        //TODO: if king has moved at all then disable castling for the appropriate color
+//        if (move.getPiece() == WHITE_KING) {
+//            canCastle = false;
+//        }
+
         System.out.println("Real cumulative turn: " + cumulativeTurn);
-        State nextState = new State(newBoard, -1, nextTurn, applyCastling, shortCastlingBlack, shortCastlingWhite,
+        State nextState = new State(newBoard, -1, nextTurn, canCastleWhite, canCastleBlack, shortCastlingBlack, shortCastlingWhite,
                 longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn + 1);
 
         if (move.enPassantMove) {
@@ -265,12 +280,12 @@ public class State {
         //return this;
     }
 
-    private void updatePieceAndSquareStateForCastling(Square rookSquareOld, Square rookSquareNew) {
-        PieceAndSquareTuple rookToNewSquare = new PieceAndSquareTuple(WHITE_ROOK, rookSquareNew);
+    private void updatePieceAndSquareStateForCastling(Square rookSquareOld, Square rookSquareNew, Piece rook) {
+        PieceAndSquareTuple rookToNewSquare = new PieceAndSquareTuple(rook, rookSquareNew);
         List<PieceAndSquareTuple> newState = new ArrayList<>();
         // add all tuples except for the old rook that moved
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (!(t.getPiece() == WHITE_ROOK && t.getSquare() == rookSquareOld)) {
+            if (!(t.getPiece() == rook && t.getSquare() == rookSquareOld)) {
                 newState.add(t);
             }
         }
@@ -389,13 +404,21 @@ public class State {
     }
 
     //Getter for castling
-    public boolean isApplyCastling() {
-        return applyCastling;
+    public boolean isCanCastleWhite() {
+        return canCastleWhite;
+    }
+
+    public boolean isCanCastleBlack() {
+        return canCastleBlack;
     }
 
     //Setter for castling
-    public void setApplyCastling(boolean applyCastling) {
-        this.applyCastling = applyCastling;
+    public void setCanCastleWhite(boolean canCastleWhite) {
+        this.canCastleWhite = canCastleWhite;
+    }
+
+    public void setCanCastleBlack(boolean canCastleBlack) {
+        this.canCastleBlack = canCastleBlack;
     }
 
     public boolean isShortCastlingWhite() {

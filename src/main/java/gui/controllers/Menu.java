@@ -5,11 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Config;
@@ -17,7 +13,6 @@ import logic.enums.GameType;
 import logic.enums.Side;
 import logic.game.AIGame;
 import logic.game.AiAiGame;
-import logic.game.Game;
 import logic.game.HumanGame;
 import logic.player.*;
 
@@ -65,8 +60,8 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("ExpectiMiniMax AI");
-        blackPlayerChoice.setValue("MiniMax AI");
+        whitePlayerChoice.setValue("Basic AI");
+        blackPlayerChoice.setValue("Basic AI");
     }
 
     //private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
@@ -135,7 +130,7 @@ public class Menu {
             case "Basic AI" -> new BasicAIPlayer(color);
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(3,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(7,color);
             default -> new RandomMovesPlayer(color);
         };
     }
