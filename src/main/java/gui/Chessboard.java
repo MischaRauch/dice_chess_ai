@@ -172,8 +172,8 @@ public class Chessboard extends GridPane {
                 if (gameType == GameType.AI_V_AI) {
                     AiAiGame aiAiGame = (AiAiGame) game;
                     //handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
-                    handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
-                    handle.aiVsAiCsvWrite();
+                    //handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+                    //handle.aiVsAiCsvWrite();
                 } else if (gameType == GameType.HUMAN_V_AI) {
                     AIGame aiGame = (AIGame) game;
                     handle = new CsvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());

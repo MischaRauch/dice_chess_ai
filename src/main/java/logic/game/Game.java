@@ -101,6 +101,7 @@ public abstract class Game {
         return winner;
     }
 
+
     public void setGameOver(boolean newGame) { gameDone = newGame;}
 
     protected void processCastling() {

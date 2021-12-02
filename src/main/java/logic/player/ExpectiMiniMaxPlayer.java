@@ -41,7 +41,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     @Override
     public String getNameAi() {
-        return "MiniMax";
+        return "ExpectiMiniMax";
     }
 
 }

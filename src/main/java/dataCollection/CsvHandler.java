@@ -35,7 +35,7 @@ public class CsvHandler extends ViewDataController {
     public void addToCsv(){
         GameInfo newGame = new GameInfo(type, alg, algSide, winner, turns);
         gameList.add(newGame);
-//        CsvReaderWriter.writeCsv("data.csv");
+        //CsvReaderWriter.writeCsv("data.csv");
         try {
             CsvReaderWriter.writeCsv(getClass().getResource("/data/data.csv").toURI().getPath());
         } catch (URISyntaxException e) {
@@ -44,7 +44,7 @@ public class CsvHandler extends ViewDataController {
     }
 
     public void readTheCsv(){
-//        CsvReaderWriter.readCsv("data.csv");
+        //CsvReaderWriter.readCsv("data.csv");
         try {
             CsvReaderWriter.readCsv(getClass().getResource("/data/data.csv").toURI().getPath());
         } catch (URISyntaxException e) {
@@ -53,22 +53,22 @@ public class CsvHandler extends ViewDataController {
     }
 
     public void aiVsAiCsvRead() {
-//        AICsvReaderWriter.readCsv("aiVsAi.csv");
-        try {
+        AICsvReaderWriter.readCsv("aiVsAi.csv");
+        /*try {
             AICsvReaderWriter.readCsv(getClass().getResource("/data/aiVsAi.csv").toURI().getPath());
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public void aiVsAiCsvWrite(){
         GameInfo aiAiGame = new GameInfo(alg, algTwo, winner, turns);
         aiAiGameList.add(aiAiGame);
-//        AICsvReaderWriter.writeCsv("aiVsAi.csv");
-        try {
+        AICsvReaderWriter.writeCsv("aiVsAi.csv");
+        /*try {
             AICsvReaderWriter.writeCsv(getClass().getResource("/data/aiVsAi.csv").toURI().getPath());
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
