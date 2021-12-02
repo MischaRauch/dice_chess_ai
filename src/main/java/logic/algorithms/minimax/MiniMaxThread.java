@@ -1,5 +1,6 @@
 package logic.algorithms.minimax;
 
+import dataCollection.CsvHandler;
 import logic.Move;
 
 public class MiniMaxThread extends Thread {
@@ -22,7 +23,10 @@ public class MiniMaxThread extends Thread {
         System.out.println("Optimal Move: " + bestChild.getMove().toString());
         this.bestMove = bestChild.getMove();
         long end = System.nanoTime();
-        System.out.println("MiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        System.out.println("MiniMaxPlayer: " + state.getColor().name() + ", Elapsed Time to generate tree and find optimal move: " + (end - start));
+        long time = end - start;
+        CsvHandler csvHandler = new CsvHandler(state.getColor().name(), time);
+        csvHandler.writeTimeCsv("time.csv");
     }
 
     public Move getBestMove() {

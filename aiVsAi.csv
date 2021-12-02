@@ -1,6 +1,11 @@
 Alg, AlgTwo, Winner, Turns 
-ExpectiMiniMax,Basic AI,WHITE,34
-ExpectiMiniMax,Basic AI,WHITE,10
-ExpectiMiniMax,Basic AI,WHITE,30
-ExpectiMiniMax,Basic AI,WHITE,48
-ExpectiMiniMax,Basic AI,WHITE,52
+ExpectiMiniMax,MiniMax,WHITE,18
+ExpectiMiniMax,MiniMax,BLACK,35
+ExpectiMiniMax,MiniMax,WHITE,12
+ExpectiMiniMax,MiniMax,WHITE,30
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,WHITE,36
+ExpectiMiniMax,MiniMax,BLACK,67
+ExpectiMiniMax,MiniMax,WHITE,40
+ExpectiMiniMax,MiniMax,BLACK,29
+ExpectiMiniMax,MiniMax,WHITE,18

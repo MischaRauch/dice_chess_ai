@@ -55,7 +55,7 @@ public class AICsvReaderWriter extends ViewDataController {
                     info.setGameWinner(fields[2]);
                     info.setNumTurnsToWin(Integer.parseInt(fields[3]));
 
-                    aiAiGameList.add(info); //TODO: check this
+                    aiAiGameList.add(info);
                 }
             }
 

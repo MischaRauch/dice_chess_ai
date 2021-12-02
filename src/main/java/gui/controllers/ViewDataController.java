@@ -1,4 +1,5 @@
 package gui.controllers;
+import dataCollection.CsvHandler;
 import dataCollection.GameInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,7 +43,7 @@ public class ViewDataController implements Initializable {
 
     public static ObservableList<GameInfo> gameList = FXCollections.observableArrayList();
     public static ObservableList<GameInfo> aiAiGameList = FXCollections.observableArrayList();
-
+    public static ObservableList<CsvHandler> aiTimeList = FXCollections.observableArrayList();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
