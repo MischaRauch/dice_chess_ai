@@ -7,6 +7,7 @@ import logic.enums.Square;
 import logic.game.Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static logic.enums.Piece.*;
@@ -263,6 +264,26 @@ public class State {
         return nextState;
         //}
         //return this;
+    }
+
+    public boolean equals1(State state) {
+        State thisState = this;
+        State givenState = state;
+
+        for (int i = 0; i < board.getBoard().length; i++) {
+            Piece p1 = thisState.board.getBoard()[i];
+            Piece p2 = givenState.board.getBoard()[i];
+
+            if ((p1 == OFF_BOARD && p2 != OFF_BOARD) || (p1 != OFF_BOARD && p2 == OFF_BOARD)) {
+                return false;
+            }
+            if ((p1 != OFF_BOARD && p2 != OFF_BOARD)) {
+                if ((p1.getUnicode() != p2.getUnicode())) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void updatePieceAndSquareStateForCastling(Square rookSquareOld, Square rookSquareNew) {

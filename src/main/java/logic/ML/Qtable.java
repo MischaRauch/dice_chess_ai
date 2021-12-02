@@ -34,7 +34,6 @@ public class Qtable {
         for (State state : stateSpace) {
             actionSpace = createActionSpace(state); // for each state create actionSpace
             Qtable.put(state, actionSpace); // adding actionSpace of the state
-
         }
     }
 
@@ -43,19 +42,24 @@ public class Qtable {
     }
 
     public ArrayList<OriginAndDestSquare> accessStateValue(State state) {
-        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            if (entry.getKey() == state) {
-                return entry.getValue();
-                }
+        for (State tempState: stateSpace) {
+            if (tempState.equals1(state)) {
+                return createActionSpace(state);
             }
+        }
+//        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+//            if (entry.getKey().equals1(state)) {
+//                return entry.getValue();
+//                }
+//            }
         return null;
     }
 
     public int accessStateIndex(State state) {
         int answer = 0;
-        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            if (entry.getKey().equals(state)) {
-                break;
+        for (State tempState: stateSpace) {
+            if (tempState.equals1(state)) {
+                return answer;
             }
             answer++;
         }
@@ -63,40 +67,54 @@ public class Qtable {
     }
 
     public int accessActionIndex(State state, OriginAndDestSquare originAndDestSquare) { // TODO, decide what to do with -1
-
-        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            if (entry.getKey() == state) {
-                ArrayList<OriginAndDestSquare> temp = entry.getValue();
-                for (int i=0; i<temp.size(); i++) {
-                    // System.out.println(temp.get(i) +" why "+ originAndDestSquare);
-                    if (temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
-                        && temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
-                        return i;
+        ArrayList<OriginAndDestSquare> tempList;
+        for (State tempState: stateSpace) {
+            if (tempState.equals1(state)) {
+                tempList = createActionSpace(state);
+                int a = 0;
+                for (OriginAndDestSquare tempAction: tempList) {
+                    if (tempAction.getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
+                            && tempAction.getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
+                        return a;
                     }
+                    a++;
                 }
             }
         }
-        return -1; // shouldn't happen
+//        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+//            if (entry.getKey() == state) {
+//                ArrayList<OriginAndDestSquare> temp = entry.getValue();
+//                for (int i=0; i<temp.size(); i++) {
+//                    if (temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
+//                        && temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
+//                        return i;
+//                    }
+//                }
+//            }
+//        }
+        return -1; // doesn't exist
     }
 
-    public boolean checkIfStateLastDepth(State state) {
-        int a;
-        if (indexOfDepthOfAI.size() < 2) {
-            a = 0;
-        } else {
-            a = indexOfDepthOfAI.get(indexOfDepthOfAI.size() - 1) - indexOfDepthOfAI.get(indexOfDepthOfAI.size() - 2);
-        }
+//    public boolean checkIfStateLastDepth(State state) {
+//        int a;
+//        if (indexOfDepthOfAI.size() < 2) {
+//            a = 0;
+//        } else {
+//            a = indexOfDepthOfAI.get(indexOfDepthOfAI.size() - 1) - indexOfDepthOfAI.get(indexOfDepthOfAI.size() - 2);
+//        }
+//
+//        for (int i = a; i<indexOfDepthOfAI.size(); i++) {
+//            if (stateSpace.get(i) == state) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-        for (int i = a; i<indexOfDepthOfAI.size(); i++) {
-            if (stateSpace.get(i) == state) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkIfKingExist(State state) {
+    public boolean checkIfKingExist(State state) { // TODO, fix this
         Piece p;
+        boolean exists=false;
+
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
@@ -126,8 +144,8 @@ public class Qtable {
         ArrayList<State> opponentState = new ArrayList<>();
         ArrayList<Integer> indexOfDepthOfOpponent = new ArrayList<>();
 
-        stateSpace = new ArrayList<>();
-        indexOfDepthOfAI = new ArrayList<>(); // this shows from which index the first state of that depth
+        ArrayList<State> stateSpace = new ArrayList<>();
+        ArrayList<Integer> indexOfDepthOfAI = new ArrayList<>(); // this shows from which index the first state of that depth
         // starts and at which index it ends. Ex: indexOfDepth[2] will return e.g. 125, this means states of depth 2 ends
         // at 125, to get where it starts just do indexOfDepth[2] - indexOfDepth[1]
 
@@ -152,7 +170,6 @@ public class Qtable {
                     stateSpace.addAll(possibleStatesOfCurrentBoard);
                 }
                 indexOfDepthOfAI.add(totalStates + indexOfDepthOfAI.get(currentDepthOfAI));
-                // System.out.println("AI" + indexOfDepthOfAI.get(currentDepthOfAI + 1));
                 currentDepthOfAI++;
 
             }
@@ -164,25 +181,22 @@ public class Qtable {
                 int a;
 
                 if (currentDepthOfAI == 0) {
-                    toWhere = indexOfDepthOfAI.get(currentDepthOfAI) + 1;
+                    toWhere = indexOfDepthOfAI.get(currentDepthOfAI);
                     a = indexOfDepthOfAI.get(currentDepthOfAI);
                 } else {
                     toWhere = indexOfDepthOfAI.get(currentDepthOfAI);
                     a = indexOfDepthOfAI.get(currentDepthOfAI-1) + 1;
                 }
 
-                for (int j=a; j<toWhere; j++) {
+                for (int j=a; j<=toWhere; j++) {
                     State tempState = stateSpace.get(j);
                     possibleStatesOfCurrentBoard = BoardStateGenerator.getPossibleBoardStates(tempState, currentSide);
                     totalStates += possibleStatesOfCurrentBoard.size();
                     opponentState.addAll(possibleStatesOfCurrentBoard);
                 }
                 indexOfDepthOfOpponent.add(totalStates + indexOfDepthOfOpponent.get(currentDepthOfOpponent));
-                // System.out.println("opponent" + indexOfDepthOfOpponent.get(currentDepthOfOpponent + 1));
                 currentDepthOfOpponent++;
             }
-
-
         }
 //        for (int a=0; a<stateSpace.size(); a++) {
 //            stateSpace.get(a).getBoard().printBoard();
