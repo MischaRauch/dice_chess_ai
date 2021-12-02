@@ -7,12 +7,9 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static logic.enums.Piece.EMPTY;
-import static logic.enums.Piece.KNIGHT;
-import static logic.enums.Square.INVALID;
-import static logic.enums.Square.getSquare;
+import static logic.enums.Square.*;
 
 
 public abstract class AIPlayer {
@@ -148,30 +145,34 @@ public abstract class AIPlayer {
                             }
                         }
                         //CHECK FOR CASTLING
+                        //TODO: check if White can castle before generating the move
                         if (piece.getColor() == Side.WHITE) {
-                            if (location.getSquareNumber() == 4) {
+                            if (location == Square.e1) {
                                 //SHORT WHITE
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(6)) && state.isShortCastlingWhite()) {
-                                    validMoves.add(new Move(p, location, getSquare(6), state.getDiceRoll(), color));
-                                    state.setApplyCastling(true);
+                                    Move m = new Move(p, location, Square.g1, state.getDiceRoll(), color);
+                                    m.castlingRookDestination = f1;
+                                    validMoves.add(m);
+                                    //TODO: add this type of move gen with flags to all other castling thingies
                                 }
                                 //LONG WHITE
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
                                     validMoves.add(new Move(p, location, getSquare(2), state.getDiceRoll(), color));
-                                    state.setApplyCastling(true);
+                                    state.setCanCastle(true);
                                 }
                             }
+                            //TODO: check if black can castle before generating the move
                         } else {
                             if (location.getSquareNumber() == 116) {
                                 //SHORT BLACK
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
                                     validMoves.add(new Move(p, location, getSquare(118), state.getDiceRoll(), color));
-                                    state.setApplyCastling(true);
+                                    state.setCanCastle(true);
                                 }
                                 //LONG BLACK
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
                                     validMoves.add(new Move(p, location, getSquare(114), state.getDiceRoll(), color));
-                                    state.setApplyCastling(true);
+                                    state.setCanCastle(true);
                                 }
                             }
                         }

@@ -106,7 +106,7 @@ public abstract class Game {
 
     protected void processCastling() {
         //check if castling was performed
-        if (currentState.isApplyCastling()) {
+        if (currentState.isCanCastle()) {
             if (currentState.getCastling() == Square.f8) {
                 System.out.println("SHORT CASTLING BLACK WAS PERFROMED 09");
                 castlingPerformed = 2;

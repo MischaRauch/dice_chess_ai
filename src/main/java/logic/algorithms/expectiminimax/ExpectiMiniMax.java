@@ -109,7 +109,7 @@ public class ExpectiMiniMax {
             List<Move> legalMovesForGivePiece = gen.getValidMovesForGivenPiece(parentNode.getPreviousState(), pieceList.get(i));
 
             State newState = new State(parentNode.getPreviousState().getBoard(), Piece.getDiceFromPiece(bestStatePieceThatMoved),
-                    bestStatePieceThatMoved.getColor(), parentNode.getPreviousState().isApplyCastling(), parentNode.getPreviousState().isShortCastlingBlack(),
+                    bestStatePieceThatMoved.getColor(), parentNode.getPreviousState().isCanCastle(), parentNode.getPreviousState().isShortCastlingBlack(),
                     parentNode.getPreviousState().isShortCastlingWhite(), parentNode.getPreviousState().isLongCastlingBlack(), parentNode.getPreviousState().isLongCastlingWhite(),
                     parentNode.getPreviousState().castling, parentNode.getPreviousState().getPieceAndSquare(), parentNode.getPreviousState().getCumulativeTurn());
 
