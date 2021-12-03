@@ -67,8 +67,8 @@ public class Qtable {
             if (entry.getKey().equals1(state)) {
                 ArrayList<OriginAndDestSquare> temp = entry.getValue();
                 for (int i=0; i<temp.size(); i++) {
-                    if (temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber()
-                        && temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber()) {
+                    if ((temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber())
+                        && (temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber())) {
                         return i;
                     }
                 }
@@ -84,57 +84,88 @@ public class Qtable {
         for (Piece p: pieceList) {
             totalWeights += getWeightOf(side, p);
         }
+
+        totalWeights += check(state, side); // if I lose king or get king give max or min number
         return totalWeights;
     }
+    public int check(State state, Side side) { // with for loop make each move that gets king inf
+        Piece p;
+        boolean WExist = false;
+        boolean BExist = false;
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
+                if (p.equals(Piece.WHITE_KING)) {
+                    WExist = true;
+                }
+                if (p.equals(Piece.BLACK_KING)) {
+                    BExist = true;
+                }
+            }
+        }
+        if (side.equals(Side.BLACK) && !WExist) { return Integer.MAX_VALUE;}
+        else if(side.equals(Side.WHITE) && !BExist) {return Integer.MAX_VALUE;}
+        else if (side.equals(Side.BLACK) && !BExist) {return Integer.MIN_VALUE;}
+        else if(side.equals(Side.WHITE) && !WExist) {return Integer.MIN_VALUE;}
 
+        return 0;
+    }
 
     public int getWeightOf(Side side, Piece p) {
-        if (side == Side.BLACK) {
+        if (side.equals(Side.BLACK)) {
             return switch (p) {
-                case BLACK_PAWN -> 1000;
-                case BLACK_KNIGHT, BLACK_BISHOP -> 3500;
-                case BLACK_ROOK -> 5250;
-                case BLACK_QUEEN -> 10000;
-                case BLACK_KING -> 2000000;
+                case BLACK_PAWN -> 100;
+                case BLACK_KNIGHT, BLACK_BISHOP -> 350;
+                case BLACK_ROOK -> 525;
+                case BLACK_QUEEN -> 1000;
+                case BLACK_KING -> 200000;
 
-                case WHITE_PAWN -> -1000;
-                case WHITE_KNIGHT, WHITE_BISHOP -> -3500;
-                case WHITE_ROOK -> -5250;
-                case WHITE_QUEEN -> -10000;
-                case WHITE_KING -> -2000000;
+                case WHITE_PAWN -> -100;
+                case WHITE_KNIGHT, WHITE_BISHOP -> -350;
+                case WHITE_ROOK -> -525;
+                case WHITE_QUEEN -> -1000;
+                case WHITE_KING -> -200000;
                 default -> 0;
             };
-        } else if(side == Side.WHITE) {
+        } else if(side.equals(Side.WHITE)) {
             return switch (p) {
-                case BLACK_PAWN -> -1000;
-                case BLACK_KNIGHT, BLACK_BISHOP -> -3500;
-                case BLACK_ROOK -> -5250;
-                case BLACK_QUEEN -> -10000;
-                case BLACK_KING -> -2000000;
+                case BLACK_PAWN -> -100;
+                case BLACK_KNIGHT, BLACK_BISHOP -> -350;
+                case BLACK_ROOK -> -525;
+                case BLACK_QUEEN -> -1000;
+                case BLACK_KING -> -200000;
 
-                case WHITE_PAWN -> 1000;
-                case WHITE_KNIGHT, WHITE_BISHOP -> 3500;
-                case WHITE_ROOK -> 5250;
-                case WHITE_QUEEN -> 10000;
-                case WHITE_KING -> 2000000;
+                case WHITE_PAWN -> 100;
+                case WHITE_KNIGHT, WHITE_BISHOP -> 350;
+                case WHITE_ROOK -> 525;
+                case WHITE_QUEEN -> 1000;
+                case WHITE_KING -> 200000;
                 default -> 0;
             };
         }
         return 0;
     }
 
-    public int getIndexOfBestMove(int[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p, State initial) {
+    public int getIndexOfBestMove(int[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p, State initial, int b) {
         double count = 0;
         int indexOfMaxAction = -1; // if returns this somethings wrong
         int a = 0;
+        ArrayList<Integer> doableMoves = new ArrayList<>();
+
         for (OriginAndDestSquare move : moves) {
-            if (p == initial.getBoard().getPieceAt(move.getOrigin())) {
-                if(qvalues[0][a] > count){
-                    count = qvalues[0][a];
+            if (p.equals(initial.getBoard().getPieceAt(move.getOrigin()))) {
+                doableMoves.add(a);
+                if(qvalues[b][a] > count){
+                    count = qvalues[b][a];
                     indexOfMaxAction = a;
                 }
             }
             a++;
+        }
+
+        if (count == 0) {
+            int index = (int) (Math.random() * doableMoves.size());
+            return doableMoves.get(index);
         }
         return indexOfMaxAction;
     }
@@ -161,10 +192,10 @@ public class Qtable {
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
-                if (p == Piece.WHITE_KING) {
+                if (p.equals(Piece.WHITE_KING)) {
                     WExist = true;
                 }
-                if (p == Piece.BLACK_KING) {
+                if (p.equals(Piece.BLACK_KING)) {
                     BExist = true;
                 }
             }
