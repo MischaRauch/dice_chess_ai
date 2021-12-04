@@ -94,7 +94,9 @@ public class DQL {
                     break;
                 }
              }
-            explorationProb -= max(explorationDecay, minExplorationProb);
+            if (explorationProb >= minExplorationProb) {
+                explorationProb -= explorationDecay;
+            }
             totalRewardsOfEachEpisode.add(gamesTotalReward);
 
         }
