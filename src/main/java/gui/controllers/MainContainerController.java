@@ -25,6 +25,7 @@ import logic.game.HumanGame;
 import logic.player.BasicAIPlayer;
 import logic.player.MiniMaxPlayer;
 import logic.player.RandomMovesPlayer;
+import logic.player.QLPlayer;
 
 import java.io.IOException;
 import java.util.Stack;

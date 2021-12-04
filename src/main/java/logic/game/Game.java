@@ -51,12 +51,12 @@ public abstract class Game {
         // First time game gets initialized game instance is null so make this the first state
         if (Game.getInstance() == null) {
             firstState = new State(currentState);
-            System.out.println("GAME INSTANCE NULL, FIRST STATE INITIALIZED");
+            //System.out.println("GAME INSTANCE NULL, FIRST STATE INITIALIZED");
             numTurns = 0;
         }
         CURRENT_GAME = this;
         this.FEN = initialPosition;
-        System.out.println("GAME const fen");
+        // System.out.println("GAME const fen");
     }
 
     // not abstract method as  AiAi game will never use this

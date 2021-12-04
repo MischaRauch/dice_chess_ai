@@ -129,7 +129,7 @@ public class Chessboard extends GridPane {
 
             if (move.isPromotionMove()) {
                 destination.setPiece(move.getPromotionPiece());
-                System.out.println("is promotion move");
+                // System.out.println("is promotion move");
             }
 
             //move rook if castling was performed

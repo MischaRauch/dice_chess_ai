@@ -23,7 +23,7 @@ import static logic.enums.Side.WHITE;
 
 public class Menu {
 
-    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI"};
+    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "Minimax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
 
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
@@ -130,7 +130,8 @@ public class Menu {
             case "Basic AI" -> new BasicAIPlayer(color);
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(7,color);
+            case "QL AI" -> new QLPlayer(2, color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(11,color);
             default -> new RandomMovesPlayer(color);
         };
     }

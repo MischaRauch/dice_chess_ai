@@ -31,7 +31,7 @@ public class HumanGame extends Game {
             checkGameOver(move);
             // update pieceAndSquare in state
 //            updatePieceAndSquareState(newState,move);
-            newState.printPieceAndSquare();
+            // newState.printPieceAndSquare();
 
             currentState = newState;
             move.setStatus(Validity.VALID);
@@ -49,11 +49,11 @@ public class HumanGame extends Game {
     }
 
     private void printArray(List<PieceAndSquareTuple> pieceAndSquare){
-        System.out.println("printArray: ");
+        // System.out.println("printArray: ");
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            System.out.print(t.toString() + " | ");
+            // System.out.print(t.toString() + " | ");
         }
-        System.out.println("Size: " + pieceAndSquare.size());
+        // System.out.println("Size: " + pieceAndSquare.size());
     }
 
 //    public void resetCurrentState() {

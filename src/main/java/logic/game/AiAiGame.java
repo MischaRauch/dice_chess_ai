@@ -12,6 +12,10 @@ import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
+import logic.player.BasicAIPlayer;
+import logic.player.MiniMaxPlayer;
+import logic.player.QTablePlayer;
+import logic.player.QLPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
