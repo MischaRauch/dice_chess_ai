@@ -91,7 +91,7 @@ public class DQL {
                 currentState = newState;
                 if (finished) break;
             }
-            explorationProb -= max(explorationDecay, minExplorationProb);
+            if (explorationProb >= minExplorationProb) {explorationProb -= explorationDecay;}
             totalRewardsOfEachEpisode.add(gamesTotalReward);
         }
     }
@@ -131,8 +131,7 @@ public class DQL {
             }
         }
         if (count == 0) {
-            int index = (int) (Math.random() * currentQtable.accessStateValue(currentQtable.stateSpace.get(stateIndex)).size());
-            return index;
+            return (int) (Math.random() * currentQtable.accessStateValue(currentQtable.stateSpace.get(stateIndex)).size());
         }
         return indexOfMaxAction;
     }
