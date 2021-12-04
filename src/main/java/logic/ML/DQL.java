@@ -93,6 +93,7 @@ public class DQL {
             }
             if (explorationProb >= minExplorationProb) {explorationProb -= explorationDecay;}
             totalRewardsOfEachEpisode.add(gamesTotalReward);
+
         }
     }
 
