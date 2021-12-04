@@ -6,6 +6,7 @@ import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import logic.ML.OriginAndDestSquare;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
