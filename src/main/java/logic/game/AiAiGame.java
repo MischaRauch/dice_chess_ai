@@ -65,36 +65,25 @@ public class AiAiGame extends Game {
         while (!gameOver) {
             System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
 
-            List<PieceAndSquareTuple> first = currentState.getPieceAndSquare();
-
-            //update the value for gameOver,so we eventually exit this loop
             Move move = nextPlayer.chooseMove(currentState);
 
-            // TODO MAKE evaluator legal move not modify the state for castling
-            //  the state should track all castling not the evaluator
-//            if (evaluator.isLegalMove(move, currentState, true, true)) {
-
-            //need to check if the destination capture move was a king, and in the next state the state the king might
-            //be dead already. so we can't check it was capture
-            /// TODO FIX BUG (if FEN loaded with only 2 kings game freezes)
+            System.out.println("Previous State: ");
+            currentState.printPieceAndSquare();
 
             State newState = currentState.applyMove(move);
+
             previousStates.push(currentState);
             checkGameOver(move);
-            //after checking if king was captured, we can updated the currentState
+            // after checking if king was captured, we can update the currentState
             currentState = newState;
+
+            System.out.println("Updated State: ");
+            currentState.printPieceAndSquare();
+
             move.setStatus(Validity.VALID);
-
-            List<PieceAndSquareTuple> next = currentState.getPieceAndSquare();
-
 
             processCastling();
 
-
-            //MainContainerController.getInstance().updateTurn(currentState.getColor());
-//            } else {
-//                move.setInvalid();
-//            }
             //update GUI, need to use Platform.runLater because we are in a separate thread here,
             //and the GUI can only be updated from the main JavaFX thread. So we queue the GUI updates here
             Platform.runLater(() -> {

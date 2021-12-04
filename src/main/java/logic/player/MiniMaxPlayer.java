@@ -33,8 +33,8 @@ public class MiniMaxPlayer extends AIPlayer {
             e.printStackTrace();
         }
         Move chosenMove = thread.getBestMove();
-//        // TODO make evalautor not update moves
-//        // to promote en passant moves
+        // TODO make evalautor not update moves
+        // to promote en passant moves
         evaluator.isLegalMove(chosenMove, state, true, true);
         state.printPieceAndSquare();
         return chosenMove;

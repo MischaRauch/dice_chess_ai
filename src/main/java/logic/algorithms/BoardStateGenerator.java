@@ -1,12 +1,15 @@
 package logic.algorithms;
 
-import logic.*;
+import logic.LegalMoveGenerator;
+import logic.ML.OriginAndDestSquare;
+import logic.Move;
+import logic.PieceAndSquareTuple;
+import logic.State;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.ML.OriginAndDestSquare;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,8 +21,8 @@ import static logic.enums.Square.*;
 
 // generates all possible states of the board for n turns ahead
 public class BoardStateGenerator {
-
-    public static ArrayList<State> getPossibleBoardStates(State state, Side side) { // for ML
+    // for ML
+    public static ArrayList<State> getPossibleBoardStates(State state, Side side) {
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
         ArrayList<State> answer = new ArrayList<State>();
         State tempState;
@@ -34,6 +37,7 @@ public class BoardStateGenerator {
         }
         return answer;
     }
+
     /*public List<Move> getValidMovesForGivenPiece(State state, Piece piece) {
         public List<Move> getValidMovesForGivenPiece(State state, Piece piece) {
             List<Move> validMoves = new LinkedList<>();
@@ -261,7 +265,6 @@ public class BoardStateGenerator {
 
                                             capture.promotionMove = true;
                                         }
-
                                         //add capture move to the list of valid moves
                                         validMoves.add(capture);
                                     }
@@ -304,8 +307,6 @@ public class BoardStateGenerator {
                                 }
                                 //LONG WHITE
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1)) && state.isLongCastlingWhite()) {
-                                    //validMoves.add(new Move(p, location, getSquare(2), state.getDiceRoll(), color));
-                                    //state.setCanCastle(true);
                                     Move m = new Move(p, location, Square.c1, state.getDiceRoll(), piece.getColor());
                                     m.castlingRookDestination = d1;
                                     validMoves.add(m);
@@ -316,8 +317,6 @@ public class BoardStateGenerator {
                             if (location.getSquareNumber() == 116) {
                                 //SHORT BLACK
                                 if (board.isEmpty(location.getSquareRight()) && board.isEmpty(getSquare(118)) && state.isShortCastlingBlack()) {
-                                    //validMoves.add(new Move(p, location, getSquare(118), state.getDiceRoll(), color));
-                                    //state.setCanCastle(true);
                                     Move m = new Move(p, location, Square.g8, state.getDiceRoll(), piece.getColor());
                                     m.castlingRookDestination = f8;
                                     validMoves.add(m);
@@ -325,8 +324,6 @@ public class BoardStateGenerator {
                                 }
                                 //LONG BLACK
                                 if (board.isEmpty(location.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113)) && state.isLongCastlingBlack()) {
-                                    //validMoves.add(new Move(p, location, getSquare(114), state.getDiceRoll(), color));
-                                    //state.setCanCastle(true);
                                     Move m = new Move(p, location, Square.c8, state.getDiceRoll(), piece.getColor());
                                     m.castlingRookDestination = d8;
                                     validMoves.add(m);
@@ -418,7 +415,7 @@ public class BoardStateGenerator {
             // get all piece types with their dice numbers
             Piece coloredPiece = Piece.getPieceFromDice(diceRoll, color);
             if (p == coloredPiece) {
-                List<Square> legalMoves = generator.getLegalMoves(state, s, p, color);
+                List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
                 //printLegalMoves(legalMoves);
 
                 List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2, legalMoves, p, s);

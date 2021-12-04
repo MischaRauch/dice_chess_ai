@@ -26,8 +26,6 @@ public class QTablePlayer extends AIPlayer {
         for (Move move : validMoves) {
             moveMap.put(move,0);
         }
-
-        //Move bestCapture = bestCapture(state,validMoves);
         bestCapture(state,validMoves);
         //get the best capture move
         Move key = Collections.max(moveMap.entrySet(), Map.Entry.comparingByValue()).getKey();

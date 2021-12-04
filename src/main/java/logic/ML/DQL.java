@@ -2,13 +2,13 @@ package logic.ML;
 
 import logic.Move;
 import logic.State;
+import logic.algorithms.BoardStateEvaluator;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.algorithms.BoardStateEvaluator;
 import logic.player.ExpectiMiniMaxPlayer;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.lang.Math.max;
 
@@ -21,7 +21,7 @@ public class DQL {
     State initialState;
 
     public void algo(State initialState, Side side, int depth) {
-        currentQtable = new Qtable(initialState, side , depth);
+        currentQtable = new Qtable(new State(initialState), side, depth);
         this.initialState = initialState;
 
         int stateSize = currentQtable.stateSpace.size();
@@ -29,13 +29,13 @@ public class DQL {
 
         Qvalues = new int[stateSize][actionSize]; // save the q-values in a separate table
 
-        for (int[] row: Qvalues) {// fill the table with 0
+        for (int[] row : Qvalues) {// fill the table with 0
             Arrays.fill(row, 0);
         }
         double numOfGames = 400;
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
-        double explorationDecay = 1/numOfGames;
+        double explorationDecay = 1 / numOfGames;
         double minExplorationProb = 0.01; // prob. of exploration can go down until 0.01
 
         double gamma = 0.99; // discount factor, helps the algo to strive for a long-term high reward (0<gamma<1)
@@ -46,17 +46,17 @@ public class DQL {
         State currentState;
         Move action;
 
-        for (int i=0; i < numOfGames; i++) {
-            currentState = initialState;
+        for (int i = 0; i < numOfGames; i++) {
+            currentState = new State(initialState);
 
             int reward;
             int gamesTotalReward = 0;
             boolean finished = false; // turn to true if king captured
 
-            System.out.println("Game"+i);
+            //System.out.println("Game"+i);
 
-            for (int j=0; j < depth/2; j++) {
-                System.out.println("action"+j);
+            for (int j = 0; j < depth / 2; j++) {
+                //System.out.println("action"+j);
 
                 // take learned path or explore new actions
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
@@ -70,7 +70,7 @@ public class DQL {
                     action = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
                 }
                 //apply chosen action and return the next state, reward and true if the episode is ended
-                State newState = currentState.applyMove(action);
+                State newState = new State(currentState.applyMove(action));
 
                 newState = newState.applyMove(currentQtable.randomMoveGenerator(newState, Side.getOpposite(side)));
                 // code line above can be changed with some better algo (example given below) which could give better results but would take more time
@@ -85,18 +85,14 @@ public class DQL {
                 OriginAndDestSquare tempOriginAndDestSquare = new OriginAndDestSquare(action.getOrigin(), action.getDestination());
                 int indexOfAction = currentQtable.accessActionIndex(currentState, tempOriginAndDestSquare);
 
-                Qvalues[indexOfState][indexOfAction] = (int) ((1-learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate*(reward + gamma* maxValue(Qvalues, currentQtable.accessStateIndex(newState))));
+                Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState))));
 
                 gamesTotalReward += reward;
                 currentState = newState;
-
-                if (finished) {
-                    break;
-                }
-             }
+                if (finished) break;
+            }
             explorationProb -= max(explorationDecay, minExplorationProb);
             totalRewardsOfEachEpisode.add(gamesTotalReward);
-
         }
     }
 
@@ -106,10 +102,10 @@ public class DQL {
 
     public int getReward(State state, Side side) {
         int reward = 0;
-        reward += BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide)/10;
+        reward += BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide) / 10;
 //        System.out.println(BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide)/10);
 //        System.out.println(currentQtable.addPieceWeights(state, side)*50);
-        reward += currentQtable.addPieceWeights(state, side)*50;
+        reward += currentQtable.addPieceWeights(state, side) * 50;
         return reward;
     }
 
@@ -125,27 +121,27 @@ public class DQL {
         return (new Move(tempP, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(tempP), color));
     }
 
-    public int argmax (int [][] qvalues, int stateIndex) {
+    public int argmax(int[][] qvalues, int stateIndex) {
         int count = 0;
         int indexOfMaxAction = -1; // if returns this somethings wrong
-        for(int i = 0; i < qvalues[stateIndex].length; i++){
-            if(qvalues[stateIndex][i] > count){
+        for (int i = 0; i < qvalues[stateIndex].length; i++) {
+            if (qvalues[stateIndex][i] > count) {
                 count = qvalues[stateIndex][i];
                 indexOfMaxAction = i;
             }
         }
         if (count == 0) {
-            int index = (int) (Math.random()*currentQtable.accessStateValue(currentQtable.stateSpace.get(stateIndex)).size());
+            int index = (int) (Math.random() * currentQtable.accessStateValue(currentQtable.stateSpace.get(stateIndex)).size());
             return index;
         }
-       return indexOfMaxAction;
+        return indexOfMaxAction;
     }
 
-    public int maxValue (int [][] qvalues, int stateIndex) {
+    public int maxValue(int[][] qvalues, int stateIndex) {
         int count = 0;
 
-        for(int i = 0; i < qvalues[stateIndex].length; i++){
-            if(qvalues[stateIndex][i] > count){
+        for (int i = 0; i < qvalues[stateIndex].length; i++) {
+            if (qvalues[stateIndex][i] > count) {
                 count = qvalues[stateIndex][i];
             }
         }

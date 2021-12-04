@@ -51,7 +51,6 @@ public class State {
         board = that.getBoard();
         diceRoll = that.getDiceRoll();
         color = that.getColor();
-        loadPieceAndSquareFromFEN(that.getBoard().getFEN());
     }
 
     // for state updation
@@ -166,7 +165,7 @@ public class State {
                 knight++;
             }
         }
-        // System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
     public State applyMove(Move move) {
