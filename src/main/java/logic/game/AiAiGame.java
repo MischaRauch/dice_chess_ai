@@ -18,6 +18,7 @@ import logic.player.QTablePlayer;
 import logic.player.QLPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,9 +27,10 @@ public class AiAiGame extends Game {
 
     private final AIPlayer white, black;
     //will play AIvsAI 50 times
-    private int playTill = Config.SIMULATION_SIZE;
+    private static int playTill = Config.SIMULATION_SIZE;
     private int played = 0;
     private CsvHandler handle;
+    private static String[][] resultsArray = new String[playTill+1][4];
 
 
     public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
@@ -117,6 +119,16 @@ public class AiAiGame extends Game {
             }
         }
 
+
+        //Save the information for this game
+        resultsArray[played][0] = white.getNameAi();
+        resultsArray[played][1] = black.getNameAi();
+        resultsArray[played][2] = getWinner().name();
+        resultsArray[played][3] = Integer.toString(previousStates.lastElement().getCumulativeTurn());
+        //only add once all the data is gathered
+        if(played == playTill) {
+            loogerFromArray(resultsArray);
+        }
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 
@@ -125,8 +137,9 @@ public class AiAiGame extends Game {
         if (played < playTill) {
             AiAiGame game = new AiAiGame(this.white, this.black, played + 1, this.getFEN());
             game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?
-            updateCsvFile(game);
+            //updateCsvFile(game);
         }
+
 
     }
 
@@ -163,5 +176,12 @@ public class AiAiGame extends Game {
         Side winner = game.getWinner();
         handle = new CsvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
         handle.aiVsAiCsvWrite();
+    }
+
+    public void loogerFromArray(String[][] array) {
+        for (int i = 1; i <= played; i++) {
+            handle = new CsvHandler(array[i][0], array[i][1], array[i][2], Integer.parseInt(array[i][3]));
+            handle.aiVsAiCsvWrite();
+        }
     }
 }

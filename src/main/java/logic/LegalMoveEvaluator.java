@@ -10,6 +10,8 @@ import logic.enums.Square;
 
 import java.util.ArrayList;
 
+import static logic.enums.Square.*;
+
 public class LegalMoveEvaluator {
 
     Move move;
@@ -344,18 +346,21 @@ public class LegalMoveEvaluator {
                     if (move.getDestination().getSquareNumber() == 6 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingWhite()) {
                         if (isActualMove) {
 //                            System.out.println("SHORT CASTLING WHITE2");
-                            state.setApplyCastling(true);
+                            //state.setCanCastle(true);
                             //state.setShortCastlingWhite(false);
-                            state.setCastling(Square.f1);
+                            //state.setCastling(Square.f1);
+                            move.castlingRookDestination = f1;
+
                         }
 //                        System.out.println("SHORT CASTLING WHITE");
                         return true;
                     } else if (move.getDestination().getSquareNumber() == 2 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(1)) && state.isLongCastlingWhite()) {
                         if (isActualMove) {
 //                            System.out.println("LONG CASTLING WHITE2");
-                            state.setApplyCastling(true);
+                            //state.setCanCastle(true);
                             //state.setLongCastlingWhite(false);
-                            state.setCastling(Square.d1);
+                            //state.setCastling(Square.d1);
+                            move.castlingRookDestination = d1;
                         }
 //                        System.out.println("LONG CASTLING WHITE");
                         return true;
@@ -366,18 +371,20 @@ public class LegalMoveEvaluator {
                     if (move.getDestination().getSquareNumber() == 118 && b.isEmpty(squareRight) && b.isEmpty(move.getDestination()) && state.isShortCastlingBlack()) {
                         if (isActualMove) {
 //                            System.out.println("SHORT CASTLING Black2");
-                            state.setApplyCastling(true);
+                            // state.setCanCastle(true);
                             //state.setShortCastlingBlack(false);
-                            state.setCastling(Square.f8);
+                            //state.setCastling(Square.f8);
+                            move.castlingRookDestination = f8;
                         }
 //                        System.out.println("SHORT CASTLING Black");
                         return true;
                     } else if (move.getDestination().getSquareNumber() == 114 && b.isEmpty(squareLeft) && b.isEmpty(move.getDestination()) && b.isEmpty(Square.getSquare(113)) && state.isLongCastlingBlack()) {
                         if (isActualMove) {
 //                            System.out.println("LONG CASTLING Black2");
-                            state.setApplyCastling(true);
+                            //state.setCanCastle(true);
                             //state.setLongCastlingBlack(false);
-                            state.setCastling(Square.d8);
+                            //state.setCastling(Square.d8);
+                            move.castlingRookDestination = d8;
                         }
 //                        System.out.println("LONG CASTLING Black");
                         return true;
@@ -394,11 +401,11 @@ public class LegalMoveEvaluator {
     public void disableCastling() {
         if (isActualMove) {
             if (move.getPiece().getColor() == Side.WHITE) {
-                state.setLongCastlingWhite(false);
-                state.setShortCastlingWhite(false);
+                //state.setLongCastlingWhite(false);
+                //state.setShortCastlingWhite(false);
             } else {
-                state.setLongCastlingBlack(false);
-                state.setShortCastlingBlack(false);
+                //state.setLongCastlingBlack(false);
+                //state.setShortCastlingBlack(false);
             }
         }
     }
