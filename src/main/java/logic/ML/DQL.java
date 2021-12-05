@@ -32,7 +32,7 @@ public class DQL {
         for (int[] row : Qvalues) {// fill the table with 0
             Arrays.fill(row, 0);
         }
-        double numOfGames = 400;
+        double numOfGames = 1000;
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
         double explorationDecay = 1 / numOfGames;
