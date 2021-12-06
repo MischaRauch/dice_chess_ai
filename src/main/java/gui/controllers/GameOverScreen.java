@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import javafx.scene.Node;
+import javafx.stage.Modality;
 import logic.enums.Side;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
