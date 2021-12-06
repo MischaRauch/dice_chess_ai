@@ -65,10 +65,13 @@ public class GameOverScreen extends AnchorPane {
     private Button historyButton;
     @FXML
     void historyButtonAction(ActionEvent event) throws IOException {
-        Stage stage = (Stage) historyButton.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/viewData.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(((Node)event.getSource()).getScene().getWindow());
+        stage.show();
     }
 
 }
