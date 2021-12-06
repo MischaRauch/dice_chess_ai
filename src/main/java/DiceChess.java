@@ -19,8 +19,8 @@ public class DiceChess extends Application {
         Scene scene = new Scene(root);
         stage.getIcons().add(new Image("/images/DiceChessIcon.png"));
 
-        stage.setTitle("Dice Chess!");
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
 
     }

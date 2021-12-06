@@ -19,7 +19,6 @@ public class MiniMaxThread extends Thread {
         MiniMax miniMax = new MiniMax();
         miniMax.constructTree(depth, state);
         Node bestChild = miniMax.findBestChild(true, miniMax.getTree().getRoot().getChildren(),state.getDiceRoll());
-        System.out.println("Optimal Move: " + bestChild.getMove().toString());
         this.bestMove = bestChild.getMove();
         long end = System.nanoTime();
         System.out.println("MiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));

@@ -65,10 +65,5 @@ public class CsvHandler extends ViewDataController {
         GameInfo aiAiGame = new GameInfo(alg, algTwo, winner, turns);
         aiAiGameList.add(aiAiGame);
         AICsvReaderWriter.writeCsv("aiVsAi.csv");
-        /*try {
-            AICsvReaderWriter.writeCsv(getClass().getResource("/data/aiVsAi.csv").toURI().getPath());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
     }
 }

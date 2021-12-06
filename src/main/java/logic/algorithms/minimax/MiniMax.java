@@ -42,7 +42,6 @@ public class MiniMax {
             bestNode = parentNode;
         }
         while (this.depth > 0) {
-//            if (getKingCount(parentNode.getState().getPieceAndSquare()) != 2) {constructTree(parentNode, 0);;}
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
             // loop through for all 6 dice numbers and generate all possible states
             for (int i = 1; i < 7; i++) {
@@ -224,6 +223,16 @@ public class MiniMax {
         return bestChild;
     }
 
+    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
+        int king = 0;
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
+                king++;
+            }
+        }
+        return king;
+    }
+
     private void printEvaluationNumbers(List<Integer> possibleEvaluationNumbers) {
         // for visual appeal
         if (possibleEvaluationNumbers.size() != 0) {
@@ -279,16 +288,6 @@ public class MiniMax {
             }
         }
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
-    }
-
-    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
-        int king = 0;
-        for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
-                king++;
-            }
-        }
-        return king;
     }
 
 }

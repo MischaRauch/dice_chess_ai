@@ -39,7 +39,6 @@ public class ViewDataController implements Initializable {
     @FXML
     private TableView<GameInfo> tableView;
 
-
     public static ObservableList<GameInfo> gameList = FXCollections.observableArrayList();
     public static ObservableList<GameInfo> aiAiGameList = FXCollections.observableArrayList();
 
