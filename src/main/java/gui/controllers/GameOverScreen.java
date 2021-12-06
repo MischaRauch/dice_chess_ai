@@ -52,14 +52,13 @@ public class GameOverScreen extends AnchorPane {
         Platform.exit();
     }
 
-
-    // TODO When you restart MiniMax starts behaving wierdly, king moves like knight, queen backstabs it's own king ;)
     @FXML
     void restart(ActionEvent event) throws IOException {
-        Stage stage = (Stage) playAgainButton.getScene().getWindow();
-        Parent root = new MainContainerController(MainContainerController.getInstance().type);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        /// TODO re-enable play again button
+//        Stage stage = (Stage) playAgainButton.getScene().getWindow();
+//        Parent root = new MainContainerController(MainContainerController.getInstance().type);
+//        Scene scene = new Scene(root);
+//        stage.setScene(scene);
     }
 
     @FXML

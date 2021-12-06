@@ -58,17 +58,17 @@ public class AiAiGame extends Game {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
-        // FIXED BUG need to clone first state as when you call restart method you launch same game which has same state,
+        // need to clone first state as when you call restart method you launch same game which has same state,
         // so game gets loaded from the state that the previous game was loaded from
-        System.out.println("AiAiGame; playTill: " + playTill);
-        System.out.println("AiAiGame; Played: " + played);
+        //System.out.println("AiAiGame; playTill: " + playTill);
+        //System.out.println("AiAiGame; Played: " + played);
         while (!gameOver) {
-            System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
+            //System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
 
             Move move = nextPlayer.chooseMove(currentState);
 
-            System.out.println("Previous State: ");
-            currentState.printPieceAndSquare();
+            //System.out.println("Previous State: ");
+            //currentState.printPieceAndSquare();
 
             State newState = currentState.applyMove(move);
 
@@ -77,8 +77,8 @@ public class AiAiGame extends Game {
             // after checking if king was captured, we can update the currentState
             currentState = newState;
 
-            System.out.println("Updated State: ");
-            currentState.printPieceAndSquare();
+            //System.out.println("Updated State: ");
+            //currentState.printPieceAndSquare();
 
             move.setStatus(Validity.VALID);
 
@@ -107,8 +107,6 @@ public class AiAiGame extends Game {
                 e.printStackTrace();
             }
         }
-
-
         //Save the information for this game
         resultsArray[played][0] = white.getNameAi();
         resultsArray[played][1] = black.getNameAi();

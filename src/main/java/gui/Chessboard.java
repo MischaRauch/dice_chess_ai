@@ -252,8 +252,8 @@ public class Chessboard extends GridPane {
         return tileBoard[row][col];
     }
 
-    //copy-pasted from GameboardController and removed some of the unnecessary lines like the two dice rolls
-    //however more unnecessary lines can be removed like the activeColor, castling etc; However idk.
+    // copy-pasted from GameboardController and removed some of the unnecessary lines like the two dice rolls
+    // however more unnecessary lines can be removed like the activeColor, castling etc; However idk.
     public char[][] parseFENd(String fenDiceBoard) {
         //chess logic.board has starts with index 1 so to keep things simple leave index 0 empty
         char[][] board = new char[9][9];

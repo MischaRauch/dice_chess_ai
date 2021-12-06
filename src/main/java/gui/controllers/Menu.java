@@ -23,7 +23,7 @@ import static logic.enums.Side.WHITE;
 
 public class Menu {
 
-    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "Minimax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
+    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
 
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
@@ -60,11 +60,9 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("Basic AI");
-        blackPlayerChoice.setValue("Basic AI");
+        whitePlayerChoice.setValue("MiniMax AI");
+        blackPlayerChoice.setValue("ExpectiMiniMax AI");
     }
-
-    //private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
 
     @FXML
     void start(ActionEvent event) {
@@ -119,6 +117,7 @@ public class Menu {
             Parent root = new MainContainerController(type);
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.centerOnScreen();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,7 +130,7 @@ public class Menu {
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
             case "QL AI" -> new QLPlayer(2, color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(7,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
             default -> new RandomMovesPlayer(color);
         };
     }

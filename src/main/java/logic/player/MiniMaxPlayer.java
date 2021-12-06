@@ -36,7 +36,7 @@ public class MiniMaxPlayer extends AIPlayer {
         // TODO make evalautor not update moves
         // to promote en passant moves
         evaluator.isLegalMove(chosenMove, state, true, true);
-        state.printPieceAndSquare();
+        //state.printPieceAndSquare();
         return chosenMove;
     }
 
