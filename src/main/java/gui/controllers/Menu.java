@@ -5,11 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Config;
@@ -17,7 +13,6 @@ import logic.enums.GameType;
 import logic.enums.Side;
 import logic.game.AIGame;
 import logic.game.AiAiGame;
-import logic.game.Game;
 import logic.game.HumanGame;
 import logic.player.*;
 
@@ -28,7 +23,7 @@ import static logic.enums.Side.WHITE;
 
 public class Menu {
 
-    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "Minimax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
+    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
 
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
@@ -65,11 +60,9 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("Human");
-        blackPlayerChoice.setValue("Human");
+        whitePlayerChoice.setValue("MiniMax AI");
+        blackPlayerChoice.setValue("ExpectiMiniMax AI");
     }
-
-    private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
 
     @FXML
     void start(ActionEvent event) {
@@ -106,16 +99,16 @@ public class Menu {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                new AiAiGame(white, black, StartingFEN);
+                new AiAiGame(white, black, Config.OPENING_FEN);
             }
             case HUMAN_V_AI -> {
                 AIPlayer aiPlayer = getPlayer(blackPlayer, BLACK);
-                new AIGame(aiPlayer,StartingFEN);
+                new AIGame(aiPlayer,Config.OPENING_FEN);
             }
             case HUMAN_V_HUMAN -> {
-                new HumanGame(StartingFEN);
+                new HumanGame(Config.OPENING_FEN);
             }
-            default -> new HumanGame(StartingFEN);
+            default -> new HumanGame(Config.OPENING_FEN);
         }
 
         try {
@@ -124,6 +117,7 @@ public class Menu {
             Parent root = new MainContainerController(type);
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.centerOnScreen();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -133,10 +127,10 @@ public class Menu {
         return switch (player) {
             case "Random AI" -> new RandomMovesPlayer(color);
             case "Basic AI" -> new BasicAIPlayer(color);
-            case "Minimax AI" -> new MiniMaxPlayer(9, color);
+            case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
             case "QL AI" -> new QLPlayer(2, color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
             default -> new RandomMovesPlayer(color);
         };
     }

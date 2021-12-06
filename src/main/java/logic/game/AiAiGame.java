@@ -1,16 +1,13 @@
 package logic.game;
 
 import dataCollection.CsvHandler;
-import logic.Config;
-import logic.enums.Side;
-import logic.enums.Validity;
-import gui.controllers.MainContainerController;
 import gui.ChessIcons;
 import gui.Chessboard;
 import gui.controllers.MainContainerController;
 import javafx.application.Platform;
 import logic.Config;
 import logic.Move;
+import logic.PieceAndSquareTuple;
 import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
@@ -20,15 +17,20 @@ import logic.player.MiniMaxPlayer;
 import logic.player.QTablePlayer;
 import logic.player.QLPlayer;
 
-import static logic.enums.Side.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AiAiGame extends Game {
 
     private final AIPlayer white, black;
     //will play AIvsAI 50 times
-    private int playTill = Config.SIMULATION_SIZE;
+    private static int playTill = Config.SIMULATION_SIZE;
     private int played = 0;
     private CsvHandler handle;
+    private static String[][] resultsArray = new String[playTill+1][4];
 
 
     public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
@@ -36,6 +38,7 @@ public class AiAiGame extends Game {
         this.white = white;
         this.black = black;
     }
+
     public AiAiGame(AIPlayer white, AIPlayer black, int played, String FEN) {
         super(FEN);
         this.white = white;
@@ -55,37 +58,32 @@ public class AiAiGame extends Game {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
-        // FIXED BUG need to clone first state as when you call restart method you launch same game which has same state,
+        // need to clone first state as when you call restart method you launch same game which has same state,
         // so game gets loaded from the state that the previous game was loaded from
         //System.out.println("AiAiGame; playTill: " + playTill);
         //System.out.println("AiAiGame; Played: " + played);
         while (!gameOver) {
-            //System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn());
+            //System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
 
-            //update the value for gameOver,so we eventually exit this loop
             Move move = nextPlayer.chooseMove(currentState);
 
-            // TODO MAKE evaluator legal move not modify the state for castling
-            //  the state should track all castling not the evaluator
-            if (evaluator.isLegalMove(move, currentState, true, true)) {
-
-            //need to check if the destination capture move was a king, and in the next state the state the king might
-            //be dead already. so we can't check it was capture
-             /// TODO FIX BUG (if FEN loaded with only 2 kings game freezes)
+            //System.out.println("Previous State: ");
+            //currentState.printPieceAndSquare();
 
             State newState = currentState.applyMove(move);
+
             previousStates.push(currentState);
             checkGameOver(move);
-            //after checking if king was captured, we can updated the currentState
+            // after checking if king was captured, we can update the currentState
             currentState = newState;
+
+            //System.out.println("Updated State: ");
+            //currentState.printPieceAndSquare();
+
             move.setStatus(Validity.VALID);
 
-                processCastling();
+            processCastling();
 
-                //MainContainerController.getInstance().updateTurn(currentState.getColor());
-            } else {
-                move.setInvalid();
-            }
             //update GUI, need to use Platform.runLater because we are in a separate thread here,
             //and the GUI can only be updated from the main JavaFX thread. So we queue the GUI updates here
             Platform.runLater(() -> {
@@ -109,7 +107,15 @@ public class AiAiGame extends Game {
                 e.printStackTrace();
             }
         }
-
+        //Save the information for this game
+        resultsArray[played][0] = white.getNameAi();
+        resultsArray[played][1] = black.getNameAi();
+        resultsArray[played][2] = getWinner().name();
+        resultsArray[played][3] = Integer.toString(previousStates.lastElement().getCumulativeTurn());
+        //only add once all the data is gathered
+        if(played == playTill) {
+            loogerFromArray(resultsArray);
+        }
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 
@@ -118,9 +124,31 @@ public class AiAiGame extends Game {
         if (played < playTill) {
             AiAiGame game = new AiAiGame(this.white, this.black, played + 1, this.getFEN());
             game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?
-            updateCsvFile(game);
+            //updateCsvFile(game);
         }
 
+
+    }
+
+    public boolean isEqualState(List<PieceAndSquareTuple> first, List<PieceAndSquareTuple> second) {
+        List<PieceAndSquareTuple> firstCopy = first.stream().collect(Collectors.toList());
+
+        if (first.size() == second.size()) {
+            int size = first.size();
+            for (int i = 0; i < size; i++) {
+                int count = 0;
+                for (int j = 0; j < size; j++) {
+                    if (firstCopy.get(i).getPiece() == second.get(j).getPiece() && firstCopy.get(i).getSquare() == second.get(j).getSquare()) {
+                        count++;
+                    }
+                    Collections.rotate(firstCopy, 1);
+                }
+                if (count==size) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void updateCsvFile(AiAiGame game) {
@@ -135,5 +163,12 @@ public class AiAiGame extends Game {
         Side winner = game.getWinner();
         handle = new CsvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
         handle.aiVsAiCsvWrite();
+    }
+
+    public void loogerFromArray(String[][] array) {
+        for (int i = 1; i <= played; i++) {
+            handle = new CsvHandler(array[i][0], array[i][1], array[i][2], Integer.parseInt(array[i][3]));
+            handle.aiVsAiCsvWrite();
+        }
     }
 }

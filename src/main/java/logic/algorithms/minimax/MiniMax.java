@@ -87,7 +87,7 @@ public class MiniMax {
                 int lastPieceIndex = possibleBoardStates.size() - 1;
                 int diceNo = Piece.getDiceFromPiece((Piece) possibleBoardStates.get(lastPieceIndex).getPiece());
                 State newState = new State(
-                        parentNode.getState().getBoard(), diceNo, parentNode.getState().getColor(), parentNode.getState().isApplyCastling(),
+                        parentNode.getState().getBoard(), diceNo, parentNode.getState().getColor(), parentNode.getState().isCanCastleWhite(), parentNode.getState().isCanCastleBlack(),
                         parentNode.getState().isShortCastlingBlack(), parentNode.getState().isShortCastlingWhite(), parentNode.getState().isLongCastlingBlack(),
                         parentNode.getState().isShortCastlingWhite(), parentNode.getState().getCastling(), possibleBoardStates, parentNode.getState().getCumulativeTurn());
                 int evalNo = (int) allStatesAndBoardEvaluationsForGivenPieceType.get(diceNo - 1).getEvaluationNumbers().get(i);
@@ -223,6 +223,16 @@ public class MiniMax {
         return bestChild;
     }
 
+    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
+        int king = 0;
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
+                king++;
+            }
+        }
+        return king;
+    }
+
     private void printEvaluationNumbers(List<Integer> possibleEvaluationNumbers) {
         // for visual appeal
         if (possibleEvaluationNumbers.size() != 0) {
@@ -278,16 +288,6 @@ public class MiniMax {
             }
         }
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
-    }
-
-    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
-        int king = 0;
-        for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
-                king++;
-            }
-        }
-        return king;
     }
 
 }

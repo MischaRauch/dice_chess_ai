@@ -18,7 +18,6 @@ import logic.*;
 import java.io.IOException;
 import java.util.List;
 
-import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
 
 
@@ -134,24 +133,24 @@ public class Chessboard extends GridPane {
             }
 
             //move rook if castling was performed
-            if (move.castling != Square.INVALID) {
+            if (move.castlingRookDestination != Square.INVALID) {
                 //Short castling white
-                if (move.castling == Square.f1) {
+                if (move.castlingRookDestination == Square.f1) {
                     tileBoard[7][7].setPiece(Piece.EMPTY);
                     tileBoard[7][5].setPiece(Piece.WHITE_ROOK);
                 }
                 //Long castling white
-                if (move.castling == Square.d1) {
+                if (move.castlingRookDestination == Square.d1) {
                     tileBoard[7][0].setPiece(Piece.EMPTY);
                     tileBoard[7][3].setPiece(Piece.WHITE_ROOK);
                 }
                 //Short castling black
-                if (move.castling == Square.f8) {
+                if (move.castlingRookDestination == Square.f8) {
                     tileBoard[0][7].setPiece(Piece.EMPTY);
                     tileBoard[0][5].setPiece(Piece.BLACK_ROOK);
                 }
                 //Long castling black
-                if (move.castling == Square.d8) {
+                if (move.castlingRookDestination == Square.d8) {
                     tileBoard[0][0].setPiece(Piece.EMPTY);
                     tileBoard[0][3].setPiece(Piece.BLACK_ROOK);
                 }
@@ -172,8 +171,8 @@ public class Chessboard extends GridPane {
                 if (gameType == GameType.AI_V_AI) {
                     AiAiGame aiAiGame = (AiAiGame) game;
                     //handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
-                    handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
-                    handle.aiVsAiCsvWrite();
+                    //handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+                    //handle.aiVsAiCsvWrite();
                 } else if (gameType == GameType.HUMAN_V_AI) {
                     AIGame aiGame = (AIGame) game;
                     handle = new CsvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
@@ -253,8 +252,8 @@ public class Chessboard extends GridPane {
         return tileBoard[row][col];
     }
 
-    //copy-pasted from GameboardController and removed some of the unnecessary lines like the two dice rolls
-    //however more unnecessary lines can be removed like the activeColor, castling etc; However idk.
+    // copy-pasted from GameboardController and removed some of the unnecessary lines like the two dice rolls
+    // however more unnecessary lines can be removed like the activeColor, castling etc; However idk.
     public char[][] parseFENd(String fenDiceBoard) {
         //chess logic.board has starts with index 1 so to keep things simple leave index 0 empty
         char[][] board = new char[9][9];

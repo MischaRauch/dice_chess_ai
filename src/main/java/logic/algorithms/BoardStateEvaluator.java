@@ -15,12 +15,12 @@ public class BoardStateEvaluator {
 
     public static int getBoardEvaluationNumber(State state, Side color) { // for ML
         int evalNo = 0;
-        int turn = 10;
+        int turn = 1;
 
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, color);
 
         for (OriginAndDestSquare tempMove : originAndDestSquares) {
-            Square s = (Square) tempMove.getOrigin();
+            Square s = tempMove.getOrigin();
             Piece p = state.getBoard().getPieceAt(s);
 
             if (p.getColor()==color) {
@@ -38,16 +38,14 @@ public class BoardStateEvaluator {
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {
         int evalNo = 0;
-        for (PieceAndSquareTuple ps : nodePieceAndSquare) {
-            Piece p = (Piece) ps.getPiece();
-            Square s = (Square) ps.getSquare();
+        for (PieceAndSquareTuple<Piece,Square> ps : nodePieceAndSquare) {
             // if piece friendly add weight, else subtract opposite weight
-            if (p.getColor()==color) {
-                evalNo += p.getWeight();
-                evalNo += getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
+            if (ps.getPiece().getColor()==color) {
+                evalNo += ps.getPiece().getWeight();
+                evalNo += getCorrectWeights(ps.getPiece(),turn)[ps.getSquare().getRank()-1][ps.getSquare().getFile()];
             } else {
-                evalNo -= p.getWeight();
-                evalNo -= getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
+                evalNo -= ps.getPiece().getWeight();
+                evalNo -= getCorrectWeights(ps.getPiece(),turn)[ps.getSquare().getRank()-1][ps.getSquare().getFile()];
             }
         }
         return evalNo;
@@ -74,20 +72,7 @@ public class BoardStateEvaluator {
         };
     }
 
-    // flips the weight matrix horizontally so if can be used for either black or white
-    private static int[][] flipMatrixHorizontal(int[][] matrix) {
-        int temp = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length / 2; j++) {
-                temp = matrix[i][j];
-                matrix[i][j] = matrix[i][matrix.length - 1 - j];
-                matrix[i][matrix.length - 1 -j] = temp;
-            }
-        }
-        return matrix;
-    }
-
-    private static int[][] knightBoardWeightsB = {
+    private final static int[][] knightBoardWeightsB = {
             {-50,-40,-30,-30,-30,-30,-40,-50},
             {-40,-20,  0,  5,  5,  0,-20,-40},
             {-30,  5, 10, 15, 15, 10,  5,-30},
@@ -96,7 +81,7 @@ public class BoardStateEvaluator {
             {-30,  0, 10, 15, 15, 10,  0,-30},
             {-40,-20,  0,  0,  0,  0,-20,-40},
             {-50,-40,-30,-30,-30,-30,-40,-50} };
-    private static int[][] knightBoardWeightsW = {
+    private final static int[][] knightBoardWeightsW = {
             {-50,-40,-30,-30,-30,-30,-40,-50},
             {-40,-20,  0,  0,  0,  0,-20,-40},
             {-30,  0, 10, 15, 15, 10,  0,-30},
@@ -106,7 +91,7 @@ public class BoardStateEvaluator {
             {-40,-20,  0,  5,  5,  0,-20,-40},
             {-50,-40,-30,-30,-30,-30,-40,-50} };
 
-    private static int[][] queenBoardWeightsB = {
+    private final static int[][] queenBoardWeightsB = {
             {-20,-10,-10, -5, -5,-10,-10,-20},
             {-10,  0,  5,  0,  0,  0,  0,-10},
             {-10,  5,  5,  5,  5,  5,  0,-10},
@@ -115,7 +100,7 @@ public class BoardStateEvaluator {
             {-10,  0,  5,  5,  5,  5,  0,-10},
             {-10,  0,  0,  0,  0,  0,  0,-10},
             {-20,-10,-10, -5, -5,-10,-10,-20} };
-    private static int[][] queenBoardWeightsW = {
+    private final static int[][] queenBoardWeightsW = {
             {-20,-10,-10, -5, -5,-10,-10,-20},
             {-10,  0,  0,  0,  0,  0,  0,-10},
             {-10,  0,  5,  5,  5,  5,  0,-10},
@@ -124,8 +109,8 @@ public class BoardStateEvaluator {
             {-10,  5,  5,  5,  5,  5,  0,-10},
             {-10,  0,  5,  0,  0,  0,  0,-10},
             {-20,-10,-10, -5, -5,-10,-10,-20} };
-    
-    private static int[][] bishopBoardWeightsB = {
+
+    private final static int[][] bishopBoardWeightsB = {
             {-20,-10,-10,-10,-10,-10,-10,-20},
             {-10,  5,  0,  0,  0,  0,  5,-10},
             {-10, 10, 10, 10, 10, 10, 10,-10},
@@ -134,7 +119,7 @@ public class BoardStateEvaluator {
             {-10,  0,  5, 10, 10,  5,  0,-10},
             {-10,  0,  0,  0,  0,  0,  0,-10},
             {-20,-10,-10,-10,-10,-10,-10,-20} };
-    private static int[][] bishopBoardWeightsW = {
+    private final static int[][] bishopBoardWeightsW = {
             {-20,-10,-10,-10,-10,-10,-10,-20},
             {-10,  0,  0,  0,  0,  0,  0,-10},
             {-10,  0,  5, 10, 10,  5,  0,-10},
@@ -143,8 +128,8 @@ public class BoardStateEvaluator {
             {-10, 10, 10, 10, 10, 10, 10,-10},
             {-10,  5,  0,  0,  0,  0,  5,-10},
             {-20,-10,-10,-10,-10,-10,-10,-20} };
-    
-    private static int[][] pawnBoardWeightsB = {
+
+    private final static int[][] pawnBoardWeightsB = {
             {0,  0,  0,  0,  0,  0,  0,  0},
             {5, 10, 10,-20,-20, 10, 10,  5},
             {5, -5,-10,  0,  0,-10, -5,  5},
@@ -153,7 +138,7 @@ public class BoardStateEvaluator {
             {10, 10, 20, 30, 30, 20, 10, 10},
             {50, 50, 50, 50, 50, 50, 50, 50},
             {0,  0,  0,  0,  0,  0,  0,  0} };
-    private static int[][] pawnBoardWeightsW = {
+    private final static int[][] pawnBoardWeightsW = {
             {0,  0,  0,  0,  0,  0,  0,  0},
             {50, 50, 50, 50, 50, 50, 50, 50},
             {10, 10, 20, 30, 30, 20, 10, 10},
@@ -162,8 +147,8 @@ public class BoardStateEvaluator {
             {5, -5,-10,  0,  0,-10, -5,  5},
             {5, 10, 10,-20,-20, 10, 10,  5},
             {0,  0,  0,  0,  0,  0,  0,  0}};
-    
-    private static int[][] rookBoardWeightsW = {
+
+    private final static int[][] rookBoardWeightsW = {
             {0,  0,  0,  0,  0,  0,  0,  0},
             {5, 10, 10, 10, 10, 10, 10,  5},
             {-5,  0,  0,  0,  0,  0,  0, -5},
@@ -172,7 +157,7 @@ public class BoardStateEvaluator {
             {-5,  0,  0,  0,  0,  0,  0, -5},
             {-5,  0,  0,  0,  0,  0,  0, -5},
             {0,  0,  0,  5,  5,  0,  0,  0} };
-    private static int[][] rookBoardWeightsB = {
+    private final static int[][] rookBoardWeightsB = {
             {0,  0,  0,  5,  5,  0,  0,  0},
             {-5,  0,  0,  0,  0,  0,  0, -5},
             {-5,  0,  0,  0,  0,  0,  0, -5},
@@ -181,8 +166,8 @@ public class BoardStateEvaluator {
             {-5,  0,  0,  0,  0,  0,  0, -5},
             {5, 10, 10, 10, 10, 10, 10,  5},
             {0,  0,  0,  0,  0,  0,  0,  0} };
-            
-    private static int[][] kingBoardWeightsMiddleGameW = {
+
+    private final static int[][] kingBoardWeightsMiddleGameW = {
             {-30,-40,-40,-50,-50,-40,-40,-30},
             {-30,-40,-40,-50,-50,-40,-40,-30},
             {-30,-40,-40,-50,-50,-40,-40,-30},
@@ -191,7 +176,7 @@ public class BoardStateEvaluator {
             {-10,-20,-20,-20,-20,-20,-20,-10},
             {20, 20,  0,  0,  0,  0, 20, 20},
             {20, 30, 10,  0,  0, 10, 30, 20} };
-    private static int[][] kingBoardWeightsMiddleGameB = {
+    private final static int[][] kingBoardWeightsMiddleGameB = {
             {20, 30, 10,  0,  0, 10, 30, 20},
             {20, 20,  0,  0,  0,  0, 20, 20},
             {-10,-20,-20,-20,-20,-20,-20,-10},
@@ -200,8 +185,8 @@ public class BoardStateEvaluator {
             {-30,-40,-40,-50,-50,-40,-40,-30},
             {-30,-40,-40,-50,-50,-40,-40,-30},
             {-30,-40,-40,-50,-50,-40,-40,-30}, };
-    
-    private static int[][] kingBoardWeightsEndGameW = {
+
+    private final static int[][] kingBoardWeightsEndGameW = {
             {-50,-40,-30,-20,-20,-30,-40,-50},
             {-30,-20,-10,  0,  0,-10,-20,-30},
             {-30,-10, 20, 30, 30, 20,-10,-30},
@@ -210,7 +195,7 @@ public class BoardStateEvaluator {
             {-30,-10, 20, 30, 30, 20,-10,-30},
             {-30,-30,  0,  0,  0,  0,-30,-30},
             {-50,-30,-30,-30,-30,-30,-30,-50} };
-    private static int[][] kingBoardWeightsEndGameB = {
+    private final static int[][] kingBoardWeightsEndGameB = {
             {-50,-30,-30,-30,-30,-30,-30,-50},
             {-30,-30,  0,  0,  0,  0,-30,-30},
             {-30,-10, 20, 30, 30, 20,-10,-30},

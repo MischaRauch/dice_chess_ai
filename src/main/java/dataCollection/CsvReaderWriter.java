@@ -13,7 +13,7 @@ public class CsvReaderWriter extends ViewDataController {
         try{
             fileWriter = new FileWriter(filePath);
             fileWriter.append("Game Type, Alg, Winner, Turns \n");
-            //TODO
+
             for(GameInfo g : gameList){
                 fileWriter.append(g.getGameType());
                 fileWriter.append(",");

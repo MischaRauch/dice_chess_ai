@@ -22,7 +22,7 @@ public class Move {
     public Square enPassant = Square.INVALID;
     boolean enPassantMove = false;
     boolean enPassantCapture = false;
-    public Square castling = Square.INVALID;
+    public Square castlingRookDestination = Square.INVALID;
     boolean AIMove = false;
 
     public Move(Piece piece, Square origin, Square destination, int diceRoll, Side side) {

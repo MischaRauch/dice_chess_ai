@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import javafx.scene.Node;
+import javafx.stage.Modality;
 import logic.enums.Side;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -52,24 +54,26 @@ public class GameOverScreen extends AnchorPane {
         Platform.exit();
     }
 
-
-    // TODO When you restart MiniMax starts behaving wierdly, king moves like knight, queen backstabs it's own king ;)
     @FXML
     void restart(ActionEvent event) throws IOException {
-        Stage stage = (Stage) playAgainButton.getScene().getWindow();
-        Parent root = new MainContainerController(MainContainerController.getInstance().type);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        /// TODO re-enable play again button
+//        Stage stage = (Stage) playAgainButton.getScene().getWindow();
+//        Parent root = new MainContainerController(MainContainerController.getInstance().type);
+//        Scene scene = new Scene(root);
+//        stage.setScene(scene);
     }
 
     @FXML
     private Button historyButton;
     @FXML
     void historyButtonAction(ActionEvent event) throws IOException {
-        Stage stage = (Stage) historyButton.getScene().getWindow();
+        Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/viewData.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(((Node)event.getSource()).getScene().getWindow());
+        stage.show();
     }
 
 }
