@@ -5,19 +5,15 @@ import logic.State;
 import logic.algorithms.BoardStateEvaluator;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.player.ExpectiMiniMaxPlayer;
+import logic.player.BasicAIPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static java.lang.Math.max;
-
 
 public class DQL {
 
     Qtable currentQtable;
     int[][] Qvalues;
-    ExpectiMiniMaxPlayer exp;
     State initialState;
 
     public void algo(State initialState, Side side, int depth) {
@@ -32,7 +28,7 @@ public class DQL {
         for (int[] row : Qvalues) {// fill the table with 0
             Arrays.fill(row, 0);
         }
-        double numOfGames = 1000;
+        double numOfGames = 300;
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
         double explorationDecay = 1 / numOfGames;
@@ -40,8 +36,6 @@ public class DQL {
 
         double gamma = 0.99; // discount factor, helps the algo to strive for a long-term high reward (0<gamma<1)
         double learningRate = 0.1;
-
-        ArrayList<Integer> totalRewardsOfEachEpisode = new ArrayList<>(); // to test the performance of the agent
 
         State currentState;
         Move action;
@@ -53,11 +47,7 @@ public class DQL {
             int gamesTotalReward = 0;
             boolean finished = false; // turn to true if king captured
 
-            //System.out.println("Game"+i);
-
             for (int j = 0; j < depth / 2; j++) {
-                //System.out.println("action"+j);
-
                 // take learned path or explore new actions
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
                     action = currentQtable.randomMoveGenerator(currentState, side);
@@ -71,10 +61,12 @@ public class DQL {
                 }
                 //apply chosen action and return the next state, reward and true if the episode is ended
                 State newState = new State(currentState.applyMove(action));
-
+                /* what happens here is that I can't get immediate reward, in order to get the actual reward I need to apply a
+                move of the opponent so that the reward I get will be useful and valid.
+                */
                 newState = newState.applyMove(currentQtable.randomMoveGenerator(newState, Side.getOpposite(side)));
                 // code line above can be changed with some better algo (example given below) which could give better results but would take more time
-                //QTablePlayer help = new QTablePlayer(Side.getOpposite(side));
+                //BasicAIPlayer help = new BasicAIPlayer(Side.getOpposite(side));
                 //newState = newState.applyMove(help.chooseMove(newState));
 
                 reward = getReward(newState, side);
@@ -91,9 +83,7 @@ public class DQL {
                 currentState = newState;
                 if (finished) break;
             }
-            if (explorationProb >= minExplorationProb) {explorationProb -= explorationDecay;}
-            totalRewardsOfEachEpisode.add(gamesTotalReward);
-
+            if (explorationProb >= minExplorationProb) explorationProb -= explorationDecay;
         }
     }
 
@@ -104,36 +94,31 @@ public class DQL {
     public int getReward(State state, Side side) {
         int reward = 0;
         reward += BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide) / 10;
-//        System.out.println(BoardStateEvaluator.getBoardEvaluationNumber(state, currentQtable.currentSide)/10);
-//        System.out.println(currentQtable.addPieceWeights(state, side)*50);
         reward += currentQtable.addPieceWeights(state, side) * 50;
         return reward;
     }
 
     public Move getBestMove(State state, Side color) {
-        Piece tempP = Piece.getPieceFromDice(initialState.getDiceRoll(), initialState.getColor()); // get piece that needs to be equal
+        Piece tempP = Piece.getPieceFromDice(initialState.getDiceRoll(), initialState.getColor()); // get piece that the action needs to be equal
         int a = currentQtable.accessStateIndex(initialState);
 
         ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
 
         int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP, initialState, a);
         OriginAndDestSquare tempMove = originAndDestSquares.get(index);
-        //System.out.println("wut"); // if this prints then problem is not here :))
         return (new Move(tempP, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(tempP), color));
     }
 
     public int argmax(int[][] qvalues, int stateIndex) {
         int count = 0;
-        int indexOfMaxAction = -1; // if returns this somethings wrong
+        int indexOfMaxAction = -1; // if returns this something is wrong
         for (int i = 0; i < qvalues[stateIndex].length; i++) {
             if (qvalues[stateIndex][i] > count) {
                 count = qvalues[stateIndex][i];
                 indexOfMaxAction = i;
             }
         }
-        if (count == 0) {
-            return (int) (Math.random() * currentQtable.accessStateValue(currentQtable.stateSpace.get(stateIndex)).size());
-        }
+        if (count == 0) return (int) (Math.random() * currentQtable.accessStateValue(currentQtable.stateSpace.get(stateIndex)).size());
         return indexOfMaxAction;
     }
 

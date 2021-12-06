@@ -17,7 +17,6 @@ public class Qtable {
     ArrayList<State> stateSpace;
     Side currentSide;
     LegalMoveGenerator legalMoveGenerator;
-    ArrayList<Integer> indexOfDepthOfAI = new ArrayList<>();
     int depth;
 
     public Qtable(State currentState, Side side, int depth) {
@@ -61,7 +60,7 @@ public class Qtable {
         return answer;
     }
 
-    public int accessActionIndex(State state, OriginAndDestSquare originAndDestSquare) { // TODO, decide what to do with -1
+    public int accessActionIndex(State state, OriginAndDestSquare originAndDestSquare) {
 
         for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
             if (entry.getKey().equals1(state)) {
@@ -74,7 +73,7 @@ public class Qtable {
                 }
             }
         }
-        return -1; // shouldn't happen
+        return -1; // means action in that state doesn't exist
     }
 
     public int addPieceWeights(State state, Side side) {
@@ -88,7 +87,7 @@ public class Qtable {
         totalWeights += check(state, side); // if I lose king or get king give max or min number
         return totalWeights;
     }
-    public int check(State state, Side side) { // with for loop make each move that gets king inf
+    public int check(State state, Side side) { // this method checks if the move makes the player lose/capture king
         Piece p;
         boolean WExist = false;
         boolean BExist = false;
@@ -148,7 +147,7 @@ public class Qtable {
 
     public int getIndexOfBestMove(int[][] qvalues, ArrayList<OriginAndDestSquare> moves, Piece p, State initial, int b) {
         double count = 0;
-        int indexOfMaxAction = -1; // if returns this somethings wrong
+        int indexOfMaxAction = -1; // if returns this something is wrong
         int a = 0;
         ArrayList<Integer> doableMoves = new ArrayList<>();
 
@@ -169,21 +168,6 @@ public class Qtable {
         }
         return indexOfMaxAction;
     }
-//    public boolean checkIfStateLastDepth(State state) {
-//        int a;
-//        if (indexOfDepthOfAI.size() < 2) {
-//            a = 0;
-//        } else {
-//            a = indexOfDepthOfAI.get(indexOfDepthOfAI.size() - 1) - indexOfDepthOfAI.get(indexOfDepthOfAI.size() - 2);
-//        }
-//
-//        for (int i = a; i<indexOfDepthOfAI.size(); i++) {
-//            if (stateSpace.get(i) == state) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     public boolean checkIfKingsExist(State state) {
         Piece p;
@@ -275,24 +259,8 @@ public class Qtable {
                 currentDepthOfOpponent++;
             }
         }
-//        for (int a=0; a<stateSpace.size(); a++) {
-//            stateSpace.get(a).getBoard().printBoard();
-//        }
         return stateSpace;
     }
-
-//    public Arrays<int> accessStatesByDepth(ArrayList<State> allStates, ArrayList<Integer> infoOfIndex, int depth) {
-//        ArrayList<State> tempStates = new ArrayList<>();
-//        int toWhere = infoOfIndex.get(depth);
-//        int a = infoOfIndex.get(depth-1);
-//
-//        for (int i = a; i<toWhere; i++) {
-//            if (stateSpace.get(i) == state) {
-//                return true;
-//            }
-//        }
-//        return
-//    }
 
     // TODO, here maybe prune moves somehow
     public HashMap<Piece, ArrayList<Integer>> actionPruning(State state) { // remove actions that's not possible for that state
