@@ -182,7 +182,7 @@ public class Chessboard extends GridPane {
                     handle.addToCsv();
                 }
 
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner(),game.getPlayer())));
 
                 // if gameover true then the winner has also been set by the checkGameOver( method in Game, so we can reset state here
                if(gameType!=GameType.AI_V_AI) {

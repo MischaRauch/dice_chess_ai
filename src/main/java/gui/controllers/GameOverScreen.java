@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import logic.player.*;
 
 import java.io.IOException;
 
@@ -21,9 +22,17 @@ import static logic.enums.Side.WHITE;
 public class GameOverScreen extends AnchorPane {
 
     Side winner;
+    AIPlayer winnerPlayer;
+    BasicAIPlayer basicAI;
+    ExpectiMiniMaxPlayer expectiMiniMax;
+    MiniMaxPlayer miniMaxPlayer;
+    QLPlayer qlPlayer;
+    QTablePlayer qTablePlayer;
+    RandomMovesPlayer randomplayer;
 
-    public GameOverScreen(Side winner) {
+    public GameOverScreen(Side winner,AIPlayer winnerPlayer) {
         this.winner = winner;
+        this.winnerPlayer= winnerPlayer;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameOverScreen.fxml"));
@@ -38,10 +47,36 @@ public class GameOverScreen extends AnchorPane {
     @FXML
     void initialize() {
         resultLabel.setText(winner == WHITE ? "White wins!" : "Black wins!");
+        if(winnerPlayer==basicAI) {
+            winnerlabel.setText("BasicAIPlayer wins");
+        }
+        else if(winnerPlayer==expectiMiniMax)
+        {
+            winnerlabel.setText("ExpectiMinimaxPlayer wins");
+        }
+        else if(winnerPlayer==miniMaxPlayer)
+        {
+            winnerlabel.setText("MinimaxPlayer wins");
+        }
+        else if(winnerPlayer==qlPlayer)
+        {
+            winnerlabel.setText("qlPlayer wins");
+        }
+        else if(winnerPlayer==qTablePlayer)
+        {
+            winnerlabel.setText("qTablePlayer wins");
+        }
+        else
+        {
+            winnerlabel.setText("RandomPlayer wins");
+        }
     }
 
     @FXML
     private Label resultLabel;
+
+    @FXML
+    private Label winnerlabel;
 
     @FXML
     private Button playAgainButton;

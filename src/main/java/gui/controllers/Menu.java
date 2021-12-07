@@ -123,7 +123,8 @@ public class Menu {
         }
     }
 
-    private AIPlayer getPlayer(String player, Side color) {
+ //was private and non static
+    public static AIPlayer getPlayer(String player, Side color) {
         return switch (player) {
             case "Random AI" -> new RandomMovesPlayer(color);
             case "Basic AI" -> new BasicAIPlayer(color);

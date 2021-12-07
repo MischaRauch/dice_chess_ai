@@ -1,11 +1,13 @@
 package logic.game;
 
+import gui.controllers.Menu;
 import logic.*;
 import logic.board.Board;
 import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import logic.player.AIPlayer;
 
 import java.util.Stack;
 
@@ -32,7 +34,8 @@ public abstract class Game {
     public boolean gameDone = false;
     //This variable is the winner of the game, neutral by default
     public Side winner = NEUTRAL;
-
+    String theplayer;
+    public AIPlayer player;
     //indicated is in last state a castling was performed to disable castling rights
     //for the beginning of the next move - 0 = none, 1 = shortCasltingWhite
     //2 = shortCastlingBlack, 3 = longCastlingWhite, 4 = longCastlingBlack
@@ -88,6 +91,8 @@ public abstract class Game {
             System.out.println("gameDone = true");
             gameDone = true;
             winner = move.getSide();
+            player = Menu.getPlayer(theplayer,winner);
+
         }
 //        if (currentState.getKingCount(currentState.getPieceAndSquare())!=2) {
 //            gameDone = true;
@@ -103,6 +108,10 @@ public abstract class Game {
         return winner;
     }
 
+    public AIPlayer getPlayer()
+    {
+        return player;
+    }
 
     public void setGameOver(boolean newGame) { gameDone = newGame;}
 
