@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/samgl/Documents/UNI/Year 2/Project2-1/BestDiceChess/src/main/java</OriginalElement>
+  <nodes>
+    <node x="516.5714285714287" y="163.1071428571429">logic.player.QTablePlayer</node>
+    <node x="286.22834518422763" y="403.3365830707284">logic.game.HumanGame</node>
+    <node x="467.39988687782795" y="654.0192964204916">gui.controllers.MainContainerController</node>
+    <node x="404.4356011635422" y="282.0966427060604">logic.LegalMoveEvaluator</node>
+    <node x="429.3571428571429" y="1107.969834087481">dataCollection.CsvReaderWriter</node>
+    <node x="857.0" y="232.3673044939132">logic.algorithms.minimax.MiniMax</node>
+    <node x="881.9559631544923" y="567.2887278521689">gui.Tile</node>
+    <node x="135.3852617970266" y="403.3365830707284">logic.game.AiAiGame</node>
+    <node x="610.1428571428567" y="395.3365830707284">logic.Dice</node>
+    <node x="993.6702488687783" y="163.1071428571429">logic.player.ExpectiMiniMaxPlayer</node>
+    <node x="301.97834518422763" y="163.1071428571429">logic.player.RandomMovesPlayer</node>
+    <node x="1047.5" y="229.64658663946364">logic.algorithms.expectiminimax.ExpectiMiniMax</node>
+    <node x="651.3571428571429" y="1178.0578294254765">dataCollection.GameInfo</node>
+    <node x="356.4489334195217" y="1171.0412357250596">logic.enums.Validity</node>
+    <node x="681.3297511312217" y="163.1071428571429">logic.player.QLPlayer</node>
+    <node x="203.97834518422766" y="234.3365830707284">logic.Config</node>
+    <node x="953.4285714285712" y="721.5327490371155">gui.controllers.PromotionPrompt</node>
+    <node x="208.97834518422766" y="294.3365830707284">logic.game.Game</node>
+    <node x="617.3571428571429" y="1024.969834087481">gui.controllers.ViewDataController</node>
+    <node x="304.72834518422763" y="476.5107933197318">logic.game.AIGame</node>
+    <node x="742.5714285714283" y="651.5194861410619">gui.Chessboard</node>
+    <node x="143.3852617970266" y="468.5107933197319">logic.enums.GameType</node>
+    <node x="619.3571428571429" y="1107.969834087481">dataCollection.AICsvReaderWriter</node>
+    <node x="735.5714285714283" y="468.057969563276">logic.board.Board</node>
+    <node x="689.8297511312217" y="232.3673044939132">logic.ML.Qtable</node>
+    <node x="152.05680349062732" y="654.0192964204916">DiceChess</node>
+    <node x="817.5" y="163.1071428571429">logic.player.MiniMaxPlayer</node>
+    <node x="-43.90346907993961" y="1013.3831070889895">logic.PieceAndSquareTuple</node>
+    <node x="1246.5" y="229.6465866394637">logic.algorithms.minimax.Tree</node>
+    <node x="-43.90346907993961" y="1060.6764705882354">logic.BoardStateAndEvaluationNumberTuple</node>
+    <node x="833.0" y="303.0508687850142">logic.algorithms.minimax.MiniMaxThread</node>
+    <node x="1616.2142857142858" y="705.4396143072613">dataCollection.CsvHandler</node>
+    <node x="1040.75" y="517.8222795127667">logic.algorithms.BoardStateGenerator</node>
+    <node x="-28.90346907993961" y="1107.969834087481">logic.PieceAndTurnDeathTuple</node>
+    <node x="449.48917259211385" y="229.64658663946364">logic.Move</node>
+    <node x="1043.25" y="588.5058438038677">logic.algorithms.BoardStateEvaluator</node>
+    <node x="1032.5" y="303.0508687850142">logic.algorithms.expectiminimax.ExpectiMiniMaxTree</node>
+    <node x="-28.90346907993967" y="1148.2967571644042">logic.ML.OriginAndDestSquare</node>
+    <node x="610.1428571428567" y="468.057969563276">logic.enums.Piece</node>
+    <node x="872.0" y="387.3365830707284">logic.enums.Side</node>
+    <node x="1035.75" y="447.13871522166573">logic.algorithms.expectiminimax.ExpectiMiniMaxThread</node>
+    <node x="551.5714285714287" y="10.314174317563612">logic.player.AIPlayer</node>
+    <node x="1256.5" y="376.45515093056474">logic.algorithms.minimax.Node</node>
+    <node x="177.1569166127987" y="549.6850035687353">gui.controllers.GameOverScreen</node>
+    <node x="963.4285714285713" y="654.0192964204916">gui.ChessIcons</node>
+    <node x="718.5714285714283" y="567.2887278521689">logic.board.Board0x88</node>
+    <node x="738.5714285714283" y="387.3365830707284">logic.State</node>
+    <node x="1028.5" y="376.45515093056474">logic.algorithms.expectiminimax.ExpectiMiniMaxNode</node>
+    <node x="143.3852617970266" y="163.1071428571429">logic.player.BasicAIPlayer</node>
+    <node x="718.5714285714283" y="721.5327490371155">gui.Chessboard.MovePieceHandler</node>
+    <node x="688.0" y="296.5281618657079">logic.ML.DQL</node>
+    <node x="401.9356011635422" y="342.71661288839437">logic.LegalMoveGenerator</node>
+    <node x="325.22834518422763" y="654.0192964204916">gui.controllers.Menu</node>
+    <node x="869.4559631544923" y="465.5581592838462">logic.enums.Square</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dataCollection.AICsvReaderWriter" target="gui.controllers.ViewDataController" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.player.MiniMaxPlayer" target="logic.player.AIPlayer" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="895.0" y="103.90648567119155" />
+      <point x="606.0714285714287" y="103.90648567119155" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.player.ExpectiMiniMaxPlayer" target="logic.player.AIPlayer" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="1095.1702488687783" y="103.90648567119155" />
+      <point x="606.0714285714287" y="103.90648567119155" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="dataCollection.CsvHandler" target="gui.controllers.ViewDataController" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="1682.2142857142858" y="1082.969834087481" />
+      <point x="711.3571428571429" y="1082.969834087481" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.game.AiAiGame" target="logic.game.Game" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="195.8852617970266" y="362.3365830707284" />
+      <point x="255.47834518422766" y="362.3365830707284" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.player.BasicAIPlayer" target="logic.player.AIPlayer" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="215.3852617970266" y="103.90648567119155" />
+      <point x="606.0714285714287" y="103.90648567119155" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.player.QLPlayer" target="logic.player.AIPlayer" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="738.8297511312217" y="103.90648567119155" />
+      <point x="606.0714285714287" y="103.90648567119155" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="gui.Chessboard.MovePieceHandler" target="gui.Chessboard" relationship="INNER_CLASS">
+      <point x="0.0" y="-16.5" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="dataCollection.CsvReaderWriter" target="gui.controllers.ViewDataController" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="514.3571428571429" y="1082.969834087481" />
+      <point x="711.3571428571429" y="1082.969834087481" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.game.HumanGame" target="logic.game.Game" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="358.22834518422763" y="362.3365830707284" />
+      <point x="255.47834518422766" y="362.3365830707284" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.game.AIGame" target="logic.game.HumanGame" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.player.RandomMovesPlayer" target="logic.player.AIPlayer" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="401.97834518422763" y="103.90648567119155" />
+      <point x="606.0714285714287" y="103.90648567119155" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.board.Board0x88" target="logic.board.Board" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="0.0" y="16.5" />
+    </edge>
+    <edge source="logic.player.QTablePlayer" target="logic.player.AIPlayer" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="588.5714285714287" y="103.90648567119155" />
+      <point x="606.0714285714287" y="103.90648567119155" />
+      <point x="0.0" y="16.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="733.1176470588235" y="390.5" />
+  <SelectedNodes>
+    <node>logic.algorithms.minimax.Node</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
