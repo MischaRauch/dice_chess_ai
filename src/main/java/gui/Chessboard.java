@@ -1,11 +1,9 @@
 package gui;
 
 import dataCollection.CsvHandler;
-import logic.enums.*;
-import logic.game.*;
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
-import javafx.concurrent.Task;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import logic.*;
+import logic.Config;
+import logic.Dice;
+import logic.LegalMoveGenerator;
+import logic.Move;
+import logic.enums.*;
+import logic.game.AIGame;
+import logic.game.AiAiGame;
+import logic.game.Game;
+import logic.game.HumanGame;
 
 import java.io.IOException;
 import java.util.List;
@@ -64,6 +70,11 @@ public class Chessboard extends GridPane {
     //populates the GridPane (which is actually this class) with Tile objects
     //more or less copy-pasted from GameboardController with some slight modifications
     public void loadBoard(String fenD) {
+        if (gameType == GameType.AI_V_AI) {
+            //SimulationHandler sH = new SimulationHandler();
+            //sH.start();
+            Platform.exit();
+        }
         char[][] boardState = parseFENd(fenD);
         for (int i = 1; i < boardState.length; i++) {
             for (int j = 1; j < boardState.length; j++) {
@@ -80,7 +91,7 @@ public class Chessboard extends GridPane {
             }
         }
 
-        if (gameType == GameType.AI_V_AI) {
+     /*   if (gameType == GameType.AI_V_AI) {
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() {
@@ -90,7 +101,8 @@ public class Chessboard extends GridPane {
             };
             new Thread(task).start();
 
-        }
+        }*/
+
     }
 
     private void recolorBoard() {
@@ -307,7 +319,7 @@ public class Chessboard extends GridPane {
                             tile.select();
 
                             //color legal moves green
-                            List<Square> legalMoves = generator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
+                            List<Square> legalMoves = LegalMoveGenerator.getMoves(game.getCurrentState(), tile.getSquare(), tile.getPiece());
                             for (Square s : legalMoves)
                                 tileBoard[8 - s.getRank()][s.getFile()].colorGreen();
                         }

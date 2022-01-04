@@ -12,25 +12,18 @@ import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
-import logic.player.MiniMaxPlayer;
-import logic.player.QTablePlayer;
-import logic.player.QLPlayer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AiAiGame extends Game {
-
     private final AIPlayer white, black;
     //will play AIvsAI 50 times
-    private static int playTill = Config.SIMULATION_SIZE;
+    private static final int playTill = Config.SIMULATION_SIZE;
     private int played = 0;
     private CsvHandler handle;
-    private static String[][] resultsArray = new String[playTill+1][4];
+    private static final String[][] resultsArray = new String[playTill + 1][4];
 
 
     public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
@@ -172,3 +165,4 @@ public class AiAiGame extends Game {
         }
     }
 }
+

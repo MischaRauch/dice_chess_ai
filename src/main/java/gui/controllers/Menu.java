@@ -12,9 +12,9 @@ import logic.Config;
 import logic.enums.GameType;
 import logic.enums.Side;
 import logic.game.AIGame;
-import logic.game.AiAiGame;
 import logic.game.HumanGame;
 import logic.player.*;
+import simulation.SimulationHandler;
 
 import java.io.IOException;
 
@@ -99,7 +99,9 @@ public class Menu {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                new AiAiGame(white, black, Config.OPENING_FEN);
+                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN);
+                sH.startHandler();
+
             }
             case HUMAN_V_AI -> {
                 AIPlayer aiPlayer = getPlayer(blackPlayer, BLACK);
