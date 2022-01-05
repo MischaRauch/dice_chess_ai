@@ -18,13 +18,7 @@ import logic.PieceAndTurnDeathTuple;
 import logic.enums.GameType;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.game.AIGame;
-import logic.game.AiAiGame;
 import logic.game.Game;
-import logic.game.HumanGame;
-import logic.player.BasicAIPlayer;
-import logic.player.MiniMaxPlayer;
-import logic.player.RandomMovesPlayer;
 
 import java.io.IOException;
 import java.util.Stack;
@@ -99,24 +93,8 @@ public class MainContainerController extends AnchorPane {
         }
     }
 
-    private String StartingFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 1";
-    //private String StartingFEN = "r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1 1"; // castling tests
-    //private String StartingFEN = "4k3/8/8/8/K/8/pppppppp/8 w KQkq - 0 1 1";
     @FXML
     void initialize() throws IOException {
-//        switch (type) {
-//            case AI_V_AI -> {
-//                Game game = new AiAiGame(new RandomMovesPlayer(Side.WHITE),new MiniMaxPlayer(100, Side.BLACK));
-//                //Game game = new AiAiGame(new MiniMaxPlayer(100, WHITE), new RandomMovesPlayer(Side.BLACK));
-//            }
-//            case HUMAN_V_AI -> {
-//                Game game = new AIGame(new MiniMaxPlayer(7, Side.BLACK));
-//            }
-//            case HUMAN_V_HUMAN -> {
-//                Game game = new HumanGame();
-//            }
-//        }
-
         board = new Chessboard(type);
         chessBoardContainer.getChildren().add(board);
 
@@ -136,26 +114,28 @@ public class MainContainerController extends AnchorPane {
 
     @FXML
     void undoMove(ActionEvent event) {
-        if (!inputBlock) {
-            Game game = Game.getInstance();
-            game.undoState();
-            board.loadBoard(game.getCurrentState().toFEN());
-            removeLastInScrollPane();
-            removeInFlowPanelB();
-            removeInFlowPanelW();
-        }
+        /// TODO re-enable undo button
+//        if (!inputBlock) {
+//            Game game = Game.getInstance();
+//            game.undoState();
+//            board.loadBoard(game.getCurrentState().toFEN());
+//            removeLastInScrollPane();
+//            removeInFlowPanelB();
+//            removeInFlowPanelW();
+//        }
     }
 
     @FXML
     void redoMove(ActionEvent event) {
-        if (!inputBlock) {
-            Game game = Game.getInstance();
-            game.redoState();
-            board.loadBoard(game.getCurrentState().toFEN());
-            redoInScrollPane();
-            redoInFlowPanelB();
-            redoInFlowPanelW();
-        }
+        /// TODO re-enable redo button
+//        if (!inputBlock) {
+//            Game game = Game.getInstance();
+//            game.redoState();
+//            board.loadBoard(game.getCurrentState().toFEN());
+//            redoInScrollPane();
+//            redoInFlowPanelB();
+//            redoInFlowPanelW();
+//        }
     }
 
     public void movePieceOut(Piece piece, Side color) {

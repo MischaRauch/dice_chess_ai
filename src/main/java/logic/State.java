@@ -7,6 +7,7 @@ import logic.enums.Square;
 import logic.game.Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static logic.enums.Piece.*;
@@ -40,7 +41,7 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         loadPieceAndSquareFromFEN(board.getFEN());
-        printPieceAndSquare();
+        // printPieceAndSquare();
         cumulativeTurn = 0;
     }
 
@@ -50,7 +51,6 @@ public class State {
         board = that.getBoard();
         diceRoll = that.getDiceRoll();
         color = that.getColor();
-        loadPieceAndSquareFromFEN(that.getBoard().getFEN());
     }
 
     // for state updation
@@ -253,7 +253,7 @@ public class State {
         }
 
         updatePieceAndSquareState(move);
-        printPieceAndSquare();
+        // printPieceAndSquare();
 
 
 
@@ -262,7 +262,7 @@ public class State {
 //            canCastle = false;
 //        }
 
-        System.out.println("Real cumulative turn: " + cumulativeTurn);
+        // System.out.println("Real cumulative turn: " + cumulativeTurn);
         State nextState = new State(newBoard, -1, nextTurn, canCastleWhite, canCastleBlack, shortCastlingBlack, shortCastlingWhite,
                 longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn + 1);
 
@@ -274,10 +274,30 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        newBoard.printBoard();
+        // newBoard.printBoard();
         return nextState;
         //}
         //return this;
+    }
+
+    public boolean equals1(State state) {
+        State thisState = this;
+        State givenState = state;
+
+        for (int i = 0; i < board.getBoard().length; i++) {
+            Piece p1 = thisState.board.getBoard()[i];
+            Piece p2 = givenState.board.getBoard()[i];
+
+            if ((p1 == OFF_BOARD && p2 != OFF_BOARD) || (p1 != OFF_BOARD && p2 == OFF_BOARD)) {
+                return false;
+            }
+            if ((p1 != OFF_BOARD && p2 != OFF_BOARD)) {
+                if ((p1.getUnicode() != p2.getUnicode())) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void updatePieceAndSquareStateForCastling(Square rookSquareOld, Square rookSquareNew, Piece rook) {
@@ -384,7 +404,7 @@ public class State {
 
     public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
         this.pieceAndSquare = pieceAndSquare;
-        printPieceAndSquare();
+        // printPieceAndSquare();
     }
 
     public int getCumulativeTurn() {

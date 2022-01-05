@@ -12,8 +12,6 @@ import java.util.List;
 
 public class ExpectiMiniMax {
 
-    private final boolean DEBUG = false;
-
     private final BoardStateGenerator gen = new BoardStateGenerator();
     private ExpectiMiniMaxTree tree;
     private ExpectiMiniMaxNode bestNode;
@@ -29,23 +27,20 @@ public class ExpectiMiniMax {
             bestNode = parentNode;
         }
         while (depth != 0) {
-//            if (getKingCount(parentNode.getPreviousState().getPieceAndSquare()) != 2) {constructTree(parentNode, 0);;}
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = generateAllPossibleStatesForGivenNode(parentNode);
             List<Piece> pieceList = generatePieceTypesForGivenNode(parentNode);
 
             boolean isChildMaxPlayer = !parentNode.isMaxPlayer();
-            // PARENT (CURRENT NODE) MINIMIZER -> CHILD MAXIMIZER
+            // parent (current node minimizer -> child maximizer
             if (!isChildMaxPlayer) {
                 ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, !isChildMaxPlayer, pieceList);
                 depth -= 1;
-//                bestNode = bestChild;
                 constructTree(bestChild, depth);
             }
-            // PARENT (CURRENT NODE) MAXIMIZER -> CHILD MINIMIZER
+            // parent (current node) maximizer -> child minimizer
             else if (isChildMaxPlayer) {
                 ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, isChildMaxPlayer, pieceList);
                 depth -= 1;
-//                bestNode = bestChild;
                 constructTree(bestChild, depth);
             }
         }
@@ -66,7 +61,7 @@ public class ExpectiMiniMax {
 
     private List<BoardStateAndEvaluationNumberTuple> generateAllPossibleStatesForGivenNode(ExpectiMiniMaxNode parentNode) {
         List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
-        // STATE GENERATION
+        // state generation
         // loop through for all 6 dice numbers and generate all possible states
         for (int i = 1; i < 7; i++) {
             // evaluation numbers for i-th dice roll
@@ -81,8 +76,6 @@ public class ExpectiMiniMax {
                 allStatesAndBoardEvaluationsForGivenPieceType.add(new BoardStateAndEvaluationNumberTuple(possibleBoardStatesForGivenPiece, possibleEvaluationNumbersForGivenPiece));
             }
         }
-        if (DEBUG)
-            System.out.println("Size of all states tuple : " + allStatesAndBoardEvaluationsForGivenPieceType.size());
         return allStatesAndBoardEvaluationsForGivenPieceType;
     }
 
@@ -117,14 +110,13 @@ public class ExpectiMiniMax {
                     chanceDivider, nodeValue, newState, legalMovesForGivePiece, pieceList.get(i));
 
             parentNode.addChild(newNode);
-            if (DEBUG) System.out.println("Added child with value: " + newNode.getNodeValue());
         }
         int bestChildIndex = getBestChildIndex(parentNode, !isChildMaxPlayer);
         ExpectiMiniMaxNode bestChild = parentNode.getChildren().get(bestChildIndex);
         return bestChild;
     }
 
-    // sum eval numbers for given piece type
+    // sum evaluation numbers for given piece type
     private int getSumOfEvalNumbers(List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType, int indexZeroBased) {
         int sum = 0;
         for (int i = 0; i < allStatesAndBoardEvaluationsForGivenPieceType.size(); i++) {
@@ -162,6 +154,7 @@ public class ExpectiMiniMax {
         int min = Integer.MIN_VALUE;
         for (int i = 0; i < allStatesAndBoardEvaluationsForGivenPieceType.size(); i++) {
             for (int j = 0; j < allStatesAndBoardEvaluationsForGivenPieceType.get(indexZeroBased).getEvaluationNumbers().size(); j++) {
+                // mazimizer
                 if (isMax) {
                     if ((int) allStatesAndBoardEvaluationsForGivenPieceType.get(indexZeroBased).getEvaluationNumbers().get(j) > min) {
                         min = (int) allStatesAndBoardEvaluationsForGivenPieceType.get(indexZeroBased).getEvaluationNumbers().get(j);
@@ -181,14 +174,14 @@ public class ExpectiMiniMax {
         return bestIndex;
     }
 
-    // ONLY CALLED AFTER TREE GENERATED
+    // only called after tree generated
     private int getBestBoardEvaluationIndexFromBestNode() {
         int min = Integer.MIN_VALUE;
         int max = Integer.MAX_VALUE;
         int bestEval = 0;
         int indexForBestEval = -1;
 
-        // GET INDEX OF BEST EVALUATION NUMBER -> WILL CORRESPOND TO INDEX OF BEST MOVE
+        // get index of the best evaluation number -> will correspond to index of best move
         for (Integer i : bestNode.getBoardEvaluationNumbersForGivenPiece()) {
             if (bestNode.isMaxPlayer() && i > min) {
                 min = i;
@@ -208,12 +201,6 @@ public class ExpectiMiniMax {
     }
 
     public Move getBestMoveForBestNode() {
-//        // ONLY WORKS AFTER FIRST TURN - CAN JUST GET PIECE AT END OF PIECE & SQUARE LIST
-//        if (bestNode.getPreviousState().getPieceAndSquare().size()<=31) {
-//            Move bestMove = bestNode.getPossibleMovesForGivenPiece().get(getBestBoardEvaluationIndexFromBestNode());
-//            return bestMove;
-//        }
-        // FOR FIRST TURN
         List<Move> allMoveForGivenPiece = gen.getValidMovesForGivenPiece(bestNode.getPreviousState(), bestNode.getPiece());
         List<PieceAndSquareTuple> bestStatePAS = bestNode.getPossibleBoardStatesForGivenPiece().get(getBestBoardEvaluationIndexFromBestNode());
         for (PieceAndSquareTuple t : bestStatePAS) {
@@ -229,20 +216,6 @@ public class ExpectiMiniMax {
 
     public ExpectiMiniMaxTree getTree() {
         return tree;
-    }
-
-    public ExpectiMiniMaxNode getBestNode() {
-        return bestNode;
-    }
-
-    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
-        int king = 0;
-        for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
-                king++;
-            }
-        }
-        return king;
     }
 
 }
