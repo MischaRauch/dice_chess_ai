@@ -135,8 +135,14 @@ public class AiAiGame extends Game {
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 
+        //Csv
+        CsvHandler csvHandler = new CsvHandler();
+        csvHandler.readTimeCsv("time.csv");
+        csvHandler.writeTimeCsv("time.csv");
+
         System.out.println("\n\n\nGameOver\n\n\n");
         System.out.println("PLAYED: " + played + " PLAY TILL: " + playTill);
+
         if (played < playTill) {
             AiAiGame game = new AiAiGame(this.white, this.black, played + 1, this.getFEN());
             game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?

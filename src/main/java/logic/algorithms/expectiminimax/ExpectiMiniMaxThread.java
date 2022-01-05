@@ -3,6 +3,8 @@ package logic.algorithms.expectiminimax;
 import dataCollection.CsvHandler;
 import logic.Move;
 
+import java.util.ArrayList;
+
 public class ExpectiMiniMaxThread extends Thread {
 
     private Move bestMove;
@@ -25,7 +27,7 @@ public class ExpectiMiniMaxThread extends Thread {
         System.out.println("ExpectiMiniMaxPlayer:" + state.getColor().name() + ", Elapsed Time to generate tree and find optimal move: " + (end - start));
         long time = end - start;
         CsvHandler csvHandler = new CsvHandler(state.getColor().name(), time);
-        csvHandler.writeTimeCsv("time.csv");
+
     }
 
     public Move getBestMove() {

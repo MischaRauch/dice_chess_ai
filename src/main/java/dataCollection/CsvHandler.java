@@ -9,7 +9,8 @@ import gui.controllers.ViewDataController;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CsvHandler extends ViewDataController {
     private SimpleStringProperty type;
@@ -71,6 +72,7 @@ public class CsvHandler extends ViewDataController {
         AICsvReaderWriter.writeCsv("aiVsAi.csv");
     }
 
+
     public void readTimeCsv(String filePath){
         BufferedReader reader = null;
 
@@ -83,10 +85,20 @@ public class CsvHandler extends ViewDataController {
                 String[] fields = line.split(",");
 
                 if(fields.length > 0){
-                    CsvHandler csv = new CsvHandler();
-                    csv.setAlgSide(fields[0]);
-                    csv.setTimeElapsed(Integer.parseInt(fields[1]));
-                    aiTimeList.add(csv);
+                    for(int i = 0; i < fields.length; i++){
+                        CsvHandler csvHandler = new CsvHandler(); //TODO: check
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[0])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[1])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[2])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[3])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[4])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[5])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[6])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[7])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[8])));
+                        csvHandler.setTimeElapsed(Integer.parseInt((fields[9])));
+                        aiTimeList.add(csvHandler);
+                    }
                 }
             }
 
@@ -100,20 +112,19 @@ public class CsvHandler extends ViewDataController {
             }
         }
     }
+
     public void writeTimeCsv(String filePath){
-        aiTimeList.add(this);
 
         FileWriter fileWriter = null;
         try{
             fileWriter = new FileWriter(filePath);
-            fileWriter.append("Side, TimeElapsed \n");
+            fileWriter.append("Game 1, Game 2, Game 3, Game 4, Game 5, Game 6, Game 7, Game 8, Game 9, Game 10 \n");
 
             for(CsvHandler c : aiTimeList){
-                fileWriter.append(c.getAlgSide());
-                fileWriter.append(",");
                 fileWriter.append(String.valueOf(c.getTimeElapsed()));
-                fileWriter.append("\n");
+                fileWriter.append(",");
             }
+            fileWriter.append("'");
 
         } catch(Exception ex){
             ex.printStackTrace();
@@ -127,6 +138,4 @@ public class CsvHandler extends ViewDataController {
         }
 
     }
-
-
 }

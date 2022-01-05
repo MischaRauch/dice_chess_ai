@@ -86,13 +86,18 @@ public class Menu {
                 Config.SIMULATION_SIZE = 0;
                 Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
 
-                //read Time Csv file
-                CsvHandler csvHSingleGameStart = new CsvHandler();
-                csvHSingleGameStart.readTimeCsv("time.csv");
+                //read Time Csv file for single game Options
+                //CsvHandler csvHSingleGameStart = new CsvHandler();
+                //csvHSingleGameStart.readTimeCsv("time.csv");
 
             } else {
                 Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
                 Config.THREAD_DELAY = 1;
+
+                //read Time Csv file for simulations
+                //CsvHandler csvHSimulationsStart = new CsvHandler();
+                //csvHSimulationsStart.readTimeCsv("time.csv");
+
             }
 
         } else if (!blackPlayer.equals("Human")){
