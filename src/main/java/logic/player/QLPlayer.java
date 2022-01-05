@@ -30,4 +30,9 @@ public class QLPlayer extends AIPlayer {
         return "QLPlayer";
     }
 
+    @Override
+    public long getTimeNeeded() {
+        return 0;
+    }
+
 }

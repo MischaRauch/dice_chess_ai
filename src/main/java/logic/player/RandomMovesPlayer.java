@@ -33,4 +33,9 @@ public class RandomMovesPlayer extends AIPlayer {
         return "Random AI";
     }
 
+    @Override
+    public long getTimeNeeded() {
+        return 0;
+    }
+
 }
