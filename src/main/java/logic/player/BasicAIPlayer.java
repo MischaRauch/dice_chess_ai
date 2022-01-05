@@ -30,7 +30,12 @@ public class BasicAIPlayer extends AIPlayer {
         return "Basic AI";
     }
 
-    public Move getBasicAIMove(State state){
+    @Override
+    public long getTimeNeeded() {
+        return 0;
+    }
+
+    public Move getBasicAIMove(State state) {
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
         if (DEBUG) {

@@ -3,7 +3,6 @@ package logic.player;
 import logic.LegalMoveEvaluator;
 import logic.Move;
 import logic.State;
-import logic.algorithms.expectiminimax.ExpectiMiniMax;
 import logic.algorithms.expectiminimax.ExpectiMiniMaxThread;
 import logic.enums.Side;
 
@@ -39,6 +38,11 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
     @Override
     public String getNameAi() {
         return "ExpectiMiniMax";
+    }
+
+    @Override
+    public long getTimeNeeded() {
+        return 0;
     }
 
 }

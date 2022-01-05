@@ -4,19 +4,29 @@ import logic.Move;
 import logic.State;
 import logic.enums.Side;
 
-import java.util.*;
-
-import static logic.enums.Piece.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class QTablePlayer extends AIPlayer {
 
     private final boolean DEBUG = true;
-    private Map<Move, Integer> moveMap = new HashMap<Move, Integer>();
+    private final Map<Move, Integer> moveMap = new HashMap<Move, Integer>();
 
-    public QTablePlayer(Side color) { super(color);}
+    public QTablePlayer(Side color) {
+        super(color);
+    }
 
     @Override
-    public String getNameAi() { return "QTablePlayer";}
+    public String getNameAi() {
+        return "QTablePlayer";
+    }
+
+    @Override
+    public long getTimeNeeded() {
+        return 0;
+    }
 
     @Override
     public Move chooseMove(State state) {
@@ -24,9 +34,9 @@ public class QTablePlayer extends AIPlayer {
         //at the beginning of a move clear the map
         moveMap.clear();
         for (Move move : validMoves) {
-            moveMap.put(move,0);
+            moveMap.put(move, 0);
         }
-        bestCapture(state,validMoves);
+        bestCapture(state, validMoves);
         //get the best capture move
         Move key = Collections.max(moveMap.entrySet(), Map.Entry.comparingByValue()).getKey();
         System.out.println("KEY "+key);

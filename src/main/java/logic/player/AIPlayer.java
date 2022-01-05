@@ -31,6 +31,9 @@ public abstract class AIPlayer {
 
     public abstract Move chooseMove(State state);
     public abstract String getNameAi();
+
+    public abstract long getTimeNeeded();
+
     //have not tested this
     //need to incorporate castling and promotion
     public List<Move> getValidMoves(State state) {
