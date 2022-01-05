@@ -15,8 +15,7 @@ public class SimulationHandler {
         game = new SimulatorSingleGame(white, black, FEN);
 
     }
-
-
+    
     public void startHandler() {
         //TODO: ask user which KPI's to track or track all
         //2 because I tested with winner and numTurns - has to be extended to user input
