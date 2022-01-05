@@ -132,4 +132,19 @@ public class DQL {
         }
         return count;
     }
+
+    public int getAvgValuesOfTable() {
+        int a = currentQtable.accessStateIndex(initialState);
+        int sum = 0;
+        for (int i = 0; i < Qvalues[a].length; i++) {
+            sum += Qvalues[a][i];
+        }
+        return sum/Qvalues[a].length;
+    }
+
+    public void printState(int a) {
+        for (int i = 0; i < Qvalues[a].length; i++) {
+            System.out.println(Qvalues[a][i]);
+        }
+    }
 }

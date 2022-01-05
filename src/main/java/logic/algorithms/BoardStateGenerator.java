@@ -1,5 +1,6 @@
 package logic.algorithms;
 
+import com.twelvemonkeys.io.SeekableOutputStream;
 import logic.LegalMoveGenerator;
 import logic.ML.OriginAndDestSquare;
 import logic.Move;
@@ -35,6 +36,24 @@ public class BoardStateGenerator {
             move1 = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
             tempState = state.applyMove(move1);
             answer.add(tempState);
+        }
+        return answer;
+    }
+    // for QL eval, could be made more efficient
+    public static ArrayList<State> getPossibleBoardStatesOfSpecificPiece(State state, Side side, int diceroll) {
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
+        ArrayList<State> answer = new ArrayList<State>();
+        State tempState;
+        Move move1;
+
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
+            Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
+
+            if (p == Piece.getPieceFromDice(diceroll, side)) {
+                move1 = new Move(p, tempMove.getOrigin(), tempMove.getDest(), diceroll, side);
+                tempState = state.applyMove(move1);
+                answer.add(tempState);
+            }
         }
         return answer;
     }
@@ -287,20 +306,36 @@ public class BoardStateGenerator {
         }
         return possibleStates;
     }
-
+    // getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getPreviousState().getPieceAndSquare(), parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
     // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
     public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
 
-        List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+        boolean applyQL = true;
+        int depth = 2;
 
-        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
-            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
-            //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
-            possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+        if (applyQL == true) {
+            int a = 0;
+            ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(state, color, diceRoll);
+
+            for (State givenState : allPossibleStates) {
+                int weight = BoardStateEvaluator.getEvalOfQL(givenState, depth);
+                possibleBoardStatesWeights.add(weight);
+            }
+            System.out.println("a");
+            return possibleBoardStatesWeights;
         }
-        //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
-        return possibleBoardStatesWeights;
+        else {
+            List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+
+            for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+                int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+                //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
+                possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+            }
+            //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
+            return possibleBoardStatesWeights;
+        }
     }
 
     public void printPossibleBoardStatesWeights(List<Integer> possibleBoardStatesWeights) {

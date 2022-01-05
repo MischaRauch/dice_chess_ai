@@ -5,6 +5,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import logic.enums.GameType;
 
+import java.util.ArrayList;
+
 public class GameInfo {
 
 
@@ -15,6 +17,11 @@ public class GameInfo {
     public SimpleStringProperty gameWinner = new SimpleStringProperty();
     public SimpleIntegerProperty numTurnsToWin = new SimpleIntegerProperty();
 
+    public ArrayList<Integer> numTurnsToWinList = new ArrayList<>();
+    public SimpleIntegerProperty avgToWin = new SimpleIntegerProperty();
+
+    //public ArrayList<Integer> numTurnsToWinList = new ArrayList<>();
+    //public SimpleIntegerProperty avgToWin = new SimpleIntegerProperty();
 
     public GameInfo(){}
 

@@ -60,7 +60,7 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         this.canCastleWhite = canCastleWhite;
-        this.canCastleWhite = canCastleBlack;
+        this.canCastleBlack = canCastleBlack;
         this.shortCastlingBlack = shortCastlingBlack;
         this.shortCastlingWhite = shortCastlingWhite;
         this.longCastlingBlack = longCastlingBlack;

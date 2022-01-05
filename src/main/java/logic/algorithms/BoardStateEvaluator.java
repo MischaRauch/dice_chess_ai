@@ -1,9 +1,9 @@
 package logic.algorithms;
 
-import logic.LegalMoveGenerator;
+import logic.*;
+import logic.ML.DQL;
 import logic.ML.OriginAndDestSquare;
-import logic.PieceAndSquareTuple;
-import logic.State;
+import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -34,6 +34,12 @@ public class BoardStateEvaluator {
         return evalNo;
     }
 
+    public static int getEvalOfQL(State state, int depth) {
+        final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+        DQL ql = new DQL();
+        ql.algo(state, state.getColor(), depth);
+        return ql.getAvgValuesOfTable();
+    }
 
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {
