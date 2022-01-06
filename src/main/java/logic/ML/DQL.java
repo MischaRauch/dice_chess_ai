@@ -5,7 +5,6 @@ import logic.State;
 import logic.algorithms.BoardStateEvaluator;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.player.BasicAIPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,12 +13,11 @@ public class DQL {
 
     Qtable currentQtable;
     int[][] Qvalues;
-    State initialState;
+    State givenInitialState;
 
     public void algo(State initialState, Side side, int depth) {
-        currentQtable = new Qtable(new State(initialState), side, depth);
-        this.initialState = initialState;
-
+        this.givenInitialState = new State(initialState);
+        currentQtable = new Qtable(givenInitialState, side, depth);
         int stateSize = currentQtable.stateSpace.size();
         int actionSize = 4672; // 8x8x(8x7+8+9), this is the total possible actions a state can have at most
 
@@ -28,7 +26,7 @@ public class DQL {
         for (int[] row : Qvalues) {// fill the table with 0
             Arrays.fill(row, 0);
         }
-        double numOfGames = 300;
+        double numOfGames = 500;
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
         double explorationDecay = 1 / numOfGames;
@@ -41,10 +39,9 @@ public class DQL {
         Move action;
 
         for (int i = 0; i < numOfGames; i++) {
-            currentState = new State(initialState);
+            currentState = givenInitialState;
 
             int reward;
-            int gamesTotalReward = 0;
             boolean finished = false; // turn to true if king captured
 
             for (int j = 0; j < depth / 2; j++) {
@@ -64,7 +61,7 @@ public class DQL {
                 /* what happens here is that I can't get immediate reward, in order to get the actual reward I need to apply a
                 move of the opponent so that the reward I get will be useful and valid.
                 */
-                newState = newState.applyMove(currentQtable.randomMoveGenerator(newState, Side.getOpposite(side)));
+                newState = newState.applyMove(currentQtable.randomMoveGenerator(new State(newState), Side.getOpposite(side)));
                 // code line above can be changed with some better algo (example given below) which could give better results but would take more time
                 //BasicAIPlayer help = new BasicAIPlayer(Side.getOpposite(side));
                 //newState = newState.applyMove(help.chooseMove(newState));
@@ -79,7 +76,6 @@ public class DQL {
 
                 Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState))));
 
-                gamesTotalReward += reward;
                 currentState = newState;
                 if (finished) break;
             }
@@ -99,12 +95,12 @@ public class DQL {
     }
 
     public Move getBestMove(State state, Side color) {
-        Piece tempP = Piece.getPieceFromDice(initialState.getDiceRoll(), initialState.getColor()); // get piece that the action needs to be equal
-        int a = currentQtable.accessStateIndex(initialState);
+        Piece tempP = Piece.getPieceFromDice(givenInitialState.getDiceRoll(), givenInitialState.getColor()); // get piece that the action needs to be equal
+        int a = currentQtable.accessStateIndex(givenInitialState);
 
         ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
 
-        int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP, initialState, a);
+        int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP, givenInitialState, a);
         OriginAndDestSquare tempMove = originAndDestSquares.get(index);
         return (new Move(tempP, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(tempP), color));
     }
@@ -134,7 +130,7 @@ public class DQL {
     }
 
     public int getAvgValuesOfTable() {
-        int a = currentQtable.accessStateIndex(initialState);
+        int a = currentQtable.accessStateIndex(givenInitialState);
         int sum = 0;
         int numOfnonZero = 0;
 

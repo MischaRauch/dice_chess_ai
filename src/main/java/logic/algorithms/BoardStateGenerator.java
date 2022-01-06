@@ -26,7 +26,7 @@ public class BoardStateGenerator {
     // for ML
     public static ArrayList<State> getPossibleBoardStates(State state, Side side) {
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
-        ArrayList<State> answer = new ArrayList<State>();
+        ArrayList<State> answer = new ArrayList<>();
         State tempState;
         Move move1;
 
@@ -42,7 +42,7 @@ public class BoardStateGenerator {
     // for QL eval, could be made more efficient
     public static ArrayList<State> getPossibleBoardStatesOfSpecificPiece(State state, Side side, int diceroll) {
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
-        ArrayList<State> answer = new ArrayList<State>();
+        ArrayList<State> answer = new ArrayList<>();
         State tempState;
         Move move1;
 
@@ -306,7 +306,6 @@ public class BoardStateGenerator {
         }
         return possibleStates;
     }
-    // getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getPreviousState().getPieceAndSquare(), parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
     // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
     public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
@@ -315,11 +314,10 @@ public class BoardStateGenerator {
         int depth = 2;
 
         if (applyQL == true) {
-            int a = 0;
-            ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(state, color, diceRoll);
+            ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(new State(state), color, diceRoll);
 
             for (State givenState : allPossibleStates) {
-                int weight = BoardStateEvaluator.getEvalOfQL(givenState, depth); // where to put this
+                int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // where to put this
                 possibleBoardStatesWeights.add(weight);
             }
             System.out.println("a");

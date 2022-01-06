@@ -18,10 +18,13 @@ public class QLPlayer extends AIPlayer {
 
     @Override
     public Move chooseMove(State state) {
+        long startTime = System.currentTimeMillis();
         ql.algo(state, state.getColor(), this.depth);
         Move bestMove = ql.getBestMove(state, this.color);
         // TODO make evalautor not update moves (Phase 3)
         evaluator.isLegalMove(bestMove, state, true, true);
+        long endTime = System.currentTimeMillis();
+        System.out.println("That took " + (endTime - startTime) + " milliseconds");
         return bestMove;
     }
 

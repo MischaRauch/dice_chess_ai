@@ -37,7 +37,7 @@ public class Qtable {
     }
 
     public ArrayList<OriginAndDestSquare> createActionSpace(State state) {
-        return legalMoveGenerator.getAllLegalMoves(state, currentSide);
+        return LegalMoveGenerator.getAllLegalMoves(state, currentSide);
     }
 
     public ArrayList<OriginAndDestSquare> accessStateValue(State state) {
@@ -189,7 +189,7 @@ public class Qtable {
 
     public Move randomMoveGenerator(State state, Side side) {
         Random r = new Random();
-        ArrayList<OriginAndDestSquare> allMoves = legalMoveGenerator.getAllLegalMoves(state, side);
+        ArrayList<OriginAndDestSquare> allMoves = LegalMoveGenerator.getAllLegalMoves(state, side);
         OriginAndDestSquare tempMove;
         int num = r.nextInt(allMoves.size());
 
@@ -261,10 +261,4 @@ public class Qtable {
         }
         return stateSpace;
     }
-
-    // TODO, here maybe prune moves somehow
-    public HashMap<Piece, ArrayList<Integer>> actionPruning(State state) { // remove actions that's not possible for that state
-        return null;
-    }
-
 }
