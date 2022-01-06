@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 public class SimulatorSingleGame extends Game {
 
+    ArrayList<String> stats = new ArrayList<String>();
+    ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
+    ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
 
     private final AIPlayer white, black;
     String whitePlayer;
@@ -35,16 +38,14 @@ public class SimulatorSingleGame extends Game {
         return black;
     }
 
-    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMove, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
+    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
-        ArrayList<String> stats = new ArrayList<String>();
+
+
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
 
-        if (timePerMove) {
-            stats.add("z");
-        }
 
         while (!gameOver) {
             Move move = nextPlayer.chooseMove(currentState);
@@ -67,21 +68,27 @@ public class SimulatorSingleGame extends Game {
             //this.getCurrentState().getBoard().printBoard();
 
             //get time needed for move
-            if (timePerMove) {
-                System.out.println(nextPlayer.getTimeNeeded());
-                stats.add(Long.toString(nextPlayer.getTimeNeeded()));
+            if (timePerMoveWhite && (nextPlayer == white)) {
+                timeperMoveWhite.add(nextPlayer.getTimeNeeded());
+            }
+            if (timePerMoveBlack && (nextPlayer == black)) {
+                timeperMoveBlack.add(nextPlayer.getTimeNeeded());
             }
 
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
-            if (gameOver && timePerMove) {
-                stats.add("z");
-            }
-
 
         }
         //Save the information for this game
+        if (timePerMoveWhite) {
+            Double averageWhite = timeperMoveWhite.stream().mapToLong(val -> val).average().orElse(0.0);
+            stats.add(Double.toString(averageWhite));
+        }
+        if (timePerMoveBlack) {
+            Double averageBlack = timeperMoveBlack.stream().mapToLong(val -> val).average().orElse(0.0);
+            stats.add(Double.toString(averageBlack));
+        }
         if (winner) {
             tmp = getWinner().name();
             stats.add(tmp);

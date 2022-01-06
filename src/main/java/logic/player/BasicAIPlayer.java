@@ -10,6 +10,7 @@ import java.util.List;
 public class BasicAIPlayer extends AIPlayer {
 
     private final boolean DEBUG = false;
+    private long timeNeeded;
 
     public BasicAIPlayer(Side color) {
         super(color);
@@ -21,6 +22,7 @@ public class BasicAIPlayer extends AIPlayer {
         Move chosenMove = getBasicAIMove(state);
         long end = System.nanoTime();
         System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        timeNeeded = end - start;
         state.printPieceAndSquare();
         return chosenMove;
     }
@@ -32,7 +34,7 @@ public class BasicAIPlayer extends AIPlayer {
 
     @Override
     public long getTimeNeeded() {
-        return 0;
+        return timeNeeded;
     }
 
     public Move getBasicAIMove(State state) {

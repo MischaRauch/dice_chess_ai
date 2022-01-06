@@ -5,8 +5,9 @@ import logic.Move;
 public class ExpectiMiniMaxThread extends Thread {
 
     private Move bestMove;
-    private int depth;
-    private logic.State state;
+    private final int depth;
+    private final logic.State state;
+    private long timeNeeded;
 
     public ExpectiMiniMaxThread(int depth, logic.State state) {
         this.depth = depth;
@@ -22,10 +23,15 @@ public class ExpectiMiniMaxThread extends Thread {
         this.bestMove = bestMove;
         long end = System.nanoTime();
         System.out.println("ExpectiMiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        timeNeeded = end - start;
     }
 
     public Move getBestMove() {
         return bestMove;
+    }
+
+    public long getTimeNeeded() {
+        return timeNeeded;
     }
 
 

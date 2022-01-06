@@ -12,6 +12,7 @@ import java.util.Random;
 public class RandomMovesPlayer extends AIPlayer {
 
     private final static Random randomly = new Random();
+    private long timeNeeded;
 
     public RandomMovesPlayer(Side color) {
         super(color);
@@ -25,6 +26,8 @@ public class RandomMovesPlayer extends AIPlayer {
         long end = System.nanoTime();
         // System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         // state.printPieceAndSquare();
+        timeNeeded = end - start;
+
         return chosenMove;
     }
 
@@ -35,7 +38,7 @@ public class RandomMovesPlayer extends AIPlayer {
 
     @Override
     public long getTimeNeeded() {
-        return 0;
+        return timeNeeded;
     }
 
 }
