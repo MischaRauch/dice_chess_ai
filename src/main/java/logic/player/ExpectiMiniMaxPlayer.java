@@ -10,6 +10,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private final int depth;
+    private long timeNeeded;
 
     public ExpectiMiniMaxPlayer(int depth, Side color) {
         super(color);
@@ -32,6 +33,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         // TODO make evalautor not update moves (Phase 3)
         evaluator.isLegalMove(chosenMove, state, true, true);
         System.out.println("ExpectiMiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        timeNeeded = thread.getTimeNeeded();
         return chosenMove;
     }
 
@@ -42,7 +44,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     @Override
     public long getTimeNeeded() {
-        return 0;
+        return timeNeeded;
     }
 
 }

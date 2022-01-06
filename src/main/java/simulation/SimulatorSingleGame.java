@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 public class SimulatorSingleGame extends Game {
 
+    ArrayList<String> stats = new ArrayList<String>();
+    ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
+    ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
 
     private final AIPlayer white, black;
     String whitePlayer;
