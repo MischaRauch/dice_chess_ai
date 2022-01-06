@@ -1,6 +1,10 @@
 package logic.game;
 
 import dataCollection.CsvHandler;
+import logic.Config;
+import logic.enums.Side;
+import logic.enums.Validity;
+import gui.controllers.MainContainerController;
 import gui.ChessIcons;
 import gui.Chessboard;
 import gui.controllers.MainContainerController;
@@ -12,6 +16,9 @@ import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
+import logic.player.BasicAIPlayer;
+import logic.player.MiniMaxPlayer;
+import logic.player.QTablePlayer;
 
 import java.util.Collections;
 import java.util.List;
@@ -112,8 +119,14 @@ public class AiAiGame extends Game {
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 
+        //Csv
+        //CsvHandler csvHandler = new CsvHandler();
+       // csvHandler.readTimeCsv("time.csv");
+        //csvHandler.writeTimeCsv("time.csv");
+
         System.out.println("\n\n\nGameOver\n\n\n");
         System.out.println("PLAYED: " + played + " PLAY TILL: " + playTill);
+
         if (played < playTill) {
             AiAiGame game = new AiAiGame(this.white, this.black, played + 1, this.getFEN());
             game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?

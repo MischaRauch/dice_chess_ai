@@ -16,6 +16,7 @@ public class SimulatorSingleGame extends Game {
     ArrayList<String> stats = new ArrayList<String>();
     ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
     ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
+    ArrayList<Long> allTimesPerMove = new ArrayList<>();
 
     private final AIPlayer white, black;
     String whitePlayer;
@@ -41,6 +42,7 @@ public class SimulatorSingleGame extends Game {
     }
 
     public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceWhite, boolean numberOfPieceBlack, boolean valueOfPiecesSummedWhite, boolean valueOfPiecesSummedBlack) {
+    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
 
@@ -77,7 +79,6 @@ public class SimulatorSingleGame extends Game {
                 timeperMoveBlack.add(nextPlayer.getTimeNeeded());
             }
 
-
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
@@ -93,9 +94,10 @@ public class SimulatorSingleGame extends Game {
             stats.add(Double.toString(averageBlack));
         }
         if (totalGameTime) {
-            timeperMoveWhite.addAll(timeperMoveBlack);
+            allTimesPerMove.addAll(timeperMoveWhite);
+            allTimesPerMove.addAll(timeperMoveBlack);
             long sum = 0;
-            for (long time : timeperMoveWhite)
+            for (long time : allTimesPerMove)
                 sum += time;
             stats.add(Long.toString(sum));
         }
@@ -124,19 +126,20 @@ public class SimulatorSingleGame extends Game {
         // I think this is not needed since its only a single game - but will leave it for now
         currentState = firstState;
 
-        System.out.println("\n\n\nGameOver\n\n\n");
-        System.out.println("Winner " + winner);
-
-        String[] returnArray = new String[4];
-        returnArray[0] = getAIPlayerWhite().getNameAi();
-        returnArray[1] = getAIPlayerBlack().getNameAi();
-        returnArray[2] = tmp;
-        returnArray[3] = Integer.toString(previousStates.lastElement().getCumulativeTurn());
-
-
         return stats;
     }
 
+    public ArrayList<Long> getTimeperMoveWhite(){
+        return timeperMoveWhite;
+    }
+
+    public ArrayList<Long> getTimeperMoveBlack(){
+        return timeperMoveBlack;
+    }
+
+    public int getNumTurns(){
+        return previousStates.lastElement().getCumulativeTurn() + 1;
+    }
     public int getSummedValues(int[] values) {
         int sum = 100 * values[0] + 350 * values[1] + 350 * values[2] + 525 * values[3] + 1000 * values[4] + 20000 * values[5];
         return sum;

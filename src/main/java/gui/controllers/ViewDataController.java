@@ -1,4 +1,5 @@
 package gui.controllers;
+import dataCollection.CsvHandler;
 import dataCollection.GameInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ViewDataController implements Initializable {
@@ -41,7 +43,8 @@ public class ViewDataController implements Initializable {
 
     public static ObservableList<GameInfo> gameList = FXCollections.observableArrayList();
     public static ObservableList<GameInfo> aiAiGameList = FXCollections.observableArrayList();
-
+    //use ArrayList instead of observable list ??
+    public static ObservableList<CsvHandler> aiTimeList = FXCollections.observableArrayList();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
