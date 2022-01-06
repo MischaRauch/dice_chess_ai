@@ -38,7 +38,7 @@ public class SimulatorSingleGame extends Game {
         return black;
     }
 
-    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
+    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
 
@@ -88,6 +88,13 @@ public class SimulatorSingleGame extends Game {
         if (timePerMoveBlack) {
             Double averageBlack = timeperMoveBlack.stream().mapToLong(val -> val).average().orElse(0.0);
             stats.add(Double.toString(averageBlack));
+        }
+        if (totalGameTime) {
+            timeperMoveWhite.addAll(timeperMoveBlack);
+            long sum = 0;
+            for (long time : timeperMoveWhite)
+                sum += time;
+            stats.add(Long.toString(sum));
         }
         if (winner) {
             tmp = getWinner().name();

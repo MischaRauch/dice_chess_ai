@@ -19,6 +19,7 @@ public class SimulationHandler {
     boolean numTurns = true;
     boolean timePerMoveWhite = true;
     boolean timePerMoveBlack = true;
+    boolean totalGameTime = true;
     boolean numberOfPieceType = false;
     boolean numberOfPiecesPerPlayer = true;
     boolean valueOfPiecesSummed = true;
@@ -35,7 +36,7 @@ public class SimulationHandler {
         //add header row for kpis
         addHeaderRow();
 
-        ArrayList<String> actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
+        ArrayList<String> actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
 
         ArrayList<String> concatenated = new ArrayList<String>();
         concatenated.addAll(trackedStates);
@@ -50,8 +51,8 @@ public class SimulationHandler {
     }
 
     public void addHeaderRow() {
-        boolean[] booleanList = {alg, algTwo, winner, numTurns, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
-        String[] header = {"Alg", "AlgTwo", "TimePerMoveWhite", "TimePerMoveBlack", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
+        boolean[] booleanList = {alg, algTwo, winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
+        String[] header = {"Alg", "AlgTwo", "TimePerMoveWhite", "TimePerMoveBlack", "TotalGameTime", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
 
         System.out.println(Arrays.toString(booleanList));
         System.out.println(Arrays.toString(header));
