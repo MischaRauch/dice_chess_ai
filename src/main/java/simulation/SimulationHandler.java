@@ -52,7 +52,7 @@ public class SimulationHandler {
         addHeaderRow();
 
         ArrayList<String> actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack));
-        ArrayList<String> actualStats = (game.start(winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
+       // ArrayList<String> actualStats = (game.start(winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
 
         ArrayList<String> concatenated = new ArrayList<String>();
         concatenated.addAll(actualStats);
@@ -80,8 +80,8 @@ public class SimulationHandler {
     public void addHeaderRow() {
         boolean[] booleanList = {alg, algTwo, winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack};
         String[] header = {"Alg", "AlgTwo", "TimePerMoveWhite", "TimePerMoveBlack", "TotalGameTime", "Winner", "Turns", "NumberOfPiecesWhite", "NumberOfPiecesBlack", "ValueOfPiecesSummedWhite", "ValueOfPiecesSummedBlack"};
-        boolean[] booleanList = {alg, algTwo, winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
-        String[] header = {"Alg", "AlgTwo", "TotalTime", "TimePerMoveWhite", "TimePerMoveBlack", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
+        // boolean[] booleanList = {alg, algTwo, winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
+        // String[] header = {"Alg", "AlgTwo", "TotalTime", "TimePerMoveWhite", "TimePerMoveBlack", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
 
         System.out.println(Arrays.toString(booleanList));
         System.out.println(Arrays.toString(header));

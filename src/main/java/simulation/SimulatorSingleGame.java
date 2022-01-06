@@ -2,6 +2,7 @@ package simulation;
 
 import logic.Move;
 import logic.State;
+import logic.algorithms.BoardStateEvaluator;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.game.Game;
@@ -42,7 +43,7 @@ public class SimulatorSingleGame extends Game {
     }
 
     public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceWhite, boolean numberOfPieceBlack, boolean valueOfPiecesSummedWhite, boolean valueOfPiecesSummedBlack) {
-    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
+        //public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
 
@@ -115,10 +116,10 @@ public class SimulatorSingleGame extends Game {
             stats.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         }
         if (valueOfPiecesSummedWhite) {
-            stats.add(Integer.toString(getSummedValues(currentState.getPieceAndSquare(Side.WHITE))));
+            stats.add(Integer.toString(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.WHITE)));
         }
         if (valueOfPiecesSummedBlack) {
-            stats.add(Integer.toString(getSummedValues(currentState.getPieceAndSquare(Side.BLACK))));
+            stats.add(Integer.toString(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.BLACK)));
         }
 
 
