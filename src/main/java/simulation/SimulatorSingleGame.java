@@ -14,6 +14,7 @@ public class SimulatorSingleGame extends Game {
     ArrayList<String> stats = new ArrayList<String>();
     ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
     ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
+    ArrayList<Long> allTimesPerMove = new ArrayList<>();
 
     private final AIPlayer white, black;
     String whitePlayer;
@@ -29,6 +30,7 @@ public class SimulatorSingleGame extends Game {
         blackPlayer = black.getNameAi();
     }
 
+
     public AIPlayer getAIPlayerWhite() {
         return white;
     }
@@ -37,19 +39,68 @@ public class SimulatorSingleGame extends Game {
         return black;
     }
 
-    public ArrayList<String> start(boolean winner, boolean numTurns, boolean totalTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
-        ArrayList<String> stats = new ArrayList<String>();
+    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
+        boolean gameOver = false;
+        AIPlayer nextPlayer = white;
+
+
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
 
+
+        while (!gameOver) {
+            Move move = nextPlayer.chooseMove(currentState);
+
+            State newState = currentState.applyMove(move);
+
+            previousStates.push(currentState);
+            checkGameOver(move);
+            // after checking if king was captured, we can update the currentState
+            currentState = newState;
+
+            move.setStatus(Validity.VALID);
+
+            processCastling();
+
+            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
+            gameOver = isGameOver();
+
+            //print board for debugging
+            //this.getCurrentState().getBoard().printBoard();
+
+            //get time needed for move
+            if (timePerMoveWhite && (nextPlayer == white)) {
+                timeperMoveWhite.add(nextPlayer.getTimeNeeded());
+            }
+            if (timePerMoveBlack && (nextPlayer == black)) {
+                timeperMoveBlack.add(nextPlayer.getTimeNeeded());
+            }
+
+            //switch players
+            nextPlayer = (nextPlayer == white) ? black : white;
+
+
+        }
+        //Save the information for this game
+        if (timePerMoveWhite) {
+            Double averageWhite = timeperMoveWhite.stream().mapToLong(val -> val).average().orElse(0.0);
+            stats.add(Double.toString(averageWhite));
+        }
+        if (timePerMoveBlack) {
+            Double averageBlack = timeperMoveBlack.stream().mapToLong(val -> val).average().orElse(0.0);
+            stats.add(Double.toString(averageBlack));
+        }
+        if (totalGameTime) {
+            allTimesPerMove.addAll(timeperMoveWhite);
+            allTimesPerMove.addAll(timeperMoveBlack);
+            long sum = 0;
+            for (long time : allTimesPerMove)
+                sum += time;
+            stats.add(Long.toString(sum));
+        }
         if (winner) {
             tmp = getWinner().name();
             stats.add(tmp);
-        }
-
-        if(totalTime){
-            int time = 0;
-            stats.add(Integer.toString(time));
         }
         if (numTurns) {
             stats.add(Integer.toString(previousStates.lastElement().getCumulativeTurn() + 1));
@@ -60,18 +111,19 @@ public class SimulatorSingleGame extends Game {
         // I think this is not needed since its only a single game - but will leave it for now
         currentState = firstState;
 
-        System.out.println("\n\n\nGameOver\n\n\n");
-        System.out.println("Winner " + winner);
-
-        String[] returnArray = new String[4];
-        returnArray[0] = getAIPlayerWhite().getNameAi();
-        returnArray[1] = getAIPlayerBlack().getNameAi();
-        returnArray[2] = tmp;
-        returnArray[3] = Integer.toString(previousStates.lastElement().getCumulativeTurn());
-
-
         return stats;
     }
 
+    public ArrayList<Long> getTimeperMoveWhite(){
+        return timeperMoveWhite;
+    }
+
+    public ArrayList<Long> getTimeperMoveBlack(){
+        return timeperMoveBlack;
+    }
+
+    public int getNumTurns(){
+        return previousStates.lastElement().getCumulativeTurn() + 1;
+    }
 }
 

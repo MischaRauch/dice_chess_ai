@@ -11,7 +11,7 @@ public class OutputToCsv {
     private static OutputToCsv singelton = null;
     private  String fileName ;
 
-    private OutputToCsv(String fileName) {
+    public OutputToCsv(String fileName) {
         try {
             this.fileName = fileName;
             File file = new File(fileName);
@@ -77,6 +77,27 @@ public class OutputToCsv {
         }
     }
 
+    public void writeEachState(List<String> stateList){
+        try {
+            FileWriter myWriter = new FileWriter(fileName);
+
+            //First append the headers:
+            myWriter.append("Turn, TimePerMove \n");
+
+            for(int i = 0; i < stateList.size()-1; i+=2){
+                myWriter.write(stateList.get(i));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+1));
+                myWriter.append("\n");
+            }
+            myWriter.append("\n");
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
     // need a read file if we want to test for each state
 
 

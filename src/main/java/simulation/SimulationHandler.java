@@ -10,6 +10,7 @@ public class SimulationHandler {
 
     //private final AIPlayer white, black;
     private final SimulatorSingleGame game;
+    private final SimulatorState states;
     public List<String> trackedStates = new ArrayList<String>();
 
     //boolean switch for kpis
@@ -25,13 +26,11 @@ public class SimulationHandler {
     boolean totalTime = true;
     boolean whitePiecesCaptured = false;
     boolean blackPiecesCaptured = false;
-    boolean avgTimeMovesAlg = false;
-    boolean avgTimeMovesAlgTwo = false;
 
     //These are only for stateSimulator
     boolean numCaptures = false;
-    boolean turn = false;
-    boolean timePerMove = false;
+    boolean turn = true;
+    boolean timePerMove = true;
     boolean whitePiecesRemaining = false;
     boolean blackPiecesRemaining = false;
 
@@ -39,7 +38,7 @@ public class SimulationHandler {
 
     public SimulationHandler(AIPlayer white, AIPlayer black, String FEN) {
         game = new SimulatorSingleGame(white, black, FEN);
-
+        states = new SimulatorState(white, black, FEN);
     }
 
     public void startHandler() {
@@ -60,8 +59,14 @@ public class SimulationHandler {
         writer.writeToFileGame(concatenated); //concatenated now only has the actual states
 
         //Writing Each State of Game to Csv
-
-        OutputToCsv writer1 = OutputToCsv.getInstance("statesGame.csv");
+        states.setTimeperMoveWhite(game.getTimeperMoveWhite());
+        states.setTimeperMoveBlack(game.getTimeperMoveBlack());
+        states.setNumTurns(game.getNumTurns());
+        ArrayList<String> statesStats = (states.startStateSimulation(turn, timePerMove, numCaptures, whitePiecesRemaining, blackPiecesRemaining));
+        System.out.println("States Array");
+        System.out.println(statesStats);
+        OutputToCsv writer1 = new OutputToCsv("statesGame.csv");
+        writer1.writeEachState(statesStats);
 
 
     }

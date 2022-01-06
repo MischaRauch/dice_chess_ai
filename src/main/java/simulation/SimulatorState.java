@@ -9,11 +9,16 @@ import logic.player.AIPlayer;
 import java.util.ArrayList;
 
 public class SimulatorState extends Game {
+    ArrayList<String> statsState = new ArrayList<String>();
 
     private final AIPlayer white, black;
     String whitePlayer;
     String blackPlayer;
     String tmp;
+
+    ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
+    ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
+    private int numTurns;
 
     public SimulatorState(AIPlayer white, AIPlayer black, String FEN) {
         super(FEN);
@@ -31,49 +36,49 @@ public class SimulatorState extends Game {
         return black;
     }
 
+    public void setTimeperMoveWhite(ArrayList<Long> timeperMoveWhite){
+        this.timeperMoveWhite = timeperMoveWhite;
+    }
+
+    public void setTimeperMoveBlack(ArrayList<Long> timeperMoveBlack){
+        this.timeperMoveBlack = timeperMoveBlack;
+    }
+
+    public void setNumTurns(int numTurns){
+        this.numTurns = numTurns;
+    }
+
     public ArrayList<String> startStateSimulation(boolean turn, boolean timePerMove, boolean numCaptures, boolean whitePiecesRemaining, boolean blackPiecesRemaining){
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
-        ArrayList<String> statsState = new ArrayList<String>();
-        statsState.add(getAIPlayerWhite().getNameAi());
-        statsState.add(getAIPlayerBlack().getNameAi());
+        //Debugging
+        System.out.println("Num turns: " + numTurns);
+        System.out.println(timeperMoveWhite);
+        System.out.println(timeperMoveBlack);
 
+        int lessTurns = 0;
+        if(timeperMoveBlack.size() < timeperMoveWhite.size())
+            lessTurns = timeperMoveBlack.size();
+        else
+            lessTurns = timeperMoveWhite.size();
 
-        while (!gameOver) {
-            Move move = nextPlayer.chooseMove(currentState);
+        for(int i = 0; i < lessTurns; i++){
+            statsState.add(getAIPlayerWhite().getNameAi());
+            statsState.add(Long.toString(timeperMoveWhite.get(i)));
 
-            State newState = currentState.applyMove(move);
+            statsState.add(getAIPlayerBlack().getNameAi());
+            statsState.add(Long.toString(timeperMoveBlack.get(i)));
+        }
 
-            previousStates.push(currentState);
-            checkGameOver(move);
-            // after checking if king was captured, we can update the currentState
-            currentState = newState;
-
-            move.setStatus(Validity.VALID);
-
-            processCastling();
-
-            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
-            gameOver = isGameOver();
-
-            //print board for debugging
-            //this.getCurrentState().getBoard().printBoard();
-
-            //get time needed for move
-            /*if (timePerMove) {
-                System.out.println(nextPlayer.getTimeNeeded());
-                stats.add(Long.toString(nextPlayer.getTimeNeeded()));
-            }
-
-            //switch players
-            nextPlayer = (nextPlayer == white) ? black : white;
-
-             */
-
+        if(lessTurns == timeperMoveBlack.size()){
+            statsState.add(getAIPlayerWhite().getNameAi());
+            statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() -1)));
+        }
+        else{
+            statsState.add(getAIPlayerBlack().getNameAi());
+            statsState.add(Long.toString(timeperMoveBlack.get(timeperMoveBlack.size()-1)));
         }
 
         return statsState;
     }
-
-
 }
