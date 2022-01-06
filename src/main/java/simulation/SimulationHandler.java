@@ -20,9 +20,10 @@ public class SimulationHandler {
     boolean timePerMoveWhite = true;
     boolean timePerMoveBlack = true;
     boolean totalGameTime = true;
-    boolean numberOfPieceType = false;
-    boolean numberOfPiecesPerPlayer = true;
-    boolean valueOfPiecesSummed = true;
+    boolean numberOfPiecesWhite = true;
+    boolean numberOfPiecesBlack = true;
+    boolean valueOfPiecesSummedWhite = true;
+    boolean valueOfPiecesSummedBlack = true;
 
 
     public SimulationHandler(AIPlayer white, AIPlayer black, String FEN) {
@@ -36,7 +37,7 @@ public class SimulationHandler {
         //add header row for kpis
         addHeaderRow();
 
-        ArrayList<String> actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
+        ArrayList<String> actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack));
 
         ArrayList<String> concatenated = new ArrayList<String>();
         concatenated.addAll(trackedStates);
@@ -51,8 +52,8 @@ public class SimulationHandler {
     }
 
     public void addHeaderRow() {
-        boolean[] booleanList = {alg, algTwo, winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
-        String[] header = {"Alg", "AlgTwo", "TimePerMoveWhite", "TimePerMoveBlack", "TotalGameTime", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
+        boolean[] booleanList = {alg, algTwo, winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack};
+        String[] header = {"Alg", "AlgTwo", "TimePerMoveWhite", "TimePerMoveBlack", "TotalGameTime", "Winner", "Turns", "NumberOfPiecesWhite", "NumberOfPiecesBlack", "ValueOfPiecesSummedWhite", "ValueOfPiecesSummedBlack"};
 
         System.out.println(Arrays.toString(booleanList));
         System.out.println(Arrays.toString(header));

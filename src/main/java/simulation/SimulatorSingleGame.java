@@ -2,11 +2,13 @@ package simulation;
 
 import logic.Move;
 import logic.State;
+import logic.enums.Side;
 import logic.enums.Validity;
 import logic.game.Game;
 import logic.player.AIPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class SimulatorSingleGame extends Game {
@@ -38,7 +40,7 @@ public class SimulatorSingleGame extends Game {
         return black;
     }
 
-    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
+    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceWhite, boolean numberOfPieceBlack, boolean valueOfPiecesSummedWhite, boolean valueOfPiecesSummedBlack) {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
 
@@ -75,6 +77,7 @@ public class SimulatorSingleGame extends Game {
                 timeperMoveBlack.add(nextPlayer.getTimeNeeded());
             }
 
+
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
@@ -103,6 +106,18 @@ public class SimulatorSingleGame extends Game {
         if (numTurns) {
             stats.add(Integer.toString(previousStates.lastElement().getCumulativeTurn() + 1));
         }
+        if (numberOfPieceWhite) {
+            stats.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+        }
+        if (numberOfPieceBlack) {
+            stats.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+        }
+        if (valueOfPiecesSummedWhite) {
+            stats.add(Integer.toString(getSummedValues(currentState.getPieceAndSquare(Side.WHITE))));
+        }
+        if (valueOfPiecesSummedBlack) {
+            stats.add(Integer.toString(getSummedValues(currentState.getPieceAndSquare(Side.BLACK))));
+        }
 
 
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
@@ -120,6 +135,11 @@ public class SimulatorSingleGame extends Game {
 
 
         return stats;
+    }
+
+    public int getSummedValues(int[] values) {
+        int sum = 100 * values[0] + 350 * values[1] + 350 * values[2] + 525 * values[3] + 1000 * values[4] + 20000 * values[5];
+        return sum;
     }
 
 }
