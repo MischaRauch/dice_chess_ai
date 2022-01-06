@@ -35,7 +35,6 @@ public class BoardStateEvaluator {
     }
 
     public static int getEvalOfQL(State state, int depth) {
-        final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
         DQL ql = new DQL();
         ql.algo(state, state.getColor(), depth);
         return ql.getAvgValuesOfTable();

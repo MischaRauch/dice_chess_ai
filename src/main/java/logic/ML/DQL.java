@@ -136,10 +136,18 @@ public class DQL {
     public int getAvgValuesOfTable() {
         int a = currentQtable.accessStateIndex(initialState);
         int sum = 0;
+        int numOfnonZero = 0;
+
         for (int i = 0; i < Qvalues[a].length; i++) {
             sum += Qvalues[a][i];
+            if (Qvalues[a][i] != 0) {
+                numOfnonZero++;
+            }
         }
-        return sum/Qvalues[a].length;
+        if (numOfnonZero == 0) {
+            numOfnonZero = 1;
+        }
+        return sum/numOfnonZero;
     }
 
     public void printState(int a) {

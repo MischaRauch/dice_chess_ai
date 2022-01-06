@@ -319,7 +319,7 @@ public class BoardStateGenerator {
             ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(state, color, diceRoll);
 
             for (State givenState : allPossibleStates) {
-                int weight = BoardStateEvaluator.getEvalOfQL(givenState, depth);
+                int weight = BoardStateEvaluator.getEvalOfQL(givenState, depth); // where to put this
                 possibleBoardStatesWeights.add(weight);
             }
             System.out.println("a");
