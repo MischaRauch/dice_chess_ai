@@ -7,14 +7,13 @@ import java.util.List;
 
 public class OutputToCsv {
 
+    private List<String> trackedStates;
     private static OutputToCsv singelton = null;
-    private final String fileName = "filename.csv";
-    // private static String dirName = "src\\main\\resources\\data";
+    private  String fileName ;
 
-    private OutputToCsv() {
+    private OutputToCsv(String fileName) {
         try {
-            //  String fileName = "test.csv";
-            //  File dir = new File(dirName);
+            this.fileName = fileName;
             File file = new File(fileName);
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
@@ -27,11 +26,15 @@ public class OutputToCsv {
         }
     }
 
-    public static OutputToCsv getInstance() {
+    public static OutputToCsv getInstance(String fileName) {
         if (singelton == null) {
-            singelton = new OutputToCsv();
+            singelton = new OutputToCsv(fileName);
         }
         return singelton;
+    }
+
+    public void setTrackedStates(List<String> trackedStates){
+        this.trackedStates = trackedStates;
     }
 
     public void writeToFile(String[] message) {
@@ -51,20 +54,21 @@ public class OutputToCsv {
         }
     }
 
-    public void writeToFile(List<String> message) {
+    public void writeToFileGame(List<String> message) {
         try {
             FileWriter myWriter = new FileWriter(fileName);
 
-            // int counter = 0;
-            // int nextLine = 0;
-            for (String string : message) {
-                if (string == "z") {
-                    myWriter.write(System.getProperty("line.separator"));
-                } else {
-                    myWriter.write(string);
-                    myWriter.write(", ");
-                }
+            //First append the headers:
+            for(String headers : trackedStates){ //works
+                myWriter.append(headers + ", ");
             }
+            myWriter.append("\n"); //new line
+
+            for(String s : message){
+                myWriter.write(s);
+                myWriter.write(", ");
+            }
+            myWriter.append("\n");
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
@@ -72,6 +76,8 @@ public class OutputToCsv {
             e.printStackTrace();
         }
     }
+
+    // need a read file if we want to test for each state
 
 
 }

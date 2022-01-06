@@ -26,7 +26,7 @@ public class ExpectiMiniMaxThread extends Thread {
         long end = System.nanoTime();
         System.out.println("ExpectiMiniMaxPlayer:" + state.getColor().name() + ", Elapsed Time to generate tree and find optimal move: " + (end - start));
         long time = end - start;
-        CsvHandler csvHandler = new CsvHandler(state.getColor().name(), time);
+        //CsvHandler csvHandler = new CsvHandler(state.getColor().name(), time);
 
     }
 

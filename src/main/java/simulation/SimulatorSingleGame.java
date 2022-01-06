@@ -26,7 +26,6 @@ public class SimulatorSingleGame extends Game {
         blackPlayer = black.getNameAi();
     }
 
-
     public AIPlayer getAIPlayerWhite() {
         return white;
     }
@@ -35,56 +34,19 @@ public class SimulatorSingleGame extends Game {
         return black;
     }
 
-    public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMove, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
-        boolean gameOver = false;
-        AIPlayer nextPlayer = white;
+    public ArrayList<String> start(boolean winner, boolean numTurns, boolean totalTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
         ArrayList<String> stats = new ArrayList<String>();
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
 
-        if (timePerMove) {
-            stats.add("z");
-        }
-
-        while (!gameOver) {
-            Move move = nextPlayer.chooseMove(currentState);
-
-            State newState = currentState.applyMove(move);
-
-            previousStates.push(currentState);
-            checkGameOver(move);
-            // after checking if king was captured, we can update the currentState
-            currentState = newState;
-
-            move.setStatus(Validity.VALID);
-
-            processCastling();
-
-            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
-            gameOver = isGameOver();
-
-            //print board for debugging
-            //this.getCurrentState().getBoard().printBoard();
-
-            //get time needed for move
-            if (timePerMove) {
-                System.out.println(nextPlayer.getTimeNeeded());
-                stats.add(Long.toString(nextPlayer.getTimeNeeded()));
-            }
-
-            //switch players
-            nextPlayer = (nextPlayer == white) ? black : white;
-
-            if (gameOver && timePerMove) {
-                stats.add("z");
-            }
-
-
-        }
-        //Save the information for this game
         if (winner) {
             tmp = getWinner().name();
             stats.add(tmp);
+        }
+
+        if(totalTime){
+            int time = 0;
+            stats.add(Integer.toString(time));
         }
         if (numTurns) {
             stats.add(Integer.toString(previousStates.lastElement().getCumulativeTurn() + 1));

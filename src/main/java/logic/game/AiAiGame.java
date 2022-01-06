@@ -120,9 +120,9 @@ public class AiAiGame extends Game {
         currentState = firstState;
 
         //Csv
-        CsvHandler csvHandler = new CsvHandler();
-        csvHandler.readTimeCsv("time.csv");
-        csvHandler.writeTimeCsv("time.csv");
+        //CsvHandler csvHandler = new CsvHandler();
+       // csvHandler.readTimeCsv("time.csv");
+        //csvHandler.writeTimeCsv("time.csv");
 
         System.out.println("\n\n\nGameOver\n\n\n");
         System.out.println("PLAYED: " + played + " PLAY TILL: " + playTill);

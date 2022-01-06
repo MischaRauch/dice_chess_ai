@@ -17,10 +17,22 @@ public class SimulationHandler {
     boolean algTwo = true;
     boolean winner = true;
     boolean numTurns = true;
-    boolean timePerMove = true;
     boolean numberOfPieceType = false;
     boolean numberOfPiecesPerPlayer = true;
     boolean valueOfPiecesSummed = true;
+    boolean totalTime = true;
+    boolean whitePiecesCaptured = false;
+    boolean blackPiecesCaptured = false;
+    boolean avgTimeMovesAlg = false;
+    boolean avgTimeMovesAlgTwo = false;
+
+    //These are only for stateSimulator
+    boolean numCaptures = false;
+    boolean turn = false;
+    boolean timePerMove = false;
+    boolean whitePiecesRemaining = false;
+    boolean blackPiecesRemaining = false;
+
 
 
     public SimulationHandler(AIPlayer white, AIPlayer black, String FEN) {
@@ -33,23 +45,28 @@ public class SimulationHandler {
         //add header row for kpis
         addHeaderRow();
 
-        ArrayList<String> actualStats = (game.start(winner, numTurns, timePerMove, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
+        ArrayList<String> actualStats = (game.start(winner, numTurns, totalTime, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
 
         ArrayList<String> concatenated = new ArrayList<String>();
-        concatenated.addAll(trackedStates);
         concatenated.addAll(actualStats);
-
         System.out.println("Tracked States ");
         System.out.println(concatenated);
 
-        //TODO: write into csv file
-        OutputToCsv writer = OutputToCsv.getInstance();
-        writer.writeToFile(concatenated);
+        //Writing Single Game to Csv
+        OutputToCsv writer = OutputToCsv.getInstance("singleGame.csv");
+        writer.setTrackedStates(trackedStates);
+        writer.writeToFileGame(concatenated); //concatenated now only has the actual states
+
+        //Writing Each State of Game to Csv
+
+        OutputToCsv writer1 = OutputToCsv.getInstance("statesGame.csv");
+
+
     }
 
     public void addHeaderRow() {
         boolean[] booleanList = {alg, algTwo, winner, numTurns, timePerMove, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
-        String[] header = {"Alg", "AlgTwo", "TimePerMove", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
+        String[] header = {"Alg", "AlgTwo", "TotalTime", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
 
         System.out.println(Arrays.toString(booleanList));
         System.out.println(Arrays.toString(header));
@@ -58,7 +75,6 @@ public class SimulationHandler {
                 trackedStates.add(header[i]);
             }
         }
-        trackedStates.add("z");
         System.out.println(trackedStates);
     }
 }
