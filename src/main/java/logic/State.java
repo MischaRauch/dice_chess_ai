@@ -7,7 +7,6 @@ import logic.enums.Square;
 import logic.game.Game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static logic.enums.Piece.*;
@@ -166,6 +165,33 @@ public class State {
             }
         }
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+    }
+
+    //for simulation
+    public int[] getPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
+        int pawn = 0;
+        int knight = 0;
+        int rook = 0;
+        int bishop = 0;
+        int king = 0;
+        int queen = 0;
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if (t.getPiece().equals(Piece.BLACK_QUEEN) || t.getPiece().equals(Piece.WHITE_QUEEN)) {
+                queen++;
+            } else if (t.getPiece().equals(Piece.WHITE_BISHOP) || t.getPiece().equals(Piece.BLACK_BISHOP)) {
+                bishop++;
+            } else if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
+                king++;
+            } else if (t.getPiece().equals(Piece.WHITE_ROOK) || t.getPiece().equals(Piece.BLACK_ROOK)) {
+                rook++;
+            } else if (t.getPiece().equals(Piece.WHITE_PAWN) || t.getPiece().equals(Piece.BLACK_PAWN)) {
+                pawn++;
+            } else if (t.getPiece().equals(Piece.WHITE_KNIGHT) || t.getPiece().equals(Piece.BLACK_KNIGHT)) {
+                knight++;
+            }
+        }
+        int[] pieces = {pawn, knight, bishop, rook, queen, king};
+        return pieces;
     }
 
     public State applyMove(Move move) {
@@ -400,6 +426,18 @@ public class State {
 
     public List<PieceAndSquareTuple> getPieceAndSquare() {
         return pieceAndSquare;
+    }
+
+    //for Simulation
+    public int[] getPieceAndSquare(Side side) {
+        List<PieceAndSquareTuple> oneSidePieceAndSquare = new ArrayList<>();
+        for (PieceAndSquareTuple piece : pieceAndSquare) {
+            Piece casted = (Piece) piece.getPiece();
+            if (casted.getColor() == side) {
+                oneSidePieceAndSquare.add(piece);
+            }
+        }
+        return getPieceCounts(oneSidePieceAndSquare);
     }
 
     public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
