@@ -88,14 +88,40 @@ public class OutputToCsv {
             FileWriter myWriter = new FileWriter(fileName);
 
             //First append the headers:
-            myWriter.append("Turn, TimePerMove \n");
-
-            for(int i = 0; i < stateList.size()-1; i+=2){
+            myWriter.append("TurnAlg, TimePerMove, Death, PieceCount, TurnAlgTwo, TimePerMove, Death, PieceCount \n");
+            System.out.println("States array length: " + stateList.size());
+            for(int i = 0; i < stateList.size()-8; i+=8){
                 myWriter.write(stateList.get(i));
                 myWriter.write(", ");
                 myWriter.write(stateList.get(i+1));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+2));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+3));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+4));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+5));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+6));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i+7));
                 myWriter.append("\n");
             }
+
+            for(int i = stateList.size()-8; i < stateList.size()-4; i+=4) {
+                myWriter.write(stateList.get(i));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i + 1));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i + 2));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i + 3));
+                myWriter.write(", ");
+                myWriter.write(stateList.get(i + 4));
+                myWriter.write("\n");
+            }
+
             myWriter.append("\n");
             myWriter.close();
             System.out.println("Successfully wrote to the file.");

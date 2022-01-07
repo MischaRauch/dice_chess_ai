@@ -2,11 +2,13 @@ package simulation;
 
 import logic.Move;
 import logic.State;
+import logic.enums.Side;
 import logic.enums.Validity;
 import logic.game.Game;
 import logic.player.AIPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SimulatorState extends Game {
     ArrayList<String> statsState = new ArrayList<String>();
@@ -19,6 +21,8 @@ public class SimulatorState extends Game {
     ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
     ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
     private int numTurns;
+    private ArrayList<int[]> pieceArrayW;
+    private ArrayList<int[]> pieceArrayB;
 
     public SimulatorState(AIPlayer white, AIPlayer black, String FEN) {
         super(FEN);
@@ -48,6 +52,11 @@ public class SimulatorState extends Game {
         this.numTurns = numTurns;
     }
 
+    public void setPieceArrays(ArrayList<int[]> pieceArrayW, ArrayList<int[]> pieceArrayB){
+        this.pieceArrayW = pieceArrayW;
+        this.pieceArrayB = pieceArrayB;
+    }
+
     public ArrayList<String> startStateSimulation(boolean turn, boolean timePerMove, boolean numCaptures, boolean whitePiecesRemaining, boolean blackPiecesRemaining){
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
@@ -68,18 +77,27 @@ public class SimulatorState extends Game {
         for(int i = 0; i < lessTurns; i++){
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(i)));
+            statsState.add(" - ");//Death
+            statsState.add(Arrays.toString(pieceArrayW.get(i)));
+
 
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(i)));
+            statsState.add(" - ");//Death Piece
+            statsState.add(Arrays.toString(pieceArrayB.get(i)));
         }
 
         if(lessTurns == timeperMoveBlack.size()){
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() -1)));
+            statsState.add(" - ");
+            statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
         }
         else{
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(timeperMoveBlack.size()-1)));
+            statsState.add(" - ");
+            statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         }
 
         return statsState;

@@ -10,6 +10,7 @@ import logic.player.AIPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 
 public class SimulatorSingleGame extends Game {
@@ -18,6 +19,8 @@ public class SimulatorSingleGame extends Game {
     ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
     ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
     ArrayList<Long> allTimesPerMove = new ArrayList<>();
+    ArrayList<int[]> pieceArrayW = new ArrayList<>();
+    ArrayList<int[]> pieceArrayB = new ArrayList<>();
 
     private final AIPlayer white, black;
     String whitePlayer;
@@ -79,6 +82,9 @@ public class SimulatorSingleGame extends Game {
             if (timePerMoveBlack && (nextPlayer == black)) {
                 timeperMoveBlack.add(nextPlayer.getTimeNeeded());
             }
+            //Add current Piece array to arraylist
+            pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+            pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
 
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
@@ -138,8 +144,22 @@ public class SimulatorSingleGame extends Game {
         return timeperMoveBlack;
     }
 
+    public ArrayList<int[]> getPieceArrayW(){
+        return pieceArrayW;
+    }
+
+    public ArrayList<int[]> getPieceArrayB(){
+        return pieceArrayB;
+    }
+
+
     public int getNumTurns(){
-        return previousStates.lastElement().getCumulativeTurn() + 1;
+        try {
+            return previousStates.lastElement().getCumulativeTurn() + 1;
+        } catch(NoSuchElementException e) {
+            System.out.println("NO ELEMENT");
+        }
+        return 0;
     }
     public int getSummedValues(int[] values) {
         int sum = 100 * values[0] + 350 * values[1] + 350 * values[2] + 525 * values[3] + 1000 * values[4] + 20000 * values[5];

@@ -62,7 +62,7 @@ public class SimulationHandler {
         //create HashMap for easier transfer of what to keep track of
         createHashMap();
 
-        if (Config.SIMULATION_SIZE != 1) {
+        if (Config.SIMULATION_SIZE != 1) { //change to include if != a single game
             SimulatorMultiGame smg = new SimulatorMultiGame(game, Config.SIMULATION_SIZE, stringBooleanHashMap, trackedStates);
             smg.start();
         } else {
@@ -73,24 +73,18 @@ public class SimulationHandler {
             OutputToCsv writer = OutputToCsv.getInstance("singleGame.csv");
             writer.setTrackedStates(trackedStates);
             writer.writeToFileGame(actualStats); //concatenated now only has the actual states
+
+            //Writing Each State of Game to Csv
+            states.setTimeperMoveWhite(game.getTimeperMoveWhite());
+            states.setTimeperMoveBlack(game.getTimeperMoveBlack());
+            states.setNumTurns(game.getNumTurns());
+            states.setPieceArrays(game.getPieceArrayW(), game.getPieceArrayB());
+            ArrayList<String> statesStats = (states.startStateSimulation(turn, timePerMove, numCaptures, whitePiecesRemaining, blackPiecesRemaining));
+            System.out.println("States Array");
+            System.out.println(statesStats);
+            OutputToCsv writer1 = new OutputToCsv("statesGame.csv");
+            writer1.writeEachState(statesStats);
         }
-
-        //ArrayList<String> concatenated = new ArrayList<String>();
-        //concatenated.addAll(actualStats);
-        //System.out.println("Tracked States ");
-        //System.out.println(concatenated);
-
-
-        //Writing Each State of Game to Csv
-        states.setTimeperMoveWhite(game.getTimeperMoveWhite());
-        states.setTimeperMoveBlack(game.getTimeperMoveBlack());
-        states.setNumTurns(game.getNumTurns());
-        ArrayList<String> statesStats = (states.startStateSimulation(turn, timePerMove, numCaptures, whitePiecesRemaining, blackPiecesRemaining));
-        System.out.println("States Array");
-        System.out.println(statesStats);
-        OutputToCsv writer1 = new OutputToCsv("statesGame.csv");
-        writer1.writeEachState(statesStats);
-
 
     }
 
