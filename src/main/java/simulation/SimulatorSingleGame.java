@@ -22,7 +22,7 @@ public class SimulatorSingleGame extends Game {
     private final AIPlayer white, black;
     String whitePlayer;
     String blackPlayer;
-    String tmp;
+    String fen;
 
 
     public SimulatorSingleGame(AIPlayer white, AIPlayer black, String FEN) {
@@ -31,6 +31,7 @@ public class SimulatorSingleGame extends Game {
         this.black = black;
         whitePlayer = white.getNameAi();
         blackPlayer = black.getNameAi();
+        this.fen = FEN;
     }
 
 
@@ -40,6 +41,10 @@ public class SimulatorSingleGame extends Game {
 
     public AIPlayer getAIPlayerBlack() {
         return black;
+    }
+
+    public String getFen() {
+        return fen;
     }
 
     public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceWhite, boolean numberOfPieceBlack, boolean valueOfPiecesSummedWhite, boolean valueOfPiecesSummedBlack) {
@@ -103,8 +108,8 @@ public class SimulatorSingleGame extends Game {
             stats.add(Long.toString(sum));
         }
         if (winner) {
-            tmp = getWinner().name();
-            stats.add(tmp);
+            String won = getWinner().name();
+            stats.add(won);
         }
         if (numTurns) {
             stats.add(Integer.toString(previousStates.lastElement().getCumulativeTurn() + 1));
@@ -125,7 +130,9 @@ public class SimulatorSingleGame extends Game {
 
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         // I think this is not needed since its only a single game - but will leave it for now
-        //currentState = firstState;
+        currentState = firstState;
+        //this.getCurrentState().getBoard().printBoard();
+
 
         return stats;
     }
@@ -140,10 +147,6 @@ public class SimulatorSingleGame extends Game {
 
     public int getNumTurns(){
         return previousStates.lastElement().getCumulativeTurn() + 1;
-    }
-    public int getSummedValues(int[] values) {
-        int sum = 100 * values[0] + 350 * values[1] + 350 * values[2] + 525 * values[3] + 1000 * values[4] + 20000 * values[5];
-        return sum;
     }
 
 }
