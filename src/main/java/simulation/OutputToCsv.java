@@ -9,7 +9,9 @@ public class OutputToCsv {
 
     private List<String> trackedStates;
     private static OutputToCsv singelton = null;
-    private  String fileName ;
+    private String fileName;
+    private boolean firstrun = true;
+    private boolean fileCreated = false;
 
     public OutputToCsv(String fileName) {
         try {
@@ -17,6 +19,7 @@ public class OutputToCsv {
             File file = new File(fileName);
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
+                fileCreated = true;
             } else {
                 System.out.println("File already exists.");
             }
@@ -56,19 +59,22 @@ public class OutputToCsv {
 
     public void writeToFileGame(List<String> message) {
         try {
-            FileWriter myWriter = new FileWriter(fileName);
-
-            //First append the headers:
-            for(String headers : trackedStates){ //works
-                myWriter.append(headers + ", ");
+            FileWriter myWriter = new FileWriter(fileName, true);
+            //First append the headers if it's the first run:
+            if (firstrun && fileCreated) {
+                for (String headers : trackedStates) { //works
+                    myWriter.append(headers + ", ");
+                }
+                firstrun = false;
             }
+
             myWriter.append("\n"); //new line
 
-            for(String s : message){
+            for (String s : message) {
                 myWriter.write(s);
                 myWriter.write(", ");
             }
-            myWriter.append("\n");
+            // myWriter.append("\n");
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {

@@ -125,7 +125,7 @@ public class SimulatorSingleGame extends Game {
 
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         // I think this is not needed since its only a single game - but will leave it for now
-        currentState = firstState;
+        //currentState = firstState;
 
         return stats;
     }
