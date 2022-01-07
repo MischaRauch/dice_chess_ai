@@ -56,6 +56,9 @@ public class SimulatorState extends Game {
         System.out.println(timeperMoveWhite);
         System.out.println(timeperMoveBlack);
 
+
+        //num captures, white pieces remaining on board
+        //Names of pieces remaining on board
         int lessTurns = 0;
         if(timeperMoveBlack.size() < timeperMoveWhite.size())
             lessTurns = timeperMoveBlack.size();
