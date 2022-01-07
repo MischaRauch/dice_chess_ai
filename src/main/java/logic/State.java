@@ -274,6 +274,8 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
+        cumulativeTurn++;
+
         // newBoard.printBoard();
         return nextState;
         //}

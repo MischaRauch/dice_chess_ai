@@ -84,15 +84,22 @@ public abstract class Game {
     public void checkGameOver(Move move) {
         Board board = currentState.getBoard();
         Piece destPiece = board.getPieceAt(move.getDestination());
-        if (destPiece.getType() == KING) {
+        if ((currentState.getCumulativeTurn()>100 && currentState.getPieceAndSquare().size()==2) ||
+                (currentState.getPieceAndSquare().size()==2 && (
+                        ( ((Piece) currentState.getPieceAndSquare().get(0).getPiece()).getCharType()=='K' &&
+                                ((Piece) currentState.getPieceAndSquare().get(1).getPiece()).getCharType()=='k'
+                        ) ||
+                        ( ((Piece) currentState.getPieceAndSquare().get(0).getPiece()).getCharType()=='k' &&
+                                ((Piece) currentState.getPieceAndSquare().get(1).getPiece()).getCharType()=='K'
+                        ))
+            )){
+            gameDone = true;
+            winner = NEUTRAL;
+        } else if (destPiece.getType() == KING) {
             System.out.println("gameDone = true");
             gameDone = true;
             winner = move.getSide();
         }
-//        if (currentState.getKingCount(currentState.getPieceAndSquare())!=2) {
-//            gameDone = true;
-//            winner = move.getSide();
-//        }
     }
 
     public boolean isGameOver() {
@@ -102,7 +109,6 @@ public abstract class Game {
     public Side getWinner() {
         return winner;
     }
-
 
     public void setGameOver(boolean newGame) { gameDone = newGame;}
 
