@@ -26,7 +26,7 @@ public class DQL {
         for (int[] row : Qvalues) {// fill the table with 0
             Arrays.fill(row, 0);
         }
-        double numOfGames = 500;
+        double numOfGames = 50;
 
         double explorationProb = 1; // this defines the prob. that the agent will explore
         double explorationDecay = 1 / numOfGames;
@@ -75,7 +75,6 @@ public class DQL {
                 int indexOfAction = currentQtable.accessActionIndex(currentState, tempOriginAndDestSquare);
 
                 Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState))));
-
                 currentState = newState;
                 if (finished) break;
             }

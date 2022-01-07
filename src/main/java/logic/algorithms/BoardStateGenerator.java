@@ -317,7 +317,7 @@ public class BoardStateGenerator {
             ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(new State(state), color, diceRoll);
 
             for (State givenState : allPossibleStates) {
-                int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // where to put this
+                int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // the location of this causes too much time
                 possibleBoardStatesWeights.add(weight);
             }
             System.out.println("a");

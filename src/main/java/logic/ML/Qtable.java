@@ -199,7 +199,7 @@ public class Qtable {
     }
 
     public ArrayList<State> createStateSpace(State currentState, int depth) {
-
+        int d = 0;
         ArrayList<State> possibleStatesOfCurrentBoard;
 
         ArrayList<State> opponentState = new ArrayList<>();
@@ -227,12 +227,12 @@ public class Qtable {
                 for (int j=a; j<toWhere; j++) {
                     State tempState = opponentState.get(j);
                     possibleStatesOfCurrentBoard = BoardStateGenerator.getPossibleBoardStates(tempState, Side.getOpposite(currentSide));
+
                     totalStates += possibleStatesOfCurrentBoard.size();
                     stateSpace.addAll(possibleStatesOfCurrentBoard);
                 }
                 indexOfDepthOfAI.add(totalStates + indexOfDepthOfAI.get(currentDepthOfAI));
                 currentDepthOfAI++;
-
             }
 
             else { // for opponent side

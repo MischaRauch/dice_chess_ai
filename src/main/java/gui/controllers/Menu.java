@@ -129,7 +129,7 @@ public class Menu {
             case "Basic AI" -> new BasicAIPlayer(color);
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "QL AI" -> new QLPlayer(2, color);
+            case "QL AI" -> new QLPlayer(4, color);
             case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(1,color);
             default -> new RandomMovesPlayer(color);
         };
