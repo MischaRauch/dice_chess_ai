@@ -81,7 +81,7 @@ public class SimulatorState extends Game {
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(i)));
             if(i != 0 ){
-                statsState.add(checkPieceDeath(pieceArrayW.get(i-1), pieceArrayW.get(i)));
+                statsState.add(checkPieceDeath(pieceArrayB.get(i-1), pieceArrayB.get(i), "BLACK"));
             }
             else
                 statsState.add("-"); //first Move
@@ -91,7 +91,7 @@ public class SimulatorState extends Game {
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(i)));
             if(i != 0 ){
-                statsState.add(checkPieceDeath(pieceArrayB.get(i-1), pieceArrayB.get(i)));
+                statsState.add(checkPieceDeath(pieceArrayW.get(i-1), pieceArrayW.get(i), "WHITE"));
             }
             else
                 statsState.add("-"); //first Move
@@ -101,23 +101,23 @@ public class SimulatorState extends Game {
         if(lessTurns == timeperMoveBlack.size()){
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() -1)));
-            statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayW.size()-2), pieceArrayW.get(pieceArrayW.size()-1)));
+            statsState.add(checkPieceDeath(pieceArrayB.get(pieceArrayB.size()-2), pieceArrayB.get(pieceArrayB.size()-1), "BLACK"));
             statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
         }
         else{
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(timeperMoveBlack.size()-1)));
-            statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayB.size()-2), pieceArrayW.get(pieceArrayB.size()-1)));
+            statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayW.size()-2), pieceArrayW.get(pieceArrayW.size()-1), "WHITE"));
             statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         }
 
         return statsState;
     }
 
-    public String checkPieceDeath(int[] previousBoard, int[] currentBoard){
+    public String checkPieceDeath(int[] previousBoard, int[] currentBoard, String color){
         for(int i = 0; i < previousBoard.length; i++){
             if(currentBoard[i] < previousBoard[i]){
-                return Piece.getPieceBasedOnNumber(i).name();
+                return color + " " + Piece.getPieceBasedOnNumber(i).name();
             }
         }
         return "-"; //safety
