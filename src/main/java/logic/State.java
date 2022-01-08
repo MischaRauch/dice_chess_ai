@@ -262,10 +262,6 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        if (diceRoll==0) {
-            Game.getInstance().setGameOver(true);
-        }
-
         cumulativeTurn++;
 
         return nextState;
@@ -343,7 +339,6 @@ public class State {
 
             prev = p;
         }
-
         return fen;
     }
 
