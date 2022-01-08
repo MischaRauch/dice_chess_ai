@@ -2,6 +2,7 @@ package simulation;
 
 import logic.Move;
 import logic.State;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.game.Game;
@@ -23,6 +24,7 @@ public class SimulatorState extends Game {
     private int numTurns;
     private ArrayList<int[]> pieceArrayW;
     private ArrayList<int[]> pieceArrayB;
+    //ArrayList<Piece> pieceDeathList = new ArrayList<>();//check if we need a number (if multiple deaths at once can occur)
 
     public SimulatorState(AIPlayer white, AIPlayer black, String FEN) {
         super(FEN);
@@ -66,6 +68,7 @@ public class SimulatorState extends Game {
         System.out.println(timeperMoveBlack);
 
 
+
         //num captures, white pieces remaining on board
         //Names of pieces remaining on board
         int lessTurns = 0;
@@ -77,29 +80,46 @@ public class SimulatorState extends Game {
         for(int i = 0; i < lessTurns; i++){
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(i)));
-            statsState.add(" - ");//Death
+            if(i != 0 ){
+                statsState.add(checkPieceDeath(pieceArrayW.get(i-1), pieceArrayW.get(i)));
+            }
+            else
+                statsState.add("-"); //first Move
             statsState.add(Arrays.toString(pieceArrayW.get(i)));
 
 
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(i)));
-            statsState.add(" - ");//Death Piece
+            if(i != 0 ){
+                statsState.add(checkPieceDeath(pieceArrayB.get(i-1), pieceArrayB.get(i)));
+            }
+            else
+                statsState.add("-"); //first Move
             statsState.add(Arrays.toString(pieceArrayB.get(i)));
         }
 
         if(lessTurns == timeperMoveBlack.size()){
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() -1)));
-            statsState.add(" - ");
+            statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayW.size()-2), pieceArrayW.get(pieceArrayW.size()-1)));
             statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
         }
         else{
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(timeperMoveBlack.size()-1)));
-            statsState.add(" - ");
+            statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayB.size()-2), pieceArrayW.get(pieceArrayB.size()-1)));
             statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         }
 
         return statsState;
+    }
+
+    public String checkPieceDeath(int[] previousBoard, int[] currentBoard){
+        for(int i = 0; i < previousBoard.length; i++){
+            if(currentBoard[i] < previousBoard[i]){
+                return Piece.getPieceBasedOnNumber(i).name();
+            }
+        }
+        return "-"; //safety
     }
 }

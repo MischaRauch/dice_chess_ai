@@ -151,6 +151,19 @@ public enum Piece {
         };
     }
 
+    public static Piece getPieceBasedOnNumber(int i){
+        Piece p = PAWN;
+        switch (i){
+            case 0: p = PAWN; break;
+            case 1: p = KNIGHT; break;
+            case 2: p = BISHOP; break;
+            case 3: p = ROOK; break;
+            case 4: p = QUEEN; break;
+            case 5: p = KING; break;
+        }
+        return p;
+    }
+
 
     public int[] getOffsets() {
         return switch (this) {

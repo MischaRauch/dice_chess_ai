@@ -3,6 +3,7 @@ package simulation;
 import logic.Move;
 import logic.State;
 import logic.algorithms.BoardStateEvaluator;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.game.Game;
