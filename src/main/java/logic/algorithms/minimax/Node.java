@@ -7,7 +7,6 @@ import java.util.*;
 public class Node {
 
     private boolean isMaxPlayer;
-    private int score;
     private List<Node> children;
     private int boardEvaluationNumber;
     private State state;
@@ -53,11 +52,4 @@ public class Node {
         return move;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getScore() {
-        return score;
-    }
 }

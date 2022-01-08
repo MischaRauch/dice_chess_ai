@@ -19,19 +19,11 @@ public class MiniMaxTest {
             new RandomMovesPlayer(BLACK), Config.OPENING_FEN);
 
     @Test
-    public void correctEvaluationFirstMovePawn() {
+    public void correctEvaluationFirstMovePawnOrKnight() {
         miniMax.constructTree(3, game.getCurrentState());
-        Node bestChild = miniMax.findBestChild(true, miniMax.getTree().getRoot().getChildren(),game.getCurrentState().getDiceRoll());
+        Node bestChild = miniMax.findBestChild(miniMax.getTree().getRoot().getChildren(),game.getCurrentState().getDiceRoll());
         Move bestMove = bestChild.getMove();
-        assertTrue(bestMove.getDiceRoll()==1);
-    }
-
-    @Test
-    public void correctEvaluationFirstMoveKnight() {
-        miniMax.constructTree(3, game.getCurrentState());
-        Node bestChild = miniMax.findBestChild(true, miniMax.getTree().getRoot().getChildren(),game.getCurrentState().getDiceRoll());
-        Move bestMove = bestChild.getMove();
-        assertTrue(bestMove.getDiceRoll()==2);
+        assertTrue(bestMove.getDiceRoll()==1 || bestMove.getDiceRoll()==2);
     }
 
 }

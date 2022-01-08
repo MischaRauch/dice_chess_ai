@@ -62,16 +62,8 @@ public class ExpectiMiniMaxNode {
         return children;
     }
 
-    public void setChildren(List<ExpectiMiniMaxNode> children) {
-        this.children = children;
-    }
-
     public List<Integer> getBoardEvaluationNumbersForGivenPiece() {
         return boardEvaluationNumbersForGivenPiece;
-    }
-
-    public List<Move> getPossibleMovesForGivenPiece() {
-        return possibleMovesGivenStateForGivenPiece;
     }
 
     public State getPreviousState() {
