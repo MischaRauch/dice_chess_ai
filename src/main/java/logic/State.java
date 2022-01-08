@@ -46,11 +46,15 @@ public class State {
     }
 
     // deep cloning initial state
+    public State(State that, int cummulativeTurn) {
+        this(that.getBoard(),that.getDiceRoll(), that.getColor(),that.canCastleWhite,that.canCastleBlack,that.isShortCastlingBlack(),that.isShortCastlingWhite(),
+                that.isLongCastlingBlack(),that.isLongCastlingWhite(), that.castling, that.getPieceAndSquare(),cummulativeTurn);
+    }
+
+    // deep cloning normal
     public State(State that) {
-        cumulativeTurn = 0;
-        board = that.getBoard();
-        diceRoll = that.getDiceRoll();
-        color = that.getColor();
+        this(that.getBoard(),that.getDiceRoll(), that.getColor(),that.canCastleWhite,that.canCastleBlack,that.isShortCastlingBlack(),that.isShortCastlingWhite(),
+                that.isLongCastlingBlack(),that.isLongCastlingWhite(), that.castling, that.getPieceAndSquare(),that.getCumulativeTurn());
     }
 
     // for state updation

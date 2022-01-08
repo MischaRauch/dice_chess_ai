@@ -9,6 +9,7 @@ import logic.Config;
 import logic.Move;
 import logic.PieceAndSquareTuple;
 import logic.State;
+import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
@@ -69,11 +70,22 @@ public class AiAiGame extends Game {
 
             //System.out.println("Previous State: ");
             //currentState.printPieceAndSquare();
-
-            State newState = currentState.applyMove(move);
+            System.out.println("Before Applying Move: ");
+            currentState.printPieceAndSquare();
+//            for(PieceAndSquareTuple t : currentState.getPieceAndSquare()) {
+//                if(t.getSquare()==move.getDestination() && ((t.getPiece() == Piece.BLACK_KING) || (t.getPiece() == Piece.WHITE_KING))) {
+//                    State temp = currentState;
+//                    State newState = currentState.applyMove(move);
+//                }
+//            }
+            State newState = currentState.applyMove(move); //AFTER THIS LINE NOTHING EXECUTES
+            System.out.println("After Applying Move: ");
+            currentState.printPieceAndSquare();
 
             previousStates.push(currentState);
+
             checkGameOver(move);
+
             // after checking if king was captured, we can update the currentState
             currentState = newState;
 
@@ -103,7 +115,7 @@ public class AiAiGame extends Game {
             try {
                 // the higher the depth the more time AI needs or game just freezes
                 Thread.sleep(Config.THREAD_DELAY);
-            } catch (InterruptedException e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
@@ -116,6 +128,7 @@ public class AiAiGame extends Game {
         if(played == playTill) {
             loogerFromArray(resultsArray);
         }
+
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 

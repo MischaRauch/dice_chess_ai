@@ -165,4 +165,12 @@ class LegalMoveEvaluatorTest {
         assertTrue(state.getPieceAndSquare().get(state.getPieceAndSquare().size()-2).getPiece()==Piece.BLACK_ROOK);
     }
 
+    @Test
+    @DisplayName("e8ke6 k Non-capture Short-castling Legal")
+    void testIsLegalMoveKingCatpure() {
+        Move potentialMove = new Move(Piece.BLACK_KING, Square.e5, Square.e4, 6, Side.BLACK);
+        State state = new State(new Board0x88("rnbq1bnr/ppppppbp/8/4k3/4K3/8/PPPPPPPP/RNBQ1BNR b KQkq - 0 1 1"), 6, Side.BLACK);
+        assertTrue(evaluator.isLegalMove(potentialMove, state, true, true));
+    }
+
 }

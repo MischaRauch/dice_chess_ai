@@ -9,6 +9,7 @@ import logic.enums.Side;
 import logic.enums.Square;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static logic.enums.Square.*;
 
@@ -74,6 +75,7 @@ public class LegalMoveEvaluator {
                         /// TODO right now auto promotes to queen
                         } else if (isAi) {
                             //move.promotionMove = true;
+                            updatePieceAndSquarePromotion(5);
                             move.promotionPiece = move.getPiece().promote(5);
                         }
                         move.promotionMove = true;
@@ -116,6 +118,19 @@ public class LegalMoveEvaluator {
 
         }
         return false;
+    }
+
+    public void updatePieceAndSquarePromotion(int diceRoll) {
+        // as to not modify state piece and square as java pass by value
+        List<PieceAndSquareTuple> newPieceAndSquare = new ArrayList<>();
+        for(PieceAndSquareTuple t : state.getPieceAndSquare()) {
+            if (!(t.getPiece()==move.getPiece() && t.getSquare()==move.getOrigin())) {
+                newPieceAndSquare.add(t);
+            }
+        }
+        // add promoted piece with specific color at destination square
+        newPieceAndSquare.add(new PieceAndSquareTuple(move.getPiece().promote(diceRoll),move.getDestination()));
+        state.setPieceAndSquare(newPieceAndSquare);
     }
 
     public boolean isLegalKnightMove() {

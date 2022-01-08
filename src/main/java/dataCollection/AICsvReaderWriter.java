@@ -25,13 +25,13 @@ public class AICsvReaderWriter extends ViewDataController {
                 fileWriter.append("\n");
             }
 
-        } catch(Exception ex){
+        } catch(Throwable ex){
             ex.printStackTrace();
         } finally {
             try{
                 fileWriter.flush();
                 fileWriter.close();
-            } catch (Exception e){
+            } catch (Throwable e){
                 e.printStackTrace();
             }
         }
@@ -59,12 +59,12 @@ public class AICsvReaderWriter extends ViewDataController {
                 }
             }
 
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
         } finally {
             try {
                 reader.close();
-            }catch (Exception ex) {
+            }catch (Throwable ex) {
                 ex.printStackTrace();
             }
         }

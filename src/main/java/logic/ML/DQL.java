@@ -17,7 +17,7 @@ public class DQL {
     State initialState;
 
     public void algo(State initialState, Side side, int depth) {
-        currentQtable = new Qtable(new State(initialState), side, depth);
+        currentQtable = new Qtable(new State(initialState,0), side, depth);
         this.initialState = initialState;
 
         int stateSize = currentQtable.stateSpace.size();
@@ -41,7 +41,7 @@ public class DQL {
         Move action;
 
         for (int i = 0; i < numOfGames; i++) {
-            currentState = new State(initialState);
+            currentState = new State(initialState,0);
 
             int reward;
             int gamesTotalReward = 0;
@@ -60,7 +60,7 @@ public class DQL {
                     action = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
                 }
                 //apply chosen action and return the next state, reward and true if the episode is ended
-                State newState = new State(currentState.applyMove(action));
+                State newState = new State(currentState.applyMove(action),0);
                 /* what happens here is that I can't get immediate reward, in order to get the actual reward I need to apply a
                 move of the opponent so that the reward I get will be useful and valid.
                 */

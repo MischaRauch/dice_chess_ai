@@ -7,11 +7,11 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 
+import java.util.List;
 import java.util.Stack;
 
 import static logic.enums.Piece.KING;
-import static logic.enums.Side.NEUTRAL;
-import static logic.enums.Side.WHITE;
+import static logic.enums.Side.*;
 
 public abstract class Game {
 
@@ -50,7 +50,7 @@ public abstract class Game {
         currentState.setDiceRoll(Dice.roll(currentState, WHITE));
         // First time game gets initialized game instance is null so make this the first state
         if (Game.getInstance() == null) {
-            firstState = new State(currentState);
+            firstState = new State(currentState,0);
             //System.out.println("GAME INSTANCE NULL, FIRST STATE INITIALIZED");
             numTurns = 0;
         }
@@ -61,7 +61,7 @@ public abstract class Game {
 
     // not abstract method as  AiAi game will never use this
     public void resetCurrentStateToFirstState() {
-        currentState = new State(firstState);
+        currentState = new State(firstState,0);
     }
 
 
@@ -84,18 +84,21 @@ public abstract class Game {
     public void checkGameOver(Move move) {
         Board board = currentState.getBoard();
         Piece destPiece = board.getPieceAt(move.getDestination());
-        if ((currentState.getCumulativeTurn()>100 && currentState.getPieceAndSquare().size()==2) ||
-                (currentState.getPieceAndSquare().size()==2 && (
-                        ( ((Piece) currentState.getPieceAndSquare().get(0).getPiece()).getCharType()=='K' &&
-                                ((Piece) currentState.getPieceAndSquare().get(1).getPiece()).getCharType()=='k'
-                        ) ||
-                        ( ((Piece) currentState.getPieceAndSquare().get(0).getPiece()).getCharType()=='k' &&
-                                ((Piece) currentState.getPieceAndSquare().get(1).getPiece()).getCharType()=='K'
-                        ))
-            )){
+
+        // fixed when there are two kings left or when
+        if (currentState.getCumulativeTurn()>100 || currentState.getPieceAndSquare().size()==2) {
             gameDone = true;
             winner = NEUTRAL;
-        } else if (destPiece.getType() == KING) {
+        // if king alone
+        } else if (onlyOneLeftOfWhite()) {
+            gameDone = true;
+            winner = BLACK;
+        } else if (onlyOneLeftOfWhite()) {
+            gameDone = true;
+            winner = WHITE;
+        }
+        // if piece being captured is king
+        else if (destPiece.getType() == KING) {
             System.out.println("gameDone = true");
             gameDone = true;
             winner = move.getSide();
@@ -104,6 +107,30 @@ public abstract class Game {
 
     public boolean isGameOver() {
         return gameDone;
+    }
+
+    public boolean onlyOneLeftOfWhite() {
+        int white = 0;
+        for (PieceAndSquareTuple t : currentState.getPieceAndSquare()) {
+            Piece p = (Piece) t.getPiece();
+            if (p.getColor().equals(WHITE)) {
+                white++;
+            }
+        }
+        if (white==1) {return true;}
+        return false;
+    }
+
+    public boolean onlyOneLeftOfBlack() {
+        int black = 0;
+        for (PieceAndSquareTuple t : currentState.getPieceAndSquare()) {
+            Piece p = (Piece) t.getPiece();
+            if (p.getColor().equals(BLACK)) {
+                black++;
+            }
+        }
+        if (black==1) {return true;}
+        return false;
     }
 
     public Side getWinner() {

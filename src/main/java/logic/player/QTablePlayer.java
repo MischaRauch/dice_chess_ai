@@ -32,12 +32,15 @@ public class QTablePlayer extends AIPlayer {
         System.out.println("KEY "+key);
         System.out.println("Value "+moveMap.get(key));
         if (moveMap.get(key) != 0) {
+            System.out.println("QTablePlayer: Color: " + this.color.toString() + " Next optimal Move: (key) " + key);
             return key;
         }
         else {
             MiniMaxPlayer ept = new MiniMaxPlayer(7,this.color);
+            System.out.println("QTablePlayer: Color: " + this.color.toString() + " Next optimal Move: (ept.chooseMove(state)) " + ept.chooseMove(state));
             return ept.chooseMove(state);
         }
+
     }
 
 

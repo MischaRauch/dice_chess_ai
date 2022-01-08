@@ -34,7 +34,6 @@ public class Dice {
                 validRolls.add(i + 1); //valid dice rolls are in range 1-6, and i starts at 0
 
         return validRolls.get((int) (Math.random() * validRolls.size()));
-
     }
 
     //TODO: method originally copy-pasted from AIPlayer class, however it is out of date and lacks most special move types
