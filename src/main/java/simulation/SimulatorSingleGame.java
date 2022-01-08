@@ -3,7 +3,6 @@ package simulation;
 import logic.Move;
 import logic.State;
 import logic.algorithms.BoardStateEvaluator;
-import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.game.Game;
@@ -89,14 +88,28 @@ public class SimulatorSingleGame extends Game {
                 timeperMoveBlack.add(nextPlayer.getTimeNeeded());
             }
             //Add current Piece array to arraylist
-            pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
-            pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+            if (nextPlayer == white)
+                pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+            else
+                pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+
+
+            //System.out.println("STATE LOGG WHITE "+Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+            //System.out.println("STATE LOGG BLACK "+Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+
 
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
 
 
         }
+        if (getWinner().name().equals("WHITE")) {
+            pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+        } else {
+            pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+        }
+
+        System.out.println("TEAST " + Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         //Save the information for this game
         if (timePerMoveWhite) {
             Double averageWhite = timeperMoveWhite.stream().mapToLong(val -> val).average().orElse(0.0);

@@ -1,10 +1,7 @@
 package simulation;
 
-import logic.Move;
-import logic.State;
 import logic.enums.Piece;
 import logic.enums.Side;
-import logic.enums.Validity;
 import logic.game.Game;
 import logic.player.AIPlayer;
 
@@ -57,6 +54,10 @@ public class SimulatorState extends Game {
     public void setPieceArrays(ArrayList<int[]> pieceArrayW, ArrayList<int[]> pieceArrayB){
         this.pieceArrayW = pieceArrayW;
         this.pieceArrayB = pieceArrayB;
+        for (int[] state : pieceArrayW)
+            System.out.println("WHITE FROM LOGGER " + Arrays.toString(state));
+        for (int[] state : pieceArrayB)
+            System.out.println("BLACK FROM LOGGER " + Arrays.toString(state));
     }
 
     public ArrayList<String> startStateSimulation(boolean turn, boolean timePerMove, boolean numCaptures, boolean whitePiecesRemaining, boolean blackPiecesRemaining){
@@ -86,7 +87,7 @@ public class SimulatorState extends Game {
             else
                 statsState.add("-"); //first Move
             statsState.add(Arrays.toString(pieceArrayW.get(i)));
-
+            System.out.println("TO FILE WHITE " + Arrays.toString(pieceArrayW.get(i)));
 
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(i)));
@@ -96,6 +97,7 @@ public class SimulatorState extends Game {
             else
                 statsState.add("-"); //first Move
             statsState.add(Arrays.toString(pieceArrayB.get(i)));
+            System.out.println("TO FILE BLACK " + Arrays.toString(pieceArrayB.get(i)));
         }
 
         if(lessTurns == timeperMoveBlack.size()){
