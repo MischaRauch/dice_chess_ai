@@ -8,6 +8,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,28 +170,53 @@ public class BoardStateEvaluator {
             if (ps.getPiece().getColor() == color) {
                 evalNo += ps.getPiece().getWeight();
                 evalNo += getCorrectWeights(ps.getPiece(), turn)[ps.getSquare().getRank() - 1][ps.getSquare().getFile()];
+                //evalNo -= 50 * getDoubleAndOrBlockedPawnCount(nodePieceAndSquare, color); // double blocked isolated pawns are bad
             } else {
                 evalNo -= ps.getPiece().getWeight();
                 evalNo -= getCorrectWeights(ps.getPiece(), turn)[ps.getSquare().getRank() - 1][ps.getSquare().getFile()];
+                //evalNo += 50 * getDoubleAndOrBlockedPawnCount(nodePieceAndSquare, Side.getOpposite(color));
             }
         }
         return evalNo;
     }
 
+    // count * 50 inspired by https://www.chessprogramming.org/Evaluation
+    private static int getDoubleAndOrBlockedPawnCount(List<PieceAndSquareTuple> nodePieceAndSquare, Side color) {
+        // above for black
+        int count = 0;
+        for (PieceAndSquareTuple<Piece, Square> ps : nodePieceAndSquare) {
+            if (ps.getPiece().getType() == Piece.PAWN && ps.getPiece().getColor() == color) {
+                for (PieceAndSquareTuple<Piece, Square> ps2 : nodePieceAndSquare) {
+                    // doubled pawns
+                        // check above for black because the way of the boardIndexMap setup
+                    if (ps.getSquare().getSquareAbove() == ps2.getSquare() && ps2.getPiece().getType() == Piece.PAWN
+                            && ps2.getPiece().getColor() == ps.getPiece().getColor() && ps.getPiece().getColor() == Side.BLACK) {
+                        count++;
+                        // check below for white
+                    } else if (ps.getSquare().getSquareBelow() == ps2.getSquare() && ps2.getPiece().getType() == Piece.PAWN
+                            && ps2.getPiece().getColor() == ps.getPiece().getColor() && ps.getPiece().getColor() == Side.WHITE) {
+                        count++;
+                    }
+                    // blocked pawns
+                    if (ps.getSquare().getSquareAbove() == ps2.getSquare() && ps2.getPiece().getType() == Piece.PAWN
+                            && ps2.getPiece().getColor() == Side.getOpposite(ps.getPiece().getColor()) && ps.getPiece().getColor() == Side.BLACK) {
+                        count++;
+                    } else if (ps.getSquare().getSquareBelow() == ps2.getSquare() && ps2.getPiece().getType() == Piece.PAWN
+                            && ps2.getPiece().getColor() == Side.getOpposite(ps.getPiece().getColor()) && ps.getPiece().getColor() == Side.WHITE) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     // return appropriate board configuration for correct side
     private static int[][] getCorrectWeights(Piece piece, int turn) {
-        if (piece == Piece.WHITE_KING && turn < 50) {
-            return kingBoardWeightsMiddleGameB;
-        }
-        if (piece == Piece.BLACK_KING && turn < 50) {
-            return kingBoardWeightsMiddleGameW;
-        }
-        if (piece == Piece.WHITE_KING && turn >= 50) {
-            return kingBoardWeightsEndGameB;
-        }
-        if (piece == Piece.BLACK_KING && turn >= 50) {
-            return kingBoardWeightsEndGameW;
-        }
+        if (piece == Piece.WHITE_KING && turn < 50) return kingBoardWeightsMiddleGameB;
+        if (piece == Piece.BLACK_KING && turn < 50) return kingBoardWeightsMiddleGameW;
+        if (piece == Piece.WHITE_KING && turn >= 50) return kingBoardWeightsEndGameB;
+        if (piece == Piece.BLACK_KING && turn >= 50) return kingBoardWeightsEndGameW;
         return switch (piece) {
             case WHITE_PAWN -> pawnBoardWeightsB;
             case BLACK_PAWN -> pawnBoardWeightsW;
@@ -205,5 +231,6 @@ public class BoardStateEvaluator {
             default -> null;
         };
     }
+
 
 }
