@@ -59,7 +59,7 @@ public class SimulatorSingleGame extends Game {
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
 
-
+        int counter = 0;
         while (!gameOver) {
             Move move = nextPlayer.chooseMove(currentState);
 
@@ -88,10 +88,17 @@ public class SimulatorSingleGame extends Game {
                 timeperMoveBlack.add(nextPlayer.getTimeNeeded());
             }
             //Add current Piece array to arraylist
-            if (nextPlayer == white)
-                pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
-            else
+            if (nextPlayer == white) {
+                System.out.println("Count White " + counter);
+                System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
                 pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+                counter++;
+            } else {
+                System.out.println("Count Black " + counter);
+                System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+                pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+                counter++;
+            }
 
 
             //System.out.println("STATE LOGG WHITE "+Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
@@ -103,11 +110,17 @@ public class SimulatorSingleGame extends Game {
 
 
         }
-        if (getWinner().name().equals("WHITE")) {
+       /* if (getWinner().name().equals("WHITE")) {
             pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+            System.out.println("Count Black "+counter);
+            System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+            counter++;
         } else {
             pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
-        }
+            System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+            System.out.println("Count White "+counter);
+            counter++;
+        }*/
 
         System.out.println("TEAST " + Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         //Save the information for this game

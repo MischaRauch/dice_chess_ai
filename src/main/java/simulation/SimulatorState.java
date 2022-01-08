@@ -56,6 +56,7 @@ public class SimulatorState extends Game {
         this.pieceArrayB = pieceArrayB;
         for (int[] state : pieceArrayW)
             System.out.println("WHITE FROM LOGGER " + Arrays.toString(state));
+        System.out.println();
         for (int[] state : pieceArrayB)
             System.out.println("BLACK FROM LOGGER " + Arrays.toString(state));
     }
@@ -79,6 +80,7 @@ public class SimulatorState extends Game {
             lessTurns = timeperMoveWhite.size();
 
         for(int i = 0; i < lessTurns; i++){
+            System.out.println("II " + i);
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(i)));
             if(i != 0 ){
