@@ -68,6 +68,10 @@ public class AiAiGame extends Game {
 
             Move move = nextPlayer.chooseMove(currentState);
 
+            checkGameOver(move);
+            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
+            gameOver = isGameOver();
+
             //System.out.println("Previous State: ");
             //currentState.printPieceAndSquare();
             System.out.println("Before Applying Move: ");
@@ -79,12 +83,12 @@ public class AiAiGame extends Game {
 //                }
 //            }
             State newState = currentState.applyMove(move); //AFTER THIS LINE NOTHING EXECUTES
+            // DICE ROLL IS 0
+
             System.out.println("After Applying Move: ");
             currentState.printPieceAndSquare();
 
             previousStates.push(currentState);
-
-            checkGameOver(move);
 
             // after checking if king was captured, we can update the currentState
             currentState = newState;
@@ -104,8 +108,7 @@ public class AiAiGame extends Game {
                 MainContainerController.getInstance().updateTurn(move.getSide());
             });
 
-            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
-            gameOver = isGameOver();
+
 
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
