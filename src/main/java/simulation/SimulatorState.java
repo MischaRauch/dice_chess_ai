@@ -61,24 +61,23 @@ public class SimulatorState extends Game {
             System.out.println("BLACK FROM LOGGER " + Arrays.toString(state));
     }
 
-    public ArrayList<String> startStateSimulation(boolean turn, boolean timePerMove, boolean numCaptures, boolean whitePiecesRemaining, boolean blackPiecesRemaining){
-        boolean gameOver = false;
-        AIPlayer nextPlayer = white;
+    public ArrayList<String> startStateSimulation(){
+
         //Debugging
         System.out.println("Num turns: " + numTurns);
         System.out.println(timeperMoveWhite);
         System.out.println(timeperMoveBlack);
 
 
-
-
-        //num captures, white pieces remaining on board
-        //Names of pieces remaining on board
         int lessTurns = 0;
         if(timeperMoveBlack.size() < timeperMoveWhite.size())
             lessTurns = timeperMoveBlack.size();
         else
             lessTurns = timeperMoveWhite.size();
+
+        System.out.println("TimePerMWhite: " + timeperMoveWhite.size());
+        System.out.println("TimePerMBlack: " + timeperMoveBlack.size());
+        System.out.println("LESS TURNS: " + lessTurns);
 
         for(int i = 0; i < lessTurns; i++){
             System.out.println("II " + i);
@@ -94,29 +93,31 @@ public class SimulatorState extends Game {
 
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(i)));
-            if(i != 0 ){
-                statsState.add(checkPieceDeath(pieceArrayW.get(i-1), pieceArrayW.get(i), "WHITE"));
+            if(i != lessTurns-1 ){//?
+                statsState.add(checkPieceDeath(pieceArrayW.get(i), pieceArrayW.get(i+1), "WHITE"));
             }
             else
-                statsState.add("-"); //first Move
+                statsState.add("-"); //first Move //CHECK THIS
             statsState.add(Arrays.toString(pieceArrayB.get(i)));
             System.out.println("TO FILE BLACK " + Arrays.toString(pieceArrayB.get(i)));
         }
 
-        if(lessTurns == timeperMoveBlack.size()){
+        if(lessTurns == timeperMoveBlack.size() && lessTurns != timeperMoveWhite.size()){ //Will the White Array every have less turns? or only equal or more
+            System.out.println("THIS IS RUNNING");
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() -1)));
+            //statsState.add("TPM DONE");
             statsState.add(checkPieceDeath(pieceArrayB.get(pieceArrayB.size()-2), pieceArrayB.get(pieceArrayB.size()-1), "BLACK"));
+            //statsState.add("CAP DONE");
             statsState.add(Arrays.toString(pieceArrayW.get(pieceArrayW.size()-1)));
-            //statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
-        }
-        else{
+            //statsState.add("ARRAY DONE");
+
             statsState.add(getAIPlayerBlack().getNameAi());
-            statsState.add(Long.toString(timeperMoveBlack.get(timeperMoveBlack.size()-1)));
-            statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayW.size()-2), pieceArrayW.get(pieceArrayW.size()-1), "WHITE"));
-            statsState.add(Arrays.toString(pieceArrayB.get(pieceArrayB.size()-1)));
-            //statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+            statsState.add("-");
+            statsState.add("-");
+            statsState.add(Arrays.toString(pieceArrayB.get(pieceArrayB.size()-1))); //CHECK THIS
         }
+
 
         return statsState;
     }

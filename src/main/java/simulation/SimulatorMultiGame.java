@@ -41,6 +41,8 @@ public class SimulatorMultiGame {
             System.out.println("END " + i + " " + statsForOneGame.toString());
             statsForOneGame.removeAll(statsForOneGame);
 
+            //SimulatorState inLoopState = new SimulatorState(white, black, fen);
+
         }
 
     }
