@@ -72,7 +72,7 @@ public class ExpectiMiniMax {
                     parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
             // add this tuple of list of possible eval numbers and board states to tuple list
             // only add if not empty
-            System.out.println(possibleEvaluationNumbersForGivenPiece);
+            //System.out.println(possibleEvaluationNumbersForGivenPiece);
             if (!possibleEvaluationNumbersForGivenPiece.isEmpty()) {
                 allStatesAndBoardEvaluationsForGivenPieceType.add(new BoardStateAndEvaluationNumberTuple(possibleBoardStatesForGivenPiece, possibleEvaluationNumbersForGivenPiece));
             }

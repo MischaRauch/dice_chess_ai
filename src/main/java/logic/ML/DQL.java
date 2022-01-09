@@ -19,7 +19,7 @@ public class DQL {
         this.givenInitialState = new State(initialState);
         currentQtable = new Qtable(givenInitialState, side, depth);
         int stateSize = currentQtable.stateSpace.size();
-        int actionSize = 4672; // 8x8x(8x7+8+9), this is the total possible actions a state can have at most
+        int actionSize = currentQtable.getActionSize(); // 8x8x(8x7+8+9), this is the total possible actions a state can have at most
 
         Qvalues = new int[stateSize][actionSize]; // save the q-values in a separate table
 
@@ -49,8 +49,8 @@ public class DQL {
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
                     action = currentQtable.randomMoveGenerator(currentState, side);
                 } else {
-                    int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState));
-                    ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState);
+                    int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState.getPieceAndSquare()));
+                    ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState.getPieceAndSquare());
                     OriginAndDestSquare tempMove = originAndDestSquares.get(index);
                     Piece p = currentState.getBoard().getPieceAt(tempMove.getOrigin());
 
@@ -70,11 +70,11 @@ public class DQL {
                 finished = didStateEnd(newState);
 
                 // update value of Qtable
-                int indexOfState = currentQtable.accessStateIndex(currentState);
+                int indexOfState = currentQtable.accessStateIndex(currentState.getPieceAndSquare());
                 OriginAndDestSquare tempOriginAndDestSquare = new OriginAndDestSquare(action.getOrigin(), action.getDestination());
-                int indexOfAction = currentQtable.accessActionIndex(currentState, tempOriginAndDestSquare);
+                int indexOfAction = currentQtable.accessActionIndex(currentState.getPieceAndSquare(), tempOriginAndDestSquare);
 
-                Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState))));
+                Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState.getPieceAndSquare()))));
                 currentState = newState;
                 if (finished) break;
             }
@@ -95,9 +95,9 @@ public class DQL {
 
     public Move getBestMove(State state, Side color) {
         Piece tempP = Piece.getPieceFromDice(givenInitialState.getDiceRoll(), givenInitialState.getColor()); // get piece that the action needs to be equal
-        int a = currentQtable.accessStateIndex(givenInitialState);
+        int a = currentQtable.accessStateIndex(givenInitialState.getPieceAndSquare());
 
-        ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state);
+        ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state.getPieceAndSquare());
 
         int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP, givenInitialState, a);
         OriginAndDestSquare tempMove = originAndDestSquares.get(index);
@@ -129,7 +129,7 @@ public class DQL {
     }
 
     public int getAvgValuesOfTable() {
-        int a = currentQtable.accessStateIndex(givenInitialState);
+        int a = currentQtable.accessStateIndex(givenInitialState.getPieceAndSquare());
         int sum = 0;
         int numOfnonZero = 0;
 

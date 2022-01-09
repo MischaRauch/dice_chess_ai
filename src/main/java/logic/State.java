@@ -1,6 +1,7 @@
 package logic;
 
 import logic.board.Board;
+import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -141,6 +142,15 @@ public class State {
             }
         }
 
+    }
+
+    public static Board PieceAndSquareToBoardConverter(List<PieceAndSquareTuple> state) {
+        Board tempBoard = new Board0x88();
+
+        for (PieceAndSquareTuple uno: state) {
+            tempBoard.setPiece((Piece) uno.getPiece(), (Square) uno.getSquare());
+        }
+        return tempBoard;
     }
 
     public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {

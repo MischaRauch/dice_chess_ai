@@ -17,7 +17,7 @@ public class BoardStateEvaluator {
         int evalNo = 0;
         int turn = 1;
 
-        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, color);
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, color);
 
         for (OriginAndDestSquare tempMove : originAndDestSquares) {
             Square s = tempMove.getOrigin();

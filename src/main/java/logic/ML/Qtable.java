@@ -1,8 +1,6 @@
 package logic.ML;
 
-import logic.LegalMoveGenerator;
-import logic.Move;
-import logic.State;
+import logic.*;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -13,46 +11,48 @@ import java.util.*;
 public class Qtable {
 
     ArrayList<OriginAndDestSquare> actionSpace;
-    LinkedHashMap<State, ArrayList<OriginAndDestSquare>> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
-    ArrayList<State> stateSpace;
+    LinkedHashMap<List<PieceAndSquareTuple>, ArrayList<OriginAndDestSquare>> Qtable; // size mxn where m (rows) is # of states and n (column) is # of actions
+    List<List<PieceAndSquareTuple>> stateSpace;
     Side currentSide;
-    LegalMoveGenerator legalMoveGenerator;
+    State initialState;
+    BoardStateGenerator stateGenerator;
     int depth;
 
     public Qtable(State currentState, Side side, int depth) {
         this.Qtable = new LinkedHashMap<>();
         this.currentSide = side;
         this.depth = depth;
-        ConstructQtable(currentState, depth);
+        this.initialState = new State(currentState);
+        ConstructQtable(initialState.getPieceAndSquare(), depth);
     }
 
 
-    public void ConstructQtable(State currentState, int depth) { // this table doesn't contain values, only info
+    public void ConstructQtable(List<PieceAndSquareTuple> currentState, int depth) { // this table doesn't contain values, only info
         stateSpace = createStateSpace(currentState, depth);
 
-        for (State state : stateSpace) {
+        for (List<PieceAndSquareTuple> state : stateSpace) {
             actionSpace = createActionSpace(state); // for each state create actionSpace
             Qtable.put(state, actionSpace); // adding actionSpace of the state
         }
     }
 
-    public ArrayList<OriginAndDestSquare> createActionSpace(State state) {
-        return LegalMoveGenerator.getAllLegalMoves(state, currentSide);
+    public ArrayList<OriginAndDestSquare> createActionSpace(List<PieceAndSquareTuple> state) {
+        return LegalMoveGenerator.getAllLegalMovesOpt(state, currentSide);
     }
 
-    public ArrayList<OriginAndDestSquare> accessStateValue(State state) {
-        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            if (entry.getKey().equals1(state)) {
+    public ArrayList<OriginAndDestSquare> accessStateValue(List<PieceAndSquareTuple> state) {
+        for (Map.Entry<List<PieceAndSquareTuple>, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+            if (entry.getKey().equals(state)) {
                 return entry.getValue();
-                }
             }
+        }
         return null;
     }
 
-    public int accessStateIndex(State state) {
+    public int accessStateIndex(List<PieceAndSquareTuple> state) {
         int answer = 0;
-        for (State tempState: stateSpace) {
-            if (tempState.equals1(state)) {
+        for (List<PieceAndSquareTuple> tempState : stateSpace) {
+            if (tempState.equals(state)) {
                 return answer;
             }
             answer++;
@@ -60,14 +60,13 @@ public class Qtable {
         return answer;
     }
 
-    public int accessActionIndex(State state, OriginAndDestSquare originAndDestSquare) {
-
-        for ( Map.Entry<State, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
-            if (entry.getKey().equals1(state)) {
+    public int accessActionIndex(List<PieceAndSquareTuple> state, OriginAndDestSquare originAndDestSquare) {
+        for (Map.Entry<List<PieceAndSquareTuple>, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+            if (entry.getKey().equals(state)) {
                 ArrayList<OriginAndDestSquare> temp = entry.getValue();
-                for (int i=0; i<temp.size(); i++) {
+                for (int i = 0; i < temp.size(); i++) {
                     if ((temp.get(i).getOrigin().getSquareNumber() == originAndDestSquare.getOrigin().getSquareNumber())
-                        && (temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber())) {
+                            && (temp.get(i).getDest().getSquareNumber() == originAndDestSquare.getDest().getSquareNumber())) {
                         return i;
                     }
                 }
@@ -80,13 +79,14 @@ public class Qtable {
         int totalWeights = 0;
 
         Piece[] pieceList = state.getBoard().getBoard();
-        for (Piece p: pieceList) {
+        for (Piece p : pieceList) {
             totalWeights += getWeightOf(side, p);
         }
 
         totalWeights += check(state, side); // if I lose king or get king give max or min number
         return totalWeights;
     }
+
     public int check(State state, Side side) { // this method checks if the move makes the player lose/capture king
         Piece p;
         boolean WExist = false;
@@ -102,10 +102,15 @@ public class Qtable {
                 }
             }
         }
-        if (side.equals(Side.BLACK) && !WExist) { return Integer.MAX_VALUE;}
-        else if(side.equals(Side.WHITE) && !BExist) {return Integer.MAX_VALUE;}
-        else if (side.equals(Side.BLACK) && !BExist) {return Integer.MIN_VALUE;}
-        else if(side.equals(Side.WHITE) && !WExist) {return Integer.MIN_VALUE;}
+        if (side.equals(Side.BLACK) && !WExist) {
+            return Integer.MAX_VALUE;
+        } else if (side.equals(Side.WHITE) && !BExist) {
+            return Integer.MAX_VALUE;
+        } else if (side.equals(Side.BLACK) && !BExist) {
+            return Integer.MIN_VALUE;
+        } else if (side.equals(Side.WHITE) && !WExist) {
+            return Integer.MIN_VALUE;
+        }
 
         return 0;
     }
@@ -126,7 +131,7 @@ public class Qtable {
                 case WHITE_KING -> -200000;
                 default -> 0;
             };
-        } else if(side.equals(Side.WHITE)) {
+        } else if (side.equals(Side.WHITE)) {
             return switch (p) {
                 case BLACK_PAWN -> -100;
                 case BLACK_KNIGHT, BLACK_BISHOP -> -350;
@@ -154,7 +159,7 @@ public class Qtable {
         for (OriginAndDestSquare move : moves) {
             if (p.equals(initial.getBoard().getPieceAt(move.getOrigin()))) {
                 doableMoves.add(a);
-                if(qvalues[b][a] > count){
+                if (qvalues[b][a] > count) {
                     count = qvalues[b][a];
                     indexOfMaxAction = a;
                 }
@@ -189,7 +194,7 @@ public class Qtable {
 
     public Move randomMoveGenerator(State state, Side side) {
         Random r = new Random();
-        ArrayList<OriginAndDestSquare> allMoves = LegalMoveGenerator.getAllLegalMoves(state, side);
+        ArrayList<OriginAndDestSquare> allMoves = LegalMoveGenerator.getAllLegalMovesML(state, side);
         OriginAndDestSquare tempMove;
         int num = r.nextInt(allMoves.size());
 
@@ -198,44 +203,44 @@ public class Qtable {
         return (new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side));
     }
 
-    public ArrayList<State> createStateSpace(State currentState, int depth) {
+    public List<List<PieceAndSquareTuple>> createStateSpace(List<PieceAndSquareTuple> givenState, int depth) {
+        List<List<PieceAndSquareTuple>> possibleBoardStates = new ArrayList<>();
+        // loop through for all 6 dice numbers and generate all possible states
         int d = 0;
-        ArrayList<State> possibleStatesOfCurrentBoard;
-
-        ArrayList<State> opponentState = new ArrayList<>();
+        //possibleStatesOfCurrentBoard;
+        List<List<PieceAndSquareTuple>> opponentState = new ArrayList<>();
         ArrayList<Integer> indexOfDepthOfOpponent = new ArrayList<>();
 
-        ArrayList<State> stateSpace = new ArrayList<>();
+        List<List<PieceAndSquareTuple>> stateSpace = new ArrayList<>();
         ArrayList<Integer> indexOfDepthOfAI = new ArrayList<>(); // this shows from which index the first state of that depth
         // starts and at which index it ends. Ex: indexOfDepth[2] will return e.g. 125, this means states of depth 2 ends
         // at 125, to get where it starts just do indexOfDepth[2] - indexOfDepth[1]
 
-        stateSpace.add(currentState); // first step
+        stateSpace.add(initialState.getPieceAndSquare()); // first step
         indexOfDepthOfAI.add(0);
         indexOfDepthOfOpponent.add(0);
 
         int currentDepthOfAI = 0;
         int currentDepthOfOpponent = 0;
 
-        for (int i = 1; i < depth*2; i++) {
+        for (int i = 1; i < depth * 2; i++) {
 
             if (i % 2 == 0) { // for AI side
                 int totalStates = 0;
                 int toWhere = indexOfDepthOfOpponent.get(currentDepthOfOpponent);
-                int a = indexOfDepthOfOpponent.get(currentDepthOfOpponent-1);
+                int a = indexOfDepthOfOpponent.get(currentDepthOfOpponent - 1);
 
-                for (int j=a; j<toWhere; j++) {
-                    State tempState = opponentState.get(j);
-                    possibleStatesOfCurrentBoard = BoardStateGenerator.getPossibleBoardStates(tempState, Side.getOpposite(currentSide));
+                for (int j = a; j < toWhere; j++) {
 
-                    totalStates += possibleStatesOfCurrentBoard.size();
-                    stateSpace.addAll(possibleStatesOfCurrentBoard);
+                    List<PieceAndSquareTuple> tempState = opponentState.get(j);
+                    possibleBoardStates = getStates(tempState, Side.getOpposite(currentSide)); // TODO
+
+                    totalStates += possibleBoardStates.size();
+                    stateSpace.addAll(possibleBoardStates);
                 }
                 indexOfDepthOfAI.add(totalStates + indexOfDepthOfAI.get(currentDepthOfAI));
                 currentDepthOfAI++;
-            }
-
-            else { // for opponent side
+            } else { // for opponent side
 
                 int totalStates = 0;
                 int toWhere;
@@ -246,14 +251,18 @@ public class Qtable {
                     a = indexOfDepthOfAI.get(currentDepthOfAI);
                 } else {
                     toWhere = indexOfDepthOfAI.get(currentDepthOfAI);
-                    a = indexOfDepthOfAI.get(currentDepthOfAI-1) + 1;
+                    a = indexOfDepthOfAI.get(currentDepthOfAI - 1) + 1;
                 }
 
-                for (int j=a; j<=toWhere; j++) {
-                    State tempState = stateSpace.get(j);
-                    possibleStatesOfCurrentBoard = BoardStateGenerator.getPossibleBoardStates(tempState, currentSide);
-                    totalStates += possibleStatesOfCurrentBoard.size();
-                    opponentState.addAll(possibleStatesOfCurrentBoard);
+                for (int j = a; j <= toWhere; j++) {
+
+                    List<PieceAndSquareTuple> tempState = stateSpace.get(j);
+
+                    possibleBoardStates = getStates(tempState, currentSide);
+
+
+                    totalStates += possibleBoardStates.size();
+                    opponentState.addAll(possibleBoardStates);
                 }
                 indexOfDepthOfOpponent.add(totalStates + indexOfDepthOfOpponent.get(currentDepthOfOpponent));
                 currentDepthOfOpponent++;
@@ -261,4 +270,31 @@ public class Qtable {
         }
         return stateSpace;
     }
+
+    public List<List<PieceAndSquareTuple>> getStates(List<PieceAndSquareTuple> givenState, Side side) {
+        List<List<PieceAndSquareTuple>> states = new ArrayList<>();
+        // loop through for all 6 dice numbers and generate all possible states
+        for (int i = 1; i < 7; i++) {
+            System.out.println("a");
+            List<List<PieceAndSquareTuple>> temp = stateGenerator.getPossibleBoardStates(givenState, side, i);
+            states.addAll(temp);
+            // if gives error write below
+            //for (int j = 0; j < states.size(); j++) {
+            //possibleStates.add(states.get(j));
+            //printPieceAndSquare(states.get(j));
+            //}
+        }
+        return states;
+    }
+    public int getActionSize() {
+        int biggestActionSize = 0;
+        for (Map.Entry<List<PieceAndSquareTuple>, ArrayList<OriginAndDestSquare>> entry : Qtable.entrySet()) {
+            if (entry.getValue().size() > biggestActionSize) {
+                biggestActionSize = entry.getValue().size();
+            }
+        }
+        return biggestActionSize;
+    }
 }
+
+
