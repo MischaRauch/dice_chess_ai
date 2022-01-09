@@ -78,8 +78,9 @@ public class SimulationHandler {
             states.setTimeperMoveWhite(game.getTimeperMoveWhite());
             states.setTimeperMoveBlack(game.getTimeperMoveBlack());
             states.setNumTurns(game.getNumTurns());
-            states.setPieceArrays(game.getPieceArrayW(), game.getPieceArrayB());
-            ArrayList<String> statesStats = (states.startStateSimulation());
+            states.setCapturePieceArraysWhite(game.getCapturePieceArrayW(), game.getCapturePieceArrayB());
+            states.setPieceArraysWhite(game.getPieceArrayW(), game.getPieceArrayB());
+            ArrayList<String> statesStats = (states.startStateSimulation(turn, timePerMove, numCaptures, whitePiecesRemaining, blackPiecesRemaining));
             System.out.println("States Array");
             System.out.println(statesStats);
             OutputToCsv writer1 = new OutputToCsv("statesGame.csv");
