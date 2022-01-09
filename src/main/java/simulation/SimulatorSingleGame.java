@@ -23,6 +23,9 @@ public class SimulatorSingleGame extends Game {
     ArrayList<int[]> capturePieceArrayB = new ArrayList<>();
     ArrayList<int[]> pieceArrayW = new ArrayList<>();
     ArrayList<int[]> pieceArrayB = new ArrayList<>();
+    ArrayList<Integer> evaluationBoardW = new ArrayList<>();
+    ArrayList<Integer> evaluationBoardB = new ArrayList<>();
+
 
     private final AIPlayer white, black;
     String whitePlayer;
@@ -102,12 +105,12 @@ public class SimulatorSingleGame extends Game {
             if (nextPlayer == white) {
                 System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
                 capturePieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
-
+                evaluationBoardB.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.BLACK));
                 counter++;
             } else {
                 System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
                 capturePieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
-
+                evaluationBoardW.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.WHITE));
                 counter++;
             }
 
@@ -187,6 +190,14 @@ public class SimulatorSingleGame extends Game {
 
     public ArrayList<int[]> getPieceArrayB() {
         return pieceArrayB;
+    }
+
+    public ArrayList<Integer> getEvaluationBoardW(){
+        return evaluationBoardW;
+    }
+
+    public ArrayList<Integer> getEvaluationBoardB(){
+        return evaluationBoardB;
     }
 
 

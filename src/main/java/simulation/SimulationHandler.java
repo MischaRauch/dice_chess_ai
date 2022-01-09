@@ -63,8 +63,10 @@ public class SimulationHandler {
         createHashMap();
 
         if (Config.SIMULATION_SIZE != 1) { //change to include if != a single game
+
             SimulatorMultiGame smg = new SimulatorMultiGame(game, Config.SIMULATION_SIZE, stringBooleanHashMap, trackedStates);
             smg.start();
+
         } else {
             actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack));
             // actualStats = (game.start(winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
@@ -80,7 +82,8 @@ public class SimulationHandler {
             states.setNumTurns(game.getNumTurns());
             states.setCapturePieceArraysWhite(game.getCapturePieceArrayW(), game.getCapturePieceArrayB());
             states.setPieceArraysWhite(game.getPieceArrayW(), game.getPieceArrayB());
-            ArrayList<String> statesStats = (states.startStateSimulation(turn, timePerMove, numCaptures, whitePiecesRemaining, blackPiecesRemaining));
+            states.setEvaluationBoards(game.getEvaluationBoardW(), game.getEvaluationBoardB());
+            ArrayList<String> statesStats = (states.startStateSimulation());
             System.out.println("States Array");
             System.out.println(statesStats);
             OutputToCsv writer1 = new OutputToCsv("statesGame.csv");

@@ -25,6 +25,8 @@ public class SimulatorState extends Game {
     //trackes the pieces of the board
     private ArrayList<int[]> pieceArrayW;
     private ArrayList<int[]> pieceArrayB;
+    ArrayList<Integer> evaluationBoardW = new ArrayList<>();
+    ArrayList<Integer> evaluationBoardB = new ArrayList<>();
 
     public SimulatorState(AIPlayer white, AIPlayer black, String FEN) {
         super(FEN);
@@ -42,7 +44,7 @@ public class SimulatorState extends Game {
         return black;
     }
 
-    public void setTimeperMoveWhite(ArrayList<Long> timeperMoveWhite){
+    public void setTimeperMoveWhite(ArrayList<Long> timeperMoveWhite) {
         this.timeperMoveWhite = timeperMoveWhite;
     }
 
@@ -59,64 +61,69 @@ public class SimulatorState extends Game {
         this.capturePieceArrayB = pieceArrayB;
     }
 
+    public void setEvaluationBoards(ArrayList<Integer> evW, ArrayList<Integer> evB){
+        this.evaluationBoardW = evW;
+        this.evaluationBoardB = evB;
+    }
+
     public void setPieceArraysWhite(ArrayList<int[]> pieceArrayW, ArrayList<int[]> pieceArrayB) {
         this.pieceArrayW = pieceArrayW;
         this.pieceArrayB = pieceArrayB;
     }
 
-    public ArrayList<String> startStateSimulation(boolean turn, boolean timePerMove, boolean numCaptures, boolean whitePiecesRemaining, boolean blackPiecesRemaining) {
-        boolean gameOver = false;
-        AIPlayer nextPlayer = white;
-    public ArrayList<String> startStateSimulation(){
+    public ArrayList<String> startStateSimulation() {
 
-        //Debugging
-        System.out.println("Num turns: " + numTurns);
-        System.out.println(timeperMoveWhite);
-        System.out.println(timeperMoveBlack);
+            //Debugging
+            System.out.println("Num turns: " + numTurns);
+            System.out.println(timeperMoveWhite);
+            System.out.println(timeperMoveBlack);
 
-
-        //num captures, white pieces remaining on board
-        //Names of pieces remaining on board
-        if ((numTurns % 2) != 0) {
-            whiteWon = true;
-        }
-
-        for (int i = 0; i < timeperMoveBlack.size(); i++) {
-
-            statsState.add(getAIPlayerWhite().getNameAi());
-            statsState.add(Long.toString(timeperMoveWhite.get(i)));
-            if (i != 0) {
-                statsState.add(checkPieceDeath(capturePieceArrayB.get((i) - 1), capturePieceArrayB.get(i), "BLACK"));
-            } else
-                statsState.add("-"); //first Move
-            statsState.add(Arrays.toString(pieceArrayW.get(i)));
-
-            statsState.add(getAIPlayerBlack().getNameAi());
-            statsState.add(Long.toString(timeperMoveBlack.get(i)));
-            if (i != 0) {
-                statsState.add(checkPieceDeath(capturePieceArrayW.get((i) - 1), capturePieceArrayW.get(i), "WHITE"));
-            } else
-                statsState.add("-"); //first Move
-            statsState.add(Arrays.toString(pieceArrayB.get(i)));
-
-        }
-
-        if (whiteWon) {
-            statsState.add(getAIPlayerWhite().getNameAi());
-            statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() - 1)));
-            statsState.add(checkPieceDeath(capturePieceArrayB.get(capturePieceArrayB.size() - 2), capturePieceArrayB.get(capturePieceArrayB.size() - 1), "BLACK"));
-            statsState.add(Arrays.toString(pieceArrayW.get(capturePieceArrayW.size() - 1)));
-        }
-
-        return statsState;
-    }
-
-    public String checkPieceDeath(int[] previousBoard, int[] currentBoard, String color){
-        for(int i = 0; i < previousBoard.length; i++){
-            if(currentBoard[i] < previousBoard[i]){
-                return color + " " + Piece.getPieceBasedOnNumber(i).name();
+            //num captures, white pieces remaining on board
+            //Names of pieces remaining on board
+            if ((numTurns % 2) != 0) {
+                whiteWon = true;
             }
+
+            for (int i = 0; i < timeperMoveBlack.size(); i++) {
+
+                statsState.add(getAIPlayerWhite().getNameAi());
+                statsState.add(Long.toString(timeperMoveWhite.get(i)));
+                if (i != 0) {
+                    statsState.add(checkPieceDeath(capturePieceArrayB.get((i) - 1), capturePieceArrayB.get(i), "BLACK"));
+                } else
+                    statsState.add("-"); //first Move
+                statsState.add(Arrays.toString(pieceArrayW.get(i)));
+                statsState.add(Integer.toString(evaluationBoardW.get(i)));
+
+                statsState.add(getAIPlayerBlack().getNameAi());
+                statsState.add(Long.toString(timeperMoveBlack.get(i)));
+                if (i != 0) {
+                    statsState.add(checkPieceDeath(capturePieceArrayW.get((i) - 1), capturePieceArrayW.get(i), "WHITE"));
+                } else
+                    statsState.add("-"); //first Move
+                statsState.add(Arrays.toString(pieceArrayB.get(i)));
+                statsState.add(Integer.toString(evaluationBoardB.get(i)));
+
+            }
+
+            if (whiteWon) {
+                statsState.add(getAIPlayerWhite().getNameAi());
+                statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() - 1)));
+                statsState.add(checkPieceDeath(capturePieceArrayB.get(capturePieceArrayB.size() - 2), capturePieceArrayB.get(capturePieceArrayB.size() - 1), "BLACK"));
+                statsState.add(Arrays.toString(pieceArrayW.get(capturePieceArrayW.size() - 1)));
+                statsState.add(Integer.toString(evaluationBoardW.get(evaluationBoardW.size()-1)));
+            }
+
+
+            return statsState;
         }
-        return "-"; //safety
+
+        public String checkPieceDeath( int[] previousBoard, int[] currentBoard, String color){
+            for (int i = 0; i < previousBoard.length; i++) {
+                if (currentBoard[i] < previousBoard[i]) {
+                    return color + " " + Piece.getPieceBasedOnNumber(i).name();
+                }
+            }
+            return "-"; //safety
+        }
     }
-}

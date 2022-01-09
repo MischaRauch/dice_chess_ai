@@ -1,6 +1,5 @@
 package gui.controllers;
 
-import dataCollection.CsvHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

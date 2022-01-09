@@ -1,6 +1,5 @@
 package gui;
 
-import dataCollection.CsvHandler;
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
 import javafx.application.Platform;
@@ -38,7 +37,6 @@ public class Chessboard extends GridPane {
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
-    private CsvHandler handle;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
@@ -46,12 +44,6 @@ public class Chessboard extends GridPane {
         game = Game.getInstance();
         this.gameType = type;
         chessboard = this;
-        handle = new CsvHandler();
-
-        if(type == GameType.AI_V_AI)
-            handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
-        else
-            handle.readTheCsv();
 
         setStyle("-fx-background-color: #ffffff");
 
@@ -179,20 +171,7 @@ public class Chessboard extends GridPane {
                 //Stage stage = (Stage) getScene().getWindow();
                 Side winner = game.getWinner();
 
-                //Writing CSV file
-                if (gameType == GameType.AI_V_AI) {
-                    AiAiGame aiAiGame = (AiAiGame) game;
-                    //handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
-                    //handle = new CsvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
-                    //handle.aiVsAiCsvWrite();
-                } else if (gameType == GameType.HUMAN_V_AI) {
-                    AIGame aiGame = (AIGame) game;
-                    handle = new CsvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
-                    handle.addToCsv();
-                } else {
-                    handle = new CsvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
-                    handle.addToCsv();
-                }
+
 
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
 

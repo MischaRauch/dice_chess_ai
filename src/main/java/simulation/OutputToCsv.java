@@ -11,6 +11,8 @@ public class OutputToCsv {
     private static OutputToCsv singelton = null;
     private String fileName;
     private boolean firstrun = true;
+   // private boolean firstRunStates = true;
+   // private boolean fileCreatedState = false;
     private boolean fileCreated = false;
 
     public OutputToCsv(String fileName) {
@@ -85,12 +87,10 @@ public class OutputToCsv {
 
     public void writeEachState(List<String> stateList){
         try {
-            FileWriter myWriter = new FileWriter(fileName);
-
-            //First append the headers:
-            myWriter.append("TurnAlg, TimePerMove, Capture, PieceCount, TurnAlgTwo, TimePerMove, Capture, PieceCount \n");
+            FileWriter myWriter = new FileWriter(fileName, true);
+            myWriter.append("TurnAlg, TimePerMove, Capture, PieceCount, EvaluationPieceWhite, TurnAlgTwo, TimePerMove, Capture, PieceCount, EvaluationPieceBlack \n");
             System.out.println("States array length: " + stateList.size());
-            for(int i = 0; i < stateList.size()-1; i+=8){
+            for(int i = 0; i < stateList.size()-1; i+=10){
                 myWriter.write(stateList.get(i));
                 myWriter.write(", ");
                 myWriter.write(stateList.get(i+1));
@@ -99,12 +99,8 @@ public class OutputToCsv {
                 myWriter.write(", ");
                 myWriter.write(stateList.get(i+3));
                 myWriter.write(", ");
-                try{
-                    myWriter.write(stateList.get(i+4));
-                    myWriter.write(", ");
-                } catch(IndexOutOfBoundsException e){
-                    myWriter.write("-, ");
-                }
+                myWriter.write(stateList.get(i+4));
+                myWriter.write(", ");
                 try{
                     myWriter.write(stateList.get(i+5));
                     myWriter.write(", ");
@@ -123,7 +119,18 @@ public class OutputToCsv {
                 } catch(IndexOutOfBoundsException e){
                     myWriter.write("-, ");
                 }
-
+                try{
+                    myWriter.write(stateList.get(i+8));
+                    myWriter.write(", ");
+                } catch(IndexOutOfBoundsException e){
+                    myWriter.write("-, ");
+                }
+                try{
+                    myWriter.write(stateList.get(i+9));
+                    myWriter.write(", ");
+                } catch(IndexOutOfBoundsException e){
+                    myWriter.write("-, ");
+                }
                 myWriter.append("\n");
             }
 
