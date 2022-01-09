@@ -71,6 +71,7 @@ public class SimulatorState extends Game {
 
 
 
+
         //num captures, white pieces remaining on board
         //Names of pieces remaining on board
         int lessTurns = 0;
@@ -106,13 +107,15 @@ public class SimulatorState extends Game {
             statsState.add(getAIPlayerWhite().getNameAi());
             statsState.add(Long.toString(timeperMoveWhite.get(timeperMoveWhite.size() -1)));
             statsState.add(checkPieceDeath(pieceArrayB.get(pieceArrayB.size()-2), pieceArrayB.get(pieceArrayB.size()-1), "BLACK"));
-            statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+            statsState.add(Arrays.toString(pieceArrayW.get(pieceArrayW.size()-1)));
+            //statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
         }
         else{
             statsState.add(getAIPlayerBlack().getNameAi());
             statsState.add(Long.toString(timeperMoveBlack.get(timeperMoveBlack.size()-1)));
             statsState.add(checkPieceDeath(pieceArrayW.get(pieceArrayW.size()-2), pieceArrayW.get(pieceArrayW.size()-1), "WHITE"));
-            statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+            statsState.add(Arrays.toString(pieceArrayB.get(pieceArrayB.size()-1)));
+            //statsState.add(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         }
 
         return statsState;
