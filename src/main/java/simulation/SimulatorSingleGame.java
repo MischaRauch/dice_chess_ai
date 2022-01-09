@@ -19,6 +19,8 @@ public class SimulatorSingleGame extends Game {
     ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
     ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
     ArrayList<Long> allTimesPerMove = new ArrayList<>();
+    ArrayList<int[]> capturePieceArrayW = new ArrayList<>();
+    ArrayList<int[]> capturePieceArrayB = new ArrayList<>();
     ArrayList<int[]> pieceArrayW = new ArrayList<>();
     ArrayList<int[]> pieceArrayB = new ArrayList<>();
 
@@ -58,10 +60,19 @@ public class SimulatorSingleGame extends Game {
 
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
+        //pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+        //pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
 
         int counter = 0;
         while (!gameOver) {
             Move move = nextPlayer.chooseMove(currentState);
+
+            if (nextPlayer == white) {
+                pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+            } else {
+                pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+            }
+
 
             State newState = currentState.applyMove(move);
 
@@ -89,20 +100,16 @@ public class SimulatorSingleGame extends Game {
             }
             //Add current Piece array to arraylist
             if (nextPlayer == white) {
-                System.out.println("Count White " + counter);
                 System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
-                pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+                capturePieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
+
                 counter++;
             } else {
-                System.out.println("Count Black " + counter);
                 System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
-                pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+                capturePieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
+
                 counter++;
             }
-
-
-            //System.out.println("STATE LOGG WHITE "+Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
-            //System.out.println("STATE LOGG BLACK "+Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
 
 
             //switch players
@@ -110,19 +117,7 @@ public class SimulatorSingleGame extends Game {
 
 
         }
-       /* if (getWinner().name().equals("WHITE")) {
-            pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
-            System.out.println("Count Black "+counter);
-            System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
-            counter++;
-        } else {
-            pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
-            System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
-            System.out.println("Count White "+counter);
-            counter++;
-        }*/
 
-        System.out.println("TEAST " + Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
         //Save the information for this game
         if (timePerMoveWhite) {
             Double averageWhite = timeperMoveWhite.stream().mapToLong(val -> val).average().orElse(0.0);
@@ -170,27 +165,35 @@ public class SimulatorSingleGame extends Game {
         return stats;
     }
 
-    public ArrayList<Long> getTimeperMoveWhite(){
+    public ArrayList<Long> getTimeperMoveWhite() {
         return timeperMoveWhite;
     }
 
-    public ArrayList<Long> getTimeperMoveBlack(){
+    public ArrayList<Long> getTimeperMoveBlack() {
         return timeperMoveBlack;
     }
 
-    public ArrayList<int[]> getPieceArrayW(){
+    public ArrayList<int[]> getCapturePieceArrayW() {
+        return capturePieceArrayW;
+    }
+
+    public ArrayList<int[]> getCapturePieceArrayB() {
+        return capturePieceArrayB;
+    }
+
+    public ArrayList<int[]> getPieceArrayW() {
         return pieceArrayW;
     }
 
-    public ArrayList<int[]> getPieceArrayB(){
+    public ArrayList<int[]> getPieceArrayB() {
         return pieceArrayB;
     }
 
 
-    public int getNumTurns(){
+    public int getNumTurns() {
         try {
             return previousStates.lastElement().getCumulativeTurn() + 1;
-        } catch(NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             System.out.println("NO ELEMENT");
         }
         return 0;
