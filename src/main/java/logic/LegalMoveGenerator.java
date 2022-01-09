@@ -17,8 +17,7 @@ import static logic.enums.Square.getSquare;
 
 public class LegalMoveGenerator {
 
-    //for GUI
-    public static List<Square> getLegalMoves(logic.State state, Square squareOrigin, Piece piece, Side side) {
+    public static List<Square> getLegalMoves(State state, Square squareOrigin, Piece piece, Side side) {
         LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
         ArrayList<Square> legalMoves = new ArrayList<>();
         for (int file = 0; file < 8; file++) {

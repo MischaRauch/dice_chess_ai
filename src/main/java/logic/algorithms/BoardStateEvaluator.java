@@ -8,7 +8,6 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,6 +140,8 @@ public class BoardStateEvaluator {
             {-30, -20, -10, 0, 0, -10, -20, -30},
             {-50, -40, -30, -20, -20, -30, -40, -50}};
 
+    private BoardStateGenerator generator = new BoardStateGenerator();
+
     public static int getBoardEvaluationNumber(State state, Side color) { // for ML
         int evalNo = 0;
         int turn = 1;
@@ -170,25 +171,42 @@ public class BoardStateEvaluator {
             if (ps.getPiece().getColor() == color) {
                 evalNo += ps.getPiece().getWeight();
                 evalNo += getCorrectWeights(ps.getPiece(), turn)[ps.getSquare().getRank() - 1][ps.getSquare().getFile()];
-                //evalNo -= 50 * getDoubleAndOrBlockedPawnCount(nodePieceAndSquare, color); // double blocked isolated pawns are bad
+                //evalNo -= 50 * getDoubledOrBlockedPawnCount(nodePieceAndSquare, color); // double blocked isolated pawns are bad so subtract
+                //evalNo += 10 * getNumberOfMovesForSide(nodePieceAndSquare, color);
             } else {
                 evalNo -= ps.getPiece().getWeight();
                 evalNo -= getCorrectWeights(ps.getPiece(), turn)[ps.getSquare().getRank() - 1][ps.getSquare().getFile()];
-                //evalNo += 50 * getDoubleAndOrBlockedPawnCount(nodePieceAndSquare, Side.getOpposite(color));
+                //evalNo += 50 * getDoubledOrBlockedPawnCount(nodePieceAndSquare, Side.getOpposite(color));
+                //evalNo += 10 * getNumberOfMovesForSide(nodePieceAndSquare, color);
             }
         }
         return evalNo;
     }
 
-    // count * 50 inspired by https://www.chessprogramming.org/Evaluation
-    private static int getDoubleAndOrBlockedPawnCount(List<PieceAndSquareTuple> nodePieceAndSquare, Side color) {
+    /**
+     * @param nodePieceAndSquare
+     * @param color
+     * @return the total count of possible legal moves for a given state for a given side
+     * @see <a href="https://www.chessprogramming.org/Evaluation#Linear_vs._Nonlinear">Inspired by: Chess Programming Wiki</a>
+     */
+    private static int getNumberOfMovesForSide(List<PieceAndSquareTuple> nodePieceAndSquare, Side color) {
+        return 0;
+    }
+
+    /**
+     * @param nodePieceAndSquare list of pieces and their corresponding squares
+     * @param color              side of double and blocked pawns being counted
+     * @return the total count of blocked or doubled pawns for given side
+     * @see <a href="https://www.chessprogramming.org/Evaluation">Inspired by: Chess Programming Wiki</a>
+     */
+    private static int getDoubledOrBlockedPawnCount(List<PieceAndSquareTuple> nodePieceAndSquare, Side color) {
         // above for black
         int count = 0;
         for (PieceAndSquareTuple<Piece, Square> ps : nodePieceAndSquare) {
             if (ps.getPiece().getType() == Piece.PAWN && ps.getPiece().getColor() == color) {
                 for (PieceAndSquareTuple<Piece, Square> ps2 : nodePieceAndSquare) {
                     // doubled pawns
-                        // check above for black because the way of the boardIndexMap setup
+                    // check above for black because the way of the boardIndexMap setup
                     if (ps.getSquare().getSquareAbove() == ps2.getSquare() && ps2.getPiece().getType() == Piece.PAWN
                             && ps2.getPiece().getColor() == ps.getPiece().getColor() && ps.getPiece().getColor() == Side.BLACK) {
                         count++;
@@ -211,6 +229,12 @@ public class BoardStateEvaluator {
         return count;
     }
 
+    /**
+     * @param piece piece who's point value matrix you want to receive
+     * @param turn  cumulative game turn found in State object
+     * @return correct point value weights for given piece
+     * @see <a href="https://www.chessprogramming.org/Point_Value">Inspired by: Chess Programming Wiki</a>
+     */
     // return appropriate board configuration for correct side
     private static int[][] getCorrectWeights(Piece piece, int turn) {
         if (piece == Piece.WHITE_KING && turn < 50) return kingBoardWeightsMiddleGameB;
@@ -231,6 +255,5 @@ public class BoardStateEvaluator {
             default -> null;
         };
     }
-
 
 }

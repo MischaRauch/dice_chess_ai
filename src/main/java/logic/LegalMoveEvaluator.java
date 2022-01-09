@@ -21,7 +21,7 @@ public class LegalMoveEvaluator {
     private boolean isAi;
 
     /**
-     * @param move  move object
+     * @param move move object
      * @param state logic.board state
      * @return true if piece can be moved to tile
      */

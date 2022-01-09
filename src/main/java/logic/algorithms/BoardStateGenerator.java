@@ -214,7 +214,6 @@ public class BoardStateGenerator {
         return validMoves;
     }
 
-
     // move piece and return array of all possible states for all possible moves a given piece can make taking into account its origin square
     public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
 

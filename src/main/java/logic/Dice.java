@@ -59,7 +59,6 @@ public class Dice {
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
                             return true;
-                            //canMove = true;
                         }
                         //check if pawns can capture
                         for (int k = 1; k < 3; k++) {
@@ -78,7 +77,6 @@ public class Dice {
                                 if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor()))
                                     return true;
                             }
-
                         }
                     }
                 }
