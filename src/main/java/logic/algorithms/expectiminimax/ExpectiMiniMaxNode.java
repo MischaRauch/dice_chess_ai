@@ -13,10 +13,10 @@ public class ExpectiMiniMaxNode {
     private List<Integer> boardEvaluationNumbersForGivenPiece;
     private List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece; //i.e. this list would be size 16 for pawn first turn
     private List<Move> possibleMovesGivenStateForGivenPiece;
-    private List<ExpectiMiniMaxNode> children;
-    private int chanceDivider; // i.e. number of pieces that can move at a given state List<PieceAndSquareTuple>
-    private boolean isMaxPlayer;
-    private State previousState; // to get origin square of piece, which you can get from dice roll in state
+    private final List<ExpectiMiniMaxNode> children;
+    private final int chanceDivider; // i.e. number of pieces that can move at a given state List<PieceAndSquareTuple>
+    private final boolean isMaxPlayer;
+    private final State previousState; // to get origin square of piece, which you can get from dice roll in state
     private int nodeValue;
     private Piece piece;
 
@@ -62,16 +62,8 @@ public class ExpectiMiniMaxNode {
         return children;
     }
 
-    public void setChildren(List<ExpectiMiniMaxNode> children) {
-        this.children = children;
-    }
-
     public List<Integer> getBoardEvaluationNumbersForGivenPiece() {
         return boardEvaluationNumbersForGivenPiece;
-    }
-
-    public List<Move> getPossibleMovesForGivenPiece() {
-        return possibleMovesGivenStateForGivenPiece;
     }
 
     public State getPreviousState() {

@@ -111,9 +111,7 @@ public class ExpectiMiniMax {
 
             parentNode.addChild(newNode);
         }
-        int bestChildIndex = getBestChildIndex(parentNode, !isChildMaxPlayer);
-        ExpectiMiniMaxNode bestChild = parentNode.getChildren().get(bestChildIndex);
-        return bestChild;
+        return parentNode.getChildren().get(getBestChildIndex(parentNode, !isChildMaxPlayer));
     }
 
     // sum evaluation numbers for given piece type

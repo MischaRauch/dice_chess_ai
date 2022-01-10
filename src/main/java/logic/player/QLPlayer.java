@@ -26,6 +26,7 @@ public class QLPlayer extends AIPlayer {
         // TODO make evalautor not update moves (Phase 3)
         evaluator.isLegalMove(bestMove, state, true, true);
         timeNeeded = end - start;
+        System.out.println("QLPlayer: Color: " + this.color.toString() + " Next optimal Move: " + bestMove);
         return bestMove;
     }
 

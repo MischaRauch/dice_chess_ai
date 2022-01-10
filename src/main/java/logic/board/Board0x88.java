@@ -21,8 +21,8 @@ public class Board0x88 extends Board {
     }
 
     private final Piece[] board;
-    public Piece[] getBoard() {return board;}
 
+    public Piece[] getBoard() {return board;}
 
     public Piece[] getBoardArray() {
         return board;

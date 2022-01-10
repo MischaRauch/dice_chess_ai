@@ -1,5 +1,6 @@
 package logic.player;
 
+import logic.LegalMoveEvaluator;
 import logic.Move;
 import logic.State;
 import logic.enums.Piece;
@@ -11,6 +12,7 @@ public class BasicAIPlayer extends AIPlayer {
 
     private final boolean DEBUG = false;
     private long timeNeeded;
+    private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
 
     public BasicAIPlayer(Side color) {
         super(color);
@@ -24,6 +26,8 @@ public class BasicAIPlayer extends AIPlayer {
         System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         timeNeeded = end - start;
         state.printPieceAndSquare();
+        System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
     }
 

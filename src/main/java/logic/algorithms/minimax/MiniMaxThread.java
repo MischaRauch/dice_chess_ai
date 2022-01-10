@@ -19,7 +19,7 @@ public class MiniMaxThread extends Thread {
         long start = System.nanoTime();
         MiniMax miniMax = new MiniMax();
         miniMax.constructTree(depth, state);
-        Node bestChild = miniMax.findBestChild(true, miniMax.getTree().getRoot().getChildren(),state.getDiceRoll());
+        Node bestChild = miniMax.findBestChild(miniMax.getTree().getRoot().getChildren(), state.getDiceRoll());
         this.bestMove = bestChild.getMove();
         long end = System.nanoTime();
         timeNeeded = (end - start);

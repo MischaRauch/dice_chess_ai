@@ -25,9 +25,9 @@ public enum Piece {
     BLACK_QUEEN(QUEEN, BLACK, 'q'),
     BLACK_KING(KING, BLACK, 'k');
 
+    private static final char[] diceToPiece = {'p', 'n', 'b', 'r', 'q', 'k'};
     static Map<Character, Piece> charPieceMap = new HashMap<>();
     static EnumMap<Piece, Character> unicodeMap = new EnumMap<>(Piece.class);
-    private static final char[] diceToPiece = {'p', 'n', 'b', 'r', 'q', 'k'};
 
     static {
         charPieceMap.put('P', WHITE_PAWN);
@@ -80,39 +80,59 @@ public enum Piece {
     }
 
     public static Piece getPieceFromDice(int diceRoll, Side color) {
-        if (diceRoll==1 && color==Side.BLACK) {return BLACK_PAWN;}
-        else if (diceRoll==1 && color==Side.WHITE) {return WHITE_PAWN;}
-        else if (diceRoll==2 && color==Side.BLACK) {return BLACK_KNIGHT;}
-        else if (diceRoll==2 && color==Side.WHITE) {return WHITE_KNIGHT;}
-        else if (diceRoll==3 && color==Side.BLACK) {return BLACK_BISHOP;}
-        else if (diceRoll==3 && color==Side.WHITE) {return WHITE_BISHOP;}
-        else if (diceRoll==4 && color==Side.BLACK) {return BLACK_ROOK;}
-        else if (diceRoll==4 && color==Side.WHITE) {return WHITE_ROOK;}
-        else if (diceRoll==5 && color==Side.BLACK) {return BLACK_QUEEN;}
-        else if (diceRoll==5 && color==Side.WHITE) {return WHITE_QUEEN;}
-        else if (diceRoll==6 && color==Side.BLACK) {return BLACK_KING;}
-        else if (diceRoll==6 && color==Side.WHITE) {return WHITE_KING;}
+        if (diceRoll == 1 && color == Side.BLACK) {
+            return BLACK_PAWN;
+        } else if (diceRoll == 1 && color == Side.WHITE) {
+            return WHITE_PAWN;
+        } else if (diceRoll == 2 && color == Side.BLACK) {
+            return BLACK_KNIGHT;
+        } else if (diceRoll == 2 && color == Side.WHITE) {
+            return WHITE_KNIGHT;
+        } else if (diceRoll == 3 && color == Side.BLACK) {
+            return BLACK_BISHOP;
+        } else if (diceRoll == 3 && color == Side.WHITE) {
+            return WHITE_BISHOP;
+        } else if (diceRoll == 4 && color == Side.BLACK) {
+            return BLACK_ROOK;
+        } else if (diceRoll == 4 && color == Side.WHITE) {
+            return WHITE_ROOK;
+        } else if (diceRoll == 5 && color == Side.BLACK) {
+            return BLACK_QUEEN;
+        } else if (diceRoll == 5 && color == Side.WHITE) {
+            return WHITE_QUEEN;
+        } else if (diceRoll == 6 && color == Side.BLACK) {
+            return BLACK_KING;
+        } else if (diceRoll == 6 && color == Side.WHITE) {
+            return WHITE_KING;
+        }
         return null;
     }
 
     public static Piece getNeutralPieceFromDice(int diceRoll) {
-        if (diceRoll==1) {return PAWN;}
-        else if (diceRoll==2) {return KNIGHT;}
-        else if (diceRoll==3) {return BISHOP;}
-        else if (diceRoll==4) {return ROOK;}
-        else if (diceRoll==5) {return QUEEN;}
-        else if (diceRoll==6) {return KING;}
+        if (diceRoll == 1) {
+            return PAWN;
+        } else if (diceRoll == 2) {
+            return KNIGHT;
+        } else if (diceRoll == 3) {
+            return BISHOP;
+        } else if (diceRoll == 4) {
+            return ROOK;
+        } else if (diceRoll == 5) {
+            return QUEEN;
+        } else if (diceRoll == 6) {
+            return KING;
+        }
         return null;
     }
 
     public static int getDiceFromPiece(Piece piece) {
         return switch (piece) {
-            case WHITE_PAWN,BLACK_PAWN -> 1;
-            case WHITE_KNIGHT,BLACK_KNIGHT -> 2;
-            case WHITE_BISHOP,BLACK_BISHOP -> 3;
-            case WHITE_ROOK,BLACK_ROOK -> 4;
-            case WHITE_QUEEN,BLACK_QUEEN -> 5;
-            case WHITE_KING,BLACK_KING -> 6;
+            case WHITE_PAWN, BLACK_PAWN -> 1;
+            case WHITE_KNIGHT, BLACK_KNIGHT -> 2;
+            case WHITE_BISHOP, BLACK_BISHOP -> 3;
+            case WHITE_ROOK, BLACK_ROOK -> 4;
+            case WHITE_QUEEN, BLACK_QUEEN -> 5;
+            case WHITE_KING, BLACK_KING -> 6;
             default -> -99999;
         };
     }
@@ -121,7 +141,17 @@ public enum Piece {
         return charPieceMap.get(c);
     }
 
-    public char getCharType() {return this.charType;}
+    public static Side getColorOfPiece(Piece piece) {
+        return switch (piece) {
+            case WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING -> Side.WHITE;
+            case BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING -> Side.BLACK;
+            default -> Side.NEUTRAL;
+        };
+    }
+
+    public char getCharType() {
+        return this.charType;
+    }
 
     //honestly can probably change it to just return type automatically, but not sure if above constructor is used
     public Piece getType() {
@@ -143,37 +173,15 @@ public enum Piece {
         };
     }
 
-    public static Side getColorOfPiece(Piece piece) {
-        return switch (piece) {
-            case WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING -> Side.WHITE;
-            case BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING -> Side.BLACK;
-            default -> Side.NEUTRAL;
-        };
-    }
-
-    public static Piece getPieceBasedOnNumber(int i){
-        Piece p = PAWN;
-        switch (i){
-            case 0: p = PAWN; break;
-            case 1: p = KNIGHT; break;
-            case 2: p = BISHOP; break;
-            case 3: p = ROOK; break;
-            case 4: p = QUEEN; break;
-            case 5: p = KING; break;
-        }
-        return p;
-    }
-
-
     public int[] getOffsets() {
         return switch (this) {
             case WHITE_PAWN -> new int[]{16, 15, 17};
             case BLACK_PAWN -> new int[]{-16, -15, -17};
-            case WHITE_KNIGHT, BLACK_KNIGHT -> new int[]{-31, 31, -33, 33, 18, -18, 14, -14};
-            case WHITE_BISHOP, BLACK_BISHOP -> new int[]{-15, -17, 15, 17};
-            case WHITE_ROOK, BLACK_ROOK -> new int[]{-16, 16, -1, 1};
-            case WHITE_QUEEN, BLACK_QUEEN -> new int[]{-15, -17, 15, 17, -16, 16, -1, 1};
-            case WHITE_KING, BLACK_KING -> new int[]{-15, -17, 15, 17, 1, -1, 16, -16};
+            case KNIGHT, WHITE_KNIGHT, BLACK_KNIGHT -> new int[]{14, 18, 31, 33, -31, -33, -18, -14};
+            case BISHOP, WHITE_BISHOP, BLACK_BISHOP -> new int[]{-15, -17, 15, 17};
+            case ROOK, WHITE_ROOK, BLACK_ROOK -> new int[]{-16, 16, -1, 1};
+            case QUEEN, WHITE_QUEEN, BLACK_QUEEN -> new int[]{-15, -17, 15, 17, -16, 16, -1, 1};
+            case KING, WHITE_KING, BLACK_KING -> new int[]{-15, -17, 15, 17, 1, -1, 16, -16};
             default -> new int[0];
         };
     }
@@ -188,6 +196,31 @@ public enum Piece {
             case KING -> color == WHITE ? WHITE_KING : BLACK_KING;
             default -> type;
         };
+    }
+
+    public static Piece getPieceBasedOnNumber(int i) {
+        Piece p = PAWN;
+        switch (i) {
+            case 0:
+                p = PAWN;
+                break;
+            case 1:
+                p = KNIGHT;
+                break;
+            case 2:
+                p = BISHOP;
+                break;
+            case 3:
+                p = ROOK;
+                break;
+            case 4:
+                p = QUEEN;
+                break;
+            case 5:
+                p = KING;
+                break;
+        }
+        return p;
     }
 
     public char getUnicode() {

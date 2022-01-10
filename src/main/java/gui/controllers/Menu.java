@@ -60,8 +60,8 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("MiniMax AI");
-        blackPlayerChoice.setValue("ExpectiMiniMax AI");
+        whitePlayerChoice.setValue("Random AI");
+        blackPlayerChoice.setValue("Basic AI");
     }
 
     @FXML

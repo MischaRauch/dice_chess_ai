@@ -88,7 +88,7 @@ public class SimulationHandler {
             ArrayList<String> statesStats = (states.startStateSimulation());
             System.out.println("States Array");
             System.out.println(statesStats);
-            OutputToCsv writer1 = new OutputToCsv("statesGame.csv");
+            OutputToCsv writer1 = new OutputToCsv("singleStates.csv");
             writer1.writeEachState(statesStats);
         }
 
