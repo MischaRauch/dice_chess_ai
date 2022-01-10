@@ -235,7 +235,7 @@ public class BoardStateGenerator {
 
 
     // move piece and return array of all possible states for all possible moves a given piece can make taking into account its origin square
-    public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
+    public static List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
@@ -307,8 +307,7 @@ public class BoardStateGenerator {
         return possibleStates;
     }
     // for hybrid
-    public List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
-        System.out.println("b");
+    public static List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
         List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = nodePieceAndSquare.stream().collect(Collectors.toList());
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
