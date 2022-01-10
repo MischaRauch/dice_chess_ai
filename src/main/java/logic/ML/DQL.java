@@ -38,20 +38,17 @@ public class DQL {
 
         State currentState;
         Move action;
-
         for (int i = 0; i < numOfGames; i++) {
             currentState = givenInitialState;
-
             int reward;
             boolean finished = false; // turn to true if king captured
 
             for (int j = 0; j < depth / 2; j++) {
-
                 // take learned path or explore new actions
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
                     action = currentQtable.randomMoveGenerator(currentState, side);
                 } else {
-                    currentState = new State(currentState.getBoard(), currentState.diceRoll, side);
+                    //currentState = new State(currentState.getBoard(), currentState.diceRoll, side); // TODO
                     int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState.getPieceAndSquare()));
 
                     ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState.getPieceAndSquare());
@@ -60,10 +57,11 @@ public class DQL {
 
                     action = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
                 }
+
                 //apply chosen action and return the next state, reward and true if the episode is ended
                 State newState = new State(currentState.applyMove(action));
-                /* what happens here is that I can't get immediate reward, in order to get the actual reward I need to apply a
-                move of the opponent so that the reward I get will be useful and valid.
+                /* what happens here is that we can't get immediate reward, in order to get the actual reward we need to apply a
+                move of the opponent so that the reward we get will be useful and valid.
                 */
                 newState = newState.applyMove(currentQtable.randomMoveGenerator(new State(newState), Side.getOpposite(side)));
                 // code line above can be changed with some better algo (example given below) which could give better results but would take more time
@@ -74,12 +72,13 @@ public class DQL {
                 finished = didStateEnd(newState);
 
                 // update value of Qtable
-                currentState = new State(currentState.getBoard(), currentState.diceRoll, side);
+                //currentState = new State(currentState.getBoard(), currentState.diceRoll, side); // TODO
                 int indexOfState = currentQtable.accessStateIndex(currentState.getPieceAndSquare());
                 OriginAndDestSquare tempOriginAndDestSquare = new OriginAndDestSquare(action.getOrigin(), action.getDestination());
                 int indexOfAction = currentQtable.accessActionIndex(currentState.getPieceAndSquare(), tempOriginAndDestSquare);
 
-                newState = new State(currentState.getBoard(), currentState.diceRoll, side);
+
+                //newState = new State(newState.getBoard(), newState.diceRoll, side); // TODO
                 Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState.getPieceAndSquare()))));
                 currentState = newState;
 
@@ -103,10 +102,10 @@ public class DQL {
     public Move getBestMove(State state, Side color) {
         Piece tempP = Piece.getPieceFromDice(givenInitialState.getDiceRoll(), givenInitialState.getColor()); // get piece that the action needs to be equal
 
-        givenInitialState = new State(givenInitialState.getBoard(), givenInitialState.diceRoll, color);
+        //givenInitialState = new State(givenInitialState.getBoard(), givenInitialState.diceRoll, color);
         int a = currentQtable.accessStateIndex(givenInitialState.getPieceAndSquare());
 
-        state = new State(state.getBoard(), state.diceRoll, color);
+        //state = new State(state.getBoard(), state.diceRoll, color);
         ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(state.getPieceAndSquare());
 
         int index = currentQtable.getIndexOfBestMove(Qvalues, originAndDestSquares, tempP, givenInitialState, a);

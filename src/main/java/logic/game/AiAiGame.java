@@ -72,6 +72,7 @@ public class AiAiGame extends Game {
 
             State newState = currentState.applyMove(move);
 
+
             previousStates.push(currentState);
             checkGameOver(move);
             // after checking if king was captured, we can update the currentState
