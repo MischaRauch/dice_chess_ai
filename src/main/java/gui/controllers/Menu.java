@@ -109,7 +109,7 @@ public class Menu {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN);
+                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN, simulationOption);
                 sH.startHandler();
 
             }
