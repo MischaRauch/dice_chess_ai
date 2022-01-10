@@ -115,7 +115,6 @@ public class State {
                 } else if (c == 'k') {
                     pieceAndSquare.add(new PieceAndSquareTuple(BLACK_KING, Square.getSquare(7 - i, file)));
                     file++;
-
                 } else if (c == 'P') {
                     pieceAndSquare.add(new PieceAndSquareTuple(WHITE_PAWN, Square.getSquare(7 - i, file)));
                     file++;
