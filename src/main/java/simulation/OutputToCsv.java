@@ -48,7 +48,7 @@ public class OutputToCsv {
             for (int i = 0; i < message.length; i++) {
                 myWriter.write(message[i]);
                 if (i != message.length - 1) {
-                    myWriter.write(", ");
+                    myWriter.write("  ");
                 }
             }
             myWriter.close();
@@ -65,7 +65,7 @@ public class OutputToCsv {
             //First append the headers if it's the first run:
             if (firstrun && fileCreated) {
                 for (String headers : trackedStates) { //works
-                    myWriter.append(headers + ", ");
+                    myWriter.append(headers + "  ");
                 }
                 firstrun = false;
             }
@@ -74,7 +74,7 @@ public class OutputToCsv {
 
             for (String s : message) {
                 myWriter.write(s);
-                myWriter.write(", ");
+                myWriter.write("  ");
             }
             // myWriter.append("\n");
             myWriter.close();
@@ -88,48 +88,48 @@ public class OutputToCsv {
     public void writeEachState(List<String> stateList){
         try {
             FileWriter myWriter = new FileWriter(fileName, true);
-            myWriter.append("TurnAlg, TimePerMove, Capture, PieceCount, EvaluationPieceWhite, TurnAlgTwo, TimePerMove, Capture, PieceCount, EvaluationPieceBlack \n");
+            myWriter.append("TurnAlg  TimePerMove  Capture  PieceCount  EvaluationPieceWhite  TurnAlgTwo  TimePerMove  Capture  PieceCount  EvaluationPieceBlack \n");
             System.out.println("States array length: " + stateList.size());
             for(int i = 0; i < stateList.size()-1; i+=10){
                 myWriter.write(stateList.get(i));
-                myWriter.write(", ");
+                myWriter.write("  ");
                 myWriter.write(stateList.get(i+1));
-                myWriter.write(", ");
+                myWriter.write("  ");
                 myWriter.write(stateList.get(i+2));
-                myWriter.write(", ");
+                myWriter.write("  ");
                 myWriter.write(stateList.get(i+3));
-                myWriter.write(", ");
+                myWriter.write("  ");
                 myWriter.write(stateList.get(i+4));
-                myWriter.write(", ");
+                myWriter.write("  ");
                 try{
                     myWriter.write(stateList.get(i+5));
-                    myWriter.write(", ");
+                    myWriter.write("  ");
                 } catch(IndexOutOfBoundsException e){
-                    myWriter.write("-, ");
+                    myWriter.write("-  ");
                 }
                 try{
                     myWriter.write(stateList.get(i+6));
-                    myWriter.write(", ");
+                    myWriter.write("  ");
                 } catch(IndexOutOfBoundsException e){
-                    myWriter.write("-, ");
+                    myWriter.write("-  ");
                 }
                 try{
                     myWriter.write(stateList.get(i+7));
-                    myWriter.write(", ");
+                    myWriter.write("  ");
                 } catch(IndexOutOfBoundsException e){
-                    myWriter.write("-, ");
+                    myWriter.write("-  ");
                 }
                 try{
                     myWriter.write(stateList.get(i+8));
-                    myWriter.write(", ");
+                    myWriter.write("  ");
                 } catch(IndexOutOfBoundsException e){
-                    myWriter.write("-, ");
+                    myWriter.write("-  ");
                 }
                 try{
                     myWriter.write(stateList.get(i+9));
-                    myWriter.write(", ");
+                    myWriter.write("  ");
                 } catch(IndexOutOfBoundsException e){
-                    myWriter.write("-, ");
+                    myWriter.write("-  ");
                 }
                 myWriter.append("\n");
             }
