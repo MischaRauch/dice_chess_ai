@@ -27,7 +27,7 @@ public class Qtable {
 
 
     public void ConstructQtable(State currentState, int depth) { // this table doesn't contain values, only info
-        //currentState = new State(currentState.getBoard(), currentState.diceRoll, currentSide); // TODO
+        currentState = new State(currentState.getBoard(), currentState.diceRoll, currentSide); // TODO
         stateSpace = createStateSpace(currentState.getPieceAndSquare(), depth);
 
         for (List<PieceAndSquareTuple> state : stateSpace) {

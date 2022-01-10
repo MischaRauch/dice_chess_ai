@@ -339,35 +339,35 @@ public class State {
         pieceAndSquare = newState;
     }
 
-//    public String toFEN() {
-//        String fen = "";
-//        Piece prev = OFF_BOARD;
-//        int emptySpaces = 0;
-//
-//        for (int i = 0; i < board.getBoard().length; i++) {
-//            Piece p = board.getBoard()[i];
-//            if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
-//                fen += "/"; //reached end of rank
-//                i += 6;     //skip forward over off-board pieces to next rank
-//                emptySpaces = 0;   //reset empty spaces
-//            }
-//
-//            if (p == EMPTY)
-//                emptySpaces++;
-//
-//            if (prev == EMPTY && p != EMPTY)
-//                fen += emptySpaces + "";   //reached end of empty spaces, print amount
-//
-//            if (p != EMPTY && p != OFF_BOARD) {
-//                fen += p.getCharType();     //non-empty piece
-//                emptySpaces = 0;            //reset empty spaces counter
-//            }
-//
-//            prev = p;
-//        }
-//
-//        return fen;
-//    }
+    public String toFEN() {
+        String fen = "";
+        Piece prev = OFF_BOARD;
+        int emptySpaces = 0;
+
+        for (int i = 0; i < board.getBoard().length; i++) {
+            Piece p = board.getBoard()[i];
+            if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
+                fen += "/"; //reached end of rank
+                i += 6;     //skip forward over off-board pieces to next rank
+                emptySpaces = 0;   //reset empty spaces
+            }
+
+            if (p == EMPTY)
+                emptySpaces++;
+
+            if (prev == EMPTY && p != EMPTY)
+                fen += emptySpaces + "";   //reached end of empty spaces, print amount
+
+            if (p != EMPTY && p != OFF_BOARD) {
+                fen += p.getCharType();     //non-empty piece
+                emptySpaces = 0;            //reset empty spaces counter
+            }
+
+            prev = p;
+        }
+
+        return fen;
+    }
 
     public Square getCastling() {
         return castling;
