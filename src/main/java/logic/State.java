@@ -7,7 +7,6 @@ import logic.enums.Square;
 import logic.game.Game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static logic.enums.Piece.*;
@@ -43,6 +42,12 @@ public class State {
         loadPieceAndSquareFromFEN(board.getFEN());
         // printPieceAndSquare();
         cumulativeTurn = 0;
+    }
+
+    //temp state for mcts
+    public State(Board board, Side player) {
+        this.board = board;
+        this.color = player;
     }
 
     // deep cloning initial state

@@ -1,8 +1,6 @@
 package gui;
 
 import dataCollection.CsvHandler;
-import logic.enums.*;
-import logic.game.*;
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
 import javafx.concurrent.Task;
@@ -13,7 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import logic.*;
+import logic.Config;
+import logic.Dice;
+import logic.LegalMoveGenerator;
+import logic.Move;
+import logic.enums.*;
+import logic.game.AIGame;
+import logic.game.AiAiGame;
+import logic.game.Game;
+import logic.game.HumanGame;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +48,7 @@ public class Chessboard extends GridPane {
         chessboard = this;
         handle = new CsvHandler();
 
-        if(type == GameType.AI_V_AI)
+        if (type == GameType.AI_V_AI)
             handle.aiVsAiCsvRead(); //AI_V_AI games are recorded in a separate CSV file
         else
             handle.readTheCsv();
@@ -86,7 +92,9 @@ public class Chessboard extends GridPane {
                 protected Void call() {
                     ((AiAiGame) game).start();
                     return null;
-                };
+                }
+
+                ;
             };
             new Thread(task).start();
 
@@ -185,14 +193,14 @@ public class Chessboard extends GridPane {
                 MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
 
                 // if gameover true then the winner has also been set by the checkGameOver( method in Game, so we can reset state here
-               if(gameType!=GameType.AI_V_AI) {
-                   game.resetCurrentStateToFirstState();
-                   game.setGameOver(false);
-               }
+                if (gameType != GameType.AI_V_AI) {
+                    game.resetCurrentStateToFirstState();
+                    game.setGameOver(false);
+                }
 
             }
 
-            }
+        }
 
 //            if (game.getCurrentState().getGameOver() != 0) {
 //
@@ -217,7 +225,7 @@ public class Chessboard extends GridPane {
 //
 //                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
 //            }
-        }
+    }
 
     // you only move selected tile ever
     private void move(Tile tile) throws CloneNotSupportedException {
@@ -276,7 +284,7 @@ public class Chessboard extends GridPane {
     public void showEndGame(int winner) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("End of the Game");
-        alert.setHeaderText("Group 04 hopes you enjoyed the logic.game!");
+        alert.setHeaderText("Group 04 hopes you enjoyed the game!");
         if (winner == 1)
             alert.setContentText("Good job WHITE you won!");
         else

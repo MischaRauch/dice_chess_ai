@@ -14,6 +14,7 @@ import logic.enums.Side;
 import logic.game.AIGame;
 import logic.game.AiAiGame;
 import logic.game.HumanGame;
+import logic.mcts.MCTSAgent;
 import logic.player.*;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ import static logic.enums.Side.WHITE;
 
 public class Menu {
 
-    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
+    private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI", "MCTS"};
 
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
@@ -130,7 +131,8 @@ public class Menu {
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
             case "QL AI" -> new QLPlayer(2, color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9, color);
+            case "MCTS" -> new MCTSAgent(color, 1000);
             default -> new RandomMovesPlayer(color);
         };
     }
