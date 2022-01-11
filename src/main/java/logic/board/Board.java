@@ -69,6 +69,8 @@ public abstract class Board {
         return FEN;
     }
 
+    public abstract String createFENFromBoard();
+
     public void setFEN(String FEN) {
         this.FEN = FEN;
     }

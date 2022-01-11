@@ -1,12 +1,14 @@
 package logic;
 
 import logic.board.Board;
+import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
 import logic.game.Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static logic.enums.Piece.*;
@@ -140,6 +142,15 @@ public class State {
 
     }
 
+    public static Board PieceAndSquareToBoardConverter(List<PieceAndSquareTuple> state) {
+        Board tempBoard = new Board0x88();
+
+        for (PieceAndSquareTuple uno: state) {
+            tempBoard.setPiece((Piece) uno.getPiece(), (Square) uno.getSquare());
+        }
+        return tempBoard;
+    }
+
     public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
         int pawn = 0;
         int knight = 0;
@@ -213,7 +224,9 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
+        String a = board.getFEN();
         Board newBoard = board.movePiece(move.origin, move.destination);
+        String b = newBoard.getFEN();
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());

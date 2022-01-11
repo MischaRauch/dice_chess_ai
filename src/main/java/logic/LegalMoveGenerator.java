@@ -5,6 +5,7 @@ import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
+import logic.State;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,6 +18,29 @@ import static logic.enums.Square.getSquare;
 
 public class LegalMoveGenerator {
 
+    // for ML, needs to be checked (evaluator.isLegalMove)
+    public static ArrayList<OriginAndDestSquare> getAllLegalMovesML(State state, Side side) {
+
+        ArrayList<OriginAndDestSquare> legalMoves = new ArrayList<>();
+        OriginAndDestSquare originAndDestSquare;
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                Piece p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
+                if (p != EMPTY && p.getColor().equals(side)) {
+                    Square origin = Square.getSquare(rank, file);
+                    List<Square> moves = getMoves(state, origin, p);
+
+                    for (Square move : moves) {
+                        legalMoves.add(new OriginAndDestSquare(origin, move));
+                    }
+                }
+            }
+        }
+        return legalMoves;
+    }
+
+    //for GUI
+    //public static List<Square> getLegalMoves(logic.State state, Square squareOrigin, Piece piece, Side side) {
     public static List<Square> getLegalMoves(State state, Square squareOrigin, Piece piece, Side side) {
         LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
         ArrayList<Square> legalMoves = new ArrayList<>();
@@ -31,24 +55,91 @@ public class LegalMoveGenerator {
         return legalMoves;
     }
 
-    public static ArrayList<OriginAndDestSquare> getAllLegalMoves(State state, Side side) { // for ML
+    // hopefully an optimized version for QL
+    public static ArrayList<OriginAndDestSquare> getAllLegalMovesOpt(List<PieceAndSquareTuple> state, Side side) {
 
         ArrayList<OriginAndDestSquare> legalMoves = new ArrayList<>();
         OriginAndDestSquare originAndDestSquare;
-        for (int file = 0; file < 8; file++) {
-            for (int rank = 0; rank < 8; rank++) {
-                Piece p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
-                Square origin = Square.getSquare(rank, file);
-                ArrayList<Square> moves = (ArrayList<Square>) getLegalMoves(state, origin, p, side); // may cause error?
 
-                for (int i=0; i<moves.size(); i++) {
-                    originAndDestSquare = new OriginAndDestSquare(origin, moves.get(i));
+        for (PieceAndSquareTuple temp: state) {
+            Piece temp1 = (Piece) temp.getPiece();
+            if (temp1.getColor().equals(side)) {
+                Square origin = (Square) temp.getSquare();
+                List<Square> moves = getMovesOpt(State.PieceAndSquareToBoardConverter(state), origin, temp1); // can cause problem?
+                for (Square move : moves) {
+                    originAndDestSquare = new OriginAndDestSquare(origin, move);
                     legalMoves.add(originAndDestSquare);
                 }
             }
         }
         return legalMoves;
     }
+
+    // for hybrid
+    public static List<Square> getLegalMovesHybrid(List<PieceAndSquareTuple> state, Square squareOrigin, Piece piece, Side side) {
+        return getMovesOpt(State.PieceAndSquareToBoardConverter(state), squareOrigin, piece);
+    }
+
+    // needs to add castling, en passant, ...
+    public static List<Square> getMovesOpt(Board board, Square origin, Piece piece) {
+        List<Square> validMoves = new LinkedList<>();
+
+        switch (piece.getType()) {
+            case PAWN -> {
+                //this one is more complex and weird since it depends on logic.board state with the en passant and capturing
+                Square naturalMove = Square.getSquare(origin.getSquareNumber() + piece.getOffsets()[0]);
+                if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
+                    validMoves.add(naturalMove);
+
+                    //double jumping
+                    Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
+                    if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(origin))
+                        validMoves.add(doubleJump);
+                }
+
+                for (int k = 1; k < 3; k++) {
+
+                    if (!board.isOffBoard(origin.getSquareNumber() + piece.getOffsets()[k])) {
+                        Square validTarget = Square.getSquare(origin.getSquareNumber() + piece.getOffsets()[k]);
+
+                        if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
+                            validMoves.add(validTarget);
+                    }
+                }
+            }
+
+            case KING, KNIGHT -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+            }
+
+            case BISHOP, ROOK, QUEEN -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        while (target != INVALID && board.isEmpty(target) ) {
+                            validMoves.add(target);
+                            target = Square.getSquare(target.getSquareNumber() + offset);
+                        }
+
+                        if (target != INVALID && !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+            }
+        }
+        return validMoves;
+    }
+
 
     //TODO: method more or less copied from AIPlayer class which is more update to date with better move gen, so this is outdated for now
     /**
@@ -158,8 +249,6 @@ public class LegalMoveGenerator {
                 }
             }
         }
-
-
         return validMoves;
     }
 

@@ -82,6 +82,7 @@ public class AiAiGame extends Game {
             System.out.println("After Applying Move: ");
             currentState.printPieceAndSquare();
 
+
             previousStates.push(currentState);
 
             // after checking if king was captured, we can update the currentState
