@@ -3,7 +3,6 @@ package logic.player;
 import logic.LegalMoveEvaluator;
 import logic.Move;
 import logic.State;
-import logic.algorithms.expectiminimax.ExpectiMiniMax;
 import logic.algorithms.expectiminimax.ExpectiMiniMaxThread;
 import logic.enums.Side;
 
@@ -11,6 +10,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
 
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private final int depth;
+    private long timeNeeded;
 
     public ExpectiMiniMaxPlayer(int depth, Side color) {
         super(color);
@@ -33,12 +33,18 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
         // TODO make evalautor not update moves (Phase 3)
         evaluator.isLegalMove(chosenMove, state, true, true);
         System.out.println("ExpectiMiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        timeNeeded = thread.getTimeNeeded();
         return chosenMove;
     }
 
     @Override
     public String getNameAi() {
         return "ExpectiMiniMax";
+    }
+
+    @Override
+    public long getTimeNeeded() {
+        return timeNeeded;
     }
 
 }

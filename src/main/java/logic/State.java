@@ -1,6 +1,7 @@
 package logic;
 
 import logic.board.Board;
+import logic.board.Board0x88;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
@@ -15,18 +16,13 @@ import static logic.enums.Side.WHITE;
 
 public class State {
 
-    //public boolean gameOver = false;
     public Square castling = Square.INVALID;
-    //TODO: only use move.castlingRookDestination
     public Board board;
     public int diceRoll;
     public Side color;
     public Square enPassant = Square.INVALID;
-    //private boolean canCastle = true;
     private boolean canCastleWhite = true;
     private boolean canCastleBlack = true;
-    //TODO: canCastleBlack, canCastleBlack : boolean
-    //they should be true until king moved and false forever
     private boolean shortCastlingWhite = true;
     private boolean longCastlingWhite = true;
     private boolean shortCastlingBlack = true;
@@ -40,7 +36,6 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         loadPieceAndSquareFromFEN(board.getFEN());
-        // printPieceAndSquare();
         cumulativeTurn = 0;
     }
 
@@ -51,11 +46,15 @@ public class State {
     }
 
     // deep cloning initial state
+    public State(State that, int cummulativeTurn) {
+        this(that.getBoard(), that.getDiceRoll(), that.getColor(), that.canCastleWhite, that.canCastleBlack, that.isShortCastlingBlack(), that.isShortCastlingWhite(),
+                that.isLongCastlingBlack(), that.isLongCastlingWhite(), that.castling, that.getPieceAndSquare(), cummulativeTurn);
+    }
+
+    // deep cloning normal
     public State(State that) {
-        cumulativeTurn = 0;
-        board = that.getBoard();
-        diceRoll = that.getDiceRoll();
-        color = that.getColor();
+        this(that.getBoard(), that.getDiceRoll(), that.getColor(), that.canCastleWhite, that.canCastleBlack, that.isShortCastlingBlack(), that.isShortCastlingWhite(),
+                that.isLongCastlingBlack(), that.isLongCastlingWhite(), that.castling, that.getPieceAndSquare(), that.getCumulativeTurn());
     }
 
     // for state updation
@@ -65,7 +64,7 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         this.canCastleWhite = canCastleWhite;
-        this.canCastleWhite = canCastleBlack;
+        this.canCastleBlack = canCastleBlack;
         this.shortCastlingBlack = shortCastlingBlack;
         this.shortCastlingWhite = shortCastlingWhite;
         this.longCastlingBlack = longCastlingBlack;
@@ -148,6 +147,15 @@ public class State {
 
     }
 
+    public static Board PieceAndSquareToBoardConverter(List<PieceAndSquareTuple> state) {
+        Board tempBoard = new Board0x88();
+
+        for (PieceAndSquareTuple uno: state) {
+            tempBoard.setPiece((Piece) uno.getPiece(), (Square) uno.getSquare());
+        }
+        return tempBoard;
+    }
+
     public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
         int pawn = 0;
         int knight = 0;
@@ -173,6 +181,33 @@ public class State {
         System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
+    //for simulation
+    public int[] getPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
+        int pawn = 0;
+        int knight = 0;
+        int rook = 0;
+        int bishop = 0;
+        int king = 0;
+        int queen = 0;
+        for (PieceAndSquareTuple t : pieceAndSquare) {
+            if (t.getPiece().equals(Piece.BLACK_QUEEN) || t.getPiece().equals(Piece.WHITE_QUEEN)) {
+                queen++;
+            } else if (t.getPiece().equals(Piece.WHITE_BISHOP) || t.getPiece().equals(Piece.BLACK_BISHOP)) {
+                bishop++;
+            } else if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
+                king++;
+            } else if (t.getPiece().equals(Piece.WHITE_ROOK) || t.getPiece().equals(Piece.BLACK_ROOK)) {
+                rook++;
+            } else if (t.getPiece().equals(Piece.WHITE_PAWN) || t.getPiece().equals(Piece.BLACK_PAWN)) {
+                pawn++;
+            } else if (t.getPiece().equals(Piece.WHITE_KNIGHT) || t.getPiece().equals(Piece.BLACK_KNIGHT)) {
+                knight++;
+            }
+        }
+        int[] pieces = {pawn, knight, bishop, rook, queen, king};
+        return pieces;
+    }
+
     public State applyMove(Move move) {
 
         //check if last move was castling
@@ -194,7 +229,9 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
+        String a = board.getFEN();
         Board newBoard = board.movePiece(move.origin, move.destination);
+        String b = newBoard.getFEN();
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
@@ -258,16 +295,7 @@ public class State {
         }
 
         updatePieceAndSquareState(move);
-        // printPieceAndSquare();
 
-
-
-        //TODO: if king has moved at all then disable castling for the appropriate color
-//        if (move.getPiece() == WHITE_KING) {
-//            canCastle = false;
-//        }
-
-        // System.out.println("Real cumulative turn: " + cumulativeTurn);
         State nextState = new State(newBoard, -1, nextTurn, canCastleWhite, canCastleBlack, shortCastlingBlack, shortCastlingWhite,
                 longCastlingBlack, longCastlingWhite, castling, pieceAndSquare, cumulativeTurn + 1);
 
@@ -279,10 +307,9 @@ public class State {
         //overwrites the 'newRoll' parameter in the constructor. There must be a better way to do this.
         nextState.diceRoll = Dice.roll(nextState, nextTurn);
 
-        // newBoard.printBoard();
+        cumulativeTurn++;
+
         return nextState;
-        //}
-        //return this;
     }
 
     public boolean equals1(State state) {
@@ -357,7 +384,6 @@ public class State {
 
             prev = p;
         }
-
         return fen;
     }
 
@@ -407,6 +433,18 @@ public class State {
         return pieceAndSquare;
     }
 
+    //for Simulation
+    public int[] getPieceAndSquare(Side side) {
+        List<PieceAndSquareTuple> oneSidePieceAndSquare = new ArrayList<>();
+        for (PieceAndSquareTuple piece : pieceAndSquare) {
+            Piece casted = (Piece) piece.getPiece();
+            if (casted.getColor() == side) {
+                oneSidePieceAndSquare.add(piece);
+            }
+        }
+        return getPieceCounts(oneSidePieceAndSquare);
+    }
+
     public void setPieceAndSquare(List<PieceAndSquareTuple> pieceAndSquare) {
         this.pieceAndSquare = pieceAndSquare;
         // printPieceAndSquare();
@@ -433,13 +471,13 @@ public class State {
         return canCastleWhite;
     }
 
-    public boolean isCanCastleBlack() {
-        return canCastleBlack;
-    }
-
     //Setter for castling
     public void setCanCastleWhite(boolean canCastleWhite) {
         this.canCastleWhite = canCastleWhite;
+    }
+
+    public boolean isCanCastleBlack() {
+        return canCastleBlack;
     }
 
     public void setCanCastleBlack(boolean canCastleBlack) {

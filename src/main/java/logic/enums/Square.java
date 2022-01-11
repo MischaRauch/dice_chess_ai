@@ -65,8 +65,6 @@ public enum Square {
         return boardIndexMap.getOrDefault(squareNumber, INVALID);
     }
 
-
-    // todo optimize these lmao
     // 1 indexed
     public static int getSquareRank(Square s) {
         int index = 0;

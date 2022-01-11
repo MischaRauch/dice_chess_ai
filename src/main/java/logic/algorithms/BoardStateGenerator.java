@@ -1,5 +1,6 @@
 package logic.algorithms;
 
+import com.twelvemonkeys.io.SeekableOutputStream;
 import logic.LegalMoveGenerator;
 import logic.ML.OriginAndDestSquare;
 import logic.Move;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static logic.enums.Piece.EMPTY;
+import static logic.enums.Piece.getDiceFromPiece;
 import static logic.enums.Square.*;
 
 // generates all possible states of the board for n turns ahead
@@ -24,8 +26,8 @@ public class BoardStateGenerator {
 
     // for ML
     public static ArrayList<State> getPossibleBoardStates(State state, Side side) {
-        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
-        ArrayList<State> answer = new ArrayList<State>();
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, side);
+        ArrayList<State> answer = new ArrayList<>();
         State tempState;
         Move move1;
 
@@ -38,6 +40,23 @@ public class BoardStateGenerator {
         }
         return answer;
     }
+    public static ArrayList<State> getPossibleBoardStatesOfSpecificPiece(State state, Side side, int roll) {
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, side);
+        ArrayList<State> answer = new ArrayList<>();
+        State tempState;
+        Move move1;
+
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
+            Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
+            if (p.getColor().equals(side) && getDiceFromPiece(p) == roll) {
+                move1 = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
+                tempState = state.applyMove(move1);
+                answer.add(tempState);
+            }
+        }
+        return answer;
+    }
+
 
     public List<Move> getValidMovesForGivenPiece(State state, Piece piece) {
         List<Move> validMoves = new LinkedList<>();
@@ -214,9 +233,8 @@ public class BoardStateGenerator {
         return validMoves;
     }
 
-
     // move piece and return array of all possible states for all possible moves a given piece can make taking into account its origin square
-    public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
+    public static List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
@@ -287,20 +305,56 @@ public class BoardStateGenerator {
         }
         return possibleStates;
     }
+    // for hybrid
+    public static List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
+        List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
+        List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = nodePieceAndSquare.stream().collect(Collectors.toList());
+        List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
+
+        for (PieceAndSquareTuple t : nodePieceAndSquareCopy) {
+            // clone for casting
+            Piece p = (Piece) t.getPiece();
+            Square s = (Square) t.getSquare(); //origin
+            Piece coloredPiece = Piece.getPieceFromDice(diceRoll, color);
+            if (p == coloredPiece) {
+                // List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
+                List<Square> legalMoves = LegalMoveGenerator.getLegalMovesHybrid(nodePieceAndSquareCopy, s, p, color);
+
+                List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2, legalMoves, p, s);
+                possibleStates.addAll(states);
+            }
+        }
+        return possibleStates;
+    }
 
     // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
     public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
 
-        List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+        boolean applyQL = false;
+        int depth = 2;
 
-        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
-            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
-            //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
-            possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+        if (applyQL == true) {
+            ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(new State(state), color, diceRoll);
+
+            for (State givenState : allPossibleStates) {
+                int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // the location of this causes too much time
+                possibleBoardStatesWeights.add(weight);
+            }
+            System.out.println("a");
+            return possibleBoardStatesWeights;
         }
-        //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
-        return possibleBoardStatesWeights;
+        else {
+            List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+
+            for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+                int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+                //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
+                possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+            }
+            //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
+            return possibleBoardStatesWeights;
+        }
     }
 
     public void printPossibleBoardStatesWeights(List<Integer> possibleBoardStatesWeights) {

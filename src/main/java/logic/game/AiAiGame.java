@@ -1,6 +1,8 @@
 package logic.game;
 
-import dataCollection.CsvHandler;
+
+//import dataCollection.CsvHandler;
+
 import gui.ChessIcons;
 import gui.Chessboard;
 import gui.controllers.MainContainerController;
@@ -12,25 +14,18 @@ import logic.State;
 import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
-import logic.player.MiniMaxPlayer;
-import logic.player.QTablePlayer;
-import logic.player.QLPlayer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AiAiGame extends Game {
-
     private final AIPlayer white, black;
     //will play AIvsAI 50 times
-    private static int playTill = Config.SIMULATION_SIZE;
+    private static final int playTill = Config.SIMULATION_SIZE;
     private int played = 0;
-    private CsvHandler handle;
-    private static String[][] resultsArray = new String[playTill+1][4];
+    //  private CsvHandler handle;
+    private static final String[][] resultsArray = new String[playTill + 1][4];
 
 
     public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
@@ -67,13 +62,29 @@ public class AiAiGame extends Game {
 
             Move move = nextPlayer.chooseMove(currentState);
 
+            checkGameOver(move);
+            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
+            gameOver = isGameOver();
+
             //System.out.println("Previous State: ");
             //currentState.printPieceAndSquare();
+            System.out.println("Before Applying Move: ");
+            currentState.printPieceAndSquare();
+//            for(PieceAndSquareTuple t : currentState.getPieceAndSquare()) {
+//                if(t.getSquare()==move.getDestination() && ((t.getPiece() == Piece.BLACK_KING) || (t.getPiece() == Piece.WHITE_KING))) {
+//                    State temp = currentState;
+//                    State newState = currentState.applyMove(move);
+//                }
+//            }
+            State newState = currentState.applyMove(move); //AFTER THIS LINE NOTHING EXECUTES
+            // DICE ROLL IS 0
 
-            State newState = currentState.applyMove(move);
+            System.out.println("After Applying Move: ");
+            currentState.printPieceAndSquare();
+
 
             previousStates.push(currentState);
-            checkGameOver(move);
+
             // after checking if king was captured, we can update the currentState
             currentState = newState;
 
@@ -92,8 +103,7 @@ public class AiAiGame extends Game {
                 MainContainerController.getInstance().updateTurn(move.getSide());
             });
 
-            //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
-            gameOver = isGameOver();
+
 
             //switch players
             nextPlayer = (nextPlayer == white) ? black : white;
@@ -103,7 +113,7 @@ public class AiAiGame extends Game {
             try {
                 // the higher the depth the more time AI needs or game just freezes
                 Thread.sleep(Config.THREAD_DELAY);
-            } catch (InterruptedException e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
@@ -113,9 +123,10 @@ public class AiAiGame extends Game {
         resultsArray[played][2] = getWinner().name();
         resultsArray[played][3] = Integer.toString(previousStates.lastElement().getCumulativeTurn());
         //only add once all the data is gathered
-        if(played == playTill) {
+        if (played == playTill) {
             loogerFromArray(resultsArray);
         }
+
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 
@@ -161,14 +172,14 @@ public class AiAiGame extends Game {
         //do we even need to check if game is over at this point? Or does this method only run when games are finished?
         //in which case:
         Side winner = game.getWinner();
-        handle = new CsvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
-        handle.aiVsAiCsvWrite();
+        //   handle = new CsvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
+        //  handle.aiVsAiCsvWrite();
     }
 
     public void loogerFromArray(String[][] array) {
         for (int i = 1; i <= played; i++) {
-            handle = new CsvHandler(array[i][0], array[i][1], array[i][2], Integer.parseInt(array[i][3]));
-            handle.aiVsAiCsvWrite();
+            //     handle = new CsvHandler(array[i][0], array[i][1], array[i][2], Integer.parseInt(array[i][3]));
+            //     handle.aiVsAiCsvWrite();
         }
     }
 }

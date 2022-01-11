@@ -10,6 +10,7 @@ public class MiniMaxPlayer extends AIPlayer {
 
     private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private final int depth;
+    private long timeNeeded;
     MiniMax miniMax = new MiniMax();
 
     public MiniMaxPlayer(int depth, Side color) {
@@ -33,16 +34,23 @@ public class MiniMaxPlayer extends AIPlayer {
             e.printStackTrace();
         }
         Move chosenMove = thread.getBestMove();
+        System.out.println("MiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
         // TODO make evalautor not update moves
         // to promote en passant moves
         evaluator.isLegalMove(chosenMove, state, true, true);
         //state.printPieceAndSquare();
+        timeNeeded = thread.getTimeNeeded();
         return chosenMove;
     }
 
     @Override
     public String getNameAi() {
         return "MiniMax";
+    }
+
+    @Override
+    public long getTimeNeeded() {
+        return timeNeeded;
     }
 
 }

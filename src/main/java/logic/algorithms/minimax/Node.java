@@ -2,15 +2,16 @@ package logic.algorithms.minimax;
 
 import logic.Move;
 import logic.State;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Node {
 
-    private boolean isMaxPlayer;
-    private int score;
-    private List<Node> children;
+    private final boolean isMaxPlayer;
+    private final List<Node> children;
     private int boardEvaluationNumber;
-    private State state;
+    private final State state;
     private Move move;
 
     // for children
@@ -53,11 +54,4 @@ public class Node {
         return move;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public int getScore() {
-        return score;
-    }
 }

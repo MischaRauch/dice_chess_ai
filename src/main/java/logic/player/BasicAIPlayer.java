@@ -1,5 +1,6 @@
 package logic.player;
 
+import logic.LegalMoveEvaluator;
 import logic.Move;
 import logic.State;
 import logic.enums.Piece;
@@ -10,6 +11,8 @@ import java.util.List;
 public class BasicAIPlayer extends AIPlayer {
 
     private final boolean DEBUG = false;
+    private long timeNeeded;
+    private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
 
     public BasicAIPlayer(Side color) {
         super(color);
@@ -21,7 +24,10 @@ public class BasicAIPlayer extends AIPlayer {
         Move chosenMove = getBasicAIMove(state);
         long end = System.nanoTime();
         System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        timeNeeded = end - start;
         state.printPieceAndSquare();
+        System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
     }
 
@@ -30,7 +36,12 @@ public class BasicAIPlayer extends AIPlayer {
         return "Basic AI";
     }
 
-    public Move getBasicAIMove(State state){
+    @Override
+    public long getTimeNeeded() {
+        return timeNeeded;
+    }
+
+    public Move getBasicAIMove(State state) {
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
         if (DEBUG) {
