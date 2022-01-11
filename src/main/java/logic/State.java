@@ -37,6 +37,10 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         loadPieceAndSquareFromFEN(board.getFEN());
+        this.board.setShortCastlingWhite(board.isShortCastlingWhite());
+        this.board.setLongCastlingWhite(board.isLongCastlingWhite());
+        this.board.setShortCastlingBlack(board.isShortCastlingBlack());
+        this.board.setLongCastlingBlack(board.isLongCastlingBlack());
         cumulativeTurn = 0;
     }
 
@@ -224,9 +228,7 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
-        String a = board.getFEN();
         Board newBoard = board.movePiece(move.origin, move.destination);
-        String b = newBoard.getFEN();
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());

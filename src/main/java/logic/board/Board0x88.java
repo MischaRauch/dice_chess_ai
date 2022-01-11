@@ -107,8 +107,26 @@ public class Board0x88 extends Board {
     }
 
     @Override
+    public Board0x88 updateCastling(Board board, Piece p, Square origin) {
+        if (board.isShortCastlingWhite() && (p == Piece.WHITE_ROOK) && (origin.getBoardIndex() == 7)) {
+            board.setShortCastlingWhite(false);
+        } else if (board.isShortCastlingWhite() && (p == Piece.WHITE_ROOK) && (origin.getBoardIndex() == 0)) {
+            board.setShortCastlingWhite(false);
+        } else if ((board.isShortCastlingWhite() || board.isLongCastlingWhite()) && (p==Piece.WHITE_KING)) {
+            board.setShortCastlingWhite(false);
+            board.setLongCastlingWhite(false);
+        } else if(p ==Piece.BLACK_KING) {
+
+        } else if (p ==Piece.BLACK_ROOK) {
+
+        }
+    }
+
+    @Override
     public Board movePiece(Square origin, Square destination) {
         Board0x88 boardAfterMove = new Board0x88(board);
+        Piece p = boardAfterMove.board[origin.getBoardIndex()];
+        boardAfterMove = updateCastling(boardAfterMove, p, origin);
 
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
         boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;

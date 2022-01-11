@@ -51,7 +51,6 @@ public class DQL {
                 } else {
                     currentState = new State(currentState.getBoard(), currentState.diceRoll, side); // TODO
                     int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState.getPieceAndSquare()));
-
                     ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState.getPieceAndSquare());
                     OriginAndDestSquare tempMove = originAndDestSquares.get(index);
                     Piece p = currentState.getBoard().getPieceAt(tempMove.getOrigin());
@@ -77,7 +76,6 @@ public class DQL {
                 int indexOfState = currentQtable.accessStateIndex(currentState.getPieceAndSquare());
                 OriginAndDestSquare tempOriginAndDestSquare = new OriginAndDestSquare(action.getOrigin(), action.getDestination());
                 int indexOfAction = currentQtable.accessActionIndex(currentState.getPieceAndSquare(), tempOriginAndDestSquare);
-
 
                 newState = new State(newState.getBoard(), newState.diceRoll, side); // TODO
                 Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState.getPieceAndSquare()))));
