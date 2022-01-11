@@ -143,7 +143,7 @@ public class SimulatorSingleGame extends Game {
             stats.add(won);
         }
         if (numTurns) {
-            stats.add(Integer.toString(previousStates.lastElement().getCumulativeTurn() + 1));
+            stats.add(Integer.toString(previousStates.lastElement().getCumulativeTurn()));
         }
         if (numberOfPieceWhite) {
             stats.add(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
@@ -203,7 +203,7 @@ public class SimulatorSingleGame extends Game {
 
     public int getNumTurns() {
         try {
-            return previousStates.lastElement().getCumulativeTurn() + 1;
+            return previousStates.lastElement().getCumulativeTurn();
         } catch (NoSuchElementException e) {
             System.out.println("NO ELEMENT");
         }

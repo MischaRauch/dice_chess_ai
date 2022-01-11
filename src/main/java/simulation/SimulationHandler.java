@@ -1,5 +1,6 @@
 package simulation;
 
+import javafx.scene.control.RadioButton;
 import logic.Config;
 import logic.player.AIPlayer;
 
@@ -13,6 +14,7 @@ public class SimulationHandler {
     //private final AIPlayer white, black;
     private final SimulatorSingleGame game;
     private final SimulatorState states;
+    private final RadioButton simulationOption;
     //choose which stats/kpis to track
     public List<String> trackedStates = new ArrayList<String>();
     //the actual stats/kpis from the game
@@ -49,10 +51,10 @@ public class SimulationHandler {
     boolean blackPiecesRemaining = false;
 
 
-
-    public SimulationHandler(AIPlayer white, AIPlayer black, String FEN) {
+    public SimulationHandler(AIPlayer white, AIPlayer black, String FEN, RadioButton simulationOption) {
         game = new SimulatorSingleGame(white, black, FEN);
         states = new SimulatorState(white, black, FEN);
+        this.simulationOption = simulationOption;
     }
 
     public void startHandler() {
@@ -62,7 +64,7 @@ public class SimulationHandler {
         //create HashMap for easier transfer of what to keep track of
         createHashMap();
 
-        if (Config.SIMULATION_SIZE != 1) { //change to include if != a single game
+        if ((Config.SIMULATION_SIZE != 1) && simulationOption.isSelected()) { //change to include if != a single game
 
             SimulatorMultiGame smg = new SimulatorMultiGame(game, Config.SIMULATION_SIZE, stringBooleanHashMap, trackedStates);
             smg.start();
@@ -86,7 +88,7 @@ public class SimulationHandler {
             ArrayList<String> statesStats = (states.startStateSimulation());
             System.out.println("States Array");
             System.out.println(statesStats);
-            OutputToCsv writer1 = new OutputToCsv("statesGame.csv");
+            OutputToCsv writer1 = new OutputToCsv("singleStates.csv");
             writer1.writeEachState(statesStats);
         }
 

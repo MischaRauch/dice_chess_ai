@@ -213,9 +213,7 @@ public abstract class AIPlayer {
                     }
                 }
             }
-
         }
-
         return validMoves;
     }
 

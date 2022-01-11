@@ -17,9 +17,6 @@ public class MiniMax {
     private final BoardStateGenerator gen = new BoardStateGenerator();
     private int depth;
     private Tree tree;
-    private int maxCount;
-    private int minCount;
-    private int totalCount;
     private int initialDepth;
     private Node bestNode;
 
@@ -30,17 +27,11 @@ public class MiniMax {
         Node root = new Node(true, state);
         tree.setRoot(root);
         constructTree(root, depth);
-        // to test built in pruning
         initialDepth = depth;
-        maxCount = 0;
-        minCount = 0;
-        totalCount = 0;
     }
 
     private void constructTree(Node parentNode, int depth) {
-        if (depth == 0) {
-            bestNode = parentNode;
-        }
+        if (depth == 0) bestNode = parentNode;
         while (this.depth > 0) {
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
             // loop through for all 6 dice numbers and generate all possible states
@@ -77,8 +68,8 @@ public class MiniMax {
         }
     }
 
-    private Node addChildrenReturnBestChild(Node parentNode, List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType, boolean isChildMaxPlayer,
-                                            Node bestChild, int finalEvalNo) {
+    private Node addChildrenReturnBestChild(Node parentNode, List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType,
+                                            boolean isChildMaxPlayer, Node bestChild, int finalEvalNo) {
         for (int j = 0; j < allStatesAndBoardEvaluationsForGivenPieceType.size(); j++) {
             // loop through states for pieces
             for (int i = 0; i < allStatesAndBoardEvaluationsForGivenPieceType.get(j).getBoardStates().size(); i++) {
@@ -109,23 +100,11 @@ public class MiniMax {
                 // add each child for each different board state for each different piece type
                 // built in pruning as we only ever add better children, not all children
                 // if eval number smaller
-                if (CheckOutPruning) {
-                    totalCount++;
-                    // System.out.println("child evaluated: " + totalCount);
-                }
                 if (isChildMaxPlayer && evalNo <= finalEvalNo) {
-                    if (CheckOutPruning) {
-                        minCount++;
-                        // System.out.println("min player children added: " + minCount);
-                    }
                     finalEvalNo = evalNo;
                     bestChild = newNode;
                     // if eval number bigger
                 } else if (!isChildMaxPlayer && evalNo >= finalEvalNo) {
-                    if (CheckOutPruning) {
-                        maxCount++;
-                        // System.out.println("max player children added: " + maxCount);
-                    }
                     finalEvalNo = evalNo;
                     bestChild = newNode;
                 }
@@ -133,28 +112,6 @@ public class MiniMax {
             }
         }
         return bestChild;
-    }
-
-    // instead of this I loop through max 32 tuples in an array and check if there are 2 kings,
-    // otherwise I would have to update children (Node) and check the node, not sure which is faster
-    public boolean checkWin() {
-        Node root = tree.getRoot();
-        checkWin(root);
-        return root.getScore() == 1;
-    }
-
-    private void checkWin(Node node) {
-        List<Node> children = node.getChildren();
-        boolean isMaxPlayer = node.isMaxPlayer();
-        children.forEach(child -> {
-            if (child.getBoardEvaluationNumber() > Math.abs(20000)) {
-                child.setScore(isMaxPlayer ? 1 : -1);
-            } else {
-                checkWin(child);
-            }
-        });
-        Node bestChild = findBestChild(isMaxPlayer, children, node.getState().getDiceRoll());
-        node.setScore(bestChild.getScore());
     }
 
     private boolean containsSquare(List<PieceAndSquareTuple> state, Square square) {
@@ -175,66 +132,19 @@ public class MiniMax {
         return tree;
     }
 
-    public Node findBestChild(boolean isMaxPlayer, List<Node> children, int diceRoll) {
+    public Node findBestChild(List<Node> children, int diceRoll) {
         Node bestChild = children.get(0);
-        if (isMaxPlayer) {
-            int max = Integer.MIN_VALUE;
-            for (Node child : children) {
-                // remove child.getDiceRoll()==diceRoll) to make OP :) 100% win rate
-                if (child.getBoardEvaluationNumber() > max && child.getState().getDiceRoll() == diceRoll) {
-                    max = child.getBoardEvaluationNumber();
-                    bestChild = child;
-                }
-            }
-        } else {
-            int min = Integer.MAX_VALUE;
-            for (Node child : children) {
-                // remove child.getDiceRoll()==diceRoll) to make OP :) 100% win rate
-                if (child.getBoardEvaluationNumber() < min && child.getState().getDiceRoll() == diceRoll) {
-                    min = child.getBoardEvaluationNumber();
-                    bestChild = child;
-                }
+        int max = Integer.MIN_VALUE;
+        for (Node child : children) {
+            if (child.getBoardEvaluationNumber() > max && child.getState().getDiceRoll() == diceRoll) {
+                max = child.getBoardEvaluationNumber();
+                bestChild = child;
             }
         }
         return bestChild;
-    }
-
-    public Node findBestChildUnknownDiceRoll(boolean isMaxPlayer, List<Node> children) {
-        Node bestChild = null;
-        if (isMaxPlayer) {
-            int max = Integer.MIN_VALUE;
-            for (Node child : children) {
-                // remove child.getDiceRoll()==diceRoll) to make OP :) 100% win rate
-                if (child.getBoardEvaluationNumber() > max) {
-                    max = child.getBoardEvaluationNumber();
-                    bestChild = child;
-                }
-            }
-        } else {
-            int min = Integer.MAX_VALUE;
-            for (Node child : children) {
-                // remove child.getDiceRoll()==diceRoll) to make OP :) 100% win rate
-                if (child.getBoardEvaluationNumber() < min) {
-                    min = child.getBoardEvaluationNumber();
-                    bestChild = child;
-                }
-            }
-        }
-        return bestChild;
-    }
-
-    private int getKingCount(List<PieceAndSquareTuple> pieceAndSquare) {
-        int king = 0;
-        for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
-                king++;
-            }
-        }
-        return king;
     }
 
     private void printEvaluationNumbers(List<Integer> possibleEvaluationNumbers) {
-        // for visual appeal
         if (possibleEvaluationNumbers.size() != 0) {
             System.out.println("ExpectiMiniMax; possibleEvaluationNumbers: ");
             for (int i = 0; i < possibleEvaluationNumbers.size(); i++) {
@@ -246,7 +156,6 @@ public class MiniMax {
 
     private void printBoardStates(List<List<PieceAndSquareTuple>> possibleBoardStates, int diceRoll) {
         System.out.println("MiniMax; DICE ROLL: " + diceRoll);
-        // for visual appeal
         if (possibleBoardStates.size() != 0) {
             System.out.println("ExpectiMiniMax; possibleBoardStates: Size: " + possibleBoardStates.size());
             for (int i = 0; i < possibleBoardStates.size(); i++) {

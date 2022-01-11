@@ -60,8 +60,8 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("MiniMax AI");
-        blackPlayerChoice.setValue("ExpectiMiniMax AI");
+        whitePlayerChoice.setValue("Random AI");
+        blackPlayerChoice.setValue("Basic AI");
     }
 
     @FXML
@@ -109,7 +109,7 @@ public class Menu {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN);
+                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN, simulationOption);
                 sH.startHandler();
 
             }
