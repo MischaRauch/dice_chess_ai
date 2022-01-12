@@ -56,6 +56,12 @@ public class Menu {
     @FXML
     private Button startButton;
 
+    private static boolean singleGame;
+
+    public static boolean getSingleGame() {
+        return singleGame;
+    }
+
     @FXML
     void initialize() {
         whitePlayerChoice.getItems().addAll(PLAYERS);
@@ -100,8 +106,13 @@ public class Menu {
             case AI_V_AI -> {
                 AIPlayer white = getPlayer(whitePlayer, WHITE);
                 AIPlayer black = getPlayer(blackPlayer, BLACK);
-                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN, simulationOption);
-                sH.startHandler();
+                if (singleGameOption.isSelected()) {
+                    singleGame = true;
+                    new AiAiGame(white, black, Config.OPENING_FEN);
+                } else {
+                    SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN, simulationOption, singleGameOption);
+                    sH.startHandler();
+                }
 
             }
             case HUMAN_V_AI -> {

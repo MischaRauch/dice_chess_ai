@@ -15,6 +15,7 @@ public class SimulationHandler {
     private final SimulatorSingleGame game;
     private final SimulatorState states;
     private final RadioButton simulationOption;
+    private final RadioButton singleGameOption;
     //choose which stats/kpis to track
     public List<String> trackedStates = new ArrayList<String>();
     //the actual stats/kpis from the game
@@ -51,10 +52,11 @@ public class SimulationHandler {
     boolean blackPiecesRemaining = false;
 
 
-    public SimulationHandler(AIPlayer white, AIPlayer black, String FEN, RadioButton simulationOption) {
+    public SimulationHandler(AIPlayer white, AIPlayer black, String FEN, RadioButton simulationOption, RadioButton singleGameOption) {
         game = new SimulatorSingleGame(white, black, FEN);
         states = new SimulatorState(white, black, FEN);
         this.simulationOption = simulationOption;
+        this.singleGameOption = singleGameOption;
     }
 
     public void startHandler() {
@@ -63,6 +65,8 @@ public class SimulationHandler {
         addHeaderRow();
         //create HashMap for easier transfer of what to keep track of
         createHashMap();
+        //check for SingleSimulation to show GUI or multi Simulation
+
 
         if ((Config.SIMULATION_SIZE != 1) && simulationOption.isSelected()) { //change to include if != a single game
 
@@ -114,5 +118,9 @@ public class SimulationHandler {
         for (int i = 0; i < header.length; i++) {
             stringBooleanHashMap.put(header[i], booleanList[i]);
         }
+    }
+
+    public boolean getWinner() {
+        return winner;
     }
 }
