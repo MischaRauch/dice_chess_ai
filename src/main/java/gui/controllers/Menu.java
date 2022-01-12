@@ -64,7 +64,7 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("Random AI");
+        whitePlayerChoice.setValue("QL AI");
         blackPlayerChoice.setValue("Basic AI");
     }
 
@@ -146,7 +146,7 @@ public class Menu {
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
             case "QL AI" -> new QLPlayer(2, color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(9,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(1,color);
             default -> new RandomMovesPlayer(color);
         };
     }

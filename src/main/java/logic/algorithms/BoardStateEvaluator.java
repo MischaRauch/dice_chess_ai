@@ -1,6 +1,7 @@
 package logic.algorithms;
 
 import logic.LegalMoveGenerator;
+import logic.ML.DQL;
 import logic.ML.OriginAndDestSquare;
 import logic.PieceAndSquareTuple;
 import logic.State;
@@ -12,6 +13,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardStateEvaluator {
+
+    public static int getBoardEvaluationNumber(State state, Side color) { // for ML
+        int evalNo = 0;
+        int turn = 1;
+
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, color);
+
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
+            Square s = tempMove.getOrigin();
+            Piece p = state.getBoard().getPieceAt(s);
+
+            if (p.getColor()==color) {
+                evalNo += p.getWeight();
+                evalNo += getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
+            } else {
+                evalNo -= p.getWeight();
+                evalNo -= getCorrectWeights(p,turn)[s.getRank()-1][s.getFile()];
+            }
+            }
+        return evalNo;
+    }
+
+    public static int getEvalOfQL(State state, int depth) {
+        DQL ql = new DQL();
+        ql.algo(state, state.getColor(), depth);
+        return ql.getAvgValuesOfTable();
+    }
+
+
+
 
     private final static int[][] knightBoardWeightsB = {
             {-50, -40, -30, -30, -30, -30, -40, -50},
@@ -142,7 +173,7 @@ public class BoardStateEvaluator {
 
     private final BoardStateGenerator generator = new BoardStateGenerator();
 
-    public static int getBoardEvaluationNumber(State state, Side color) { // for ML
+    /*public static int getBoardEvaluationNumber(State state, Side color) { // for ML
         int evalNo = 0;
         int turn = 1;
 
@@ -161,7 +192,7 @@ public class BoardStateEvaluator {
             }
         }
         return evalNo;
-    }
+    }*/
 
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {

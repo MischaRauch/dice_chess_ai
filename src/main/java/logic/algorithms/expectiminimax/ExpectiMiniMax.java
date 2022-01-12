@@ -72,6 +72,7 @@ public class ExpectiMiniMax {
                     parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
             // add this tuple of list of possible eval numbers and board states to tuple list
             // only add if not empty
+            //System.out.println(possibleEvaluationNumbersForGivenPiece);
             if (!possibleEvaluationNumbersForGivenPiece.isEmpty()) {
                 allStatesAndBoardEvaluationsForGivenPieceType.add(new BoardStateAndEvaluationNumberTuple(possibleBoardStatesForGivenPiece, possibleEvaluationNumbersForGivenPiece));
             }
@@ -94,7 +95,8 @@ public class ExpectiMiniMax {
             int sumOfEvalNumbers = getSumOfEvalNumbers(allStatesAndBoardEvaluationsForGivenPieceType, i);
             int nodeValue = sumOfEvalNumbers / chanceDivider;
             int bestBoardEvaluationIndex = getBestBoardEvaluationNumberIndex(allStatesAndBoardEvaluationsForGivenPieceType, i, isChildMaxPlayer);
-
+            //System.out.println(bestBoardEvaluationIndex);
+            //System.out.println(statesForGivenPiece.size());
             List<PieceAndSquareTuple> bestState = statesForGivenPiece.get(bestBoardEvaluationIndex);
 
             Piece bestStatePieceThatMoved = (Piece) bestState.get(bestState.size() - 1).getPiece();
@@ -111,7 +113,8 @@ public class ExpectiMiniMax {
 
             parentNode.addChild(newNode);
         }
-        return parentNode.getChildren().get(getBestChildIndex(parentNode, !isChildMaxPlayer));
+        int index = getBestChildIndex(parentNode, !isChildMaxPlayer);
+        return parentNode.getChildren().get(index);
     }
 
     // sum evaluation numbers for given piece type
