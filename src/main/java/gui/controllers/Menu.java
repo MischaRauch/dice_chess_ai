@@ -12,6 +12,7 @@ import logic.Config;
 import logic.enums.GameType;
 import logic.enums.Side;
 import logic.game.AIGame;
+import logic.game.AiAiGame;
 import logic.game.HumanGame;
 import logic.player.*;
 import simulation.SimulationHandler;
@@ -60,8 +61,8 @@ public class Menu {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("QL AI");
-        blackPlayerChoice.setValue("Basic AI");
+        whitePlayerChoice.setValue("ExpectiMiniMax AI");
+        blackPlayerChoice.setValue("Random AI");
     }
 
     @FXML
@@ -82,19 +83,9 @@ public class Menu {
                 // setting to 0 to fix turn bug
                 Config.SIMULATION_SIZE = 0;
                 Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
-
-                //read Time Csv file for single game Options
-                //CsvHandler csvHSingleGameStart = new CsvHandler();
-                //csvHSingleGameStart.readTimeCsv("time.csv");
-
             } else {
                 Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
                 Config.THREAD_DELAY = 1;
-
-                //read Time Csv file for simulations
-                //CsvHandler csvHSimulationsStart = new CsvHandler();
-                //csvHSimulationsStart.readTimeCsv("time.csv");
-
             }
 
         } else if (!blackPlayer.equals("Human")){
@@ -142,7 +133,7 @@ public class Menu {
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
             case "QL AI" -> new QLPlayer(2, color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(1,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(3,color);
             default -> new RandomMovesPlayer(color);
         };
     }
