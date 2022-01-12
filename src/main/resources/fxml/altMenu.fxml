@@ -36,7 +36,7 @@
                               <Font name="System Bold" size="36.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #98501a;" text="Info" textFill="WHITE">
+                        <Button fx:id="infoButton" mnemonicParsing="false" onAction="#viewInfo" style="-fx-background-color: #98501a;" text="Info" textFill="WHITE">
                            <font>
                               <Font size="15.0" />
                            </font>

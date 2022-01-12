@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="613.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" layoutX="49.0" layoutY="10.0" prefHeight="417.0" prefWidth="546.0" spacing="30.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/images/pieces/b_pawn.png" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="191.0" spacing="5.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Moves forward one square" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Can move forward two squares on first move" wrappingWidth="193.520751953125" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Move diagonally to capture" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/images/pieces/b_knight.png" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="7.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Moves 2 squares in one direction and 2 squares in either perpendicular direction " wrappingWidth="193.08023071289062" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Can jump over any other pieces to reach its destination position" wrappingWidth="194.26962280273438" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/images/pieces/b_bishop.png" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="7.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Can move in any direction diagonally as long as it is not obstructed by another piece " wrappingWidth="194.53228759765625" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cannot jump over any other piece on the board " wrappingWidth="182.86917114257812" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="123.0" prefWidth="145.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Can move anywhere from 1 to 7 squares in any direction as long as it is not obstructed by any other piece   " wrappingWidth="166.10842895507812" />
+                           </children>
+                        </VBox>
+                        <ImageView fitHeight="123.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/images/pieces/b_rook.png" />
+                           </image>
+                        </ImageView>
+                     </children></HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="7.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Can move in any direction on a straight or diagonal path " wrappingWidth="169.86187744140625" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cannot jump over any other piece on the board " wrappingWidth="168.59457397460938" />
+                           </children>
+                        </VBox>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/images/pieces/b_queen.png" />
+                           </image>
+                        </ImageView>
+                     </children></HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="7.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Can move one square in any direction" wrappingWidth="165.6217041015625" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cannot move to a square that puts it in a check state " wrappingWidth="169.27569580078125" />
+                           </children>
+                        </VBox>
+                        <ImageView fitHeight="200.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/images/pieces/b_king.png" />
+                           </image>
+                        </ImageView>
+                     </children></HBox>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
