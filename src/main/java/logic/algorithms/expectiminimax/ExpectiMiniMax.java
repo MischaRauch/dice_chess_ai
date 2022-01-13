@@ -6,6 +6,7 @@ import logic.PieceAndSquareTuple;
 import logic.State;
 import logic.algorithms.BoardStateGenerator;
 import logic.enums.Piece;
+import logic.enums.Side;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,8 @@ public class ExpectiMiniMax {
 
     public void constructTree(int depth, State initialBoardState) {
         this.tree = new ExpectiMiniMaxTree();
-        tree.setRoot(new ExpectiMiniMaxNode(true, initialBoardState));
+        State state = new State(initialBoardState);
+        tree.setRoot(new ExpectiMiniMaxNode(true, state));
         constructTree(tree.getRoot(), depth);
     }
 
@@ -30,16 +32,16 @@ public class ExpectiMiniMax {
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = generateAllPossibleStatesForGivenNode(parentNode);
             List<Piece> pieceList = generatePieceTypesForGivenNode(parentNode);
 
-            boolean isChildMaxPlayer = !parentNode.isMaxPlayer();
+            boolean isChildMaxPlayer = (parentNode.isMaxPlayer() ? false : true);
             // parent (current node minimizer -> child maximizer
             if (!isChildMaxPlayer) {
-                ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, !isChildMaxPlayer, pieceList);
+                ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, false, pieceList);
                 depth -= 1;
                 constructTree(bestChild, depth);
             }
             // parent (current node) maximizer -> child minimizer
             else if (isChildMaxPlayer) {
-                ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, isChildMaxPlayer, pieceList);
+                ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, true, pieceList);
                 depth -= 1;
                 constructTree(bestChild, depth);
             }
@@ -50,10 +52,10 @@ public class ExpectiMiniMax {
         List<Piece> pieces = new ArrayList<>();
         for (int i = 1; i < 7; i++) {
             // evaluation numbers for i-th dice roll
-            List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getPreviousState().getPieceAndSquare(),
-                    parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
+            List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
+                    parentNode.getState().getColor(), i, parentNode.getState());
             if (!possibleEvaluationNumbersForGivenPiece.isEmpty()) {
-                pieces.add(Piece.getPieceFromDice(i, parentNode.getPreviousState().getColor()));
+                pieces.add(Piece.getPieceFromDice(i, parentNode.getState().getColor()));
             }
         }
         return pieces;
@@ -65,14 +67,13 @@ public class ExpectiMiniMax {
         // loop through for all 6 dice numbers and generate all possible states
         for (int i = 1; i < 7; i++) {
             // evaluation numbers for i-th dice roll
-            List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getPreviousState().getPieceAndSquare(),
-                    parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
+            List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
+                    parentNode.getState().getColor(), i, parentNode.getState());
             // possible board states for i-th dice roll
-            List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece = gen.getPossibleBoardStates(parentNode.getPreviousState().getPieceAndSquare(),
-                    parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState());
+            List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece = gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),
+                    parentNode.getState().getColor(), i, parentNode.getState());
             // add this tuple of list of possible eval numbers and board states to tuple list
             // only add if not empty
-            //System.out.println(possibleEvaluationNumbersForGivenPiece);
             if (!possibleEvaluationNumbersForGivenPiece.isEmpty()) {
                 allStatesAndBoardEvaluationsForGivenPieceType.add(new BoardStateAndEvaluationNumberTuple(possibleBoardStatesForGivenPiece, possibleEvaluationNumbersForGivenPiece));
             }
@@ -80,9 +81,8 @@ public class ExpectiMiniMax {
         return allStatesAndBoardEvaluationsForGivenPieceType;
     }
 
-
-    private ExpectiMiniMaxNode addChildrenReturnBestChild(ExpectiMiniMaxNode parentNode, List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType,
-                                                          boolean isChildMaxPlayer, List<Piece> pieceList) {
+    private ExpectiMiniMaxNode addChildrenReturnBestChild(ExpectiMiniMaxNode parentNode,
+        List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType, boolean isChildMaxPlayer, List<Piece> pieceList) {
 
         int chanceDivider = allStatesAndBoardEvaluationsForGivenPieceType.size();
         for (int i = 0; i < allStatesAndBoardEvaluationsForGivenPieceType.size(); i++) {
@@ -95,26 +95,38 @@ public class ExpectiMiniMax {
             int sumOfEvalNumbers = getSumOfEvalNumbers(allStatesAndBoardEvaluationsForGivenPieceType, i);
             int nodeValue = sumOfEvalNumbers / chanceDivider;
             int bestBoardEvaluationIndex = getBestBoardEvaluationNumberIndex(allStatesAndBoardEvaluationsForGivenPieceType, i, isChildMaxPlayer);
-            //System.out.println(bestBoardEvaluationIndex);
-            //System.out.println(statesForGivenPiece.size());
+            List<Move> legalMovesForGivePiece = gen.getValidMovesForGivenPiece(parentNode.getState(), pieceList.get(i));
+
+            ExpectiMiniMaxNode newNode = new ExpectiMiniMaxNode(isChildMaxPlayer, statesForGivenPiece, boardEvaluationNumbersForGivenPiece,
+                    chanceDivider, nodeValue, null, legalMovesForGivePiece, pieceList.get(i));
+
             List<PieceAndSquareTuple> bestState = statesForGivenPiece.get(bestBoardEvaluationIndex);
 
             Piece bestStatePieceThatMoved = (Piece) bestState.get(bestState.size() - 1).getPiece();
 
-            List<Move> legalMovesForGivePiece = gen.getValidMovesForGivenPiece(parentNode.getPreviousState(), pieceList.get(i));
+            // updating bestStatePiece that moved
+            State newState = new State(parentNode.getState().getBoard(), Piece.getDiceFromPiece(bestStatePieceThatMoved),
+                    bestStatePieceThatMoved.getColor(), parentNode.getState().isCanCastleWhite(), parentNode.getState().isCanCastleBlack(), parentNode.getState().isShortCastlingBlack(),
+                    parentNode.getState().isShortCastlingWhite(), parentNode.getState().isLongCastlingBlack(), parentNode.getState().isLongCastlingWhite(),
+                    parentNode.getState().castling, parentNode.getState().getPieceAndSquare(), parentNode.getState().getCumulativeTurn());
 
-            State newState = new State(parentNode.getPreviousState().getBoard(), Piece.getDiceFromPiece(bestStatePieceThatMoved),
-                    bestStatePieceThatMoved.getColor(), parentNode.getPreviousState().isCanCastleWhite(), parentNode.getPreviousState().isCanCastleBlack(), parentNode.getPreviousState().isShortCastlingBlack(),
-                    parentNode.getPreviousState().isShortCastlingWhite(), parentNode.getPreviousState().isLongCastlingBlack(), parentNode.getPreviousState().isLongCastlingWhite(),
-                    parentNode.getPreviousState().castling, parentNode.getPreviousState().getPieceAndSquare(), parentNode.getPreviousState().getCumulativeTurn());
+            // updated Board board and pieceAndSquare Board
+            newState.applyMove(legalMovesForGivePiece.get(getBestBoardEvaluationIndexFromNode(newNode)));
+            //State newState = new State(parentNode.getState());
 
-            ExpectiMiniMaxNode newNode = new ExpectiMiniMaxNode(isChildMaxPlayer, statesForGivenPiece, boardEvaluationNumbersForGivenPiece,
-                    chanceDivider, nodeValue, newState, legalMovesForGivePiece, pieceList.get(i));
+            newNode.setState(newState);
 
             parentNode.addChild(newNode);
         }
-        int index = getBestChildIndex(parentNode, !isChildMaxPlayer);
-        return parentNode.getChildren().get(index);
+
+        ExpectiMiniMaxNode bestChild = parentNode.getChildren().get(getBestChildIndex(parentNode, !isChildMaxPlayer));
+        bestChild.setMaxPlayer(isChildMaxPlayer);
+        State updatedState = new State(parentNode.getState());
+        // invert color of state
+        updatedState.setColor(Side.getOpposite(updatedState.getColor()));
+        // don't update cummulative turn
+        bestChild.setState(updatedState);
+        return bestChild;
     }
 
     // sum evaluation numbers for given piece type
@@ -175,22 +187,51 @@ public class ExpectiMiniMax {
         return bestIndex;
     }
 
-    // only called after tree generated
-    private int getBestBoardEvaluationIndexFromBestNode() {
+    private int getBestBoardEvaluationIndexFromNode(ExpectiMiniMaxNode node) {
         int min = Integer.MIN_VALUE;
         int max = Integer.MAX_VALUE;
         int bestEval = 0;
         int indexForBestEval = -1;
 
         // get index of the best evaluation number -> will correspond to index of best move
-        for (Integer i : bestNode.getBoardEvaluationNumbersForGivenPiece()) {
-            if (bestNode.isMaxPlayer() && i > min) {
+        for (Integer i : node.getBoardEvaluationNumbersForGivenPiece()) {
+            if (!node.isMaxPlayer() && i > min) {
                 min = i;
                 bestEval = min;
-            } else if (!bestNode.isMaxPlayer() && i < max) {
+            } else if (node.isMaxPlayer() && i < max) {
                 max = i;
                 bestEval = max;
             }
+        }
+        for (int i = 0; i < node.getBoardEvaluationNumbersForGivenPiece().size(); i++) {
+            if (bestEval == node.getBoardEvaluationNumbersForGivenPiece().get(i)) {
+                indexForBestEval = i;
+                break;
+            }
+        }
+        return indexForBestEval;
+    }
+
+    // only called after tree generated
+    private int getBestBoardEvaluationIndexFromBestNode() {
+        int min = Integer.MIN_VALUE;
+        int bestEval = 0;
+        int indexForBestEval = -1;
+
+        // get index of the best evaluation number -> will correspond to index of best move
+        // root is always maximizing player
+        for (Integer i : bestNode.getBoardEvaluationNumbersForGivenPiece()) {
+            if(i > min) {
+                min = i;
+                bestEval = min;
+            }
+//            if (!bestNode.isMaxPlayer() && i > min) {
+//                min = i;
+//                bestEval = min;
+//            }else if (bestNode.isMaxPlayer() && i < max) {
+//                max = i;
+//                bestEval = max;
+//            }
         }
         for (int i = 0; i < bestNode.getBoardEvaluationNumbersForGivenPiece().size(); i++) {
             if (bestEval == bestNode.getBoardEvaluationNumbersForGivenPiece().get(i)) {
@@ -202,7 +243,7 @@ public class ExpectiMiniMax {
     }
 
     public Move getBestMoveForBestNode() {
-        List<Move> allMoveForGivenPiece = gen.getValidMovesForGivenPiece(bestNode.getPreviousState(), bestNode.getPiece());
+        List<Move> allMoveForGivenPiece = gen.getValidMovesForGivenPiece(bestNode.getState(), bestNode.getPiece());
         List<PieceAndSquareTuple> bestStatePAS = bestNode.getPossibleBoardStatesForGivenPiece().get(getBestBoardEvaluationIndexFromBestNode());
         for (PieceAndSquareTuple t : bestStatePAS) {
             Piece coloredPiece = (Piece) t.getPiece();

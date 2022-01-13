@@ -15,6 +15,7 @@ import logic.Config;
 import logic.enums.GameType;
 import logic.enums.Side;
 import logic.game.AIGame;
+import logic.game.AiAiGame;
 import logic.game.HumanGame;
 import logic.player.*;
 import simulation.SimulationHandler;
@@ -62,13 +63,19 @@ public class Menu {
     @FXML
     private TextField fenText;
 
+    private static boolean singleGame;
+
+    public static boolean getSingleGame() {
+        return singleGame;
+    }
+
     @FXML
     void initialize() {
         whitePlayerChoice.getItems().addAll(PLAYERS);
         blackPlayerChoice.getItems().addAll(PLAYERS);
         //set default game matchup
-        whitePlayerChoice.setValue("QL AI");
-        blackPlayerChoice.setValue("Basic AI");
+        whitePlayerChoice.setValue("ExpectiMiniMax AI");
+        blackPlayerChoice.setValue("Random AI");
     }
 
     @FXML
@@ -94,16 +101,14 @@ public class Menu {
                 //AI vs AI
                 type = GameType.AI_V_AI;
 
-                if (aiMatchType.getSelectedToggle() == singleGameOption) {
-                    // setting to 0 to fix turn bug
-                    Config.SIMULATION_SIZE = 0;
-                    Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
-
-                } else {
-                    Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
-                    Config.THREAD_DELAY = 1;
-
-                }
+            if (aiMatchType.getSelectedToggle() == singleGameOption) {
+                // setting to 0 to fix turn bug
+                Config.SIMULATION_SIZE = 0;
+                Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
+            } else {
+                Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
+                Config.THREAD_DELAY = 1;
+            }
 
             } else if (!blackPlayer.equals("Human")){
                 //white is human and black is AI
@@ -113,12 +118,17 @@ public class Menu {
                 type = GameType.HUMAN_V_AI;
             }
 
-            switch (type) {
-                case AI_V_AI -> {
-                    AIPlayer white = getPlayer(whitePlayer, WHITE);
-                    AIPlayer black = getPlayer(blackPlayer, BLACK);
-                    SimulationHandler sH = new SimulationHandler(white, black, openingFEN, simulationOption);
+        switch (type) {
+            case AI_V_AI -> {
+                AIPlayer white = getPlayer(whitePlayer, WHITE);
+                AIPlayer black = getPlayer(blackPlayer, BLACK);
+                if (singleGameOption.isSelected()) {
+                    singleGame = true;
+                    new AiAiGame(white, black, openingFEN);
+                } else {
+                    SimulationHandler sH = new SimulationHandler(white, black, openingFEN, simulationOption, singleGameOption);
                     sH.startHandler();
+                }
 
                 }
                 case HUMAN_V_AI -> {
@@ -148,7 +158,6 @@ public class Menu {
             this.openingFEN = Config.OPENING_FEN;
             start(event);
         }
-
     }
 
     private AIPlayer getPlayer(String player, Side color) {
@@ -158,7 +167,7 @@ public class Menu {
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
             case "QL AI" -> new QLPlayer(2, color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(1,color);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(3,color);
             default -> new RandomMovesPlayer(color);
         };
     }
@@ -183,5 +192,7 @@ public class Menu {
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
         stage.show();
     }
+
+
 
 }
