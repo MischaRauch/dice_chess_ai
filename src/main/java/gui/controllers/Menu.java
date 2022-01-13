@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Config;
@@ -17,6 +19,7 @@ import logic.game.HumanGame;
 import logic.player.*;
 import simulation.SimulationHandler;
 
+import java.awt.*;
 import java.io.IOException;
 
 import static logic.enums.Side.BLACK;
@@ -25,7 +28,7 @@ import static logic.enums.Side.WHITE;
 public class Menu {
 
     private final static String[] PLAYERS = {"Human", "Random AI", "Basic AI", "MiniMax AI", "QTable AI", "ExpectiMiniMax AI", "QL AI"};
-
+    private String openingFEN = Config.OPENING_FEN;
     @FXML
     private ChoiceBox<String> whitePlayerChoice;
 
@@ -51,13 +54,13 @@ public class Menu {
     private TextField iterationsInput;
 
     @FXML
-    private Button statsButton;
-
-    @FXML
     private Button startButton;
 
     @FXML
     private Button infoButton;
+
+    @FXML
+    private TextField fenText;
 
     @FXML
     void initialize() {
@@ -74,69 +77,78 @@ public class Menu {
         String whitePlayer = whitePlayerChoice.getValue();
         String blackPlayer = blackPlayerChoice.getValue();
 
+
+        if(!(fenText.getText().isEmpty() || fenText.getText().isBlank() || fenText.getText() == "")){
+            openingFEN = fenText.getText();
+        }
+
+        System.out.println("openingFEN: " + openingFEN);
+        System.out.println("fenText: " + fenText.getText());
+
         GameType type;
-        if (whitePlayer.equals("Human") && blackPlayer.equals("Human")) {
-            //Human vs Human game
-            type = GameType.HUMAN_V_HUMAN;
-        } else if (!whitePlayer.equals("Human") && !blackPlayer.equals("Human")) {
-            //AI vs AI
-            type = GameType.AI_V_AI;
+        try{
+            if (whitePlayer.equals("Human") && blackPlayer.equals("Human")) {
+                //Human vs Human game
+                type = GameType.HUMAN_V_HUMAN;
+            } else if (!whitePlayer.equals("Human") && !blackPlayer.equals("Human")) {
+                //AI vs AI
+                type = GameType.AI_V_AI;
 
-            if (aiMatchType.getSelectedToggle() == singleGameOption) {
-                // setting to 0 to fix turn bug
-                Config.SIMULATION_SIZE = 0;
-                Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
+                if (aiMatchType.getSelectedToggle() == singleGameOption) {
+                    // setting to 0 to fix turn bug
+                    Config.SIMULATION_SIZE = 0;
+                    Config.THREAD_DELAY = Integer.parseInt(delayInput.getText()); //TODO sanitize input so only integers are accepted
 
-                //read Time Csv file for single game Options
-                //CsvHandler csvHSingleGameStart = new CsvHandler();
-                //csvHSingleGameStart.readTimeCsv("time.csv");
+                } else {
+                    Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
+                    Config.THREAD_DELAY = 1;
 
+                }
+
+            } else if (!blackPlayer.equals("Human")){
+                //white is human and black is AI
+                type = GameType.HUMAN_V_AI;
             } else {
-                Config.SIMULATION_SIZE = Integer.parseInt(iterationsInput.getText());
-                Config.THREAD_DELAY = 1;
-
-                //read Time Csv file for simulations
-                //CsvHandler csvHSimulationsStart = new CsvHandler();
-                //csvHSimulationsStart.readTimeCsv("time.csv");
-
+                //white is AI and black is Human
+                type = GameType.HUMAN_V_AI;
             }
 
-        } else if (!blackPlayer.equals("Human")){
-            //white is human and black is AI
-            type = GameType.HUMAN_V_AI;
-        } else {
-            //white is AI and black is Human
-            type = GameType.HUMAN_V_AI;
+            switch (type) {
+                case AI_V_AI -> {
+                    AIPlayer white = getPlayer(whitePlayer, WHITE);
+                    AIPlayer black = getPlayer(blackPlayer, BLACK);
+                    SimulationHandler sH = new SimulationHandler(white, black, openingFEN, simulationOption);
+                    sH.startHandler();
+
+                }
+                case HUMAN_V_AI -> {
+                    AIPlayer aiPlayer = getPlayer(blackPlayer, BLACK);
+                    new AIGame(aiPlayer,openingFEN);
+                }
+                case HUMAN_V_HUMAN -> {
+                    new HumanGame(openingFEN);
+                }
+                default -> new HumanGame(openingFEN);
+            }
+
+            try {
+                Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                MainContainerController.stage = stage;
+                Parent root = new MainContainerController(type, openingFEN);
+                Scene scene = new Scene(root);
+
+                stage.setScene(scene);
+                stage.centerOnScreen();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }catch (Exception e){
+            System.out.println("Invalid FEN");
+            this.fenText.setText("");
+            this.openingFEN = Config.OPENING_FEN;
+            start(event);
         }
 
-        switch (type) {
-            case AI_V_AI -> {
-                AIPlayer white = getPlayer(whitePlayer, WHITE);
-                AIPlayer black = getPlayer(blackPlayer, BLACK);
-                SimulationHandler sH = new SimulationHandler(white, black, Config.OPENING_FEN, simulationOption);
-                sH.startHandler();
-
-            }
-            case HUMAN_V_AI -> {
-                AIPlayer aiPlayer = getPlayer(blackPlayer, BLACK);
-                new AIGame(aiPlayer,Config.OPENING_FEN);
-            }
-            case HUMAN_V_HUMAN -> {
-                new HumanGame(Config.OPENING_FEN);
-            }
-            default -> new HumanGame(Config.OPENING_FEN);
-        }
-
-        try {
-            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            MainContainerController.stage = stage;
-            Parent root = new MainContainerController(type);
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private AIPlayer getPlayer(String player, Side color) {
@@ -162,17 +174,14 @@ public class Menu {
     }
 
     @FXML
-    void displayStats(ActionEvent event) {
-
-    }
-
-    @FXML
     void viewInfo(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/instructions.fxml"));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.centerOnScreen();
+        ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
         stage.show();
     }
+
 }

@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="640.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.InstructionsController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="6.0" layoutY="54.0" prefHeight="361.0" prefWidth="626.0" spacing="20.0">
+      <VBox alignment="TOP_CENTER" layoutX="6.0" layoutY="54.0" prefHeight="361.0" prefWidth="626.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
                <children>
@@ -25,12 +25,15 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="46.0" prefWidth="626.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dice Chess is a variant of Chess, in which the moves of each player are determined by the rolling of an ordinary six-sided dice." wrappingWidth="482.500244140625">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dice Chess is a variant of Chess, in which the moves of each player are determined by the rolling of an ordinary six-sided dice." wrappingWidth="482.500244140625" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="14.0" />
+                        <Font size="16.0" />
                      </font>
                   </Text>
                </children>
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" />
+               </VBox.margin>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                <children>
@@ -41,7 +44,10 @@
                   </ImageView>
                   <VBox alignment="CENTER" prefHeight="150.0" prefWidth="469.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="On our menu screen, select &quot;Single Game&quot; and configure the game in one of three ways: " wrappingWidth="399.51678466796875" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="On our menu screen, select &quot;Single Game&quot; and configure the game in one of three ways: " wrappingWidth="399.51678466796875">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Text>
                         <VBox alignment="CENTER" prefHeight="64.0" prefWidth="406.0" style="-fx-background-color: #98501a; -fx-background-radius: 15;">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1.  Choose HUMAN vs. HUMAN: Play against a friend!" />
@@ -58,6 +64,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="634.0" spacing="10.0">
                <children>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #d5a47d;" text="Back" />
                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@/images/pieces/w_pawn.png" />

@@ -10,16 +10,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class InstructionsController {
+public class PieceInstController {
+
     @FXML
-    private Button PieceInstructions;
+    private Button menuButton;
 
     @FXML
     private Button backButton;
 
     @FXML
-    void viewPiecesInst(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/pieceInstructions.fxml"));
+    void back(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/instructions.fxml"));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -29,7 +30,7 @@ public class InstructionsController {
     }
 
     @FXML
-    void back(ActionEvent event) throws IOException {
+    void menu(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/altMenu.fxml"));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
@@ -38,4 +39,5 @@ public class InstructionsController {
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
         stage.show();
     }
+
 }
