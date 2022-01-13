@@ -28,6 +28,7 @@ public class State {
     private boolean longCastlingWhite = true;
     private boolean shortCastlingBlack = true;
     private boolean longCastlingBlack = true;
+
     private List<PieceAndSquareTuple> pieceAndSquare = new ArrayList<>();
     private int cumulativeTurn;
 

@@ -63,6 +63,11 @@ public class SimulatorSingleGame extends Game {
 
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
+        currentState.getBoard().setShortCastlingWhite(true);
+        currentState.getBoard().setLongCastlingWhite(true);
+        currentState.getBoard().setShortCastlingBlack(true);
+        currentState.getBoard().setLongCastlingBlack(true);
+
         //pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
         //pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
 
@@ -103,12 +108,12 @@ public class SimulatorSingleGame extends Game {
             }
             //Add current Piece array to arraylist
             if (nextPlayer == white) {
-                System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+                //System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
                 capturePieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
                 evaluationBoardB.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.BLACK));
                 counter++;
             } else {
-                System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+                //System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
                 capturePieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
                 evaluationBoardW.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.WHITE));
                 counter++;

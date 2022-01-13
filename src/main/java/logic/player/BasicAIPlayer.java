@@ -23,10 +23,10 @@ public class BasicAIPlayer extends AIPlayer {
         long start = System.nanoTime();
         Move chosenMove = getBasicAIMove(state);
         long end = System.nanoTime();
-        System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        //System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         timeNeeded = end - start;
-        state.printPieceAndSquare();
-        System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        //state.printPieceAndSquare();
+        //System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
         evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
     }
