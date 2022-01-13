@@ -36,12 +36,12 @@ public class MiniMax {
             List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
             // loop through for all 6 dice numbers and generate all possible states
             for (int i = 1; i < 7; i++) {
-                // evaluation numbers for i-th dice roll
-                List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
-                        parentNode.getState().getColor(), i, parentNode.getState());
                 // possible board states for i-th dice roll
                 List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece = gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),
                         parentNode.getState().getColor(), i, parentNode.getState());
+                // evaluation numbers for i-th dice roll
+                List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(possibleBoardStatesForGivenPiece,
+                        parentNode.getState().getColor(), parentNode.getState().getCumulativeTurn());
 
                 // add this tuple of list of possible eval numbers and board states to tuple list
                 allStatesAndBoardEvaluationsForGivenPieceType.add(new BoardStateAndEvaluationNumberTuple(possibleBoardStatesForGivenPiece, possibleEvaluationNumbersForGivenPiece));
