@@ -52,7 +52,7 @@ public class OutputToCsv {
                 }
             }
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            //System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -78,7 +78,7 @@ public class OutputToCsv {
             }
             // myWriter.append("\n");
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            //System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class OutputToCsv {
         try {
             FileWriter myWriter = new FileWriter(fileName, true);
             myWriter.append("TurnAlg  TimePerMove  Capture  PieceCount  EvaluationPieceWhite  TurnAlgTwo  TimePerMove  Capture  PieceCount  EvaluationPieceBlack \n");
-            System.out.println("States array length: " + stateList.size());
+            //System.out.println("States array length: " + stateList.size());
             for(int i = 0; i < stateList.size()-1; i+=10){
                 myWriter.write(stateList.get(i));
                 myWriter.write("  ");
@@ -138,7 +138,7 @@ public class OutputToCsv {
 
             myWriter.append("\n");
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            //System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

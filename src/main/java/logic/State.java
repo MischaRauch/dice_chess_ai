@@ -75,11 +75,11 @@ public class State {
     }
 
     public void printPieceAndSquare() {
-        System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
+        //System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            System.out.print(t.toString() + " | ");
+            //System.out.print(t.toString() + " | ");
         }
-        printPieceCounts(pieceAndSquare);
+        //printPieceCounts(pieceAndSquare);
     }
 
     private void loadPieceAndSquareFromFEN(String FEN) {
@@ -178,7 +178,7 @@ public class State {
                 knight++;
             }
         }
-        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        //System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
     //for simulation
@@ -229,9 +229,9 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
-        String a = board.getFEN();
+        //String a = board.getFEN();
         Board newBoard = board.movePiece(move.origin, move.destination);
-        String b = newBoard.getFEN();
+        //String b = newBoard.getFEN();
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());

@@ -23,10 +23,10 @@ public class BasicAIPlayer extends AIPlayer {
         long start = System.nanoTime();
         Move chosenMove = getBasicAIMove(state);
         long end = System.nanoTime();
-        System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        //System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         timeNeeded = end - start;
         state.printPieceAndSquare();
-        System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        //System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
         evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
     }
@@ -45,14 +45,14 @@ public class BasicAIPlayer extends AIPlayer {
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
         if (DEBUG) {
-            System.out.println("valid moves: " + validMoves.toString());
+            //System.out.println("valid moves: " + validMoves.toString());
         }
         // capture
         for (int i = 0; i < validMoves.size(); i++) {
             // if target piece not friendly and target destination is not empty then capture always (not sure if we need the empty condition)
             if (!state.getBoard().getPieceAt(validMoves.get(i).getDestination()).isFriendly(color) && state.getBoard().getPieceAt(validMoves.get(i).getDestination()) != Piece.EMPTY) {
 //                state = getUpdatedPieceAndSquareState(state, validMoves.get(i));
-                state.printPieceAndSquare();
+                //state.printPieceAndSquare();
                 // return first set of legal moves
                 return validMoves.get(i);
             }
@@ -68,7 +68,7 @@ public class BasicAIPlayer extends AIPlayer {
                 // gets max value of most favorable move position
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
 //                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
+                //state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case KNIGHT -> {
@@ -88,7 +88,7 @@ public class BasicAIPlayer extends AIPlayer {
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(bishopBoardWeightsW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
 //                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
+                //state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
             case ROOK -> {
@@ -119,7 +119,7 @@ public class BasicAIPlayer extends AIPlayer {
                 int[] weightsOfValidMoves = updateBoardWeights(state, getCorrectWeights(kingBoardWeightsMiddleGameW, color));
                 int favourableMoveMaxIndex = maxValueAt(weightsOfValidMoves);
 //                state = getUpdatedPieceAndSquareState(state, validMoves.get(favourableMoveMaxIndex));
-                state.printPieceAndSquare();
+                //state.printPieceAndSquare();
                 return validMoves.get(favourableMoveMaxIndex);
             }
         }

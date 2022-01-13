@@ -5,7 +5,6 @@ import logic.Config;
 import logic.player.AIPlayer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,8 +85,8 @@ public class SimulationHandler {
             states.setPieceArraysWhite(game.getPieceArrayW(), game.getPieceArrayB());
             states.setEvaluationBoards(game.getEvaluationBoardW(), game.getEvaluationBoardB());
             ArrayList<String> statesStats = (states.startStateSimulation());
-            System.out.println("States Array");
-            System.out.println(statesStats);
+            //System.out.println("States Array");
+            //System.out.println(statesStats);
             OutputToCsv writer1 = new OutputToCsv("singleStates.csv");
             writer1.writeEachState(statesStats);
         }
@@ -100,14 +99,14 @@ public class SimulationHandler {
         // boolean[] booleanList = {alg, algTwo, winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
         // String[] header = {"Alg", "AlgTwo", "TotalTime", "TimePerMoveWhite", "TimePerMoveBlack", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
 
-        System.out.println(Arrays.toString(booleanList));
-        System.out.println(Arrays.toString(header));
+        //System.out.println(Arrays.toString(booleanList));
+        //System.out.println(Arrays.toString(header));
         for (int i = 0; i < booleanList.length; i++) {
             if (booleanList[i]) {
                 trackedStates.add(header[i]);
             }
         }
-        System.out.println(trackedStates);
+        //System.out.println(trackedStates);
     }
 
     public void createHashMap() {

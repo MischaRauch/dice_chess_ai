@@ -3,6 +3,9 @@ package logic.mcts;
 import java.util.LinkedList;
 import java.util.List;
 
+import static logic.mcts.Node.NodeType.DECISION;
+import static logic.mcts.Node.NodeType.TERMINAL;
+
 public class Node {
 
     static final double e = 0.1; //something not quite 0 so we avoid division by 0;
@@ -30,17 +33,21 @@ public class Node {
         this.state = state;
         this.action = action;
         this.type = type;
-        Q = 0;
-        N = e;
-        actionsTaken = 0;
-        validRolls = (type == NodeType.CHANCE) ? state.getRolls() : null;
-        validActions = (type == NodeType.DECISION) ? state.getAvailableActions(parent.getNextRoll()) : null;
-        children = new LinkedList<>();
+        if (type != TERMINAL) {
+            Q = 0;
+            N = e;
+            actionsTaken = 0;
+            validRolls = (type == NodeType.CHANCE) ? state.getRolls() : null;
+            validActions = (type == DECISION) ? state.getAvailableActions(parent.getNextRoll()) : null;
+            children = new LinkedList<>();
+        } else {
+            N = 1;
+        }
     }
 
     //root;
     public Node(TreeState state, int roll) {
-        this.type = NodeType.DECISION;
+        this.type = DECISION;
         this.state = state;
         Q = 1;
         N = 1;
@@ -51,7 +58,9 @@ public class Node {
     }
 
     public boolean fullyExpanded() {
-        if (type == NodeType.DECISION)
+        if (type == TERMINAL)
+            return true;
+        if (type == DECISION)
             return actionsTaken == validActions.size();
         if (type == NodeType.CHANCE)
             return children.size() == validRolls.size();
@@ -61,9 +70,9 @@ public class Node {
     }
 
     public Action getNextAction() {
-        if (fullyExpanded()) {
-            //System.out.println("FULLY DECISION EXPANDED");
-        }
+        //if (fullyExpanded()) {
+        //System.out.println("FULLY DECISION EXPANDED");
+        //}
         Action next = validActions.get(actionsTaken);
         actionsTaken++;
         return next;
@@ -82,7 +91,7 @@ public class Node {
     public double getExpectedValue() {
         //average value of children
         switch (type) {
-            case DECISION -> {
+            case DECISION, TERMINAL -> {
                 return Q / N;
             }
 
@@ -95,7 +104,7 @@ public class Node {
                 return val;
             }
         }
-        ;
+
 
         return 0;
     }
@@ -106,7 +115,7 @@ public class Node {
 
     @Override
     public String toString() {
-        String s = "Q: " + Q + " N: " + N + " type: " + type;
+        String s = "[Wins: " + Q + ", Visits: " + N + ", type: " + type + "]";
         return s;
     }
 

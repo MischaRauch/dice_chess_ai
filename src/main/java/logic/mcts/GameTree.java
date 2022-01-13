@@ -1,8 +1,11 @@
 package logic.mcts;
 
 import logic.enums.Side;
+import logic.enums.Square;
 
 import java.util.HashSet;
+
+import static logic.enums.Square.*;
 
 public class GameTree {
 
@@ -15,6 +18,16 @@ public class GameTree {
         treeNodes.add(rootNode);
         root = rootNode;
         this.player = player;
+    }
+
+    public static void main(String[] args) {
+        int manhattan = Square.manhattanDistance(h7, b3);
+        System.out.println(manhattan + " " + man(new int[]{a7.getRank(), b3.getRank()}, new int[]{a7.getFile_18(), b3.getFile_18()}));
+        System.out.println(manhattan + " " + getManDis[h7.getDiff(b3)]);
+    }
+
+    public static int man(int[] x, int[] y) {
+        return Math.abs(x[0] - x[1]) + Math.abs(y[0] - y[1]);
     }
 
     public Node getRoot() {

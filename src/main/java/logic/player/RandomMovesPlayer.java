@@ -30,9 +30,9 @@ public class RandomMovesPlayer extends AIPlayer {
         // state.printPieceAndSquare();
         timeNeeded = end - start;
 
-        System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
-        System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
-        evaluator.isLegalMove(chosenMove, state, true, true);
+        //System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        //System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        //evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
     }
 

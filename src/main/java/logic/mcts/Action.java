@@ -33,7 +33,7 @@ public class Action implements Comparable<Action> {
 
     @Override
     public String toString() {
-        return "" + origin.toString() + " " + piece.toString() + " " + destination.toString() + " score: " + score;
+        return "Action(" + origin.toString() + ", " + piece.getUnicode() + ", " + destination.toString() + ", " + type + ", score: " + score + ")";
     }
 
 }

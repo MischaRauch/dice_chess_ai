@@ -26,7 +26,7 @@ public abstract class AIPlayer {
     }
 
     public AIPlayer() {
-        this(Side.BLACK);
+        this(Side.NEUTRAL);
     }
 
     public abstract Move chooseMove(State state);
@@ -218,11 +218,11 @@ public abstract class AIPlayer {
     }
 
     public void printPieceAndSquare(List<PieceAndSquareTuple> nodePieceAndSquare) {
-        System.out.println("State; pieceAndSquare: Size: " + nodePieceAndSquare.size());
-        for (PieceAndSquareTuple t : nodePieceAndSquare) {
-            System.out.print(t.toString() + " | ");
-        }
-        printPieceCounts(nodePieceAndSquare);
+        //System.out.println("State; pieceAndSquare: Size: " + nodePieceAndSquare.size());
+        //for (PieceAndSquareTuple t : nodePieceAndSquare) {
+        //System.out.print(t.toString() + " | ");
+        //}
+        //printPieceCounts(nodePieceAndSquare);
     }
 
     public void printPieceCounts(List<PieceAndSquareTuple> pieceAndSquare) {
@@ -232,21 +232,21 @@ public abstract class AIPlayer {
         int bishop = 0;
         int king = 0;
         int queen = 0;
-        for (PieceAndSquareTuple t : pieceAndSquare) {
-            if (t.getPiece().equals(Piece.BLACK_QUEEN) || t.getPiece().equals(Piece.WHITE_QUEEN)) {
-                queen++;
-            } else if (t.getPiece().equals(Piece.WHITE_BISHOP) || t.getPiece().equals(Piece.BLACK_BISHOP)) {
-                bishop++;
-            } else if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
-                king++;
-            } else if (t.getPiece().equals(Piece.WHITE_ROOK) || t.getPiece().equals(Piece.BLACK_ROOK)) {
-                rook++;
-            } else if (t.getPiece().equals(Piece.WHITE_PAWN) || t.getPiece().equals(Piece.BLACK_PAWN)) {
-                pawn++;
-            } else if (t.getPiece().equals(Piece.WHITE_KNIGHT) || t.getPiece().equals(Piece.BLACK_KNIGHT)) {
-                knight++;
-            }
-        }
+//        for (PieceAndSquareTuple t : pieceAndSquare) {
+//            if (t.getPiece().equals(Piece.BLACK_QUEEN) || t.getPiece().equals(Piece.WHITE_QUEEN)) {
+//                queen++;
+//            } else if (t.getPiece().equals(Piece.WHITE_BISHOP) || t.getPiece().equals(Piece.BLACK_BISHOP)) {
+//                bishop++;
+//            } else if (t.getPiece().equals(Piece.WHITE_KING) || t.getPiece().equals(Piece.BLACK_KING)) {
+//                king++;
+//            } else if (t.getPiece().equals(Piece.WHITE_ROOK) || t.getPiece().equals(Piece.BLACK_ROOK)) {
+//                rook++;
+//            } else if (t.getPiece().equals(Piece.WHITE_PAWN) || t.getPiece().equals(Piece.BLACK_PAWN)) {
+//                pawn++;
+//            } else if (t.getPiece().equals(Piece.WHITE_KNIGHT) || t.getPiece().equals(Piece.BLACK_KNIGHT)) {
+//                knight++;
+//            }
+//        }
         //System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 

@@ -5,8 +5,16 @@ public enum Side {
     BLACK,
     NEUTRAL;
 
+    public char asChar() {
+        return switch (this) {
+            case WHITE -> 'W';
+            case BLACK -> 'B';
+            default -> 'N';
+        };
+    }
+
     public static Side getOpposite(Side color) {
-        if (color==Side.WHITE) {
+        if (color == Side.WHITE) {
             return Side.BLACK;
         }
         return Side.WHITE;

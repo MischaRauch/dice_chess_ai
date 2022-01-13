@@ -92,7 +92,7 @@ public class SimulatorSingleGame extends Game {
             gameOver = isGameOver();
 
             //print board for debugging
-            this.getCurrentState().getBoard().printBoard();
+            //this.getCurrentState().getBoard().printBoard();
 
             //get time needed for move
             if (timePerMoveWhite && (nextPlayer == white)) {
@@ -103,12 +103,12 @@ public class SimulatorSingleGame extends Game {
             }
             //Add current Piece array to arraylist
             if (nextPlayer == white) {
-                System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
+                //System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
                 capturePieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
                 evaluationBoardB.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.BLACK));
                 counter++;
             } else {
-                System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
+                //System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
                 capturePieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
                 evaluationBoardW.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.WHITE));
                 counter++;
