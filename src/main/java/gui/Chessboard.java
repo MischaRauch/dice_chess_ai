@@ -2,7 +2,9 @@ package gui;
 
 import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
+import gui.controllers.Menu;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,7 +67,8 @@ public class Chessboard extends GridPane {
         if (gameType == GameType.AI_V_AI) {
             //SimulationHandler sH = new SimulationHandler();
             //sH.start();
-            Platform.exit();
+            if (!Menu.getSingleGame())
+                Platform.exit();
         }
         char[][] boardState = parseFENd(fenD);
         for (int i = 1; i < boardState.length; i++) {
@@ -83,17 +86,17 @@ public class Chessboard extends GridPane {
             }
         }
 
-     /*   if (gameType == GameType.AI_V_AI) {
+        if (gameType == GameType.AI_V_AI && Menu.getSingleGame()) {
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() {
                     ((AiAiGame) game).start();
                     return null;
-                };
+                }
             };
             new Thread(task).start();
 
-        }*/
+        }
 
     }
 

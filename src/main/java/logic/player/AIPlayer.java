@@ -98,7 +98,8 @@ public abstract class AIPlayer {
 
                                 if (atTarget == EMPTY) {
                                     //no piece at target, but en-passant capture still possible
-                                    if (state.getEnPassant() != INVALID) {
+                                    //also checks now if the en-passant square is not empty and if it's occupied by an opponent piece
+                                    if (state.getEnPassant() != INVALID && state.getEnPassant() == captureTarget) {
                                         Move capture = new Move(p, location, captureTarget, state.getDiceRoll(), color);
                                         capture.setEnPassantCapture(true);
                                         validMoves.add(capture);
