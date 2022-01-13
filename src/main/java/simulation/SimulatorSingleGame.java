@@ -90,7 +90,7 @@ public class SimulatorSingleGame extends Game {
             gameOver = isGameOver();
 
             //print board for debugging
-            this.getCurrentState().getBoard().printBoard();
+            //this.getCurrentState().getBoard().printBoard();
 
             //get time needed for move
             if (timePerMoveWhite && (nextPlayer == white)) {
