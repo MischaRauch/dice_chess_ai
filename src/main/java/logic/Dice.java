@@ -48,7 +48,6 @@ public class Dice {
         Board board = state.getBoard();
         Board0x88 b = (Board0x88) board;
 
-
         for (int i = 0; i < b.getBoardArray().length; i++) {
             Piece p = b.getBoardArray()[i];
             Square location = Square.getSquareByIndex(i);

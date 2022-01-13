@@ -56,10 +56,8 @@ public class SimulatorSingleGame extends Game {
     }
 
     public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceWhite, boolean numberOfPieceBlack, boolean valueOfPiecesSummedWhite, boolean valueOfPiecesSummedBlack) {
-        //public ArrayList<String> start(boolean winner, boolean numTurns, boolean timePerMoveWhite, boolean timePerMoveBlack, boolean totalGameTime, boolean numberOfPieceType, boolean numberOfPiecesPerPlayer, boolean valueOfPiecesSummed) {
         boolean gameOver = false;
         AIPlayer nextPlayer = white;
-
 
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
@@ -67,7 +65,6 @@ public class SimulatorSingleGame extends Game {
         //pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
         //pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
 
-        int counter = 0;
         while (!gameOver) {
             Move move = nextPlayer.chooseMove(currentState);
 
@@ -107,12 +104,10 @@ public class SimulatorSingleGame extends Game {
                 //System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.BLACK)));
                 capturePieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
                 evaluationBoardB.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.BLACK));
-                counter++;
             } else {
                 //System.out.println(Arrays.toString(currentState.getPieceAndSquare(Side.WHITE)));
                 capturePieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
                 evaluationBoardW.add(BoardStateEvaluator.getBoardEvaluationNumber(currentState, Side.WHITE));
-                counter++;
             }
 
 
