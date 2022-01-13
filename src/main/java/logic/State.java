@@ -38,10 +38,6 @@ public class State {
         this.diceRoll = diceRoll;
         this.color = color;
         loadPieceAndSquareFromFEN(board.getFEN());
-        this.board.setShortCastlingWhite(board.isShortCastlingWhite());
-        this.board.setLongCastlingWhite(board.isLongCastlingWhite());
-        this.board.setShortCastlingBlack(board.isShortCastlingBlack());
-        this.board.setLongCastlingBlack(board.isLongCastlingBlack());
         cumulativeTurn = 0;
     }
 

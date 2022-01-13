@@ -10,11 +10,6 @@ public abstract class Board {
 
     private String FEN;
 
-    private boolean ShortCastlingWhite = true;
-    private boolean LongCastlingWhite = true;
-    private boolean ShortCastlingBlack = true;
-    private boolean LongCastlingBlack = true;
-
     public abstract void removePiece(Square location);
 
     public abstract boolean isEmpty(Square square);
@@ -80,37 +75,4 @@ public abstract class Board {
         this.FEN = FEN;
     }
 
-    public abstract Board updateCastling(Board board, Piece p, Square q);
-
-    public boolean isShortCastlingWhite() {
-        return ShortCastlingWhite;
-    }
-
-    public void setShortCastlingWhite(boolean shortCastlingWhite) {
-        ShortCastlingWhite = shortCastlingWhite;
-    }
-
-    public boolean isLongCastlingWhite() {
-        return LongCastlingWhite;
-    }
-
-    public void setLongCastlingWhite(boolean longCastlingWhite) {
-        LongCastlingWhite = longCastlingWhite;
-    }
-
-    public boolean isShortCastlingBlack() {
-        return ShortCastlingBlack;
-    }
-
-    public void setShortCastlingBlack(boolean shortCastlingBlack) {
-        ShortCastlingBlack = shortCastlingBlack;
-    }
-
-    public boolean isLongCastlingBlack() {
-        return LongCastlingBlack;
-    }
-
-    public void setLongCastlingBlack(boolean longCastlingBlack) {
-        LongCastlingBlack = longCastlingBlack;
-    }
 }

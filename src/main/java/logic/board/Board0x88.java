@@ -107,41 +107,8 @@ public class Board0x88 extends Board {
     }
 
     @Override
-    public Board updateCastling(Board board, Piece p, Square origin) {
-        if (board.isShortCastlingWhite() && (p == Piece.WHITE_ROOK) && (origin.getBoardIndex() == 119)) {
-            board.setShortCastlingWhite(false);
-        } else if (board.isShortCastlingWhite() && (p == Piece.WHITE_ROOK) && (origin.getBoardIndex() == 112)) {
-            board.setShortCastlingWhite(false);
-        } else if ((board.isShortCastlingWhite() || board.isLongCastlingWhite()) && (p==Piece.WHITE_KING)) {
-            board.setShortCastlingWhite(false);
-            board.setLongCastlingWhite(false);
-        } else if (board.isShortCastlingBlack() && (p == Piece.BLACK_ROOK) && (origin.getBoardIndex() == 7)) {
-            board.setShortCastlingWhite(false);
-        } else if (board.isLongCastlingBlack() && (p == Piece.BLACK_ROOK) && (origin.getBoardIndex() == 0)) {
-            board.setShortCastlingWhite(false);
-        } else if ((board.isShortCastlingBlack() || board.isLongCastlingBlack()) && (p==Piece.BLACK_ROOK)) {
-            board.setShortCastlingBlack(false);
-            board.setLongCastlingBlack(false);
-        }
-        return board;
-    }
-
-    @Override
     public Board movePiece(Square origin, Square destination) {
         Board0x88 boardAfterMove = new Board0x88(board);
-//        System.out.println(boardAfterMove.isShortCastlingWhite());
-//        System.out.println(boardAfterMove.isLongCastlingWhite());
-//        System.out.println(boardAfterMove.isShortCastlingBlack());
-//        System.out.println(boardAfterMove.isLongCastlingBlack());
-
-        //boardAfterMove = (Board0x88) updateCastling(boardAfterMove, p, origin); // can cause problem?
-//        System.out.println();
-//        System.out.println(boardAfterMove.isShortCastlingWhite());
-//        System.out.println(boardAfterMove.isLongCastlingWhite());
-//        System.out.println(boardAfterMove.isShortCastlingBlack());
-//        System.out.println(boardAfterMove.isLongCastlingBlack());
-//        System.out.println();
-//        System.out.println();
 
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
         boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;

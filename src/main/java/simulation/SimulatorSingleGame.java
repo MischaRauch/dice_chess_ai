@@ -63,10 +63,6 @@ public class SimulatorSingleGame extends Game {
 
         stats.add(getAIPlayerWhite().getNameAi());
         stats.add(getAIPlayerBlack().getNameAi());
-        currentState.getBoard().setShortCastlingWhite(true);
-        currentState.getBoard().setLongCastlingWhite(true);
-        currentState.getBoard().setShortCastlingBlack(true);
-        currentState.getBoard().setLongCastlingBlack(true);
 
         //pieceArrayB.add(currentState.getPieceAndSquare(Side.BLACK));
         //pieceArrayW.add(currentState.getPieceAndSquare(Side.WHITE));
