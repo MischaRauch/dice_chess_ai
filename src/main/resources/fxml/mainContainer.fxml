@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -14,82 +21,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1260.0" style="-fx-background-color: #34495e;" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1260.0" style="-fx-background-color: #34495e;" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Region minWidth="20.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER" minWidth="220.0" prefHeight="200.0" spacing="25.0" HBox.hgrow="ALWAYS">
                <children>
                   <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
                      <children>
-                        <ImageView fx:id="diceImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/dice-icon.png" />
-                           </image></ImageView>
-                        <Button mnemonicParsing="false" onAction="#rollDice" text="Roll">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/dice-icon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
+                        <ImageView fx:id="diceImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </VBox>
-                  <HBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
-                     <children>
-                        <Button fx:id="undoButton" minWidth="90.0" mnemonicParsing="false" onAction="#undoMove" style="-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5;" text="Undo">
-                           <padding>
-                              <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/undo.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="redoButton" minWidth="90.0" mnemonicParsing="false" onAction="#redoMove" style="-fx-background-color: #2980b9; -fx-text-fill: #ffffff; -fx-background-radius: 5px;" text="Redo">
-                           <padding>
-                              <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/redo.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                     <padding>
-                        <Insets bottom="25.0" left="10.0" right="10.0" top="25.0" />
-                     </padding>
-                  </HBox>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
                      <children>
                         <Label text="Move History">
@@ -144,7 +90,7 @@
                         <Region minWidth="30.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" />
+                  <HBox alignment="TOP_CENTER" />
                </children>
                <HBox.margin>
                   <Insets top="20.0" />

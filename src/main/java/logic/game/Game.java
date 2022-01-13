@@ -45,6 +45,7 @@ public abstract class Game {
 
     public Game(String initialPosition) {
         currentState = new State(new Board0x88(initialPosition), Math.random() < 0.5 ? 1 : 2, Side.WHITE);
+
         //currentState.setDiceRoll(Dice.roll(currentState, Side.WHITE));
         currentState.setDiceRoll(Dice.roll(currentState, WHITE));
         // First time game gets initialized game instance is null so make this the first state
@@ -55,6 +56,7 @@ public abstract class Game {
         }
         CURRENT_GAME = this;
         this.FEN = initialPosition;
+        System.out.println("INITIAL POSITION: " + initialPosition);
         // System.out.println("GAME const fen");
     }
 

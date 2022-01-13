@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -16,18 +23,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.Menu">
+<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.Menu">
    <children>
       <HBox alignment="CENTER" layoutX="85.0" layoutY="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="TOP_CENTER" spacing="30.0">
                <children>
-                  <Label text="Dice Chess" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="36.0" />
-                     </font>
-                  </Label>
+                  <HBox alignment="CENTER" prefHeight="49.0" prefWidth="246.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+                     <children>
+                        <Label text="Dice Chess" textFill="#98501a">
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Region prefHeight="26.0" prefWidth="246.0" />
                   <ImageView fitHeight="246.0" fitWidth="285.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/DiceChessIcon.png" />
@@ -37,6 +48,9 @@
                <padding>
                   <Insets top="15.0" />
                </padding>
+               <HBox.margin>
+                  <Insets left="10.0" top="8.0" />
+               </HBox.margin>
             </VBox>
             <VBox alignment="TOP_CENTER" spacing="15.0">
                <children>
@@ -166,11 +180,35 @@
                         <Insets bottom="15.0" left="15.0" right="15.0" top="10.0" />
                      </padding>
                   </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="33.0" prefWidth="299.0" style="-fx-background-color: #98501a; -fx-background-radius: 10;">
+                           <children>
+                              <Label text="Load FEN" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="fenText" prefHeight="27.0" prefWidth="287.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="10.0" />
+                     </padding>
+                  </VBox>
                   <HBox alignment="CENTER">
                      <children>
                         <HBox alignment="CENTER" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="statsButton" mnemonicParsing="false" onAction="#displayStats" style="-fx-background-color: #98501a;" text="Stats" textFill="WHITE">
+                              <Button fx:id="infoButton" mnemonicParsing="false" onAction="#viewInfo" style="-fx-background-color: #98501a;" text="Info" textFill="WHITE">
                                  <font>
                                     <Font size="16.0" />
                                  </font>

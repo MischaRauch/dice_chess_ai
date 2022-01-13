@@ -47,6 +47,7 @@ public class Board0x88 extends Board {
         this();
         loadFromFEN(FEN);
         this.setFEN(FEN);
+        System.out.println("FEN board 0x88: " + FEN);
     }
 
     //easy cloning of logic.board
