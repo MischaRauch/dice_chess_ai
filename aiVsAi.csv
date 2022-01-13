@@ -1,0 +1,851 @@
+Alg, AlgTwo, Winner, Turns 
+Basic AI,ExpectiMiniMax,WHITE,19
+Basic AI,ExpectiMiniMax,BLACK,38
+Basic AI,ExpectiMiniMax,BLACK,40
+Basic AI,ExpectiMiniMax,BLACK,14
+Basic AI,ExpectiMiniMax,BLACK,40
+Basic AI,ExpectiMiniMax,BLACK,40
+Basic AI,ExpectiMiniMax,BLACK,58
+Basic AI,ExpectiMiniMax,BLACK,20
+Basic AI,ExpectiMiniMax,BLACK,34
+Basic AI,ExpectiMiniMax,BLACK,34
+Basic AI,ExpectiMiniMax,WHITE,43
+Basic AI,ExpectiMiniMax,WHITE,21
+Basic AI,ExpectiMiniMax,BLACK,52
+Basic AI,ExpectiMiniMax,BLACK,22
+Basic AI,ExpectiMiniMax,BLACK,76
+Basic AI,ExpectiMiniMax,BLACK,28
+Basic AI,ExpectiMiniMax,BLACK,14
+Basic AI,ExpectiMiniMax,BLACK,10
+Basic AI,ExpectiMiniMax,BLACK,42
+Basic AI,ExpectiMiniMax,BLACK,18
+Basic AI,ExpectiMiniMax,BLACK,34
+Basic AI,ExpectiMiniMax,BLACK,38
+Basic AI,ExpectiMiniMax,WHITE,61
+Basic AI,ExpectiMiniMax,WHITE,37
+Basic AI,ExpectiMiniMax,BLACK,24
+Basic AI,ExpectiMiniMax,BLACK,10
+Basic AI,ExpectiMiniMax,BLACK,30
+Basic AI,ExpectiMiniMax,BLACK,32
+Basic AI,ExpectiMiniMax,WHITE,39
+Basic AI,ExpectiMiniMax,BLACK,26
+Basic AI,ExpectiMiniMax,BLACK,22
+Basic AI,ExpectiMiniMax,BLACK,32
+Basic AI,ExpectiMiniMax,BLACK,58
+Basic AI,ExpectiMiniMax,BLACK,10
+Basic AI,ExpectiMiniMax,WHITE,39
+Basic AI,ExpectiMiniMax,BLACK,14
+Basic AI,ExpectiMiniMax,BLACK,26
+Basic AI,ExpectiMiniMax,BLACK,46
+Basic AI,ExpectiMiniMax,BLACK,14
+Basic AI,ExpectiMiniMax,BLACK,28
+Basic AI,ExpectiMiniMax,BLACK,36
+Basic AI,ExpectiMiniMax,WHITE,25
+Basic AI,ExpectiMiniMax,BLACK,20
+Basic AI,ExpectiMiniMax,BLACK,28
+Basic AI,ExpectiMiniMax,BLACK,28
+Basic AI,ExpectiMiniMax,BLACK,46
+Basic AI,ExpectiMiniMax,BLACK,40
+Basic AI,ExpectiMiniMax,BLACK,32
+Basic AI,ExpectiMiniMax,BLACK,40
+Basic AI,ExpectiMiniMax,BLACK,36
+MiniMax,ExpectiMiniMax,BLACK,36
+MiniMax,ExpectiMiniMax,BLACK,60
+MiniMax,ExpectiMiniMax,BLACK,32
+MiniMax,ExpectiMiniMax,BLACK,44
+MiniMax,ExpectiMiniMax,BLACK,62
+MiniMax,ExpectiMiniMax,WHITE,45
+MiniMax,ExpectiMiniMax,BLACK,24
+MiniMax,ExpectiMiniMax,BLACK,14
+MiniMax,ExpectiMiniMax,BLACK,50
+MiniMax,ExpectiMiniMax,WHITE,35
+MiniMax,ExpectiMiniMax,BLACK,66
+MiniMax,ExpectiMiniMax,BLACK,70
+MiniMax,ExpectiMiniMax,BLACK,30
+MiniMax,ExpectiMiniMax,WHITE,21
+MiniMax,ExpectiMiniMax,BLACK,42
+MiniMax,ExpectiMiniMax,WHITE,61
+MiniMax,ExpectiMiniMax,BLACK,46
+MiniMax,ExpectiMiniMax,BLACK,48
+MiniMax,ExpectiMiniMax,BLACK,46
+MiniMax,ExpectiMiniMax,WHITE,51
+MiniMax,ExpectiMiniMax,WHITE,59
+MiniMax,ExpectiMiniMax,BLACK,28
+MiniMax,ExpectiMiniMax,BLACK,30
+MiniMax,ExpectiMiniMax,BLACK,26
+MiniMax,ExpectiMiniMax,BLACK,36
+MiniMax,ExpectiMiniMax,WHITE,27
+MiniMax,ExpectiMiniMax,BLACK,52
+MiniMax,ExpectiMiniMax,BLACK,36
+MiniMax,ExpectiMiniMax,WHITE,29
+MiniMax,ExpectiMiniMax,BLACK,42
+MiniMax,ExpectiMiniMax,BLACK,36
+MiniMax,ExpectiMiniMax,BLACK,26
+MiniMax,ExpectiMiniMax,BLACK,16
+MiniMax,ExpectiMiniMax,BLACK,18
+MiniMax,ExpectiMiniMax,BLACK,30
+MiniMax,ExpectiMiniMax,BLACK,34
+MiniMax,ExpectiMiniMax,BLACK,20
+MiniMax,ExpectiMiniMax,BLACK,72
+MiniMax,ExpectiMiniMax,BLACK,56
+MiniMax,ExpectiMiniMax,BLACK,12
+MiniMax,ExpectiMiniMax,BLACK,60
+MiniMax,ExpectiMiniMax,BLACK,48
+MiniMax,ExpectiMiniMax,WHITE,33
+MiniMax,ExpectiMiniMax,BLACK,14
+MiniMax,ExpectiMiniMax,BLACK,34
+MiniMax,ExpectiMiniMax,BLACK,32
+MiniMax,ExpectiMiniMax,BLACK,58
+MiniMax,ExpectiMiniMax,BLACK,30
+MiniMax,ExpectiMiniMax,BLACK,32
+MiniMax,ExpectiMiniMax,BLACK,32
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,NEUTRAL,4
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+ExpectiMiniMax,MiniMax,WHITE,56
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,4
+MiniMax,ExpectiMiniMax,NEUTRAL,5
+ExpectiMiniMax,MiniMax,WHITE,25
+ExpectiMiniMax,MiniMax,BLACK,56
+ExpectiMiniMax,MiniMax,BLACK,40
+ExpectiMiniMax,MiniMax,WHITE,29
+ExpectiMiniMax,MiniMax,WHITE,59
+ExpectiMiniMax,MiniMax,BLACK,44
+ExpectiMiniMax,MiniMax,WHITE,17
+ExpectiMiniMax,MiniMax,WHITE,17
+ExpectiMiniMax,MiniMax,BLACK,38
+ExpectiMiniMax,MiniMax,BLACK,32
+ExpectiMiniMax,MiniMax,WHITE,11
+ExpectiMiniMax,MiniMax,WHITE,35
+ExpectiMiniMax,MiniMax,BLACK,22
+ExpectiMiniMax,MiniMax,BLACK,32
+ExpectiMiniMax,MiniMax,WHITE,41
+ExpectiMiniMax,MiniMax,WHITE,37
+ExpectiMiniMax,MiniMax,WHITE,15
+ExpectiMiniMax,MiniMax,BLACK,78
+ExpectiMiniMax,MiniMax,WHITE,19
+ExpectiMiniMax,MiniMax,BLACK,42
+ExpectiMiniMax,MiniMax,WHITE,31
+ExpectiMiniMax,MiniMax,WHITE,15
+ExpectiMiniMax,MiniMax,WHITE,13
+ExpectiMiniMax,MiniMax,WHITE,25
+ExpectiMiniMax,MiniMax,WHITE,17
+ExpectiMiniMax,MiniMax,WHITE,21
+ExpectiMiniMax,MiniMax,WHITE,11
+ExpectiMiniMax,MiniMax,WHITE,45
+ExpectiMiniMax,MiniMax,WHITE,41
+ExpectiMiniMax,MiniMax,WHITE,31
+ExpectiMiniMax,MiniMax,BLACK,58
+ExpectiMiniMax,MiniMax,WHITE,57
+ExpectiMiniMax,MiniMax,WHITE,9
+ExpectiMiniMax,MiniMax,WHITE,11
+ExpectiMiniMax,MiniMax,BLACK,18
+ExpectiMiniMax,MiniMax,WHITE,53
+ExpectiMiniMax,MiniMax,WHITE,47
+ExpectiMiniMax,MiniMax,WHITE,9
+ExpectiMiniMax,MiniMax,WHITE,35
+ExpectiMiniMax,MiniMax,WHITE,53
+ExpectiMiniMax,MiniMax,BLACK,24
+ExpectiMiniMax,MiniMax,BLACK,28
+ExpectiMiniMax,MiniMax,BLACK,72
+ExpectiMiniMax,MiniMax,BLACK,24
+ExpectiMiniMax,MiniMax,BLACK,16
+ExpectiMiniMax,MiniMax,WHITE,13
+ExpectiMiniMax,MiniMax,WHITE,51
+ExpectiMiniMax,MiniMax,WHITE,53
+ExpectiMiniMax,MiniMax,WHITE,13
+ExpectiMiniMax,MiniMax,WHITE,65
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,WHITE,42
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,WHITE,18
+ExpectiMiniMax,MiniMax,WHITE,26
+ExpectiMiniMax,MiniMax,BLACK,45
+ExpectiMiniMax,MiniMax,WHITE,84
+ExpectiMiniMax,MiniMax,WHITE,52
+ExpectiMiniMax,MiniMax,WHITE,48
+ExpectiMiniMax,MiniMax,WHITE,16
+ExpectiMiniMax,MiniMax,WHITE,58
+ExpectiMiniMax,MiniMax,WHITE,16
+ExpectiMiniMax,MiniMax,WHITE,16
+ExpectiMiniMax,MiniMax,BLACK,17
+ExpectiMiniMax,MiniMax,WHITE,12
+ExpectiMiniMax,MiniMax,WHITE,22
+ExpectiMiniMax,MiniMax,WHITE,32
+ExpectiMiniMax,MiniMax,WHITE,20
+ExpectiMiniMax,MiniMax,WHITE,50
+ExpectiMiniMax,MiniMax,BLACK,63
+ExpectiMiniMax,MiniMax,WHITE,20
+ExpectiMiniMax,MiniMax,WHITE,16
+ExpectiMiniMax,MiniMax,WHITE,10
+ExpectiMiniMax,MiniMax,WHITE,22
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,NEUTRAL,101
+ExpectiMiniMax,MiniMax,WHITE,34
+ExpectiMiniMax,MiniMax,WHITE,46
+ExpectiMiniMax,MiniMax,WHITE,26
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,WHITE,52
+ExpectiMiniMax,MiniMax,WHITE,32
+ExpectiMiniMax,MiniMax,BLACK,43
+ExpectiMiniMax,MiniMax,WHITE,28
+ExpectiMiniMax,MiniMax,WHITE,36
+ExpectiMiniMax,MiniMax,BLACK,75
+ExpectiMiniMax,MiniMax,WHITE,18
+ExpectiMiniMax,MiniMax,BLACK,21
+ExpectiMiniMax,MiniMax,WHITE,58
+ExpectiMiniMax,MiniMax,WHITE,16
+ExpectiMiniMax,MiniMax,WHITE,10
+ExpectiMiniMax,MiniMax,BLACK,15
+ExpectiMiniMax,MiniMax,BLACK,57
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,WHITE,20
+ExpectiMiniMax,MiniMax,WHITE,54
+ExpectiMiniMax,MiniMax,WHITE,14
+ExpectiMiniMax,MiniMax,WHITE,28
+ExpectiMiniMax,MiniMax,WHITE,12
+ExpectiMiniMax,MiniMax,WHITE,18
+Random AI,Basic AI,BLACK,88
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,60
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,76
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,12
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,BLACK,18
+Random AI,Basic AI,BLACK,60
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,NEUTRAL,101
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,86
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,WHITE,85
+Random AI,Basic AI,BLACK,18
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,14
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,70
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,70
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,84
+Random AI,Basic AI,BLACK,88
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,70
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,79
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,WHITE,29
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,WHITE,27
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,76
+Random AI,Basic AI,BLACK,60
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,76
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,86
+Random AI,Basic AI,BLACK,80
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,10
+Random AI,Basic AI,WHITE,43
+Random AI,Basic AI,BLACK,100
+Random AI,Basic AI,BLACK,78
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,14
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,WHITE,43
+Random AI,Basic AI,BLACK,60
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,18
+Random AI,Basic AI,BLACK,73
+Random AI,Basic AI,WHITE,93
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,WHITE,21
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,WHITE,31
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,73
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,WHITE,37
+Random AI,Basic AI,WHITE,11
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,62
+Random AI,Basic AI,WHITE,35
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,76
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,70
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,83
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,62
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,WHITE,25
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,86
+Random AI,Basic AI,BLACK,78
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,84
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,83
+Random AI,Basic AI,WHITE,49
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,14
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,96
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,18
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,WHITE,65
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,WHITE,95
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,70
+Random AI,Basic AI,BLACK,60
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,69
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,78
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,BLACK,8
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,80
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,42
+Random AI,Basic AI,BLACK,8
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,62
+Random AI,Basic AI,WHITE,33
+Random AI,Basic AI,BLACK,22
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,74
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,98
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,100
+Random AI,Basic AI,BLACK,80
+Random AI,Basic AI,BLACK,90
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,90
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,80
+Random AI,Basic AI,BLACK,64
+Random AI,Basic AI,BLACK,94
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,18
+Random AI,Basic AI,BLACK,40
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,78
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,88
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,16
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,12
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,BLACK,76
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,70
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,84
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,48
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,60
+Random AI,Basic AI,BLACK,77
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,WHITE,61
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,BLACK,77
+Random AI,Basic AI,BLACK,32
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,WHITE,49
+Random AI,Basic AI,BLACK,71
+Random AI,Basic AI,BLACK,67
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,8
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,72
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,20
+Random AI,Basic AI,BLACK,62
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,84
+Random AI,Basic AI,BLACK,28
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,52
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,73
+Random AI,Basic AI,BLACK,82
+Random AI,Basic AI,BLACK,36
+Random AI,Basic AI,WHITE,85
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,81
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,NEUTRAL,102
+Random AI,Basic AI,BLACK,84
+Random AI,Basic AI,BLACK,62
+Random AI,Basic AI,WHITE,83
+Random AI,Basic AI,WHITE,37
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,8
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,50
+Random AI,Basic AI,BLACK,46
+Random AI,Basic AI,BLACK,54
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,38
+Random AI,Basic AI,BLACK,44
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,88
+Random AI,Basic AI,BLACK,58
+Random AI,Basic AI,BLACK,26
+Random AI,Basic AI,BLACK,66
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,88
+Random AI,Basic AI,BLACK,56
+Random AI,Basic AI,BLACK,10
+Random AI,Basic AI,BLACK,24
+Random AI,Basic AI,BLACK,68
+Random AI,Basic AI,BLACK,34
+Random AI,Basic AI,BLACK,30
+Random AI,Basic AI,BLACK,28
+MiniMax,Basic AI,BLACK,84
+MiniMax,Basic AI,WHITE,77
+MiniMax,Basic AI,WHITE,47
+MiniMax,Basic AI,BLACK,56
+MiniMax,Basic AI,WHITE,51
+MiniMax,Basic AI,WHITE,49
+MiniMax,Basic AI,WHITE,73
+MiniMax,Basic AI,WHITE,19
+MiniMax,Basic AI,BLACK,56
+MiniMax,Basic AI,WHITE,33
+MiniMax,Basic AI,WHITE,29
+MiniMax,Basic AI,BLACK,28
+MiniMax,Basic AI,BLACK,64
+MiniMax,Basic AI,WHITE,81
+MiniMax,Basic AI,WHITE,29
+MiniMax,Basic AI,WHITE,37
+MiniMax,Basic AI,WHITE,47
+MiniMax,Basic AI,WHITE,49
+MiniMax,Basic AI,BLACK,30
+MiniMax,Basic AI,BLACK,70
+MiniMax,Basic AI,BLACK,56
+MiniMax,Basic AI,WHITE,11
+MiniMax,Basic AI,BLACK,66
+MiniMax,Basic AI,BLACK,56
+MiniMax,Basic AI,WHITE,39
+MiniMax,Basic AI,BLACK,26
+MiniMax,Basic AI,WHITE,41
+MiniMax,Basic AI,WHITE,33
+MiniMax,Basic AI,BLACK,56
+MiniMax,Basic AI,WHITE,67
+MiniMax,Basic AI,NEUTRAL,102
+MiniMax,Basic AI,WHITE,13
+MiniMax,Basic AI,WHITE,91
+MiniMax,Basic AI,NEUTRAL,102
+MiniMax,Basic AI,WHITE,31
+MiniMax,Basic AI,WHITE,49
+MiniMax,Basic AI,WHITE,77
+MiniMax,Basic AI,WHITE,25
+MiniMax,Basic AI,BLACK,80
+MiniMax,Basic AI,BLACK,66
+MiniMax,Basic AI,WHITE,19
+MiniMax,Basic AI,BLACK,40
+MiniMax,Basic AI,WHITE,39
+MiniMax,Basic AI,BLACK,72
+MiniMax,Basic AI,WHITE,41
+MiniMax,Basic AI,WHITE,29
+MiniMax,Basic AI,BLACK,58
+MiniMax,Basic AI,WHITE,53
+MiniMax,Basic AI,NEUTRAL,102
+MiniMax,Basic AI,BLACK,52
+ExpectiMiniMax,Random AI,WHITE,55
+ExpectiMiniMax,Random AI,WHITE,87
+ExpectiMiniMax,Random AI,WHITE,15
+ExpectiMiniMax,Random AI,WHITE,35
+ExpectiMiniMax,Random AI,WHITE,27
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,NEUTRAL,102
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,WHITE,21
+ExpectiMiniMax,Random AI,WHITE,27
+ExpectiMiniMax,Random AI,WHITE,23
+ExpectiMiniMax,Random AI,WHITE,47
+ExpectiMiniMax,Random AI,WHITE,13
+ExpectiMiniMax,Random AI,WHITE,25
+ExpectiMiniMax,Random AI,WHITE,47
+ExpectiMiniMax,Random AI,BLACK,30
+ExpectiMiniMax,Random AI,WHITE,81
+ExpectiMiniMax,Random AI,WHITE,21
+ExpectiMiniMax,Random AI,WHITE,35
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,NEUTRAL,102
+ExpectiMiniMax,Random AI,WHITE,45
+ExpectiMiniMax,Random AI,WHITE,39
+ExpectiMiniMax,Random AI,WHITE,23
+ExpectiMiniMax,Random AI,WHITE,15
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,WHITE,53
+ExpectiMiniMax,Random AI,BLACK,60
+ExpectiMiniMax,Random AI,WHITE,15
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,WHITE,17
+ExpectiMiniMax,Random AI,WHITE,53
+ExpectiMiniMax,Random AI,WHITE,39
+ExpectiMiniMax,Random AI,WHITE,81
+ExpectiMiniMax,Random AI,WHITE,47
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,WHITE,53
+ExpectiMiniMax,Random AI,WHITE,11
+ExpectiMiniMax,Random AI,WHITE,39
+ExpectiMiniMax,Random AI,WHITE,31
+ExpectiMiniMax,Random AI,WHITE,13
+ExpectiMiniMax,Random AI,BLACK,26
+ExpectiMiniMax,Random AI,WHITE,23
+ExpectiMiniMax,Random AI,WHITE,17
+ExpectiMiniMax,Random AI,WHITE,19
+ExpectiMiniMax,Random AI,WHITE,51
+ExpectiMiniMax,Random AI,WHITE,11
+ExpectiMiniMax,Random AI,WHITE,25
+ExpectiMiniMax,Random AI,WHITE,19
