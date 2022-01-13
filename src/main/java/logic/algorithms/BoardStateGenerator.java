@@ -376,6 +376,20 @@ public class BoardStateGenerator {
 //        return possibleBoardStatesWeights;
 //    }
 
+//    // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
+//    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
+//
+//        List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+//
+//        List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
+//
+//        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+//            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+//            possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+//        }
+//        return possibleBoardStatesWeights;
+//    }
+
     // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
     public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece, Side color, int turn) {
 
