@@ -11,11 +11,11 @@
    <children>
       <VBox alignment="TOP_CENTER" layoutX="6.0" layoutY="54.0" prefHeight="361.0" prefWidth="626.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="10.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
                <children>
-                  <Label prefHeight="43.0" prefWidth="221.0" text="Game Instructions" textFill="#834316">
+                  <Label prefHeight="74.0" prefWidth="303.0" text="Game Instructions" textFill="#834316" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font name="System Bold" size="28.0" />
+                        <Font name="System Bold" size="36.0" />
                      </font>
                   </Label>
                </children>
@@ -23,9 +23,9 @@
                   <Insets left="100.0" right="100.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="46.0" prefWidth="626.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+            <HBox alignment="CENTER" prefHeight="46.0" prefWidth="626.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dice Chess is a variant of Chess, in which the moves of each player are determined by the rolling of an ordinary six-sided dice." wrappingWidth="482.500244140625" HBox.hgrow="ALWAYS">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dice Chess is a variant of Chess, in which the moves of each player are determined by the rolling of an ordinary six-sided dice." wrappingWidth="482.500244140625">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -35,20 +35,22 @@
                   <Insets left="20.0" right="20.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+            <HBox alignment="CENTER" prefHeight="171.0" prefWidth="602.0" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/boardPhoto.png" />
                      </image>
                   </ImageView>
-                  <VBox alignment="CENTER" prefHeight="150.0" prefWidth="469.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;">
+                  <VBox alignment="CENTER" prefHeight="188.0" prefWidth="465.0" spacing="10.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
                      <children>
+                        <Region prefHeight="21.0" prefWidth="465.0" VBox.vgrow="ALWAYS" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="On our menu screen, select &quot;Single Game&quot; and configure the game in one of three ways: " wrappingWidth="399.51678466796875">
                            <font>
                               <Font size="15.0" />
                            </font></Text>
-                        <VBox alignment="CENTER" prefHeight="64.0" prefWidth="406.0" style="-fx-background-color: #98501a; -fx-background-radius: 15;">
+                        <Region prefHeight="19.0" prefWidth="465.0" VBox.vgrow="ALWAYS" />
+                        <VBox alignment="CENTER" prefHeight="86.0" prefWidth="454.0" style="-fx-background-color: #98501a; -fx-background-radius: 15;" VBox.vgrow="ALWAYS">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1.  Choose HUMAN vs. HUMAN: Play against a friend!" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2. Choose AI vs. HUMAN: Select an AI player and prove that you are stronger!" />
@@ -58,44 +60,45 @@
                               <Insets left="6.0" right="5.0" />
                            </VBox.margin>
                         </VBox>
+                        <Region prefHeight="12.0" prefWidth="465.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="634.0" spacing="10.0">
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="634.0" spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #d5a47d;" text="Back" />
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #d5a47d;" text="Back" HBox.hgrow="ALWAYS" />
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/pieces/w_pawn.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/pieces/w_knight.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/pieces/w_bishop.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/pieces/w_rook.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/pieces/w_queen.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
                         <Image url="@/images/pieces/w_king.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="PieceInstructions" mnemonicParsing="false" onAction="#viewPiecesInst" style="-fx-background-color: #d5a47d;" text="Learn the basics of the Pieces" />
+                  <Button fx:id="PieceInstructions" mnemonicParsing="false" onAction="#viewPiecesInst" style="-fx-background-color: #d5a47d;" text="Learn the basics of the Pieces" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>
