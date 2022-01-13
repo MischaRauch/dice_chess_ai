@@ -28,6 +28,7 @@ public class State {
     private boolean longCastlingWhite = true;
     private boolean shortCastlingBlack = true;
     private boolean longCastlingBlack = true;
+
     private List<PieceAndSquareTuple> pieceAndSquare = new ArrayList<>();
     private int cumulativeTurn;
 
@@ -223,9 +224,7 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
-        String a = board.getFEN();
         Board newBoard = board.movePiece(move.origin, move.destination);
-        String b = newBoard.getFEN();
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());

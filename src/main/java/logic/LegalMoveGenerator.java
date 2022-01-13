@@ -18,11 +18,11 @@ import static logic.enums.Square.getSquare;
 
 public class LegalMoveGenerator {
 
-    // for ML, needs to be checked (evaluator.isLegalMove)
+    // for ML
     public static ArrayList<OriginAndDestSquare> getAllLegalMovesML(State state, Side side) {
 
         ArrayList<OriginAndDestSquare> legalMoves = new ArrayList<>();
-        OriginAndDestSquare originAndDestSquare;
+
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 Piece p = state.getBoard().getPieceAt(Square.getSquare(rank, file));
@@ -80,7 +80,7 @@ public class LegalMoveGenerator {
         return getMovesOpt(State.PieceAndSquareToBoardConverter(state), squareOrigin, piece);
     }
 
-    // needs to add castling, en passant, ...
+    // needs to add castling, en passant, promotion
     public static List<Square> getMovesOpt(Board board, Square origin, Piece piece) {
         List<Square> validMoves = new LinkedList<>();
 
@@ -104,11 +104,54 @@ public class LegalMoveGenerator {
 
                         if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
                             validMoves.add(validTarget);
+
+//                        if (board.getPieceAt(validTarget) == EMPTY && state.getEnPassant() != INVALID) {
+//                            if (state.getEnPassant() == validTarget)
+//                                validMoves.add(state.getEnPassant());
+//                        }
                     }
                 }
             }
 
-            case KING, KNIGHT -> {
+            case KING -> {
+                for (int offset : piece.getOffsets()) {
+                    if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
+                        Square target = Square.getSquare(origin.getSquareNumber() + offset);
+
+                        if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor())) {
+                            validMoves.add(target);
+                        }
+                    }
+                }
+                //CHECK FOR CASTLING
+                if (piece.getColor() == Side.WHITE) {
+                    if (origin.getSquareNumber() == 4) {
+                        //SHORT WHITE
+                        if (board.isEmpty(origin.getSquareRight()) && board.isEmpty(getSquare(6))) {
+                            validMoves.add(getSquare(6));
+
+                        }
+                        //LONG WHITE
+                        if (board.isEmpty(origin.getSquareLeft()) && board.isEmpty(getSquare(2)) && board.isEmpty(getSquare(1))) {
+                            validMoves.add(getSquare(2));
+                        }
+                    }
+                }
+                else {
+                    if (origin.getSquareNumber() == 116) {
+                        //SHORT BLACK
+                        if (board.isEmpty(origin.getSquareRight()) && board.isEmpty(getSquare(118))) {
+                            validMoves.add(getSquare(118));
+                        }
+                        //LONG BLACK
+                        if (board.isEmpty(origin.getSquareLeft()) && board.isEmpty(getSquare(114)) && board.isEmpty(getSquare(113))) {
+                            validMoves.add(getSquare(114));
+                        }
+                    }
+                }
+            }
+
+            case KNIGHT -> {
                 for (int offset : piece.getOffsets()) {
                     if (!board.isOffBoard(origin.getSquareNumber() + offset)) {
                         Square target = Square.getSquare(origin.getSquareNumber() + offset);

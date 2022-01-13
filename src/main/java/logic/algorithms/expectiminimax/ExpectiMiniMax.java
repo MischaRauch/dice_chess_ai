@@ -16,15 +16,18 @@ public class ExpectiMiniMax {
     private final BoardStateGenerator gen = new BoardStateGenerator();
     private ExpectiMiniMaxTree tree;
     private ExpectiMiniMaxNode bestNode;
+    private boolean isHybrid;
 
-    public void constructTree(int depth, State initialBoardState) {
+    public void constructTree(int depth, State initialBoardState, boolean isHybrid) {
         this.tree = new ExpectiMiniMaxTree();
         State state = new State(initialBoardState);
         tree.setRoot(new ExpectiMiniMaxNode(true, state));
-        constructTree(tree.getRoot(), depth);
+        constructTree(tree.getRoot(), depth, isHybrid);
+        this.isHybrid = isHybrid; // put the new parameter to here
     }
 
-    private void constructTree(ExpectiMiniMaxNode parentNode, int depth) {
+    private void constructTree(ExpectiMiniMaxNode parentNode, int depth, boolean isHybrid) {
+        this.isHybrid = isHybrid;
         if (depth == 0) {
             bestNode = parentNode;
         }
@@ -37,13 +40,13 @@ public class ExpectiMiniMax {
             if (!isChildMaxPlayer) {
                 ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, false, pieceList);
                 depth -= 1;
-                constructTree(bestChild, depth);
+                constructTree(bestChild, depth, isHybrid);
             }
             // parent (current node) maximizer -> child minimizer
             else if (isChildMaxPlayer) {
                 ExpectiMiniMaxNode bestChild = addChildrenReturnBestChild(parentNode, allStatesAndBoardEvaluationsForGivenPieceType, true, pieceList);
                 depth -= 1;
-                constructTree(bestChild, depth);
+                constructTree(bestChild, depth, isHybrid);
             }
         }
     }
@@ -53,7 +56,9 @@ public class ExpectiMiniMax {
         for (int i = 1; i < 7; i++) {
             // evaluation numbers for i-th dice roll
             List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
-                    parentNode.getState().getColor(), i, parentNode.getState());
+                    parentNode.getState().getColor(), i, parentNode.getState(), isHybrid);
+            //List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getPreviousState().getPieceAndSquare(),
+            //        parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState(), isHybrid);
             if (!possibleEvaluationNumbersForGivenPiece.isEmpty()) {
                 pieces.add(Piece.getPieceFromDice(i, parentNode.getState().getColor()));
             }
@@ -68,7 +73,9 @@ public class ExpectiMiniMax {
         for (int i = 1; i < 7; i++) {
             // evaluation numbers for i-th dice roll
             List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
-                    parentNode.getState().getColor(), i, parentNode.getState());
+                    parentNode.getState().getColor(), i, parentNode.getState(), isHybrid);
+            //List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getPreviousState().getPieceAndSquare(),
+            //        parentNode.getPreviousState().getColor(), i, parentNode.getPreviousState(), isHybrid);
             // possible board states for i-th dice roll
             List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece = gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),
                     parentNode.getState().getColor(), i, parentNode.getState());

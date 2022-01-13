@@ -6,14 +6,11 @@ import logic.State;
 import logic.algorithms.expectiminimax.ExpectiMiniMaxThread;
 import logic.enums.Side;
 
-public class ExpectiMiniMaxPlayer extends AIPlayer {
-
-    private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
+public class Hybrid_ExpectiQL extends AIPlayer{private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
     private final int depth;
     private long timeNeeded;
-    private boolean isHybrid;
 
-    public ExpectiMiniMaxPlayer(int depth, Side color) {
+    public Hybrid_ExpectiQL(int depth, Side color) {
         super(color);
         this.depth = depth;
     }
@@ -21,7 +18,7 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
     @Override
     public Move chooseMove(State state) {
         // java creates a seperate thread to compute minimax while main thread still computing
-        ExpectiMiniMaxThread thread = new ExpectiMiniMaxThread(depth,state, false);
+        ExpectiMiniMaxThread thread = new ExpectiMiniMaxThread(depth,state, true);
         thread.start();
         try {
             // threads execute code in sequence
@@ -31,16 +28,15 @@ public class ExpectiMiniMaxPlayer extends AIPlayer {
             e.printStackTrace();
         }
         Move chosenMove = thread.getBestMove();
-        // TODO make evalautor not update moves (Phase 3)
         evaluator.isLegalMove(chosenMove, state, true, true);
-        System.out.println("ExpectiMiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        System.out.println("Hybrid_ExpectiQL: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
         timeNeeded = thread.getTimeNeeded();
         return chosenMove;
     }
 
     @Override
     public String getNameAi() {
-        return "ExpectiMiniMax";
+        return "Hybrid_ExpectiQL";
     }
 
     @Override

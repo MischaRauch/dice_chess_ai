@@ -17,7 +17,7 @@ public class ExpectiMiniMaxUnitTest {
 
     @Test
     public void correctEvaluationFirstMoveKnight() {
-        expectiMiniMax.constructTree(3, game.getCurrentState());
+        expectiMiniMax.constructTree(3, game.getCurrentState(), false);
         Move bestMove = expectiMiniMax.getBestMoveForBestNode();
         assertTrue(bestMove.getDiceRoll() == 2);
     }

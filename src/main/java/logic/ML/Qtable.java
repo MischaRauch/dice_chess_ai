@@ -81,6 +81,7 @@ public class Qtable {
             }
             answer++;
         }
+        stateSpace.add(state); // can cause problem?
         return answer;
     }
 
