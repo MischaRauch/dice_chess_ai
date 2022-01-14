@@ -2,12 +2,15 @@ package logic.mcts;
 
 import logic.Move;
 import logic.State;
+import logic.board.Board0x88;
 import logic.enums.Side;
 import logic.player.AIPlayer;
 
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Random;
 
+import static logic.mcts.Action.ActionType.WIN;
 import static logic.mcts.Node.NodeType.*;
 
 public class MCTSAgent extends AIPlayer {
@@ -20,7 +23,10 @@ public class MCTSAgent extends AIPlayer {
     public static Random random;
     static final double c = 1.4;
     long timeNeeded;
-
+    boolean debug = false;
+    boolean prune = false;
+    boolean uctExpected = false;
+    boolean sameStateRollout = false;
 
     public MCTSAgent(Side player, int numIterations) {
         super(player);
@@ -34,17 +40,29 @@ public class MCTSAgent extends AIPlayer {
         //this is where we create the GameTree and start the MCTS process
         long start = System.nanoTime();
         currentState = state;
-        root = new Node(new TreeState(currentState.getBoard(), player, 0), currentState.diceRoll);
+        root = new Node(new TreeState(new Board0x88(currentState.board.getBoard()), player, 0), currentState.diceRoll);
+
+        //if we can win, take that action immediately
+        for (Action a : root.validActions) {
+            if (a.type == WIN) {
+                return new Move(a.piece, a.origin, a.destination, state.diceRoll, player);
+            }
+        }
+
         tree = new GameTree(root, player);
         Action action = expectiMCTS(tree);
         Move move = new Move(action.piece, action.origin, action.destination, state.diceRoll, player);
         long end = System.nanoTime();
         timeNeeded = end - start;
-        //System.out.println("ACTION TAKEN: [" + action + "] ACTION TYPE: " + action.type);
-        //System.out.println(root.toString());
-        //System.out.println("TREE SIZE: " + tree.getTreeNodes().size());
-        //root.state.board.printBoard();
-        //System.out.println("--------------------------------------------------------------------");
+
+        if (debug) {
+            System.out.println("ACTION TAKEN: [" + action + "] ACTION TYPE: " + action.type);
+            System.out.println(root.toString());
+            System.out.println("TREE SIZE: " + tree.getTreeNodes().size());
+            root.state.board.printBoard();
+            System.out.println("--------------------------------------------------------------------");
+        }
+
         return move;
     }
 
@@ -58,6 +76,11 @@ public class MCTSAgent extends AIPlayer {
         for (int i = 0; i < numIterations; i++) {
             Node leaf = select(tree.getRoot());
             if (leaf.state.terminal) {
+//                System.out.println(leaf.type);
+//                System.out.println("leaf player to move: " + leaf.state.playerToMove);
+//                System.out.println("backup: winner: " + leaf.state.winner);
+//                System.out.println("backup: player: " + player);
+//                System.out.println("reward: " + leaf.state.reward(player));
                 backup(leaf, leaf.state.reward(player));
             } else {
                 double delta = simulate(leaf.state);
@@ -107,7 +130,7 @@ public class MCTSAgent extends AIPlayer {
             switch (a.type) {
                 case WIN:
                     return a;
-                case CAPTURE, QUIET:
+                case CAPTURE, QUIET, PROMOTE:
                     if (n.getExpectedValue() * a.score > value) {
                         best = a;
                         value = n.getExpectedValue() * a.score;
@@ -136,6 +159,9 @@ public class MCTSAgent extends AIPlayer {
         }
 
         if (!node.fullyExpanded()) {
+            if (node.type == TERMINAL) {
+                System.out.println("whoops");
+            }
             //System.out.println("SELECTED NODE NOT FULLY EXPANDED");
             Node q = expand(node);
             if (q.type == CHANCE) {
@@ -170,8 +196,14 @@ public class MCTSAgent extends AIPlayer {
                 //Terminal state reached by applying this action. No chance nodes should be created
                 q = new Node(node, nextState, a, TERMINAL);
                 //q.Q = nextState.playerToMove == player ? -1 : 1;
-                //q.Q = nextState.winner == node.state.playerToMove ?
-                q.Q = Integer.MAX_VALUE;
+
+                //if the Decision PLayer who applied Action 'a' to get Terminal State q was the winner in q -> Always choose this action
+                if (nextState.winner != node.state.playerToMove) {
+                    System.out.println("HOW is this even possible?");
+                }
+                q.Q = (nextState.winner == node.state.playerToMove) ? Integer.MAX_VALUE : Integer.MIN_VALUE; //TODO: is it even possible for the winner not to be the player who moved?
+                q.pruneSiblings();
+                //q.Q = Integer.MAX_VALUE;
                 //TODO: prune siblings from game tree and parent node
                 //TODO: prune action except a from parent -> mark parent fully expanded
             }
@@ -212,6 +244,33 @@ public class MCTSAgent extends AIPlayer {
         }
     }
 
+    public double simulate(TreeState state, boolean strategy) {
+        TreeState given = new TreeState(new Board0x88(state.board.getBoard()), state.playerToMove, state.depth);
+
+        for (int j = 0; j < 100; j++) {
+            if (given.terminal) {
+                return given.reward(player);
+            }
+
+            if (given.getRolls().isEmpty()) {
+                System.out.println("NO ROLLS");
+                System.out.println("TERMINAL? " + given.terminal);
+                return 0;
+            }
+
+            List<Integer> rolls = given.getRolls();
+            int roll = rolls.get(random.nextInt(rolls.size()));
+
+            PriorityQueue<Action> actions = given.getAvailableActions(roll); //TODO: reduce action space;
+            assert !actions.isEmpty();
+            Action a = actions.poll(); //TODO: add randomness
+
+            given = given.simulate(a);
+        }
+        //no terminal state found in 200 moves
+        return 0.5;
+    }
+
     public double simulate(TreeState state) {
         //System.out.println("ROLLOUT!");
         for (int j = 0; j < 100; j++) {
@@ -237,11 +296,11 @@ public class MCTSAgent extends AIPlayer {
             //System.out.println(rolls);
             int roll = rolls.get(random.nextInt(rolls.size()));
             //System.out.println("rolled: " + roll);
-            List<Action> actions = state.getAvailableActions(roll); //TODO: reduce action space;
+            PriorityQueue<Action> actions = state.getAvailableActions(roll); //TODO: reduce action space;
             //System.out.println(actions);
             assert !actions.isEmpty();
             //System.out.println("--- available: " + actions.size());
-            Action a = actions.get(0); //TODO: add randomness
+            Action a = actions.poll(); //TODO: add randomness
             //System.out.println("--- action: " + a);
             state = state.apply(a);
             //System.out.println("--- iteration: " + j);

@@ -27,7 +27,6 @@ public class Board0x88 extends Board {
 
     public Piece[] getBoard() {return board;}
 
-
     public Piece[] getBoardArray() {
         return board;
     }
@@ -112,7 +111,9 @@ public class Board0x88 extends Board {
 
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
         boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;
-        boardAfterMove.setFEN(boardAfterMove.createFENFromBoard());
+
+        //TODO: sorry if this breaks functionality somewhere, but this is an expensive operation
+        //boardAfterMove.setFEN(boardAfterMove.createFENFromBoard());
 
         return boardAfterMove;
     }

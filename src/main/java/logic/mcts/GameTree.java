@@ -1,11 +1,10 @@
 package logic.mcts;
 
 import logic.enums.Side;
-import logic.enums.Square;
 
 import java.util.HashSet;
-
-import static logic.enums.Square.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameTree {
 
@@ -17,17 +16,8 @@ public class GameTree {
         treeNodes = new HashSet<>();
         treeNodes.add(rootNode);
         root = rootNode;
+        stateSequence = new LinkedList<>();
         this.player = player;
-    }
-
-    public static void main(String[] args) {
-        int manhattan = Square.manhattanDistance(h7, b3);
-        System.out.println(manhattan + " " + man(new int[]{a7.getRank(), b3.getRank()}, new int[]{a7.getFile_18(), b3.getFile_18()}));
-        System.out.println(manhattan + " " + getManDis[h7.getDiff(b3)]);
-    }
-
-    public static int man(int[] x, int[] y) {
-        return Math.abs(x[0] - x[1]) + Math.abs(y[0] - y[1]);
     }
 
     public Node getRoot() {
@@ -55,6 +45,8 @@ public class GameTree {
     }
 
 
+    public List<Node> stateSequence;
+
     //the Monte Carlo Search Tree
 
     //perhaps store global hash map of hashed game states to their equivalent node/score found in previous MCTS searches
@@ -73,23 +65,4 @@ public class GameTree {
 
     //For playout phase implement Expectiminimax with Star1 pruning
     //  Perhaps use NN if better results
-
-
-//    class Node {
-//
-//        double value; //MCTS value
-//        boolean isTerminal; //if game is over (a king is captured)
-//        boolean isLeaf; //true if this node has not yet been explored. If this node is terminal then it is also a leaf
-//                        //At the beginning all children are leaf nodes
-//        int numVisited; //amount of time this node has been visited in the search tree
-//
-//        Node parent;
-//        List<Node> children;
-//        GameState currentState;
-//        List<ChessMove> possibleMoves; //perhaps the valid movies that can be applied or have yet to be applied
-//                                        //could represent the edges or children, idk
-//
-//    }
-
-
 }

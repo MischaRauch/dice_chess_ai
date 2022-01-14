@@ -137,6 +137,18 @@ public enum Piece {
         };
     }
 
+    public int getPiecePerspective(Side p) {
+        return switch (this.type) {
+            case PAWN -> color == p ? 1 : -1;
+            case KNIGHT -> color == p ? 2 : -2;
+            case BISHOP -> color == p ? 3 : -3;
+            case ROOK -> color == p ? 4 : -4;
+            case QUEEN -> color == p ? 5 : -5;
+            case KING -> color == p ? 6 : -6;
+            default -> 0;
+        };
+    }
+
     public static Piece getPieceFromChar(char c) {
         return charPieceMap.get(c);
     }
@@ -199,28 +211,15 @@ public enum Piece {
     }
 
     public static Piece getPieceBasedOnNumber(int i) {
-        Piece p = PAWN;
-        switch (i) {
-            case 0:
-                p = PAWN;
-                break;
-            case 1:
-                p = KNIGHT;
-                break;
-            case 2:
-                p = BISHOP;
-                break;
-            case 3:
-                p = ROOK;
-                break;
-            case 4:
-                p = QUEEN;
-                break;
-            case 5:
-                p = KING;
-                break;
-        }
-        return p;
+        return switch (i) {
+            case 0 -> PAWN;
+            case 1 -> KNIGHT;
+            case 2 -> BISHOP;
+            case 3 -> ROOK;
+            case 4 -> QUEEN;
+            case 5 -> KING;
+            default -> PAWN;
+        };
     }
 
     public char getUnicode() {

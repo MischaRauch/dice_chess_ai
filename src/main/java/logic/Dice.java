@@ -67,7 +67,7 @@ public class Dice {
                                 return true;
                             }
                         }
-                        return false;
+//                        return false; TODO: I think this was a bug? it would return false if the first pawn encountered was blocke
                     }
 
                     case KNIGHT, BISHOP, ROOK, QUEEN, KING -> {

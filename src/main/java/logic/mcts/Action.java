@@ -4,7 +4,7 @@ import logic.enums.Piece;
 import logic.enums.Square;
 
 public class Action implements Comparable<Action> {
-    enum ActionType {WIN, CAPTURE, QUIET}
+    enum ActionType {WIN, CAPTURE, PROMOTE, QUIET}
 
     Piece piece;
     Square origin;

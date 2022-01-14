@@ -23,7 +23,7 @@ public class MiniMaxThread extends Thread {
         this.bestMove = bestChild.getMove();
         long end = System.nanoTime();
         timeNeeded = (end - start);
-        System.out.println("MiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        //System.out.println("MiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
     }
 
     public Move getBestMove() {
