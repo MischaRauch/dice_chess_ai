@@ -403,28 +403,28 @@ public class BoardStateGenerator {
     }
 
     // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
-    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state, boolean isHybrid) {
+    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPieceHybrid(Side color, int diceRoll, State state) {
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
 
         int depth = 2;
 
-        if (isHybrid) {
-            ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(new State(state), color, diceRoll);
+        ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(new State(state), color, diceRoll);
 
-            for (State givenState : allPossibleStates) {
-                int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // the location of this causes too much time
-                possibleBoardStatesWeights.add(weight);
-            }
-        } else {
-            List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
-
-            for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
-                int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
-                //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
-                possibleBoardStatesWeights.add(newBoardPieceStateWeights);
-            }
-            //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
+        for (State givenState : allPossibleStates) {
+            int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // the location of this causes too much time
+            possibleBoardStatesWeights.add(weight);
         }
+
+//        } else {
+//            List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+//
+//            for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+//                int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+//                //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
+//                possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+//            }
+//            //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
+//        }
         return possibleBoardStatesWeights;
     }
     
