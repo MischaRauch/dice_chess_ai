@@ -1,6 +1,5 @@
 package logic.mcts;
 
-import logic.Config;
 import logic.State;
 import logic.board.Board;
 import logic.board.Board0x88;
@@ -13,8 +12,7 @@ import java.util.*;
 import static logic.Dice.canMove;
 import static logic.Dice.diceToPiece;
 import static logic.enums.Piece.*;
-import static logic.enums.Side.BLACK;
-import static logic.enums.Side.WHITE;
+import static logic.enums.Side.*;
 import static logic.enums.Square.INVALID;
 import static logic.mcts.Action.ActionType.*;
 
@@ -27,9 +25,11 @@ public class TreeState {
 
     Board board;
     Side playerToMove;
+    Side winner;
     //int p;
     boolean terminal;
     int depth;
+    int diceRoll;
     //not going to bother considering en-passant, or castling since they are statistically very unlikely to occur
     //the overhead of tracking/checking those, is not worth the value they would bring
 
@@ -37,20 +37,12 @@ public class TreeState {
         this.board = board;
         this.depth = depth;
         playerToMove = player;
-        //p = player == Side.WHITE ? 1 : -1;
-        //System.out.println("Old evil king: "+ evilKing + " player: " + playerToMove);
         //check if terminal state
         terminal = isTerminal();
+        winner = NEUTRAL;
         evilKing = playerToMove == WHITE ? blackKing : whiteKing;
         //System.out.println("Evil King now at: "+ evilKing+ " player: " + playerToMove);
     }
-//    public TreeState(Board board, Side player, int depth, Square evilKing) {
-//        this.board = board;
-//        this.depth = depth;
-//        playerToMove = player;
-//        terminal = isTerminal();
-//        this.evilKing = evilKing;
-//    }
 
     public List<Integer> getRolls() {
         List<Integer> validRolls = new ArrayList<>(6);
@@ -61,6 +53,7 @@ public class TreeState {
                 validRolls.add(i + 1); //valid dice rolls are in range 1-6, and i starts at 0
 
         Collections.shuffle(validRolls);
+
         if (validRolls.isEmpty()) {
             System.out.println("----------------------------\nNO VALID ROLLS?????");
             board.printBoard();
@@ -71,7 +64,7 @@ public class TreeState {
 
     public TreeState apply(Action action) {
         Board next = board.movePiece(action.origin, action.destination);
-        if (action.type == PROMOTE || action.piece.canPromote(action.destination)) {
+        if (action.type == PROMOTE || action.piece.canPromote(action.destination)) { //this or part is for captures into promotion rank
             next.setPiece(QUEEN.getColoredPiece(playerToMove), action.destination);
         }
         return new TreeState(next, Side.getOpposite(playerToMove), depth - 1);
@@ -99,6 +92,7 @@ public class TreeState {
 
     public PriorityQueue<Action> getAvailableActions(int diceRoll) {
         //System.out.println("GETTING AVAILABLE ACTIONS..");
+        this.diceRoll = diceRoll;
         PriorityQueue<Action> validActions = new PriorityQueue<>(new ActionComparator());
         Piece piece = diceToPiece[diceRoll - 1].getColoredPiece(playerToMove);
         Piece[] b = board.getBoard();
@@ -106,8 +100,9 @@ public class TreeState {
         for (int i = 0; i < b.length; i++) {
             //System.out.println("CONSIDERING BOARD SQUARE i: " + i);
             Piece p = b[i];
-            Square location = Square.getSquareByIndex(i);
-            if (location != Square.INVALID) {
+
+            if (p != OFF_BOARD) {
+                Square location = Square.getSquareByIndex(i);
                 //System.out.println("CONSIDERING VALID SQUARE i: " + i);
                 if (p == piece) {
                     //System.out.println("PIECE = " + p + " at: " + i);
@@ -121,9 +116,9 @@ public class TreeState {
                                     if (board.isEmpty(target)) {
                                         int manhattanDistance = Square.manhattanDistance(location, evilKing);
                                         int score = -3 * manhattanDistance + 60;
-                                        if (p == KING)
-                                            score = (manhattanDistance > 6) ? manhattanDistance : -manhattanDistance; //Shy king heuristic
-                                        validActions.add(new Action(p, location, target, score, QUIET)); //TODO: manhattan distance
+                                        if (p.getType() == KING) //Shy king heuristic
+                                            score = (manhattanDistance > 6) ? score : manhattanDistance;
+                                        validActions.add(new Action(p, location, target, score, QUIET));
                                     } else if (!board.getPieceAt(target).isFriendly(playerToMove)) {
                                         Action.ActionType type = board.getPieceAt(target).getType() == KING ? WIN : CAPTURE;
                                         validActions.add(new Action(p, location, target, board.getPieceAt(target).getWeight(), type)); //capture
@@ -134,7 +129,8 @@ public class TreeState {
 
                         case BISHOP, ROOK, QUEEN -> {
                             for (int offset : piece.getOffsets()) {
-                                Square target = Square.getSquare(location.getSquareNumber() + offset);
+//                                Square target = Square.getSquare(location.getSquareNumber() + offset);
+                                Square target = location.getOffSetSquare(offset);
                                 while (target != INVALID) {
                                     if (board.isEmpty(target)) {
                                         validActions.add(new Action(p, location, target, -3 * Square.manhattanDistance(location, evilKing) + 60, QUIET)); //TODO manhattan distance
@@ -154,10 +150,6 @@ public class TreeState {
                             //first check the natural move in the "forward" direction
                             Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                             if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
-//                                if (!piece.canDoubleJump(location)) {
-//                                    Action a = new Action(p, location, naturalMove, 16);
-//                                    validActions.add(a);
-//                                }
 
                                 //double jumping
                                 Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
@@ -191,11 +183,10 @@ public class TreeState {
                         }
                     }
                 }
+            } else {
+                i += 7;
             }
         }
-        //System.out.println(validActions);
-        //Collections.sort(validActions);
-        //System.out.println("TOP THREE: " + validActions.get(0) + " and " + validActions.get(1) + " and " + validActions.get(2));
         return validActions;
     }
 
@@ -217,20 +208,12 @@ public class TreeState {
                 return false;
             }
         }
-        //if playerToMove == WHITE and !whiteKing -> LOSE -> Winner = BLACK
-        //if playerToMove == BLACK and !blackKing -> LOSE -> Winner = WHITE
-        //if playerToMove == WHITE and blackKing -> LOSE -> Winner = BLACK
-        //if playerToMove == WHITE and !blackKing -> WIN -> WINNER = WHITE
-        //if playerToMove == BLACK and white
+
         if (playerToMove == WHITE && !whiteKing) {
             //if WHITE is to move, but there is no white King, then black captured the white king
             winner = BLACK;
-//            System.out.println("BLACK WINS");
-//            board.printBoard();
         } else if (playerToMove == BLACK && !blackKing) {
             winner = WHITE;
-//            System.out.println("WHITE WINS");
-//            board.printBoard();
         } else {
             System.out.println("NEITHER WHITE NOR BLACK WON THE GAME?");
         }
@@ -238,42 +221,45 @@ public class TreeState {
         return true; //either one of the kings is not on the board
     }
 
-    Side winner = null;
-
     public double reward(Side player) {
-        if (terminal) {
+        if (terminal) { //TODO prob don't need this branch
             return player == playerToMove ? 0 : 1.0; //0 reward if opponent's move created this terminal state
         }
         return 0.5; //in non-terminal states, we may want to terminate simulation phase after x turns and declare draw
     }
 
     public static void main(String[] args) {
-        TreeState ts = new TreeState(new Board0x88(Config.OPENING_FEN), WHITE, 0);
+        String fen = "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4";
+        TreeState ts = new TreeState(new Board0x88(fen), WHITE, 0);
+        //TreeState ts = new TreeState(new Board0x88(Config.OPENING_FEN), WHITE, 0);
         //System.out.println(Arrays.toString(ts.board.getBoard()));
+        ts.board.printBoard();
         System.out.println("Input array: " + Arrays.toString(ts.normalizedBoardArray()));
     }
 
     public int[] normalizedBoardArray() {
-        int[] b = new int[64 + 6]; //all boards + all piece types
+        int[] b = new int[70]; //all boards + all piece types
         int index = 0;
-        //int i = 0;
         Piece[] x88 = board.getBoard();
-
-        playerToMove = BLACK;
 
         for (int i = 0; i < x88.length; i++) {
             if (x88[i] == OFF_BOARD) {
                 i += 7;
-                System.out.println();
             } else {
                 b[index++] = x88[i].getPiecePerspective(playerToMove);
-                System.out.print(x88[i] + ", ");
             }
         }
 
-        int roll = 5;
-        b[index + roll - 1] = 1;
+        /*
+        To add the dice roll at the correct index:
+              index = 64 + roll - 1
 
+        For example:
+            roll = 5;
+            b[64 + roll - 1] = 1;
+
+        This sets the correct array position corresponding to the dice roll (piece type)
+        */
         return b;
     }
 }

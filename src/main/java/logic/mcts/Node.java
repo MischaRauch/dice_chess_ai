@@ -28,6 +28,7 @@ public class Node {
     double Q; //quality of node (i.e. total number of wins)
     double N; //Number of visits through this node
     NodeType type; //what kind of node this is
+    int diceRoll;
 
     public Node(Node parent, TreeState state, Action action, NodeType type) {
         this.parent = parent;
@@ -41,6 +42,7 @@ public class Node {
             validRolls = (type == CHANCE) ? state.getRolls() : null;
             validActions = (type == DECISION) ? state.getAvailableActions(parent.getNextRoll()) : null;
             children = new LinkedList<>();
+            diceRoll = state.diceRoll;
         } else {
             N = 1;
             fullyExpanded = true;
@@ -58,7 +60,10 @@ public class Node {
         validActions = state.getAvailableActions(roll);
         children = new LinkedList<>();
         isRoot = true;
+        this.roll = roll;
     }
+
+    int roll;
 
     public boolean fullyExpanded() {
 
@@ -77,20 +82,12 @@ public class Node {
     }
 
     public Action getNextAction() {
-        //if (fullyExpanded()) {
-        //System.out.println("FULLY DECISION EXPANDED");
-        //}
         Action next = validActions.poll();
         fullyExpanded = validActions.isEmpty();
         return next;
-        //Action next = validActions.get(actionsTaken);
-        //actionsTaken++;
-        //fullyExpanded = actionsTaken == validActions.size();
-        //return next;
     }
 
     public int getNextRoll() {
-        //if (fullyExpanded()) {
         if (fullyExpanded) {
             //System.out.println("FULLY CHANCE EXPANDED");
             return validRolls.get(MCTSAgent.random.nextInt(validRolls.size()));
@@ -114,7 +111,7 @@ public class Node {
                 for (Node child : children) {
                     val += child.getExpectedValue();
                 }
-                val = val / ((double) validRolls.size()); //should actually be the number of dice rolls available};
+                val = val / ((double) validRolls.size());
                 return val;
             }
         }
@@ -132,23 +129,12 @@ public class Node {
         parent.validActions.clear();
         parent.validActions.add(this.action);
         fullyExpanded = true;
+        parent.fullyExpanded = true;
     }
 
     @Override
     public String toString() {
-        String s = "[Wins: " + Q + ", Visits: " + N + ", type: " + type + "]";
-        return s;
+        return "[Wins: " + Q + ", Visits: " + N + ", type: " + type + "]";
     }
 
-//    public Node applyAction(Node p, Action a) {
-//        //here we apply an action to the parent nodes state in order to obtain a new child node
-//        switch (p.type) {
-//            case ROOT, DECISION -> {}//we would create a chance node
-//            case CHANCE -> {} //we would need to roll the die and create a decision node
-//            case LEAF -> {} //we would need to expand the node or something idk
-//            case TERMINAL -> {} //we can't really apply actions to terminal states
-//        }
-//
-//        return new Node();
-//    }
 }

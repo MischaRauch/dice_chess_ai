@@ -79,6 +79,10 @@ public enum Square {
         return boardIndexMap.getOrDefault(squareNumber, INVALID);
     }
 
+    public Square getOffSetSquare(int offset) {
+        return squareMap.getOrDefault(squareNumber + offset, INVALID);
+    }
+
     // 1 indexed
     //there are 0x88 bitwise methods for these below that don't make you look through a bunch of loops
     public static int getSquareRank(Square s) {
@@ -261,13 +265,6 @@ public enum Square {
         Collections.sort(rightDiagonals);
         return rightDiagonals;
     }
-
-
-    //not really sure how to interpret what this returns
-    //okay, so basically I think adding 0x77 (119) to the square difference ensures that the result is non-negative
-    //so that you can use it as an index in some sort of attack table, which lets you know which pieces can attack a
-    //certain square, not really sure what such a table looks like tho. Definitely more research needed
-
 
 }
 

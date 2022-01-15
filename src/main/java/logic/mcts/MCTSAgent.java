@@ -6,11 +6,13 @@ import logic.board.Board0x88;
 import logic.enums.Side;
 import logic.player.AIPlayer;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
 import static logic.mcts.Action.ActionType.WIN;
+import static logic.mcts.MCTSAgent.Strategy.*;
 import static logic.mcts.Node.NodeType.*;
 
 public class MCTSAgent extends AIPlayer {
@@ -24,15 +26,23 @@ public class MCTSAgent extends AIPlayer {
     static final double c = 1.4;
     long timeNeeded;
     boolean debug = false;
-    boolean prune = false;
+    boolean prune = true;
     boolean uctExpected = false;
-    boolean sameStateRollout = false;
+    boolean sameStateRollout = true;
+    Action previousAction;
+    public List<Node> actions;
+    Node child;
 
     public MCTSAgent(Side player, int numIterations) {
         super(player);
         this.player = player;
         this.numIterations = numIterations;
         random = new Random();
+        actions = new LinkedList<>();
+    }
+
+    public void log() {
+        InputParser.csvWriter(InputParser.parseState(currentState.board, player, currentState.diceRoll, root.Q / root.N));
     }
 
     @Override
@@ -55,6 +65,7 @@ public class MCTSAgent extends AIPlayer {
         long end = System.nanoTime();
         timeNeeded = end - start;
 
+
         if (debug) {
             System.out.println("ACTION TAKEN: [" + action + "] ACTION TYPE: " + action.type);
             System.out.println(root.toString());
@@ -63,6 +74,7 @@ public class MCTSAgent extends AIPlayer {
             System.out.println("--------------------------------------------------------------------");
         }
 
+        log();
         return move;
     }
 
@@ -76,18 +88,13 @@ public class MCTSAgent extends AIPlayer {
         for (int i = 0; i < numIterations; i++) {
             Node leaf = select(tree.getRoot());
             if (leaf.state.terminal) {
-//                System.out.println(leaf.type);
-//                System.out.println("leaf player to move: " + leaf.state.playerToMove);
-//                System.out.println("backup: winner: " + leaf.state.winner);
-//                System.out.println("backup: player: " + player);
-//                System.out.println("reward: " + leaf.state.reward(player));
-                backup(leaf, leaf.state.reward(player));
+                backup(leaf, leaf.state.reward(player), DEFAULT, leaf.state.winner);
             } else {
-                double delta = simulate(leaf.state);
-                backup(leaf, delta);
+                simulate(leaf, DEFAULT);
             }
         }
-
+        //System.out.println("-------");
+        //System.out.println("| Dice Roll: " + root.roll);
         double expectedValue = 0;
         double maxVisits = 0;
         Node bestExpected = null;
@@ -101,28 +108,41 @@ public class MCTSAgent extends AIPlayer {
                 mostVisited = n;
                 maxVisits = n.N;
             }
+
+            //System.out.println("| r: "+n.Q / n.N);
         }
+        //System.out.println("-------");
+
+
+//        if (bestExpected.action != mostVisited.action) {
+//            System.out.println("did not take best expected");
+//        }
 
         //Node best = bestChild(root);
         Action h = chooseAction(root, mostVisited);
-        if (h == mostVisited.action) {
-            numMostVisitedChosen++;
-//            System.out.println("Chose most visited: " + h.type);
-            //System.out.println("Chose most visited: " + h);
-        } else if (h == bestExpected.action) {
-            numBestExpectedChosen++;
-//            System.out.println("Chose best expected: " + h.type);
-            //System.out.println("Chose best expected: " + h);
-        } else {
-            numBestLocalChosen++;
-//            System.out.println("Chose action type: " + h.type);
-            //System.out.println("Chose action: " + h);
-        }
+
+//        for (Node n : child.children) {
+//            System.out.println("Dice roll: " + n.diceRoll);
+//        }
+//        if (h == mostVisited.action) {
+//            numMostVisitedChosen++;
+////            System.out.println("Chose most visited: " + h.type);
+//            //System.out.println("Chose most visited: " + h);
+//        } else if (h == bestExpected.action) {
+//            numBestExpectedChosen++;
+////            System.out.println("Chose best expected: " + h.type);
+//            //System.out.println("Chose best expected: " + h);
+//        } else {
+//            numBestLocalChosen++;
+////            System.out.println("Chose action type: " + h.type);
+//            //System.out.println("Chose action: " + h);
+//        }
         return h;
         //return mostVisited.action;
     }
 
     public Action chooseAction(Node root, Node mostVisited) {
+        child = mostVisited;
         Action best = mostVisited.action;
         double value = mostVisited.getExpectedValue() * best.score;
         for (Node n : root.children) {
@@ -134,9 +154,12 @@ public class MCTSAgent extends AIPlayer {
                     if (n.getExpectedValue() * a.score > value) {
                         best = a;
                         value = n.getExpectedValue() * a.score;
+
+                        child = n;
                     }
             }
         }
+        actions.add(child);
         return best;
     }
 
@@ -145,8 +168,9 @@ public class MCTSAgent extends AIPlayer {
         //System.out.println("    - value: " + v.getExpectedValue());
         //System.out.println("    - exploration: " + (C * Math.sqrt(Math.log(v.parent.N) / v.N)));
         //TODO: added expected value to UCT term
+        double chance = (v.type == CHANCE) ? -1.0 / v.validRolls.size() : 0;
         double value = (v.N < 1) ? 1 : v.Q / v.N; //v.getExpectedValue();
-        double uct = value + (C * Math.sqrt(Math.log(v.parent.N) / v.N));
+        double uct = value + chance + (C * Math.sqrt(Math.log(v.parent.N) / v.N));
 
         return uct;
     }
@@ -159,9 +183,9 @@ public class MCTSAgent extends AIPlayer {
         }
 
         if (!node.fullyExpanded()) {
-            if (node.type == TERMINAL) {
-                System.out.println("whoops");
-            }
+//            if (node.type == TERMINAL) {
+//                System.out.println("whoops");
+//            }
             //System.out.println("SELECTED NODE NOT FULLY EXPANDED");
             Node q = expand(node);
             if (q.type == CHANCE) {
@@ -195,17 +219,14 @@ public class MCTSAgent extends AIPlayer {
             } else {
                 //Terminal state reached by applying this action. No chance nodes should be created
                 q = new Node(node, nextState, a, TERMINAL);
-                //q.Q = nextState.playerToMove == player ? -1 : 1;
 
                 //if the Decision PLayer who applied Action 'a' to get Terminal State q was the winner in q -> Always choose this action
-                if (nextState.winner != node.state.playerToMove) {
-                    System.out.println("HOW is this even possible?");
-                }
-                q.Q = (nextState.winner == node.state.playerToMove) ? Integer.MAX_VALUE : Integer.MIN_VALUE; //TODO: is it even possible for the winner not to be the player who moved?
+//                if (nextState.winner != node.state.playerToMove) {
+//                    System.out.println("HOW is this even possible?");
+//                }
+                //q.Q = (nextState.winner == node.state.playerToMove) ? Integer.MAX_VALUE : Integer.MIN_VALUE; //TODO: is it even possible for the winner not to be the player who moved?
                 q.pruneSiblings();
-                //q.Q = Integer.MAX_VALUE;
-                //TODO: prune siblings from game tree and parent node
-                //TODO: prune action except a from parent -> mark parent fully expanded
+                q.Q = Integer.MAX_VALUE; //is this necessary? should probably just be 1
             }
             node.addChild(q);
             tree.addNode(q);
@@ -222,6 +243,7 @@ public class MCTSAgent extends AIPlayer {
         if (node.type == CHANCE) {
             //System.out.println("STOCHASTIC EVENT");
             return node.children.get(random.nextInt(node.children.size()));
+            //return node.children.get(node.getNextRoll());
         } else {
             //UCT
             if (node.children.isEmpty()) {
@@ -244,32 +266,75 @@ public class MCTSAgent extends AIPlayer {
         }
     }
 
-    public double simulate(TreeState state, boolean strategy) {
-        TreeState given = new TreeState(new Board0x88(state.board.getBoard()), state.playerToMove, state.depth);
+    enum Strategy {DEFAULT, SINGLE_STATE, CHANCE_PENALTY, ALTERNATING}
 
+    public void simulate(Node leaf, Strategy strategy) {
+        TreeState given = new TreeState(new Board0x88(leaf.state.board.getBoard()), leaf.state.playerToMove, leaf.state.depth);
         for (int j = 0; j < 100; j++) {
-            if (given.terminal) {
-                return given.reward(player);
-            }
-
-            if (given.getRolls().isEmpty()) {
-                System.out.println("NO ROLLS");
-                System.out.println("TERMINAL? " + given.terminal);
-                return 0;
-            }
-
-            List<Integer> rolls = given.getRolls();
-            int roll = rolls.get(random.nextInt(rolls.size()));
-
-            PriorityQueue<Action> actions = given.getAvailableActions(roll); //TODO: reduce action space;
-            assert !actions.isEmpty();
-            Action a = actions.poll(); //TODO: add randomness
-
-            given = given.simulate(a);
+            if (!given.terminal) {
+                List<Integer> rolls = given.getRolls();
+                PriorityQueue<Action> actions = given.getAvailableActions(rolls.get(random.nextInt(rolls.size()))); //TODO: reduce action space;
+                assert !actions.isEmpty();
+                Action a = actions.poll(); //TODO: add randomness
+                given = given.simulate(a);
+            } else break;
         }
-        //no terminal state found in 200 moves
-        return 0.5;
+
+        switch (strategy) {
+            case DEFAULT -> {
+                backup(leaf, given.winner == player ? 1 : 0, DEFAULT, given.winner);
+            }
+
+            case ALTERNATING -> {
+                if (given.winner == player) {
+                    backup(leaf, 1, ALTERNATING, given.winner);
+                } else {
+                    backup(leaf, 0, ALTERNATING, given.winner);
+                }
+            }
+            case CHANCE_PENALTY -> {
+                if (given.winner == player) {
+                    backup(leaf, 1, CHANCE_PENALTY, given.winner);
+                } else {
+                    backup(leaf, 0, CHANCE_PENALTY, given.winner);
+                }
+            }
+        }
     }
+
+    public void backup(Node v, double delta, Strategy strat, Side winner) {
+
+        while (v != null) {
+            switch (strat) {
+                case DEFAULT -> {
+                    v.Q += delta;
+                }
+                case ALTERNATING -> {
+                    //if we are at a chance node,
+                    if (v.type == CHANCE) { // that represents an action its parent took
+                        if (v.state.playerToMove != winner)
+                            v.Q += delta;
+                    } else {
+                        if (v.state.playerToMove == winner)
+                            v.Q += delta;
+                    }
+
+                }
+
+                case CHANCE_PENALTY -> {
+                    if (v.type == CHANCE && v.state.playerToMove != winner)
+                        v.Q += delta;
+                }
+
+                default -> v.Q += delta;
+
+            }
+
+            v.N += 1;
+            v = v.parent;
+        }
+    }
+
 
     public double simulate(TreeState state) {
         //System.out.println("ROLLOUT!");
@@ -312,24 +377,6 @@ public class MCTSAgent extends AIPlayer {
         return 0.5;
     }
 
-    public void backup(Node v, double delta) {
-        //System.out.println("BACKING UP: " + delta);
-        //TODO: while (v != null) -> include root node
-        while (v.parent != null) {
-            //ignores chance for now
-
-            v.N += 1;
-            v.Q += delta;
-//            if (v.type == CHANCE) {
-//                // delta = delta / ((double)v.validRolls.size());
-//            }
-            v = v.parent;
-
-            //delta = -delta;
-        }
-        root.N += 1;
-        root.Q += delta;
-    }
 
     @Override
     public String getNameAi() {
