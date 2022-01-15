@@ -74,7 +74,7 @@ public class MCTSAgent extends AIPlayer {
             System.out.println("--------------------------------------------------------------------");
         }
 
-        log();
+        //log();
         return move;
     }
 
@@ -88,9 +88,9 @@ public class MCTSAgent extends AIPlayer {
         for (int i = 0; i < numIterations; i++) {
             Node leaf = select(tree.getRoot());
             if (leaf.state.terminal) {
-                backup(leaf, leaf.state.reward(player), DEFAULT, leaf.state.winner);
+                backup(leaf, leaf.state.reward(player), CHANCE_PENALTY, leaf.state.winner);
             } else {
-                simulate(leaf, DEFAULT);
+                simulate(leaf, CHANCE_PENALTY);
             }
         }
         //System.out.println("-------");
@@ -168,7 +168,8 @@ public class MCTSAgent extends AIPlayer {
         //System.out.println("    - value: " + v.getExpectedValue());
         //System.out.println("    - exploration: " + (C * Math.sqrt(Math.log(v.parent.N) / v.N)));
         //TODO: added expected value to UCT term
-        double chance = (v.type == CHANCE) ? -1.0 / v.validRolls.size() : 0;
+        double chance = (v.type == CHANCE) ? 1.0 / v.validRolls.size() : 0;
+
         double value = (v.N < 1) ? 1 : v.Q / v.N; //v.getExpectedValue();
         double uct = value + chance + (C * Math.sqrt(Math.log(v.parent.N) / v.N));
 

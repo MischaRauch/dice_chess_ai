@@ -7,7 +7,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.game.Game;
 import logic.player.AIPlayer;
-import logic.player.MiniMaxPlayer;
+import logic.player.BasicAIPlayer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -32,14 +32,15 @@ public class ExperimentFactory {
     static long inSeconds = (long) 1e9;
 
     public static void main(String[] args) {
+        //TODO: so far this only works if the white player is MCTSAgent!
         //AIPlayer mcts = new MCTSAgent(WHITE, 1000);
         //AIPlayer basic = new BasicAIPlayer(BLACK);
         //AIPlayer minimax = new MiniMaxPlayer(5, BLACK);
 
-        AIPlayer white = new MCTSAgent(WHITE, 2500);
+        AIPlayer white = new MCTSAgent(WHITE, 2000);
         //AIPlayer black = new MiniMaxPlayer(7, BLACK);
-        AIPlayer black = new MiniMaxPlayer(7, BLACK);
-        //AIPlayer black = new BasicAIPlayer(BLACK);
+        //AIPlayer black = new MiniMaxPlayer(7, BLACK);
+        AIPlayer black = new BasicAIPlayer(BLACK);
         //AIPlayer black = new RandomMovesPlayer(BLACK);
 
         /*
@@ -53,18 +54,17 @@ public class ExperimentFactory {
          */
 
 
-        SimulationFactory sim = SimulationFactory.create(white, black, 200)
-                .trackWinRate()
-                .trackWinTotal()
-                .trackTimeNeed()
-                .trackTreeSize()
-                .trackWinner()
-                .trackUCT();
+        SimulationFactory sim = SimulationFactory.create(white, black, 70);
+//                .trackWinRate()
+//                .trackWinTotal()
+//                .trackTimeNeed()
+//                .trackTreeSize()
+//                .trackWinner()
+//                .trackUCT();
 
         sim.start();
 
         System.out.println("\n\n###########< End Results >##############\n");
-        System.out.println("            Strat: PENALTY_CHANCE");
         System.out.println(sim.white.getNameAi() + " - White win average: " + sim.whiteWinTotal / sim.numSimulations);
         System.out.println(sim.black.getNameAi() + " - Black win average: " + sim.blackWinTotal / sim.numSimulations);
         System.out.println("Draws: " + sim.numDraws);
@@ -162,9 +162,9 @@ public class ExperimentFactory {
             for (int i = 1; i <= numSimulations; i++) {
                 //white = new MCTSAgent(WHITE, 1000);
                 //black = new BasicAIPlayer(BLACK);
-                GameSimulator sim = GameSimulator.StateSimulationFactory(white, black)
-                        .trackExpectedValue()
-                        .trackDepth();
+                GameSimulator sim = GameSimulator.StateSimulationFactory(white, black);
+//                        .trackExpectedValue()
+//                        .trackDepth();
                 sim.start();
 
                 if (sim.victor == WHITE) whiteWinTotal++;
@@ -180,16 +180,16 @@ public class ExperimentFactory {
                 maxTime = Math.max(maxTime, white.getTimeNeeded() / (double) inSeconds);
                 sumTime += (((double) white.getTimeNeeded()) / (double) inSeconds);
                 averageTime = sumTime / (double) i;
-
-                winTotal.add(i, whiteWinTotal);
-                winRate.add(i, whiteWinTotal / i);
-                timeNeeded.add(i, (((double) white.getTimeNeeded()) / inSeconds));
-
-                timeNeededNormalized.add(i, (((double) white.getTimeNeeded()) / (long) 1e5));
-                treeSize.add(i, gameTreeSize);
-                gameResult.add(i, (sim.victor == WHITE) ? 1 : -1);
-                uct.add(i, sim.actionValue);
-
+//
+//                winTotal.add(i, whiteWinTotal);
+//                winRate.add(i, whiteWinTotal / i);
+//                timeNeeded.add(i, (((double) white.getTimeNeeded()) / inSeconds));
+//
+//                timeNeededNormalized.add(i, (((double) white.getTimeNeeded()) / (long) 1e5));
+//                treeSize.add(i, gameTreeSize);
+//                gameResult.add(i, (sim.victor == WHITE) ? 1 : -1);
+//                uct.add(i, sim.actionValue);
+//
                 String progress = "Game " + i + " winner: " + sim.victor.asChar() + " --- WHITE (wins: " + (int) whiteWinTotal + ", WR: " + Math.floor(whiteWinTotal * 100 / i) / 100 + ") - BLACK (wins: " + (int) blackWinTotal + ", WR: " + Math.floor(blackWinTotal * 100 / i) / 100 + ") - " + (int) (i * 100 / numSimulations) + "% complete ";
                 System.out.print("\r" + progress);
 
@@ -206,9 +206,9 @@ public class ExperimentFactory {
             }
 
             //plot();
-            plot(uct, winRate, gameResult);
-            plot(timeNeeded, winRate, gameResult);
-            plot(timeNeededNormalized, treeSize, gameResult);
+            //plot(uct, winRate, gameResult);
+            //plot(timeNeeded, winRate, gameResult);
+            //plot(timeNeededNormalized, treeSize, gameResult);
         }
 
         public void plot(XYSeries s1, XYSeries s2, XYSeries s3) {
@@ -285,7 +285,7 @@ public class ExperimentFactory {
                 processCastling();
                 numTurns++;
 
-                collectData();
+                //collectData();
 
                 gameDone = checkGameOver(currentState);
                 if (gameDone) break;

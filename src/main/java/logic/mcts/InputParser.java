@@ -59,7 +59,7 @@ public class InputParser {
     public static void csvWriter(String[] input) {
 
         try {
-            File file = new File("trainingData.csv");
+            File file = new File("trainingData_Black_vs_Basic.csv");
             FileWriter writer;
             CSVWriter csvWriter;
 
