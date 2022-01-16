@@ -1,17 +1,17 @@
 package logic.mcts;
 
 import logic.player.AIPlayer;
-import logic.player.MiniMaxPlayer;
+import logic.player.ExpectiMiniMaxPlayer;
 
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
-import static logic.mcts.MCTSAgent.Strategy.ALTERNATING;
+import static logic.mcts.MCTSAgent.Strategy.ALTERNATING_CHANCE_PENALTY;
 
 public class ExperimentFactory {
 
     static long inSeconds = (long) 1e9;
 
-    static MCTSAgent.Strategy strategy = ALTERNATING;
+    static MCTSAgent.Strategy strategy = ALTERNATING_CHANCE_PENALTY;
 
     public static void main(String[] args) {
         //TODO: so far this only works if the white player is MCTSAgent!
@@ -20,7 +20,8 @@ public class ExperimentFactory {
                 .useStrategy(strategy);
 
 //        AIPlayer white = new MCTSAgent(WHITE, 2000);
-        AIPlayer black = new MiniMaxPlayer(7, BLACK);
+        //AIPlayer black = new MiniMaxPlayer(7, BLACK);
+        AIPlayer black = new ExpectiMiniMaxPlayer(7, BLACK);
         //AIPlayer black = new BasicAIPlayer(BLACK);
         //AIPlayer black = new RandomMovesPlayer(BLACK);
 
@@ -35,7 +36,7 @@ public class ExperimentFactory {
 //        ssg.start();
 
 
-        SimulationFactory sim = SimulationFactory.create(white, black, 100)
+        SimulationFactory sim = SimulationFactory.create(white, black, 20)
                 .trackWinner()
                 .trackWinRate()
 //                .trackWinTotal()

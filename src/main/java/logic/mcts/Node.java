@@ -101,7 +101,7 @@ public class Node {
 //                val = val / ((double) validRolls.size());
                 //val = val / ((double) children.size());
                 //System.out.println(val);
-                val = (Q / N) / numValidRolls;
+                val = (Q / N) * (1 / numValidRolls);
                 return val;
             }
 

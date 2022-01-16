@@ -24,7 +24,7 @@ public class ExpectiMiniMaxThread extends Thread {
         Move bestMove = expectiMiniMax.getBestMoveForBestNode();
         this.bestMove = bestMove;
         long end = System.nanoTime();
-        System.out.println("ExpectiMiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        //System.out.println("ExpectiMiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         timeNeeded = end - start;
     }
 

@@ -1,7 +1,7 @@
 package logic.mcts;
 
 import logic.player.AIPlayer;
-import logic.player.MiniMaxPlayer;
+import logic.player.ExpectiMiniMaxPlayer;
 import org.jfree.data.xy.XYSeries;
 
 import java.util.LinkedList;
@@ -56,20 +56,21 @@ public class SimulationFactory {
         double c = 0.7;
         XYSeries exploitationWeight = new XYSeries("C");
         XYSeries localCwinRate = new XYSeries("C WR");
-        double localWR = 0;
-        double localI = 0;
+//        double localWR = 0;
+//        double localI = 0;
         //timeNeededNormalized = new XYSeries("Time Needed x Tree Size");
         for (int i = 1; i <= numSimulations; i++) {
             if (i % 10 == 0) {
-                localWR = 0;
-                localI = 1;
+//                localWR = 0;
+//                localI = 1;
                 c += 0.1;
             }
-            localI++;
-            c = 1.4;
+            //localI++;
+            //c = 1.4;
             exploitationWeight.add(i, c);
             white = new MCTSAgent(WHITE, 2000);
-            black = new MiniMaxPlayer(7, BLACK);
+            black = new ExpectiMiniMaxPlayer(7, BLACK);
+//            black = new MiniMaxPlayer(7, BLACK);
             GameSimulator sim = GameSimulator.StateSimulationFactory(white, black)
 //                        .trackExpectedValue();
 //                        .trackDepth()
@@ -79,7 +80,7 @@ public class SimulationFactory {
 
             if (sim.victor == WHITE) {
                 whiteWinTotal++;
-                localWR++;
+                //localWR++;
             } else if (sim.victor == BLACK) blackWinTotal++;
             else numDraws++;
 
@@ -95,7 +96,7 @@ public class SimulationFactory {
 //
             //winTotal.add(i, whiteWinTotal);
             winRate.add(i, whiteWinTotal / i);
-            localCwinRate.add(i, localWR / localI);
+            //localCwinRate.add(i, localWR / localI);
             timeNeeded.add(i, (((double) white.getTimeNeeded()) / inSeconds));
 //
             //timeNeededNormalized.add(i, (((double) white.getTimeNeeded()) / (long) 1e5));

@@ -56,7 +56,7 @@ public abstract class Game {
         }
         CURRENT_GAME = this;
         this.FEN = initialPosition;
-        System.out.println("INITIAL POSITION: " + initialPosition);
+        //System.out.println("INITIAL POSITION: " + initialPosition);
         // System.out.println("GAME const fen");
     }
 
@@ -100,7 +100,7 @@ public abstract class Game {
         }
         // if piece being captured is king
         else if (destPiece.getType() == KING) {
-            System.out.println("gameDone = true");
+            //System.out.println("gameDone = true");
             gameDone = true;
             winner = move.getSide();
         }
