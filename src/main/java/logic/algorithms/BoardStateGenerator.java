@@ -41,6 +41,7 @@ public class BoardStateGenerator {
     }
     public static ArrayList<State> getPossibleBoardStatesOfSpecificPiece(State state, Side side, int roll) {
         ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, side);
+
         ArrayList<State> answer = new ArrayList<>();
         State tempState;
         Move move1;
@@ -53,6 +54,7 @@ public class BoardStateGenerator {
                 answer.add(tempState);
             }
         }
+        System.out.println(answer.size());
         return answer;
     }
 

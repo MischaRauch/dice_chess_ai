@@ -21,10 +21,10 @@ public class ExpectiMiniMax {
 
     public void constructTree(int depth, State initialBoardState, boolean isHybrid) {
         this.tree = new ExpectiMiniMaxTree();
+        this.isHybrid = isHybrid; // put the new parameter to here
         State state = new State(initialBoardState);
         tree.setRoot(new ExpectiMiniMaxNode(true, state));
         constructTree(tree.getRoot(), depth, isHybrid);
-        this.isHybrid = isHybrid; // put the new parameter to here
     }
 
     private void constructTree(ExpectiMiniMaxNode parentNode, int depth, boolean isHybrid) {
@@ -69,6 +69,7 @@ public class ExpectiMiniMax {
         List<BoardStateAndEvaluationNumberTuple> allStatesAndBoardEvaluationsForGivenPieceType = new ArrayList<>();
         // state generation
         // loop through for all 6 dice numbers and generate all possible states
+
         for (int i = 1; i < 7; i++) {
             if (isHybrid) {
                 // possible board states for i-th dice roll
@@ -76,7 +77,7 @@ public class ExpectiMiniMax {
                         parentNode.getState().getColor(), i, parentNode.getState());
                 // evaluation numbers for i-th dice roll
                 List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPieceHybrid(
-                        parentNode.getState().getColor(), parentNode.getState().getDiceRoll(),parentNode.getState());
+                        parentNode.getState().getColor(), i,parentNode.getState());
                 // add this tuple of list of possible eval numbers and board states to tuple list
                 // only add if not empty
                 if (!possibleEvaluationNumbersForGivenPiece.isEmpty()) {
