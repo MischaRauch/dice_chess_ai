@@ -44,8 +44,8 @@ public class TreeState {
         //System.out.println("Evil King now at: "+ evilKing+ " player: " + playerToMove);
     }
 
-    public List<Integer> getRolls() {
-        List<Integer> validRolls = new ArrayList<>(6);
+    public ArrayList<Integer> getRolls() {
+        ArrayList<Integer> validRolls = new ArrayList<>(6);
         State dummy = new State(board, playerToMove);
 
         for (int i = 0; i < 6; i++)
@@ -111,7 +111,7 @@ public class TreeState {
                         //e.g. captures*value, protections, forwards, backwards, quiet
                         case KNIGHT, KING -> {
                             for (int offset : piece.getOffsets()) {
-                                Square target = Square.getSquare(location.getSquareNumber() + offset);
+                                Square target = location.getOffSetSquare(offset);
                                 if (target != Square.INVALID) {
                                     if (board.isEmpty(target)) {
                                         int manhattanDistance = Square.manhattanDistance(location, evilKing);
@@ -134,7 +134,7 @@ public class TreeState {
                                 while (target != INVALID) {
                                     if (board.isEmpty(target)) {
                                         validActions.add(new Action(p, location, target, -3 * Square.manhattanDistance(location, evilKing) + 60, QUIET)); //TODO manhattan distance
-                                        target = Square.getSquare(target.getSquareNumber() + offset);
+                                        target = target.getOffSetSquare(offset);
                                     } else if (!board.getPieceAt(target).isFriendly(playerToMove)) {
                                         Action.ActionType type = board.getPieceAt(target).getType() == KING ? WIN : CAPTURE;
                                         validActions.add(new Action(p, location, target, board.getPieceAt(target).getWeight(), type)); //capture
@@ -148,11 +148,11 @@ public class TreeState {
                         }
                         case PAWN -> {
                             //first check the natural move in the "forward" direction
-                            Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
+                            Square naturalMove = location.getOffSetSquare(piece.getOffsets()[0]);
                             if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
 
                                 //double jumping
-                                Square doubleJump = Square.getSquare(naturalMove.getSquareNumber() + piece.getOffsets()[0]);
+                                Square doubleJump = naturalMove.getOffSetSquare(piece.getOffsets()[0]);
                                 if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(location)) {
                                     validActions.add(new Action(p, location, doubleJump, -3 * Square.manhattanDistance(location, evilKing) + 60, QUIET));
                                 } else {
@@ -170,7 +170,7 @@ public class TreeState {
                             //now consider pawn capture moves which put the pawn in a different file
                             for (int k = 1; k < 3; k++) {
                                 //loop through the two potential capture targets
-                                Square captureTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
+                                Square captureTarget = location.getOffSetSquare(piece.getOffsets()[k]);
                                 if (captureTarget != INVALID) {
                                     Piece atTarget = board.getPieceAt(captureTarget);
                                     if (atTarget != EMPTY && !atTarget.isFriendly(playerToMove)) {
@@ -193,20 +193,26 @@ public class TreeState {
     //optimizable with piece list / concurrent traversal of board
     public boolean isTerminal() {
         //System.out.println("CHECKING TERMINAL...");
+        Piece[] b = board.getBoard();
         boolean whiteKing = false, blackKing = false;
-        for (int i = 0; i < board.getBoard().length; i++) {
-            if (board.getBoard()[i] == Piece.WHITE_KING) {
-                whiteKing = true;
-                this.whiteKing = Square.getBoardIndexMap().get(i);
-            } else if (board.getBoard()[i] == BLACK_KING) {
-                blackKing = true;
-                this.blackKing = Square.getBoardIndexMap().get(i);
+        for (int i = 0; i < b.length; i++) {
+            if (b[i] == OFF_BOARD) {
+                i += 7;
+            } else {
+                if (b[i] == WHITE_KING) {
+                    whiteKing = true;
+                    this.whiteKing = Square.getBoardIndexMap().get(i);
+                } else if (b[i] == BLACK_KING) {
+                    blackKing = true;
+                    this.blackKing = Square.getBoardIndexMap().get(i);
+                }
+
+                if (whiteKing && blackKing) { //both kings on the board, so not terminal
+                    //System.out.println("TERMINAL FALSE");
+                    return false;
+                }
             }
 
-            if (whiteKing && blackKing) { //both kings on the board, so not terminal
-                //System.out.println("TERMINAL FALSE");
-                return false;
-            }
         }
 
         if (playerToMove == WHITE && !whiteKing) {
@@ -222,10 +228,7 @@ public class TreeState {
     }
 
     public double reward(Side player) {
-        if (terminal) { //TODO prob don't need this branch
-            return player == playerToMove ? 0 : 1.0; //0 reward if opponent's move created this terminal state
-        }
-        return 0.5; //in non-terminal states, we may want to terminate simulation phase after x turns and declare draw
+        return winner == player ? 1 : 0;
     }
 
     public static void main(String[] args) {

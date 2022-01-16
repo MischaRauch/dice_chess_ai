@@ -33,7 +33,24 @@ public class GameTree {
     }
 
     public void pruneNode(Node node) {
-        treeNodes.remove(node);
+        if (node.children.isEmpty()) {
+            treeNodes.remove(node);
+            node = null;
+        } else {
+            for (Node child : node.children) {
+                pruneNode(child);
+            }
+            node.children.clear();
+            treeNodes.remove(node);
+            node = null;
+        }
+    }
+
+    public void prune(Node nodeToKeep, Node parent) {
+        for (Node child : parent.children) {
+            if (child != nodeToKeep)
+                pruneNode(child);
+        }
     }
 
     public HashSet<Node> getTreeNodes() {

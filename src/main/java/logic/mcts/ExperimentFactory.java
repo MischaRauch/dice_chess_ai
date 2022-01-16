@@ -7,7 +7,7 @@ import logic.enums.Piece;
 import logic.enums.Side;
 import logic.game.Game;
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
+import logic.player.MiniMaxPlayer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -26,10 +26,13 @@ import java.util.Map;
 
 import static logic.enums.Piece.*;
 import static logic.enums.Side.*;
+import static logic.mcts.MCTSAgent.Strategy.ALTERNATING_CHANCE_PENALTY;
 
 public class ExperimentFactory {
 
     static long inSeconds = (long) 1e9;
+
+    static MCTSAgent.Strategy strategy = ALTERNATING_CHANCE_PENALTY;
 
     public static void main(String[] args) {
         //TODO: so far this only works if the white player is MCTSAgent!
@@ -37,10 +40,13 @@ public class ExperimentFactory {
         //AIPlayer basic = new BasicAIPlayer(BLACK);
         //AIPlayer minimax = new MiniMaxPlayer(5, BLACK);
 
-        AIPlayer white = new MCTSAgent(WHITE, 2000);
+        AIPlayer white = MCTSAgent.create(WHITE, 2250)
+                .useStrategy(strategy);
+
+//        AIPlayer white = new MCTSAgent(WHITE, 2000);
         //AIPlayer black = new MiniMaxPlayer(7, BLACK);
-        //AIPlayer black = new MiniMaxPlayer(7, BLACK);
-        AIPlayer black = new BasicAIPlayer(BLACK);
+        AIPlayer black = new MiniMaxPlayer(7, BLACK);
+        //AIPlayer black = new BasicAIPlayer(BLACK);
         //AIPlayer black = new RandomMovesPlayer(BLACK);
 
         /*
@@ -54,17 +60,19 @@ public class ExperimentFactory {
          */
 
 
-        SimulationFactory sim = SimulationFactory.create(white, black, 70);
-//                .trackWinRate()
+        SimulationFactory sim = SimulationFactory.create(white, black, 100)
+                .trackWinRate()
 //                .trackWinTotal()
-//                .trackTimeNeed()
+                .trackTimeNeed()
 //                .trackTreeSize()
-//                .trackWinner()
-//                .trackUCT();
+                .trackWinner()
+//                .trackUCT()
+                ;
 
         sim.start();
 
         System.out.println("\n\n###########< End Results >##############\n");
+        System.out.println("        Strategy : " + strategy.toString());
         System.out.println(sim.white.getNameAi() + " - White win average: " + sim.whiteWinTotal / sim.numSimulations);
         System.out.println(sim.black.getNameAi() + " - Black win average: " + sim.blackWinTotal / sim.numSimulations);
         System.out.println("Draws: " + sim.numDraws);
@@ -75,9 +83,9 @@ public class ExperimentFactory {
         System.out.println("Min Tree: " + sim.minTreeSize);
         System.out.println("Avg Tree: " + sim.avgTreeSize);
         System.out.println("Max Tree: " + sim.maxTreeSize);
-        System.out.println("MCTS:\n\tchoseMostVisited: " + ((MCTSAgent) sim.white).numMostVisitedChosen);
-        System.out.println("\tchoseBestLocal: " + ((MCTSAgent) sim.white).numBestLocalChosen);
-        System.out.println("\tchoseBestExpected: " + ((MCTSAgent) sim.white).numBestExpectedChosen);
+        //System.out.println("MCTS:\n\tchoseMostVisited: " + ((MCTSAgent) sim.white).numMostVisitedChosen);
+        //System.out.println("\tchoseBestLocal: " + ((MCTSAgent) sim.white).numBestLocalChosen);
+        //System.out.println("\tchoseBestExpected: " + ((MCTSAgent) sim.white).numBestExpectedChosen);
         System.out.println("\n########################################");
 
     }
@@ -158,13 +166,20 @@ public class ExperimentFactory {
         }
 
         public void start() {
+            double c = 0.7;
+            XYSeries exploitationWeight = new XYSeries("C");
             timeNeededNormalized = new XYSeries("Time Needed x Tree Size");
             for (int i = 1; i <= numSimulations; i++) {
+                if (i % 10 == 0) c += 0.1;
+                c = 0.7;
+                exploitationWeight.add(i, c);
                 //white = new MCTSAgent(WHITE, 1000);
                 //black = new BasicAIPlayer(BLACK);
-                GameSimulator sim = GameSimulator.StateSimulationFactory(white, black);
-//                        .trackExpectedValue()
-//                        .trackDepth();
+                GameSimulator sim = GameSimulator.StateSimulationFactory(white, black)
+//                        .trackExpectedValue();
+//                        .trackDepth()
+                        .tuneC(c);
+                ;
                 sim.start();
 
                 if (sim.victor == WHITE) whiteWinTotal++;
@@ -181,14 +196,14 @@ public class ExperimentFactory {
                 sumTime += (((double) white.getTimeNeeded()) / (double) inSeconds);
                 averageTime = sumTime / (double) i;
 //
-//                winTotal.add(i, whiteWinTotal);
-//                winRate.add(i, whiteWinTotal / i);
-//                timeNeeded.add(i, (((double) white.getTimeNeeded()) / inSeconds));
+                //winTotal.add(i, whiteWinTotal);
+                winRate.add(i, whiteWinTotal / i);
+                timeNeeded.add(i, (((double) white.getTimeNeeded()) / inSeconds));
 //
-//                timeNeededNormalized.add(i, (((double) white.getTimeNeeded()) / (long) 1e5));
-//                treeSize.add(i, gameTreeSize);
-//                gameResult.add(i, (sim.victor == WHITE) ? 1 : -1);
-//                uct.add(i, sim.actionValue);
+                //timeNeededNormalized.add(i, (((double) white.getTimeNeeded()) / (long) 1e5));
+                //treeSize.add(i, gameTreeSize);
+                gameResult.add(i, (sim.victor == WHITE) ? 1 : -1);
+                //uct.add(i, sim.actionValue);
 //
                 String progress = "Game " + i + " winner: " + sim.victor.asChar() + " --- WHITE (wins: " + (int) whiteWinTotal + ", WR: " + Math.floor(whiteWinTotal * 100 / i) / 100 + ") - BLACK (wins: " + (int) blackWinTotal + ", WR: " + Math.floor(blackWinTotal * 100 / i) / 100 + ") - " + (int) (i * 100 / numSimulations) + "% complete ";
                 System.out.print("\r" + progress);
@@ -206,9 +221,15 @@ public class ExperimentFactory {
             }
 
             //plot();
-            //plot(uct, winRate, gameResult);
+            List<XYSeries> toPlot = new LinkedList<>();
+            toPlot.add(exploitationWeight);
+            toPlot.add(winRate);
+            toPlot.add(gameResult);
+            toPlot.add(timeNeeded);
+            plot(toPlot);
             //plot(timeNeeded, winRate, gameResult);
-            //plot(timeNeededNormalized, treeSize, gameResult);
+            //plot(timeNeeded, winRate, gameResult);
+            //plot(timeNeededNormalized, treeSize, winRate);
         }
 
         public void plot(XYSeries s1, XYSeries s2, XYSeries s3) {
@@ -216,6 +237,12 @@ public class ExperimentFactory {
             dataSet.add(s1);
             dataSet.add(s2);
             dataSet.add(s3);
+            SimulationPlotter multiPlot = new SimulationPlotter("Title: " + white.getNameAi() + " v " + black.getNameAi(), dataSet, "idk");
+            multiPlot.pack();
+            multiPlot.setVisible(true);
+        }
+
+        public void plot(List<XYSeries> dataSet) {
             SimulationPlotter multiPlot = new SimulationPlotter("Title: " + white.getNameAi() + " v " + black.getNameAi(), dataSet, "idk");
             multiPlot.pack();
             multiPlot.setVisible(true);
@@ -268,6 +295,8 @@ public class ExperimentFactory {
         List<String> keys;
         HashMap<String, XYSeries> dataSeries;
 
+        double c;
+
         public GameSimulator(AIPlayer white, AIPlayer black) {
             super(Config.OPENING_FEN);
             this.white = white;
@@ -276,16 +305,18 @@ public class ExperimentFactory {
             keys = new LinkedList<>();
             dataSeries = new HashMap<>();
             series = new LinkedList<>();
+            c = MCTSAgent.C;
         }
 
         public void start() {
+            MCTSAgent.C = c;
             while (!gameDone) {
                 Move move = currentPlayer.chooseMove(currentState);
                 currentState = currentState.applyMove(move);
                 processCastling();
                 numTurns++;
 
-                //collectData();
+                collectData();
 
                 gameDone = checkGameOver(currentState);
                 if (gameDone) break;
@@ -316,8 +347,8 @@ public class ExperimentFactory {
             MCTSAgent agent = (MCTSAgent) white;
 
             if (trackExpectedValue) {
-                XYSeries expectedValue = dataSeries.get("Expected Value");
-                expectedValue.add(numTurns, agent.child.Q / agent.child.N);
+                //XYSeries expectedValue = dataSeries.get("Expected Value");
+                //expectedValue.add(numTurns, agent.child.Q / agent.child.N);
                 actionValue += agent.child.Q;
                 //exploitation += agent.bestChild(agent.root).getExpectedValue(); //should be UCT explore term
             }
@@ -340,25 +371,25 @@ public class ExperimentFactory {
 //                dataSeries.get("UCT").add(numTurns, white);
 //            }
 
-            if (numTrackPieces) {
-                XYSeries pieceData = dataSeries.get("Num Pieces");
-                //for (currentPlayer.getValidMoves(currentState))
-                pieceData.add(numTurns, agent.getValidMoves(currentState).size());
-                pieces += agent.getValidMoves(currentState).size();
-
-            }
-
-            if (trackGameTree) {
-                XYSeries treeSet = dataSeries.get("Tree Depth");
-                treeSet.add(numTurns, agent.tree.getTreeNodes().size());
-                gameTreeSize += agent.tree.getTreeNodes().size();
-            }
-
-            if (trackTimePerTurn) {
-                XYSeries s = dataSeries.get("Time Needed");
-                s.add(numTurns, agent.getTimeNeeded() / 1e9);
-                timeNeeded += agent.getTimeNeeded();
-            }
+//            if (numTrackPieces) {
+//                XYSeries pieceData = dataSeries.get("Num Pieces");
+//                //for (currentPlayer.getValidMoves(currentState))
+//                pieceData.add(numTurns, agent.getValidMoves(currentState).size());
+//                pieces += agent.getValidMoves(currentState).size();
+//
+//            }
+//
+//            if (trackGameTree) {
+//                XYSeries treeSet = dataSeries.get("Tree Depth");
+//                treeSet.add(numTurns, agent.tree.getTreeNodes().size());
+//                gameTreeSize += agent.tree.getTreeNodes().size();
+//            }
+//
+//            if (trackTimePerTurn) {
+//                XYSeries s = dataSeries.get("Time Needed");
+//                s.add(numTurns, agent.getTimeNeeded() / 1e9);
+//                timeNeeded += agent.getTimeNeeded();
+//            }
         }
 
         public void plot() {
@@ -398,6 +429,11 @@ public class ExperimentFactory {
 
         public static GameSimulator StateSimulationFactory(AIPlayer white, AIPlayer black) {
             return new GameSimulator(white, black);
+        }
+
+        public GameSimulator tuneC(double C) {
+            c = C;
+            return this;
         }
 
         boolean trackUCT, trackExpectedValue, trackExploitation, trackExploration, trackTimePerTurn,
@@ -580,10 +616,13 @@ public class ExperimentFactory {
             XYPlot plot = chart.getXYPlot();
             XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 
+            //chart.getXYPlot().getDataset()
+
             // sets paint color for each series
             renderer.setSeriesPaint(0, Color.RED);
             renderer.setSeriesPaint(1, Color.GREEN);
             renderer.setSeriesPaint(2, Color.YELLOW);
+            renderer.setSeriesPaint(3, Color.CYAN);
             renderer.setSeriesLinesVisible(2, false);
 
             // sets thickness for series (using strokes)

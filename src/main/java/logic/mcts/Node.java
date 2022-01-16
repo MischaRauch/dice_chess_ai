@@ -1,7 +1,6 @@
 package logic.mcts;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 import static logic.mcts.Node.NodeType.*;
@@ -15,15 +14,16 @@ public class Node {
     public boolean isRoot = false;
 
     Node parent;
-    List<Node> children;
+    ArrayList<Node> children;
     boolean fullyExpanded = false;
-
-    List<Integer> validRolls;
+    int roll;
+    ArrayList<Integer> validRolls;
 
     TreeState state;
     Action action;              //action taken to reach this node
     PriorityQueue<Action> validActions;  //all valid actions from this node according to the state
     int actionsTaken;
+    double numValidRolls;
 
     double Q; //quality of node (i.e. total number of wins)
     double N; //Number of visits through this node
@@ -39,9 +39,12 @@ public class Node {
             Q = 0;
             N = e;
             actionsTaken = 0;
-            validRolls = (type == CHANCE) ? state.getRolls() : null;
+            if (type == CHANCE) {
+                validRolls = state.getRolls();
+                numValidRolls = validRolls.size();
+            }
             validActions = (type == DECISION) ? state.getAvailableActions(parent.getNextRoll()) : null;
-            children = new LinkedList<>();
+            children = new ArrayList<>();
             diceRoll = state.diceRoll;
         } else {
             N = 1;
@@ -58,27 +61,13 @@ public class Node {
         N = 1;
         actionsTaken = 0;
         validActions = state.getAvailableActions(roll);
-        children = new LinkedList<>();
+        children = new ArrayList<>();
         isRoot = true;
         this.roll = roll;
     }
 
-    int roll;
-
     public boolean fullyExpanded() {
-
         return fullyExpanded;
-//        if (type == TERMINAL)
-//            return true;
-//        if (type == DECISION)
-//            return fullyExpanded;
-//            //return actionsTaken == validActions.size();
-//        if (type == CHANCE)
-//            return fullyExpanded;
-        //return children.size() == validRolls.size();
-
-        //System.out.println("NOT FULLY EXPANDED");
-        //return false;
     }
 
     public Action getNextAction() {
@@ -88,11 +77,8 @@ public class Node {
     }
 
     public int getNextRoll() {
-        if (fullyExpanded) {
-            //System.out.println("FULLY CHANCE EXPANDED");
-            return validRolls.get(MCTSAgent.random.nextInt(validRolls.size()));
-        }
         int roll = validRolls.get(actionsTaken);
+        //fullyExpanded = validRolls.isEmpty();
         actionsTaken++; //just gonna reuse this variable lol
         fullyExpanded = actionsTaken == validRolls.size();
         return roll;
@@ -111,12 +97,15 @@ public class Node {
                 for (Node child : children) {
                     val += child.getExpectedValue();
                 }
-                val = val / ((double) validRolls.size());
+                val = val / numValidRolls;
+//                val = val / ((double) validRolls.size());
                 return val;
             }
-        }
 
-        return 0;
+            default -> {
+                return 0;
+            }
+        }
     }
 
     public void addChild(Node child) {
@@ -124,9 +113,9 @@ public class Node {
     }
 
     public void pruneSiblings() {
-        parent.children.clear();
+        parent.children = new ArrayList<>(1);
         parent.children.add(this);
-        parent.validActions.clear();
+        parent.validActions = new PriorityQueue<>(1);
         parent.validActions.add(this.action);
         fullyExpanded = true;
         parent.fullyExpanded = true;
