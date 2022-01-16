@@ -93,12 +93,15 @@ public class Node {
             //TODO separate out Terminal case
 
             case CHANCE -> {
-                double val = 0;
+                double val = 0.0;
                 for (Node child : children) {
                     val += child.getExpectedValue();
                 }
                 val = val / numValidRolls;
 //                val = val / ((double) validRolls.size());
+                //val = val / ((double) children.size());
+                //System.out.println(val);
+                val = (Q / N) / numValidRolls;
                 return val;
             }
 

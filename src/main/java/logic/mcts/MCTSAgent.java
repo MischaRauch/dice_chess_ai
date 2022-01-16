@@ -14,7 +14,7 @@ import static logic.mcts.Node.NodeType.*;
 
 public class MCTSAgent extends AIPlayer {
 
-    enum Strategy {DEFAULT, CHANCE_PENALTY, ALTERNATING, ALTERNATING_CHANCE_PENALTY}
+    enum Strategy {DEFAULT, CHANCE_PENALTY, ALTERNATING, ALTERNATING_CHANCE_PENALTY, ALTERNATING_DEFAULT}
 
     State currentState;
     GameTree tree;
@@ -100,13 +100,14 @@ public class MCTSAgent extends AIPlayer {
         return move;
     }
 
-//    int numMostVisitedChosen = 0;
+    //    int numMostVisitedChosen = 0;
 //    int numBestExpectedChosen = 0;
 //    int numBestLocalChosen = 0;
-
+    public int maxDepth = 0;
     public Action expectiMCTS(GameTree tree) {
         for (int i = 0; i < numIterations; i++) {
             Node leaf = select2(root);
+
             if (leaf.state.terminal) {
                 backup(leaf, leaf.state.reward(player), leaf.state.winner);
             } else {
@@ -161,7 +162,6 @@ public class MCTSAgent extends AIPlayer {
         //double chance = (v.type == CHANCE) ? 1.0 / v.validRolls.size() : 0;
         double chance = v.getExpectedValue();
         double value = (v.N < 1) ? 1 : v.Q / v.N; //if node has not been visit set its value to be the maximum
-
         return value + chance + (C * Math.sqrt(Math.log(v.parent.N) / v.N));
     }
 
@@ -331,6 +331,23 @@ public class MCTSAgent extends AIPlayer {
                         v.Q += delta;
 
                     v.N += 1;
+                    v = v.parent;
+                }
+            }
+
+            case ALTERNATING_DEFAULT -> {
+                while (v != null) {
+                    if (v.type == CHANCE) {
+                        if (player == winner && v.state.playerToMove != player)
+//                            v.Q += delta;
+                            v.Q++;
+                    } else {
+                        if (player == winner && v.state.playerToMove == player) {
+//                            v.Q += delta;
+                            v.Q++;
+                        }
+                    }
+                    v.N++;
                     v = v.parent;
                 }
             }
