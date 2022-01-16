@@ -86,8 +86,8 @@ public abstract class Game {
         Board board = currentState.getBoard();
         Piece destPiece = board.getPieceAt(move.getDestination());
 
-        //currentState.getCumulativeTurn() > 100 ||
         // fixed when there are two kings left or when
+        // currentState.getCumulativeTurn() > 100 ||
         if (currentState.getPieceAndSquare().size() == 2) {
             gameDone = true;
             winner = NEUTRAL;
