@@ -74,4 +74,5 @@ public abstract class Board {
     public void setFEN(String FEN) {
         this.FEN = FEN;
     }
+
 }

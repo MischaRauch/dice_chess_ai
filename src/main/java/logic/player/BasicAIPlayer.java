@@ -25,7 +25,7 @@ public class BasicAIPlayer extends AIPlayer {
         long end = System.nanoTime();
         //System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         timeNeeded = end - start;
-        state.printPieceAndSquare();
+        //state.printPieceAndSquare();
         //System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
         evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
@@ -45,7 +45,7 @@ public class BasicAIPlayer extends AIPlayer {
         List<Move> validMoves = getValidMoves(state);
         // heavily inspired by https://www.chessprogramming.org/Simplified_Evaluation_Function
         if (DEBUG) {
-            //System.out.println("valid moves: " + validMoves.toString());
+            System.out.println("valid moves: " + validMoves.toString());
         }
         // capture
         for (int i = 0; i < validMoves.size(); i++) {

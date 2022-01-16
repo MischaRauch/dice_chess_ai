@@ -3,6 +3,7 @@ package simulation;
 import logic.enums.Side;
 import logic.player.AIPlayer;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +37,6 @@ public class SimulatorMultiGame {
 
     public void start() {
         createFileAndHeaderGame();
-        int whiteWins = 0;
-        int blackWins = 0;
 
         //perform plays and track them till the ammount of simulation is reached
         for (int i = 0; i < numberOfSimulations; i++) {
@@ -45,18 +44,9 @@ public class SimulatorMultiGame {
             SimulatorSingleGame inLoop = new SimulatorSingleGame(white, black, fen);
             statsForOneGame = inLoop.start(booleaList.get("Winner"), booleaList.get("Turns"), booleaList.get("TimePerMoveWhite"), booleaList.get("TimePerMoveBlack"), booleaList.get("TotalGameTime"), booleaList.get("NumberOfPiecesBlack"), booleaList.get("NumberOfPiecesBlack"), booleaList.get("ValueOfPiecesSummedWhite"), booleaList.get("ValueOfPiecesSummedBlack"));
             writer.writeToFileGame(statsForOneGame);
-            //System.out.println("END " + i + " " + statsForOneGame.toString());
-            if (inLoop.getWinner() == Side.WHITE) whiteWins++;
-            else blackWins++;
+            System.out.println("END " + i + " " + statsForOneGame.toString());
             writeMultiStates(inLoop);
             statesForOneGame.removeAll(statesForOneGame);
-            System.out.println("==========<Win Rates>===========");
-            System.out.println("====   white/black: " + (whiteWins / ((double) blackWins)) + " =====");
-            System.out.println("====   black/white: " + (blackWins / ((double) whiteWins)) + " =====");
-            System.out.println("====   white/total: " + (whiteWins / ((double) i + 1)) + " =====");
-            System.out.println("====   black/total: " + (blackWins / ((double) i + 1)) + " =====");
-            System.out.println("=======<That's all Folks>=======");
-
         }
 
     }

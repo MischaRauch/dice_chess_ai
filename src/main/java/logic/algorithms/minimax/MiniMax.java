@@ -38,7 +38,7 @@ public class MiniMax {
             for (int i = 1; i < 7; i++) {
                 // evaluation numbers for i-th dice roll
                 List<Integer> possibleEvaluationNumbersForGivenPiece = gen.getPossibleBoardStatesWeightsOfSpecificPiece(parentNode.getState().getPieceAndSquare(),
-                        parentNode.getState().getColor(), i, parentNode.getState());
+                        parentNode.getState().getColor(), i, parentNode.getState(), false);
                 // possible board states for i-th dice roll
                 List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece = gen.getPossibleBoardStates(parentNode.getState().getPieceAndSquare(),
                         parentNode.getState().getColor(), i, parentNode.getState());

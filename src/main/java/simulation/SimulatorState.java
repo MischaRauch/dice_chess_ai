@@ -14,6 +14,7 @@ public class SimulatorState extends Game {
     String whitePlayer;
     String blackPlayer;
     boolean whiteWon = false;
+    boolean debug = false;
 
     ArrayList<Long> timeperMoveWhite = new ArrayList<Long>();
     ArrayList<Long> timeperMoveBlack = new ArrayList<Long>();
@@ -73,13 +74,15 @@ public class SimulatorState extends Game {
     public ArrayList<String> startStateSimulation() {
 
         //Debugging
-        //System.out.println("Num turns: " + numTurns);
-        //System.out.println(timeperMoveWhite.size());
-        //System.out.println(timeperMoveBlack.size());
-        //System.out.println("Capture White " + capturePieceArrayW.size());
-        //System.out.println("Capture Black " + capturePieceArrayB.size());
-        //System.out.println("WHITE " + pieceArrayW.size());
-        //System.out.println("Black " + pieceArrayB.size());
+        if (debug) {
+            System.out.println("Num turns: " + numTurns);
+            System.out.println(timeperMoveWhite.size());
+            System.out.println(timeperMoveBlack.size());
+            System.out.println("Capture White " + capturePieceArrayW.size());
+            System.out.println("Capture Black " + capturePieceArrayB.size());
+            System.out.println("WHITE " + pieceArrayW.size());
+            System.out.println("Black " + pieceArrayB.size());
+        }
 
         //num captures, white pieces remaining on board
         //Names of pieces remaining on board

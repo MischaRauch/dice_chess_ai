@@ -39,14 +39,15 @@ public class Chessboard extends GridPane {
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
+    private String openingFEN;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
-    public Chessboard(GameType type) throws IOException {
+    public Chessboard(GameType type, String openingFEN) throws IOException {
         game = Game.getInstance();
         this.gameType = type;
         chessboard = this;
-
+        this.openingFEN = openingFEN;
         setStyle("-fx-background-color: #ffffff");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gameboard.fxml"));
@@ -58,7 +59,7 @@ public class Chessboard extends GridPane {
     //This stuff gets called after the constructor has finished loading the FXML file
     @FXML
     void initialize() {
-        loadBoard(Config.OPENING_FEN);
+        loadBoard(openingFEN);
     }
 
     //populates the GridPane (which is actually this class) with Tile objects
@@ -331,6 +332,8 @@ public class Chessboard extends GridPane {
                     }
                 }
             }
+
+            MainContainerController.getInstance().setDiceImage(ChessIcons.load(Game.getInstance().getDiceRoll(), Game.getInstance().getTurn()).getImage());
 
         }
     }

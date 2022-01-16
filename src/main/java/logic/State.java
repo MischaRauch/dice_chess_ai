@@ -8,6 +8,7 @@ import logic.enums.Square;
 import logic.game.Game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static logic.enums.Piece.*;
@@ -27,6 +28,7 @@ public class State {
     private boolean longCastlingWhite = true;
     private boolean shortCastlingBlack = true;
     private boolean longCastlingBlack = true;
+
     private List<PieceAndSquareTuple> pieceAndSquare = new ArrayList<>();
     private int cumulativeTurn;
 
@@ -75,11 +77,11 @@ public class State {
     }
 
     public void printPieceAndSquare() {
-        //System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
+        System.out.println("State; pieceAndSquare: Size: " + pieceAndSquare.size());
         for (PieceAndSquareTuple t : pieceAndSquare) {
-            //System.out.print(t.toString() + " | ");
+            System.out.print(t.toString() + " | ");
         }
-        //printPieceCounts(pieceAndSquare);
+        printPieceCounts(pieceAndSquare);
     }
 
     private void loadPieceAndSquareFromFEN(String FEN) {
@@ -177,7 +179,7 @@ public class State {
                 knight++;
             }
         }
-        //System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
+        System.out.println("\nCounts: Pawn: " + pawn + " Knight: " + knight + " Bishop: " + bishop + " Rook: " + rook + " Queen: " + queen + " King: " + king + "\n");
     }
 
     //for simulation
@@ -228,9 +230,7 @@ public class State {
         Side nextTurn = color == WHITE ? BLACK : WHITE;
 
         //update available pieces sets
-        //String a = board.getFEN();
         Board newBoard = board.movePiece(move.origin, move.destination);
-        //String b = newBoard.getFEN();
 
         if (move.enPassantCapture) {
             newBoard.removePiece(color == WHITE ? move.destination.getSquareBelow() : move.destination.getSquareAbove());
