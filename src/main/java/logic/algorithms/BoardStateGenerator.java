@@ -54,7 +54,6 @@ public class BoardStateGenerator {
                 answer.add(tempState);
             }
         }
-        System.out.println(answer.size());
         return answer;
     }
 
