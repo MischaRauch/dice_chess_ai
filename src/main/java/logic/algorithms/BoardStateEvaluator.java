@@ -194,6 +194,7 @@ public class BoardStateEvaluator {
         return evalNo;
     }*/
 
+
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {
         int evalNo = 0;

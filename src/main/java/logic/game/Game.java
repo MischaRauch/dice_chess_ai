@@ -95,7 +95,7 @@ public abstract class Game {
         } else if (onlyOneLeftOfWhite()) {
             gameDone = true;
             winner = BLACK;
-        } else if (onlyOneLeftOfWhite()) {
+        } else if (onlyOneLeftOfBlack()) {
             gameDone = true;
             winner = WHITE;
         }
