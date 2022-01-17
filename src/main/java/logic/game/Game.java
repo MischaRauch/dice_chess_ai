@@ -87,14 +87,15 @@ public abstract class Game {
         Piece destPiece = board.getPieceAt(move.getDestination());
 
         // fixed when there are two kings left or when
-        if (currentState.getCumulativeTurn() > 100 || currentState.getPieceAndSquare().size() == 2) {
+        // currentState.getCumulativeTurn() > 100 ||
+        if (currentState.getPieceAndSquare().size() == 2) {
             gameDone = true;
             winner = NEUTRAL;
             // if king alone
         } else if (onlyOneLeftOfWhite()) {
             gameDone = true;
             winner = BLACK;
-        } else if (onlyOneLeftOfWhite()) {
+        } else if (onlyOneLeftOfBlack()) {
             gameDone = true;
             winner = WHITE;
         }

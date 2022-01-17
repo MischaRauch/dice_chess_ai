@@ -188,11 +188,12 @@ public class BoardStateEvaluator {
                 evalNo += getCorrectWeights(p, turn)[s.getRank() - 1][s.getFile()];
             } else {
                 evalNo -= p.getWeight();
-                evalNo -= getCorrectWeights(p, turn)[s.getRank() - 1][s.getFile()];
+                evalNo -= getCorrectWeights(p, turn)[s. getRank() - 1][s.getFile()];
             }
         }
         return evalNo;
     }*/
+
 
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {
