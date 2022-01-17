@@ -16,19 +16,31 @@
 ### Setting up a game:
 
 1. Play against your best buddy by selecting ```Human``` as ```White``` and ```Black``` player.
-    * After the game you will find a new file in the root project folder ```data.csv``` which will track for you what
-      type of game you played and who won (KPI's).
 2. To interactively play against an AI choose as White Player ```Human```, then choose as black player an AI agent and
    start the game as a ```Single Game```.
 3. See two agents compete against each other
     * Chose two agents as ```White``` and ```Black``` player.
     * Simulate a ```Single Game``` and set a ```Delay``` to follow the moves visually, or run a ```Simulation``` with
-      x ```ÌIterations```, after the simulation you will find a csv file ```aiVsAi``` with the KPI's in the root project
-      folder.
+      x ```ÌIterations```, after multi run simulation you will find two csv files in the root project folder. One called ```multiGame.csv``` with the end game       results and one file called ```multiStats.csv``` with detailed information about every move. Which KPI's can be seen in which file is listed below.
 
-KPI's:
+### KPI's: 
 
+**MultiGame CSV**
 * agent played as white
 * agent played as black
+* average time needed to calculate a move for agent in white (in nanoseconds)
+* average time needed to calculate a move for agent in black (in nanoseconds)
+* total game time (in nanoseconds)
 * which agent won
 * number of moves in that game
+* the number of pieces left on the board from agent in white, in the following order [Pawn,Knight,Bishop,Rook,Queen,King]
+* the number of pieces left on the board from agent in black, in the following order [Pawn,Knight,Bishop,Rook,Queen,King]
+* the evaluation score based on the pieces which are left on the board for white
+* the evaluation score based on the pieces which are left on the board for black 
+
+**MultiStats CSV**
+Each row in this file represents two moves. One move from the White agent and one move from the Black agent. Each move tracks the following:
+* Which algorithm played
+* How long it took the algorithm to calculate that move (in nanoseconds)
+* If a capture was performed, and if so which piece from the opponent was captured
+* the remaining pieces of its own side, in the following order [Pawn,Knight,Bishop,Rook,Queen,King]
