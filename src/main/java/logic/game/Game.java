@@ -101,7 +101,6 @@ public abstract class Game {
         }
         // if piece being captured is king
         else if (destPiece.getType() == KING) {
-            //System.out.println("gameDone = true");
             gameDone = true;
             winner = move.getSide();
         }
@@ -145,22 +144,18 @@ public abstract class Game {
         //check if castling was performed
         if (currentState.isCanCastleBlack()) {
             if (currentState.getCastling() == Square.f8) {
-                System.out.println("SHORT CASTLING BLACK WAS PERFROMED 09");
                 castlingPerformed = 2;
             }
             if (currentState.getCastling() == Square.d8) {
-                System.out.println("LONG CASTLING BLACK WAS PERFORMED 09");
                 castlingPerformed = 4;
             }
             currentState.setCastling(Square.INVALID);
         }
         if (currentState.isCanCastleWhite()) {
             if (currentState.getCastling() == Square.f1) {
-                System.out.println("SHORT CASTLING WHITE WAS PERFORMED 09");
                 castlingPerformed = 1;
             }
             if (currentState.getCastling() == Square.d1) {
-                System.out.println("LONG CASTLING WHITE WAS PERFORMED 09");
                 castlingPerformed = 3;
             }
             currentState.setCastling(Square.INVALID);

@@ -1,9 +1,7 @@
 package simulation;
 
-import logic.enums.Side;
 import logic.player.AIPlayer;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,16 +62,6 @@ public class SimulatorMultiGame {
         statsForOneGame.removeAll(statsForOneGame);
     }
 
-    /*public void startState(){
-        OutputToCsv stateMultiWriter = new OutputToCsv("multiStates.csv");
-        for (int i = 0; i < numberOfSimulations; i++) {
-            SimulatorState inLoopState = new SimulatorState(white, black, fen);
-            statesForOneGame = inLoopState.startStateSimulation();
-            stateMultiWriter.writeEachState(statesForOneGame);
-            System.out.println("END STATES MULTI" + i + " " + statesForOneGame.toString());
-            statesForOneGame.removeAll(statesForOneGame);
-        }
-    }*/
 
     public void createFileAndHeaderGame() {
         writer = OutputToCsv.getInstance("multiGame.csv");

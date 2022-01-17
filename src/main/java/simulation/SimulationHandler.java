@@ -36,19 +36,6 @@ public class SimulationHandler {
     boolean numberOfPiecesBlack = true;
     boolean valueOfPiecesSummedWhite = true;
     boolean valueOfPiecesSummedBlack = true;
-    boolean numberOfPieceType = false;
-    boolean numberOfPiecesPerPlayer = true;
-    boolean valueOfPiecesSummed = true;
-    boolean totalTime = true;
-    boolean whitePiecesCaptured = false;
-    boolean blackPiecesCaptured = false;
-
-    //These are only for stateSimulator
-    boolean numCaptures = false;
-    boolean turn = true;
-    boolean timePerMove = true;
-    boolean whitePiecesRemaining = false;
-    boolean blackPiecesRemaining = false;
 
 
     public SimulationHandler(AIPlayer white, AIPlayer black, String FEN, RadioButton simulationOption, RadioButton singleGameOption) {
@@ -59,7 +46,6 @@ public class SimulationHandler {
     }
 
     public void startHandler() {
-        //TODO: ask user which KPI's to track or track all
         //add header row for kpis
         addHeaderRow();
         //create HashMap for easier transfer of what to keep track of
@@ -74,7 +60,6 @@ public class SimulationHandler {
 
         } else {
             actualStats = (game.start(winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack));
-            // actualStats = (game.start(winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed));
 
             //Writing Single Game to Csv
             OutputToCsv writer = OutputToCsv.getInstance("singleGame.csv");
@@ -89,8 +74,6 @@ public class SimulationHandler {
             states.setPieceArraysWhite(game.getPieceArrayW(), game.getPieceArrayB());
             states.setEvaluationBoards(game.getEvaluationBoardW(), game.getEvaluationBoardB());
             ArrayList<String> statesStats = (states.startStateSimulation());
-            //System.out.println("States Array");
-            //System.out.println(statesStats);
             OutputToCsv writer1 = new OutputToCsv("singleStates.csv");
             writer1.writeEachState(statesStats);
         }
@@ -100,17 +83,13 @@ public class SimulationHandler {
     public void addHeaderRow() {
         booleanList = new boolean[]{alg, algTwo, winner, numTurns, timePerMoveWhite, timePerMoveBlack, totalGameTime, numberOfPiecesWhite, numberOfPiecesBlack, valueOfPiecesSummedWhite, valueOfPiecesSummedBlack};
         header = new String[]{"Alg", "AlgTwo", "TimePerMoveWhite", "TimePerMoveBlack", "TotalGameTime", "Winner", "Turns", "NumberOfPiecesWhite", "NumberOfPiecesBlack", "ValueOfPiecesSummedWhite", "ValueOfPiecesSummedBlack"};
-        // boolean[] booleanList = {alg, algTwo, winner, numTurns, totalTime, timePerMoveWhite, timePerMoveBlack, numberOfPieceType, numberOfPiecesPerPlayer, valueOfPiecesSummed};
-        // String[] header = {"Alg", "AlgTwo", "TotalTime", "TimePerMoveWhite", "TimePerMoveBlack", "Winner", "Turns", "NumberOfPieceType", "NumberOfPiecesPerPlayer", "ValueOfPiecesSummed"};
 
-        //System.out.println(Arrays.toString(booleanList));
-        //System.out.println(Arrays.toString(header));
+
         for (int i = 0; i < booleanList.length; i++) {
             if (booleanList[i]) {
                 trackedStates.add(header[i]);
             }
         }
-        //System.out.println(trackedStates);
     }
 
     public void createHashMap() {

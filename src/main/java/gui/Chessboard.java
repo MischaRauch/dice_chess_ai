@@ -1,5 +1,6 @@
 package gui;
 
+import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
 import gui.controllers.Menu;
 import javafx.application.Platform;
@@ -7,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -36,7 +38,7 @@ public class Chessboard extends GridPane {
     private final GameType gameType;
     private final Game game;
     private final Tile[][] tileBoard = new Tile[8][8];
-    private String openingFEN;
+    private final String openingFEN;
 
     //you can add parameters to the constructor, e.g.: a reference to the greater ApplicationController or whatever,
     //that this class is loaded into, if needed
@@ -63,8 +65,6 @@ public class Chessboard extends GridPane {
     //more or less copy-pasted from GameboardController with some slight modifications
     public void loadBoard(String fenD) {
         if (gameType == GameType.AI_V_AI) {
-            //SimulationHandler sH = new SimulationHandler();
-            //sH.start();
             if (!Menu.getSingleGame())
                 Platform.exit();
         }
@@ -161,11 +161,6 @@ public class Chessboard extends GridPane {
                 }
             }
 
-//            if (game.getCurrentState().getGameOver() != 0) {
-//                //showEndGame(logic.game.getCurrentState().getGameOver());
-//                //Stage stage = (Stage) getScene().getWindow();
-//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK)));
-//            }
 
             if (game.isGameOver()) {
                 //showEndGame(logic.game.getCurrentState().getGameOver());
@@ -173,8 +168,7 @@ public class Chessboard extends GridPane {
                 Side winner = game.getWinner();
 
 
-
-                //MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
+                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
 
                 // if gameover true then the winner has also been set by the checkGameOver( method in Game, so we can reset state here
                 if (gameType != GameType.AI_V_AI) {
@@ -186,29 +180,6 @@ public class Chessboard extends GridPane {
 
         }
 
-//            if (game.getCurrentState().getGameOver() != 0) {
-//
-//                //showEndGame(logic.game.getCurrentState().getGameOver());
-//                //Stage stage = (Stage) getScene().getWindow();
-//                Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK;
-//                //Writing CSV file
-//                if(gameType == GameType.AI_V_AI) {
-//                    AiAiGame aiAiGame = (AiAiGame) game;
-//                    handle = new csvHandler(aiAiGame.getAIPlayerWhite().getNameAi(), aiAiGame.getAIPlayerBlack().getNameAi(), winner.name(), game.getNumTurns());
-//                    handle.aiVsAiCsvWrite();
-//                }
-//                else if(gameType == GameType.HUMAN_V_AI){
-//                    AIGame aiGame = (AIGame) game;
-//                   handle = new csvHandler(gameType.name(), aiGame.getAiPlayerAiGame().getNameAi(), aiGame.getAiPlayerSide().toString(), winner.name(), game.getNumTurns());
-//                    handle.addToCsv();
-//                }
-//                else {
-//                    handle = new csvHandler(gameType.name(), "null", "null", winner.name(), game.getNumTurns());
-//                    handle.addToCsv();
-//                }
-//
-//                MainContainerController.stage.setScene(new Scene(new GameOverScreen(winner)));
-//            }
     }
 
     // you only move selected tile ever

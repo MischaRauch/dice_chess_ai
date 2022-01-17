@@ -173,27 +173,6 @@ public class BoardStateEvaluator {
 
     private final BoardStateGenerator generator = new BoardStateGenerator();
 
-    /*public static int getBoardEvaluationNumber(State state, Side color) { // for ML
-        int evalNo = 0;
-        int turn = 1;
-
-        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, color);
-
-        for (OriginAndDestSquare tempMove : originAndDestSquares) {
-            Square s = tempMove.getOrigin();
-            Piece p = state.getBoard().getPieceAt(s);
-
-            if (p.getColor() == color) {
-                evalNo += p.getWeight();
-                evalNo += getCorrectWeights(p, turn)[s.getRank() - 1][s.getFile()];
-            } else {
-                evalNo -= p.getWeight();
-                evalNo -= getCorrectWeights(p, turn)[s. getRank() - 1][s.getFile()];
-            }
-        }
-        return evalNo;
-    }*/
-
 
     // return a value of a board for a given side taking into account the piece values and their corresponding board square position values
     public static int getBoardEvaluationNumber(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int turn) {

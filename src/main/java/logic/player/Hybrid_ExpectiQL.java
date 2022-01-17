@@ -29,7 +29,6 @@ public class Hybrid_ExpectiQL extends AIPlayer{private final LegalMoveEvaluator 
         }
         Move chosenMove = thread.getBestMove();
         evaluator.isLegalMove(chosenMove, state, true, true);
-        System.out.println("Hybrid_ExpectiQL: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
         timeNeeded = thread.getTimeNeeded();
         return chosenMove;
     }

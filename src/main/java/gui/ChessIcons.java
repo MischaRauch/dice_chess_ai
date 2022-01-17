@@ -70,7 +70,6 @@ public class ChessIcons {
     public static ImageView load(int diceRoll, Side side) {
         //syntax is a little weird here bc I wanted to one-line all the methods in this class, but if you are not familiar
         //with this syntax, it's basically an if/else statement in one line.
-        //I have not tested this method so no idea if it works :D
         //read it like: (if) side equals Side.WHITE (then) load using the uppercase piece, (else) load using the default lowercase piece char
         return side == Side.WHITE ? load(Character.toUpperCase(diceToPiece[diceRoll - 1])) : load(diceToPiece[diceRoll - 1]);
     }

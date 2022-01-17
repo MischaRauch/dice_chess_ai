@@ -21,7 +21,10 @@
 3. See two agents compete against each other
     * Chose two agents as ```White``` and ```Black``` player.
     * Simulate a ```Single Game``` and set a ```Delay``` to follow the moves visually, or run a ```Simulation``` with
-      x ```ÌIterations```, after multi run simulation you will find two csv files in the root project folder. One called ```multiGame.csv``` with the end game       results and one file called ```multiStats.csv``` with detailed information about every move. Which KPI's can be seen in which file is listed below.
+      x ```ÌIterations```, after multi run simulation you will find two csv files in the root project folder. One
+      called ```multiGame.csv``` with the end game results and one file called ```multiStats.csv``` with detailed
+      information about every move. As long as these files are not beeing deleted all simulations will append to the
+      existing file. Which KPI's can be seen in which file is listed below.
 
 ### KPI's: 
 
@@ -39,6 +42,7 @@
 * the evaluation score based on the pieces which are left on the board for black 
 
 **MultiStats CSV**
+
 Each row in this file represents two moves. One move from the White agent and one move from the Black agent. Each move tracks the following:
 * Which algorithm played
 * How long it took the algorithm to calculate that move (in nanoseconds)

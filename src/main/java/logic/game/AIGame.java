@@ -1,13 +1,11 @@
 package logic.game;
 
 import gui.controllers.MainContainerController;
-import logic.enums.Side;
-import logic.enums.Validity;
 import logic.Move;
 import logic.State;
+import logic.enums.Side;
+import logic.enums.Validity;
 import logic.player.AIPlayer;
-import logic.player.MiniMaxPlayer;
-import logic.player.QLPlayer;
 
 public class AIGame extends HumanGame {
 
@@ -46,8 +44,5 @@ public class AIGame extends HumanGame {
         return move;
     }
 
-//    public void resetCurrentState() {
-//        currentState=firstState;
-//    }
 
 }

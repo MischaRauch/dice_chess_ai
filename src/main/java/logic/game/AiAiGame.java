@@ -1,8 +1,6 @@
 package logic.game;
 
 
-//import dataCollection.CsvHandler;
-
 import gui.ChessIcons;
 import gui.Chessboard;
 import gui.controllers.MainContainerController;
@@ -11,7 +9,6 @@ import logic.Config;
 import logic.Move;
 import logic.PieceAndSquareTuple;
 import logic.State;
-import logic.enums.Side;
 import logic.enums.Validity;
 import logic.player.AIPlayer;
 
@@ -21,11 +18,6 @@ import java.util.stream.Collectors;
 
 public class AiAiGame extends Game {
     private final AIPlayer white, black;
-    //will play AIvsAI 50 times
-    private static final int playTill = Config.SIMULATION_SIZE;
-    private int played = 0;
-    //  private CsvHandler handle;
-    private static final String[][] resultsArray = new String[playTill + 1][4];
 
 
     public AiAiGame(AIPlayer white, AIPlayer black, String FEN) {
@@ -34,12 +26,6 @@ public class AiAiGame extends Game {
         this.black = black;
     }
 
-    public AiAiGame(AIPlayer white, AIPlayer black, int played, String FEN) {
-        super(FEN);
-        this.white = white;
-        this.black = black;
-        this.played = played;
-    }
 
     public AIPlayer getAIPlayerWhite() {
         return white;
@@ -55,10 +41,8 @@ public class AiAiGame extends Game {
         MainContainerController.inputBlock = true;    //prevents user from clicking dice roll button
         // need to clone first state as when you call restart method you launch same game which has same state,
         // so game gets loaded from the state that the previous game was loaded from
-        //System.out.println("AiAiGame; playTill: " + playTill);
-        //System.out.println("AiAiGame; Played: " + played);
+
         while (!gameOver) {
-            //System.out.println("AiAiGame; real turn: " + currentState.getCumulativeTurn() + " ");
 
             Move move = nextPlayer.chooseMove(currentState);
 
@@ -66,21 +50,12 @@ public class AiAiGame extends Game {
             //update the value for gameOver, updates gameDone in Game, so we eventually exit this loop
             gameOver = isGameOver();
 
-            //System.out.println("Previous State: ");
             //currentState.printPieceAndSquare();
-            System.out.println("Before Applying Move: ");
-            currentState.printPieceAndSquare();
-//            for(PieceAndSquareTuple t : currentState.getPieceAndSquare()) {
-//                if(t.getSquare()==move.getDestination() && ((t.getPiece() == Piece.BLACK_KING) || (t.getPiece() == Piece.WHITE_KING))) {
-//                    State temp = currentState;
-//                    State newState = currentState.applyMove(move);
-//                }
-//            }
+
             State newState = currentState.applyMove(move); //AFTER THIS LINE NOTHING EXECUTES
             // DICE ROLL IS 0
 
-            System.out.println("After Applying Move: ");
-            currentState.printPieceAndSquare();
+            //currentState.printPieceAndSquare();
 
 
             previousStates.push(currentState);
@@ -117,28 +92,11 @@ public class AiAiGame extends Game {
                 e.printStackTrace();
             }
         }
-        //Save the information for this game
-        resultsArray[played][0] = white.getNameAi();
-        resultsArray[played][1] = black.getNameAi();
-        resultsArray[played][2] = getWinner().name();
-        resultsArray[played][3] = Integer.toString(previousStates.lastElement().getCumulativeTurn());
-        //only add once all the data is gathered
-        if (played == playTill) {
-            loogerFromArray(resultsArray);
-        }
 
         // reset current state to first state (first state initialized in game abstract class the first time game is initialized)
         currentState = firstState;
 
         System.out.println("\n\n\nGameOver\n\n\n");
-        System.out.println("PLAYED: " + played + " PLAY TILL: " + playTill);
-        if (played < playTill) {
-            AiAiGame game = new AiAiGame(this.white, this.black, played + 1, this.getFEN());
-            game.start(); //Question: does this create a new thread for every game run? like do we ever close the previous threads when the game is finished?
-            //updateCsvFile(game);
-        }
-
-
     }
 
     public boolean isEqualState(List<PieceAndSquareTuple> first, List<PieceAndSquareTuple> second) {
@@ -160,26 +118,5 @@ public class AiAiGame extends Game {
             }
         }
         return false;
-    }
-
-    public void updateCsvFile(AiAiGame game) {
-        //I prefer game over to not be an integer property of the State class but instead a Side from the Game class
-        //Side winner = game.getCurrentState().getGameOver() == 1 ? WHITE : BLACK; -> old version
-
-        //better used this: since I've deleted all game over stuff from the State class:
-        //Side winner = game.isGameOver() ? game.getWinner() : NEUTRAL;
-
-        //do we even need to check if game is over at this point? Or does this method only run when games are finished?
-        //in which case:
-        Side winner = game.getWinner();
-        //   handle = new CsvHandler(game.getAIPlayerWhite().getNameAi(), game.getAIPlayerBlack().getNameAi(), winner.name(), game.getPreviousStates().lastElement().getCumulativeTurn());
-        //  handle.aiVsAiCsvWrite();
-    }
-
-    public void loogerFromArray(String[][] array) {
-        for (int i = 1; i <= played; i++) {
-            //     handle = new CsvHandler(array[i][0], array[i][1], array[i][2], Integer.parseInt(array[i][3]));
-            //     handle.aiVsAiCsvWrite();
-        }
     }
 }

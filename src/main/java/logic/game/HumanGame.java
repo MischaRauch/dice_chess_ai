@@ -1,18 +1,12 @@
 package logic.game;
 
 import gui.controllers.MainContainerController;
-import logic.PieceAndSquareTuple;
-import logic.enums.Piece;
-import logic.enums.Side;
-import logic.enums.Square;
-import logic.enums.Validity;
 import logic.Move;
+import logic.PieceAndSquareTuple;
 import logic.State;
+import logic.enums.Validity;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HumanGame extends Game {
 
@@ -56,8 +50,5 @@ public class HumanGame extends Game {
         // System.out.println("Size: " + pieceAndSquare.size());
     }
 
-//    public void resetCurrentState() {
-//        currentState=firstState;
-//    }
 
 }

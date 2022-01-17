@@ -8,7 +8,7 @@ public class ExpectiMiniMaxThread extends Thread {
     private final int depth;
     private final logic.State state;
     private long timeNeeded;
-    private boolean isHybrid;
+    private final boolean isHybrid;
 
     public ExpectiMiniMaxThread(int depth, logic.State state, boolean isHybrid) {
         this.depth = depth;
@@ -24,7 +24,6 @@ public class ExpectiMiniMaxThread extends Thread {
         Move bestMove = expectiMiniMax.getBestMoveForBestNode();
         this.bestMove = bestMove;
         long end = System.nanoTime();
-        //System.out.println("ExpectiMiniMaxPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         timeNeeded = end - start;
     }
 

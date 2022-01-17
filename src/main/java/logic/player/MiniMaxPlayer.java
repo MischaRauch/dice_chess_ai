@@ -34,11 +34,8 @@ public class MiniMaxPlayer extends AIPlayer {
             e.printStackTrace();
         }
         Move chosenMove = thread.getBestMove();
-        //System.out.println("MiniMaxPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
-        // TODO make evalautor not update moves
         // to promote en passant moves
         evaluator.isLegalMove(chosenMove, state, true, true);
-        //state.printPieceAndSquare();
         timeNeeded = thread.getTimeNeeded();
         return chosenMove;
     }

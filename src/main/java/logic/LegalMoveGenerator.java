@@ -5,7 +5,6 @@ import logic.board.Board;
 import logic.enums.Piece;
 import logic.enums.Side;
 import logic.enums.Square;
-import logic.State;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -105,10 +104,6 @@ public class LegalMoveGenerator {
                         if (board.getPieceAt(validTarget) != EMPTY && !board.getPieceAt(validTarget).isFriendly(piece.getColor()))
                             validMoves.add(validTarget);
 
-//                        if (board.getPieceAt(validTarget) == EMPTY && state.getEnPassant() != INVALID) {
-//                            if (state.getEnPassant() == validTarget)
-//                                validMoves.add(state.getEnPassant());
-//                        }
                     }
                 }
             }
