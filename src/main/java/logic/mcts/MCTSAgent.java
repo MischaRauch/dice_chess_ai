@@ -270,9 +270,8 @@ public class MCTSAgent extends AIPlayer {
         TreeState given = new TreeState(new Board0x88(leaf.state.board.getBoard()), leaf.state.playerToMove, leaf.state.depth);
 
         //TODO: NN
-        /*
-
-         */
+        //would have to set the strategy to NEURAL_NETWORK either hardcoded or using the MCTS.create().useStrategy(NEURAL_NETWORK)) thingy
+        //or extend this class and hardcode the strategy as NEURAL_NETWORK
         if (strategy == NEURAL_NETWORK) {
             int[] inputArray = InputParser.getInputBoard(given.board, given.playerToMove, given.diceRoll);
             //TODO: pass input array to NN
