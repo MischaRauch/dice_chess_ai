@@ -39,8 +39,6 @@ public class QTablePlayer extends AIPlayer {
         bestCapture(state, validMoves);
         //get the best capture move
         Move key = Collections.max(moveMap.entrySet(), Map.Entry.comparingByValue()).getKey();
-        System.out.println("KEY "+key);
-        System.out.println("Value "+moveMap.get(key));
         if (moveMap.get(key) != 0) {
             return key;
         }
@@ -64,8 +62,6 @@ public class QTablePlayer extends AIPlayer {
         int bestMoveScore = 0;
         for (Move move : validMoves) {
             if (!state.getBoard().isEmpty(move.getDestination())) {
-                System.out.println("good move "+move);
-                System.out.println("Target PIECE "+state.getBoard().getPieceAt(move.getDestination()).getType());
                 switch (state.getBoard().getPieceAt(move.getDestination()).getType()) {
                     case PAWN -> {
                         if (bestMoveScore < 100) {
