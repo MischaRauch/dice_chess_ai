@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.Config;
@@ -19,6 +21,7 @@ import logic.mcts.MCTSAgent;
 import logic.player.*;
 import simulation.SimulationHandler;
 
+import java.awt.*;
 import java.io.IOException;
 
 import static logic.enums.Side.BLACK;
@@ -165,10 +168,10 @@ public class Menu {
             case "Basic AI" -> new BasicAIPlayer(color);
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "QL AI" -> new QLPlayer(2, color);
-            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(11,color);
-            case "Hybrid_ExpectiQL AI" -> new Hybrid_ExpectiQL(2, color);
+            case "QL AI" -> new QLPlayer(4, color);
             case "MCTS" -> new MCTSAgent(color, 2000);
+            case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(7,color);
+            case "Hybrid_ExpectiQL AI" -> new Hybrid_ExpectiQL(2,color);
             default -> new RandomMovesPlayer(color);
         };
     }
