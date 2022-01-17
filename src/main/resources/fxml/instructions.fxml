@@ -7,13 +7,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="640.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.InstructionsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="650.0" style="-fx-background-color: #34495e;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.InstructionsController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="6.0" layoutY="54.0" prefHeight="361.0" prefWidth="626.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="10.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #d5a47d; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
                <children>
-                  <Label prefHeight="74.0" prefWidth="303.0" text="Game Instructions" textFill="#834316" HBox.hgrow="ALWAYS">
+                  <Label alignment="CENTER" prefHeight="74.0" prefWidth="413.0" text="Game Instructions" textAlignment="CENTER" textFill="#834316" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="36.0" />
                      </font>
