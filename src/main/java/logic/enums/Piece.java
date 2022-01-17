@@ -175,12 +175,12 @@ public enum Piece {
 
     // heavily inpspired by https://www.chessprogramming.org/Point_Value
     public int getWeight() {
-        return switch (this) {
-            case WHITE_PAWN, BLACK_PAWN -> 100;
-            case WHITE_KNIGHT, WHITE_BISHOP, BLACK_KNIGHT, BLACK_BISHOP -> 350;
-            case WHITE_ROOK, BLACK_ROOK -> 525;
-            case WHITE_QUEEN, BLACK_QUEEN -> 1000;
-            case WHITE_KING, BLACK_KING -> 20000;
+        return switch (this.getType()) {
+            case PAWN -> 100;
+            case KNIGHT, BISHOP -> 350;
+            case ROOK -> 525;
+            case QUEEN -> 1000;
+            case KING -> 20000;
             default -> 0;
         };
     }

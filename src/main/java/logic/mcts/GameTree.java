@@ -20,6 +20,10 @@ public class GameTree {
         this.player = player;
     }
 
+    public GameTree() {
+        treeNodes = new HashSet<>();
+    }
+
     public Node getRoot() {
         return root;
     }

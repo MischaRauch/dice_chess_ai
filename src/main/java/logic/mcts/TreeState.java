@@ -26,6 +26,7 @@ public class TreeState {
     Board board;
     Side playerToMove;
     Side winner;
+    int score = 0;
     //int p;
     boolean terminal;
     int depth;
@@ -39,6 +40,10 @@ public class TreeState {
         playerToMove = player;
         //check if terminal state
         terminal = isTerminal();
+//        for (int i = 0; i < 6; i++) {
+//            score += Piece.values()[i].getWeight() * pieceCountPlayerToMove[i];
+//            score -= Piece.values()[i].getWeight() * pieceCountOpponent[i];
+//        }
         winner = NEUTRAL;
         evilKing = playerToMove == WHITE ? blackKing : whiteKing;
         //System.out.println("Evil King now at: "+ evilKing+ " player: " + playerToMove);
@@ -49,8 +54,15 @@ public class TreeState {
         State dummy = new State(board, playerToMove);
 
         for (int i = 0; i < 6; i++)
-            if (canMove(diceToPiece[i].getColoredPiece(playerToMove), dummy))
+            if (canMove(diceToPiece[i].getColoredPiece(playerToMove), dummy)) {
                 validRolls.add(i + 1); //valid dice rolls are in range 1-6, and i starts at 0
+//                score += Piece.values()[i].getWeight() * pieceCountPlayerToMove[i];
+//                score -= Piece.values()[i].getWeight() * pieceCountOpponent[i];
+            }
+//        else {
+//                score += (i + 1) * pieceCountPlayerToMove[i];
+//                score -= (i + 1) * pieceCountOpponent[i];
+//            }
 
         Collections.shuffle(validRolls);
 
@@ -65,7 +77,7 @@ public class TreeState {
     public TreeState apply(Action action) {
         Board next = board.movePiece(action.origin, action.destination);
         if (action.type == PROMOTE || action.piece.canPromote(action.destination)) { //this or part is for captures into promotion rank
-            next.setPiece(QUEEN.getColoredPiece(playerToMove), action.destination);
+            next.setPiece(QUEEN.getColoredPiece(playerToMove), action.destination); //TODO: don't think this is correct
         }
         return new TreeState(next, Side.getOpposite(playerToMove), depth - 1);
     }
@@ -84,6 +96,7 @@ public class TreeState {
     }
 
     static class ActionComparator implements Comparator<logic.mcts.Action> {
+
         @Override
         public int compare(logic.mcts.Action o1, logic.mcts.Action o2) {
             return (int) (o2.score - o1.score);
@@ -98,14 +111,12 @@ public class TreeState {
         Piece[] b = board.getBoard();
 
         for (int i = 0; i < b.length; i++) {
-            //System.out.println("CONSIDERING BOARD SQUARE i: " + i);
             Piece p = b[i];
 
             if (p != OFF_BOARD) {
                 Square location = Square.getSquareByIndex(i);
-                //System.out.println("CONSIDERING VALID SQUARE i: " + i);
                 if (p == piece) {
-                    //System.out.println("PIECE = " + p + " at: " + i);
+                    double fuzz = Math.random();
                     switch (piece.getType()) {
                         //add score parameter to actions in order to put them in priority queue
                         //e.g. captures*value, protections, forwards, backwards, quiet
@@ -118,9 +129,11 @@ public class TreeState {
                                         int score = -3 * manhattanDistance + 60;
                                         if (p.getType() == KING) //Shy king heuristic
                                             score = (manhattanDistance > 6) ? score : manhattanDistance;
-                                        validActions.add(new Action(p, location, target, score, QUIET));
+                                        validActions.add(new Action(p, location, target, score + fuzz, QUIET));
                                     } else if (!board.getPieceAt(target).isFriendly(playerToMove)) {
                                         Action.ActionType type = board.getPieceAt(target).getType() == KING ? WIN : CAPTURE;
+//                                        Action capture =
+//                                        int score =
                                         validActions.add(new Action(p, location, target, board.getPieceAt(target).getWeight(), type)); //capture
                                     }
                                 }
@@ -133,7 +146,7 @@ public class TreeState {
                                 Square target = location.getOffSetSquare(offset);
                                 while (target != INVALID) {
                                     if (board.isEmpty(target)) {
-                                        validActions.add(new Action(p, location, target, -3 * Square.manhattanDistance(location, evilKing) + 60, QUIET)); //TODO manhattan distance
+                                        validActions.add(new Action(p, location, target, -3 * Square.manhattanDistance(location, evilKing) + 60 + fuzz, QUIET)); //TODO manhattan distance
                                         target = target.getOffSetSquare(offset);
                                     } else if (!board.getPieceAt(target).isFriendly(playerToMove)) {
                                         Action.ActionType type = board.getPieceAt(target).getType() == KING ? WIN : CAPTURE;
@@ -149,21 +162,22 @@ public class TreeState {
                         case PAWN -> {
                             //first check the natural move in the "forward" direction
                             Square naturalMove = location.getOffSetSquare(piece.getOffsets()[0]);
-                            if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
+                            if (board.isEmpty(naturalMove)) {
 
                                 //double jumping
                                 Square doubleJump = naturalMove.getOffSetSquare(piece.getOffsets()[0]);
-                                if (doubleJump != Square.INVALID && board.isEmpty(doubleJump) && piece.canDoubleJump(location)) {
-                                    validActions.add(new Action(p, location, doubleJump, -3 * Square.manhattanDistance(location, evilKing) + 60, QUIET));
+                                if (board.isEmpty(doubleJump) && piece.canDoubleJump(location)) {
+                                    validActions.add(new Action(p, location, doubleJump, -3 * Square.manhattanDistance(location, evilKing) + 60 + fuzz, QUIET));
                                 } else {
                                     int score = -3 * Square.manhattanDistance(location, evilKing) + 60;
                                     Action.ActionType type = QUIET;
                                     if (p.canPromote(naturalMove)) {
                                         score = QUEEN.getWeight() - 100;
                                         type = PROMOTE;
-                                    } else if (p.promotable(naturalMove) && doubleJump != INVALID && board.isEmpty(doubleJump))
+                                    } else if (p.promotable(naturalMove))
                                         score = QUEEN.getWeight() - 200;
-                                    validActions.add(new Action(p, location, naturalMove, score, type));
+
+                                    validActions.add(new Action(p, location, naturalMove, score + fuzz, type));
                                 }
                             }
 
@@ -171,12 +185,12 @@ public class TreeState {
                             for (int k = 1; k < 3; k++) {
                                 //loop through the two potential capture targets
                                 Square captureTarget = location.getOffSetSquare(piece.getOffsets()[k]);
-                                if (captureTarget != INVALID) {
+                                if (board.occupied(captureTarget)) {
                                     Piece atTarget = board.getPieceAt(captureTarget);
-                                    if (atTarget != EMPTY && !atTarget.isFriendly(playerToMove)) {
+                                    if (atTarget.getColor().opponent(playerToMove)) {
                                         Action.ActionType type = atTarget.getType() == KING ? WIN : CAPTURE;
                                         int score = (p.canPromote(captureTarget)) ? atTarget.getWeight() + QUEEN.getWeight() : atTarget.getWeight();
-                                        validActions.add(new Action(p, location, captureTarget, score, type)); //capture
+                                        validActions.add(new Action(p, location, captureTarget, score + fuzz, type)); //capture
                                     }
                                 }
                             }
@@ -190,15 +204,22 @@ public class TreeState {
         return validActions;
     }
 
+    //int[] pieceCountOpponent = new int[7];
+    //int[] pieceCountPlayerToMove = new int[7];
+
+
     //optimizable with piece list / concurrent traversal of board
     public boolean isTerminal() {
         //System.out.println("CHECKING TERMINAL...");
         Piece[] b = board.getBoard();
-        boolean whiteKing = false, blackKing = false;
+        boolean whiteKing = false, blackKing = false, terminal = true;
         for (int i = 0; i < b.length; i++) {
             if (b[i] == OFF_BOARD) {
                 i += 7;
-            } else {
+            } else if (b[i] != EMPTY) {
+                //if (b[i].getColor().opponent(playerToMove)) pieceCountOpponent[b[i].getType().ordinal()]++;
+                //else pieceCountPlayerToMove[b[i].getType().ordinal()]++;
+
                 if (b[i] == WHITE_KING) {
                     whiteKing = true;
                     this.whiteKing = Square.getBoardIndexMap().get(i);
@@ -210,10 +231,12 @@ public class TreeState {
                 if (whiteKing && blackKing) { //both kings on the board, so not terminal
                     //System.out.println("TERMINAL FALSE");
                     return false;
+                    //terminal = false;
                 }
             }
-
         }
+
+        //if (!terminal) return false;
 
         if (playerToMove == WHITE && !whiteKing) {
             //if WHITE is to move, but there is no white King, then black captured the white king
@@ -228,7 +251,7 @@ public class TreeState {
     }
 
     public double reward(Side player) {
-        return winner == player ? 1 : 0;
+        return winner.opponent(player) ? 1 : 0;
     }
 
     public static void main(String[] args) {

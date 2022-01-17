@@ -1,6 +1,5 @@
 package gui;
 
-import gui.controllers.GameOverScreen;
 import gui.controllers.MainContainerController;
 import gui.controllers.Menu;
 import javafx.application.Platform;
@@ -8,11 +7,9 @@ import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import logic.Config;
 import logic.Dice;
 import logic.LegalMoveGenerator;
 import logic.Move;
@@ -177,11 +174,11 @@ public class Chessboard extends GridPane {
 
 
 
-                MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
+                //MainContainerController.stage.setScene(new Scene(new GameOverScreen(game.getWinner())));
 
                 // if gameover true then the winner has also been set by the checkGameOver( method in Game, so we can reset state here
                 if (gameType != GameType.AI_V_AI) {
-                    game.resetCurrentStateToFirstState();
+                    //game.resetCurrentStateToFirstState();
                     game.setGameOver(false);
                 }
 

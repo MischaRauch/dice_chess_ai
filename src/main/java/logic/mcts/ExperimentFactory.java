@@ -1,28 +1,33 @@
 package logic.mcts;
 
 import logic.player.AIPlayer;
-import logic.player.ExpectiMiniMaxPlayer;
+import logic.player.BasicAIPlayer;
 
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
-import static logic.mcts.MCTSAgent.Strategy.ALTERNATING_CHANCE_PENALTY;
+import static logic.mcts.MCTSAgent.Strategy.CHANCE_PENALTY;
 
 public class ExperimentFactory {
 
     static long inSeconds = (long) 1e9;
 
-    static MCTSAgent.Strategy strategy = ALTERNATING_CHANCE_PENALTY;
+    static MCTSAgent.Strategy strategy = CHANCE_PENALTY;
 
     public static void main(String[] args) {
         //TODO: so far this only works if the white player is MCTSAgent!
+        //because I cast the white player to an MCTSAgent for data collection
+        //and i'm too lazy to fix it
+        //TODO: also you have to specify the agents in the SimulationFactory class again
+        //so this class is pretty much just necessary for specificy the Agent configuration
+        //and also which data to track
 
         AIPlayer white = MCTSAgent.create(WHITE, 2000)
                 .useStrategy(strategy);
 
 //        AIPlayer white = new MCTSAgent(WHITE, 2000);
         //AIPlayer black = new MiniMaxPlayer(7, BLACK);
-        AIPlayer black = new ExpectiMiniMaxPlayer(7, BLACK);
-        //AIPlayer black = new BasicAIPlayer(BLACK);
+        //AIPlayer black = new ExpectiMiniMaxPlayer(11, BLACK);
+        AIPlayer black = new BasicAIPlayer(BLACK);
         //AIPlayer black = new RandomMovesPlayer(BLACK);
 
 
@@ -36,11 +41,11 @@ public class ExperimentFactory {
 //        ssg.start();
 
 
-        SimulationFactory sim = SimulationFactory.create(white, black, 20)
+        SimulationFactory sim = SimulationFactory.create(white, black, 50)
                 .trackWinner()
                 .trackWinRate()
 //                .trackWinTotal()
-                .trackTimeNeed()
+//                .trackTimeNeed()
 //                .trackTreeSize()
 //                .trackUCT()
                 ;
@@ -58,12 +63,13 @@ public class ExperimentFactory {
         System.out.println(sim.black.getNameAi() + " - Black win average: " + Math.floor(sim.blackWinTotal * 1000 / sim.numSimulations) / 1000);
         System.out.println("Draws: " + sim.numDraws);
         System.out.println("Win Total: " + sim.whiteWinTotal);
+        System.out.println("Black Total: " + sim.blackWinTotal);
         System.out.println("Min Time: " + Math.floor(sim.minTime * 1000) / 1000);
         System.out.println("Avg Time: " + Math.floor(sim.averageTime * 1000) / 1000);
         System.out.println("Max Time: " + Math.floor(sim.maxTime * 1000) / 1000);
-        System.out.println("Min Tree: " + sim.minTreeSize);
-        System.out.println("Avg Tree: " + sim.avgTreeSize);
-        System.out.println("Max Tree: " + sim.maxTreeSize);
+//        System.out.println("Min Tree: " + sim.minTreeSize);
+//        System.out.println("Avg Tree: " + sim.avgTreeSize);
+//        System.out.println("Max Tree: " + sim.maxTreeSize);
         //System.out.println("MCTS:\n\tchoseMostVisited: " + ((MCTSAgent) sim.white).numMostVisitedChosen);
         //System.out.println("\tchoseBestLocal: " + ((MCTSAgent) sim.white).numBestLocalChosen);
         //System.out.println("\tchoseBestExpected: " + ((MCTSAgent) sim.white).numBestExpectedChosen);

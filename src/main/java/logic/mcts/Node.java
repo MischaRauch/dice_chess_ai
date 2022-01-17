@@ -1,6 +1,7 @@
 package logic.mcts;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 import static logic.mcts.Node.NodeType.*;
@@ -66,6 +67,14 @@ public class Node {
         this.roll = roll;
     }
 
+    static class ChildComparator implements Comparator<Node> {
+
+        @Override
+        public int compare(Node o1, Node o2) {
+            return o1.state.score - o2.state.score;
+        }
+    }
+
     public boolean fullyExpanded() {
         return fullyExpanded;
     }
@@ -78,7 +87,6 @@ public class Node {
 
     public int getNextRoll() {
         int roll = validRolls.get(actionsTaken);
-        //fullyExpanded = validRolls.isEmpty();
         actionsTaken++; //just gonna reuse this variable lol
         fullyExpanded = actionsTaken == validRolls.size();
         return roll;
@@ -101,7 +109,7 @@ public class Node {
 //                val = val / ((double) validRolls.size());
                 //val = val / ((double) children.size());
                 //System.out.println(val);
-                val = (Q / N) * (1 / numValidRolls);
+                //val = (Q / N) * (1 / numValidRolls);
                 return val;
             }
 
@@ -113,6 +121,7 @@ public class Node {
 
     public void addChild(Node child) {
         children.add(child);
+        //children.sort(new ChildComparator());
     }
 
     public void pruneSiblings() {

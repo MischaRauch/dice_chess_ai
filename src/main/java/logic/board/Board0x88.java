@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static logic.enums.Piece.EMPTY;
 import static logic.enums.Piece.OFF_BOARD;
+import static logic.enums.Square.INVALID;
 
 public class Board0x88 extends Board {
 
@@ -81,9 +82,20 @@ public class Board0x88 extends Board {
         return this;
     }
 
+    public boolean occupied(Square square) {
+        return square != INVALID && getPieceAt(square) != EMPTY;
+    }
+
     @Override
     public boolean isEmpty(Square square) {
-        return getPieceAt(square) == Piece.EMPTY;
+
+        return square != INVALID && getPieceAt(square) == EMPTY;
+    }
+
+    @Override
+    public boolean isFree(Square square) {
+
+        return (square != INVALID) && getPieceAt(square) == EMPTY;
     }
 
     @Override
@@ -111,7 +123,7 @@ public class Board0x88 extends Board {
         Board0x88 boardAfterMove = new Board0x88(board);
 
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
-        boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;
+        boardAfterMove.board[origin.getBoardIndex()] = EMPTY;
 
         //TODO: sorry if this breaks functionality somewhere, but this is an expensive operation
         //boardAfterMove.setFEN(boardAfterMove.createFENFromBoard());

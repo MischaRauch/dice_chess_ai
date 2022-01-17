@@ -20,4 +20,8 @@ public enum Side {
         return Side.WHITE;
     }
 
+    public boolean opponent(Side side) {
+        return this != NEUTRAL && side != this;
+    }
+
 }
