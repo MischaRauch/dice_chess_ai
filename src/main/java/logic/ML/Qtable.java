@@ -27,7 +27,7 @@ public class Qtable {
 
 
     public void ConstructQtable(State currentState, int depth) { // this table doesn't contain values, only info
-        currentState = new State(currentState.getBoard(), currentState.diceRoll, currentSide); // TODO
+        currentState = new State(currentState.getBoard(), currentState.diceRoll, currentSide);
         stateSpace = createStateSpace(currentState.getPieceAndSquare(), depth);
 
         for (List<PieceAndSquareTuple> state : stateSpace) {
@@ -52,7 +52,6 @@ public class Qtable {
 
     public boolean equalsForTuple(List<PieceAndSquareTuple> state1, List<PieceAndSquareTuple> state2) {
         boolean answer = false;
-        int a = 0;
         for (PieceAndSquareTuple temp1 : state1) {
             Square sq1 = (Square) temp1.getSquare();
             Piece p1 = (Piece) temp1.getPiece();
@@ -62,7 +61,6 @@ public class Qtable {
                 Piece p2 = (Piece) temp2.getPiece();
                 if ((p1.getUnicode() == p2.getUnicode()) && (sq1.getBoardIndex() == sq2.getBoardIndex())) {
                     answer = true;
-                    a++;
                 }
             }
             if (answer) {
@@ -228,7 +226,7 @@ public class Qtable {
     }
 
     public List<List<PieceAndSquareTuple>> createStateSpace(List<PieceAndSquareTuple> givenState, int depth) {
-        List<List<PieceAndSquareTuple>> possibleBoardStates = new ArrayList<>();
+        List<List<PieceAndSquareTuple>> possibleBoardStates;
         List<List<PieceAndSquareTuple>> opponentState = new ArrayList<>();
         ArrayList<Integer> indexOfDepthOfOpponent = new ArrayList<>();
 

@@ -42,14 +42,15 @@ public class DQL {
         for (int i = 0; i < numOfGames; i++) {
             currentState = givenInitialState;
             int reward;
-            boolean finished = false; // turn to true if king captured
+            boolean finished; // turn to true if king captured
 
             for (int j = 0; j < depth / 2; j++) {
                 // take learned path or explore new actions
                 if (Math.random() <= explorationProb) { // at first picking action will be totally random
                     action = currentQtable.randomMoveGenerator(currentState, side);
                 } else {
-                    currentState = new State(currentState.getBoard(), currentState.diceRoll, side); // TODO
+
+                    currentState = new State(currentState.getBoard(), currentState.diceRoll, side);
                     int index = argmax(Qvalues, currentQtable.accessStateIndex(currentState.getPieceAndSquare()));
                     ArrayList<OriginAndDestSquare> originAndDestSquares = currentQtable.accessStateValue(currentState.getPieceAndSquare());
                     OriginAndDestSquare tempMove = originAndDestSquares.get(index);
@@ -57,7 +58,6 @@ public class DQL {
 
                     action = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
                 }
-
                 //apply chosen action and return the next state, reward and true if the episode is ended
                 State newState = new State(currentState.applyMove(action));
                 /* what happens here is that we can't get immediate reward, in order to get the actual reward we need to apply a
@@ -70,19 +70,19 @@ public class DQL {
 
                 reward = getReward(newState, side);
                 finished = didStateEnd(newState);
-
                 // update value of Qtable
-                currentState = new State(currentState.getBoard(), currentState.diceRoll, side); // TODO
+                currentState = new State(currentState.getBoard(), currentState.diceRoll, side);
                 int indexOfState = currentQtable.accessStateIndex(currentState.getPieceAndSquare());
                 OriginAndDestSquare tempOriginAndDestSquare = new OriginAndDestSquare(action.getOrigin(), action.getDestination());
                 int indexOfAction = currentQtable.accessActionIndex(currentState.getPieceAndSquare(), tempOriginAndDestSquare);
 
-                newState = new State(newState.getBoard(), newState.diceRoll, side); // TODO
+                newState = new State(newState.getBoard(), newState.diceRoll, side);
                 Qvalues[indexOfState][indexOfAction] = (int) ((1 - learningRate) * Qvalues[indexOfState][indexOfAction] + learningRate * (reward + gamma * maxValue(Qvalues, currentQtable.accessStateIndex(newState.getPieceAndSquare()))));
                 currentState = newState;
 
                 if (finished) break;
             }
+
             if (explorationProb >= minExplorationProb) explorationProb -= explorationDecay;
         }
     }
@@ -137,7 +137,7 @@ public class DQL {
     }
 
     public int getAvgValuesOfTable() {
-        givenInitialState = new State(givenInitialState.getBoard(), givenInitialState.diceRoll, givenInitialState.getColor()); // TODO
+        givenInitialState = new State(givenInitialState.getBoard(), givenInitialState.diceRoll, givenInitialState.getColor());
         int a = currentQtable.accessStateIndex(givenInitialState.getPieceAndSquare());
         int sum = 0;
         int numOfnonZero = 0;

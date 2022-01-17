@@ -168,7 +168,7 @@ public class Menu {
             case "Basic AI" -> new BasicAIPlayer(color);
             case "MiniMax AI" -> new MiniMaxPlayer(7, color);
             case "QTable AI" -> new QTablePlayer(color);
-            case "QL AI" -> new QLPlayer(4, color);
+            case "QL AI" -> new QLPlayer(2, color);
             case "MCTS" -> new MCTSAgent(color, 2000);
             case "ExpectiMiniMax AI" -> new ExpectiMiniMaxPlayer(7,color);
             case "Hybrid_ExpectiQL AI" -> new Hybrid_ExpectiQL(2,color);
