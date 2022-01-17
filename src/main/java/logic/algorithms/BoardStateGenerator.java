@@ -16,7 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static logic.enums.Piece.EMPTY;
+import static logic.State.PieceAndSquareToBoardConverter;
+import static logic.enums.Piece.*;
 import static logic.enums.Square.*;
 
 // generates all possible states of the board for n turns ahead
@@ -24,8 +25,8 @@ public class BoardStateGenerator {
 
     // for ML
     public static ArrayList<State> getPossibleBoardStates(State state, Side side) {
-        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMoves(state, side);
-        ArrayList<State> answer = new ArrayList<State>();
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, side);
+        ArrayList<State> answer = new ArrayList<>();
         State tempState;
         Move move1;
 
@@ -38,6 +39,24 @@ public class BoardStateGenerator {
         }
         return answer;
     }
+    public static ArrayList<State> getPossibleBoardStatesOfSpecificPiece(State state, Side side, int roll) {
+        ArrayList<OriginAndDestSquare> originAndDestSquares = LegalMoveGenerator.getAllLegalMovesML(state, side);
+
+        ArrayList<State> answer = new ArrayList<>();
+        State tempState;
+        Move move1;
+
+        for (OriginAndDestSquare tempMove : originAndDestSquares) {
+            Piece p = state.getBoard().getPieceAt(tempMove.getOrigin());
+            if (p.getColor().equals(side) && getDiceFromPiece(p) == roll) {
+                move1 = new Move(p, tempMove.getOrigin(), tempMove.getDest(), Piece.getDiceFromPiece(p), side);
+                tempState = state.applyMove(move1);
+                answer.add(tempState);
+            }
+        }
+        return answer;
+    }
+
 
     public List<Move> getValidMovesForGivenPiece(State state, Piece piece) {
         List<Move> validMoves = new LinkedList<>();
@@ -213,10 +232,8 @@ public class BoardStateGenerator {
 
         return validMoves;
     }
-
-
-    // move piece and return array of all possible states for all possible moves a given piece can make taking into account its origin square
-    public List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
+    // add the effects of castling, promotion, en passant (this is not that urgent, because it's rare) here
+    public static List<List<PieceAndSquareTuple>> getStateFromLegalMoves(List<PieceAndSquareTuple> nodePieceAndSquare, List<Square> legalMoves, Piece piece, Square origin) {
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
@@ -236,7 +253,51 @@ public class BoardStateGenerator {
                         }
                     }
 
-                    // add new location
+//                    if ((piece == WHITE_PAWN || piece == BLACK_PAWN) && ((legalMoves.get(i).getRank() == 1) || (legalMoves.get(i).getRank() == 8))) {
+//                        if ((piece == WHITE_PAWN) && legalMoves.get(i).getRank() == 8) {
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(WHITE_QUEEN, legalMoves.get(i)));
+//                        } else if ((piece == BLACK_PAWN) && legalMoves.get(i).getRank() == 1) {
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(BLACK_QUEEN, legalMoves.get(i)));
+//                        }
+//                    } else if ((piece == WHITE_KING || piece == BLACK_KING)) {
+//                        if (piece == WHITE_KING && (origin.getSquareNumber() == 4) && legalMoves.get(i).getSquareNumber() == 6) {
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(WHITE_KING, legalMoves.get(i)));
+//
+//                            for (PieceAndSquareTuple temp : nodePieceAndSquareCopy) {
+//                                if (temp.getPiece() == WHITE_ROOK && temp.getSquare() == h1) {
+//                                    nodePieceAndSquareCopy2.remove(temp);
+//                                }
+//                            }
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(WHITE_ROOK, f1));
+//                        } else if (piece == WHITE_KING && (origin.getSquareNumber() == 4) && legalMoves.get(i).getSquareNumber() == 2) {
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(WHITE_KING, legalMoves.get(i)));
+//                            for (PieceAndSquareTuple temp : nodePieceAndSquareCopy) {
+//                                if (temp.getPiece() == WHITE_ROOK && temp.getSquare() == a1) {
+//                                    nodePieceAndSquareCopy2.remove(temp);
+//                                }
+//                            }
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(WHITE_ROOK, d1));
+//                        } else if (piece == BLACK_KING && (origin.getSquareNumber() == 116) && legalMoves.get(i).getSquareNumber() == 118) {
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(BLACK_KING, legalMoves.get(i)));
+//                            for (PieceAndSquareTuple temp : nodePieceAndSquareCopy) {
+//                                if (temp.getPiece() == BLACK_ROOK && temp.getSquare() == h8) {
+//                                    nodePieceAndSquareCopy2.remove(temp);
+//                                }
+//                            }
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(BLACK_ROOK, f8));
+//                        } else if (piece == BLACK_KING && (origin.getSquareNumber() == 116) && legalMoves.get(i).getSquareNumber() == 114) {
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(BLACK_KING, legalMoves.get(i)));
+//                            for (PieceAndSquareTuple temp : nodePieceAndSquareCopy) {
+//                                if (temp.getPiece() == BLACK_ROOK && temp.getSquare() == a8) {
+//                                    nodePieceAndSquareCopy2.remove(temp);
+//                                }
+//                            }
+//                            nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(BLACK_ROOK, d8));
+//                        }
+//                    } else {
+//                        nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(piece, legalMoves.get(i)));
+//                    }
+
                     nodePieceAndSquareCopy2.add(new PieceAndSquareTuple(piece, legalMoves.get(i)));
 
                     // remove pieces at possible new location
@@ -249,7 +310,6 @@ public class BoardStateGenerator {
 
                     // add updated pieceAndSquare (state) for (Squares) legalmoves.get(i) to list
                     possibleStates.add(nodePieceAndSquareCopy2);
-
                     // reset
                     nodePieceAndSquareCopy2 = nodePieceAndSquareCopy.stream().collect(Collectors.toList());
                 }
@@ -262,46 +322,113 @@ public class BoardStateGenerator {
     public List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
         List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
         List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = nodePieceAndSquare.stream().collect(Collectors.toList());
-        LegalMoveGenerator generator = new LegalMoveGenerator();
 
         List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
-        //printPieceAndSquare(nodePieceAndSquareCopy);
 
-        for (PieceAndSquareTuple t : nodePieceAndSquareCopy) {
+        for (PieceAndSquareTuple<Piece,Square> t : nodePieceAndSquareCopy) {
             // clone for casting
-            Piece p = (Piece) t.getPiece();
-            Square s = (Square) t.getSquare(); //origin
             // get all piece types with their dice numbers
             Piece coloredPiece = Piece.getPieceFromDice(diceRoll, color);
-            if (p == coloredPiece) {
-                List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
-                //printLegalMoves(legalMoves);
+            if (t.getPiece() == coloredPiece) {
+                List<Square> legalMoves = LegalMoveGenerator.getMoves(state, t.getSquare(), t.getPiece());
 
-                List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2, legalMoves, p, s);
+                List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2, legalMoves, t.getPiece(), t.getSquare());
 
                 for (int j = 0; j < states.size(); j++) {
                     possibleStates.add(states.get(j));
-                    //printPieceAndSquare(states.get(j));
                 }
             }
         }
         return possibleStates;
     }
+    // for hybrid
+    public static List<List<PieceAndSquareTuple>> getPossibleBoardStates(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll) {
+        List<PieceAndSquareTuple> nodePieceAndSquareCopy = nodePieceAndSquare.stream().collect(Collectors.toList());
+        List<PieceAndSquareTuple> nodePieceAndSquareCopy2 = nodePieceAndSquare.stream().collect(Collectors.toList());
+        List<List<PieceAndSquareTuple>> possibleStates = new ArrayList<>();
+
+        for (PieceAndSquareTuple t : nodePieceAndSquareCopy) {
+            // clone for casting
+            Piece p = (Piece) t.getPiece();
+            Square s = (Square) t.getSquare(); //origin
+            Piece coloredPiece = Piece.getPieceFromDice(diceRoll, color);
+            if (p == coloredPiece) {
+                // List<Square> legalMoves = LegalMoveGenerator.getLegalMoves(state, s, p, color);
+                List<Square> legalMoves = LegalMoveGenerator.getLegalMovesHybrid(nodePieceAndSquareCopy, s, p, color);
+
+                List<List<PieceAndSquareTuple>> states = getStateFromLegalMoves(nodePieceAndSquareCopy2, legalMoves, p, s);
+                possibleStates.addAll(states);
+            }
+        }
+        return possibleStates;
+    }
+
+//    // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
+//    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
+//
+//        List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+//
+//        List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
+//
+//        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+//            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+//            possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+//        }
+//        return possibleBoardStatesWeights;
+//    }
+
+//    // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
+//    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
+//
+//        List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+//
+//        List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
+//
+//        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+//            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+//            possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+//        }
+//        return possibleBoardStatesWeights;
+//    }
 
     // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
-    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<PieceAndSquareTuple> nodePieceAndSquare, Side color, int diceRoll, State state) {
+    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPiece(List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece, Side color, int turn) {
+
         List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
 
-        List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
-
-        for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
-            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
-            //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
+        for (List<PieceAndSquareTuple> boardState : possibleBoardStatesForGivenPiece) {
+            int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, turn);
             possibleBoardStatesWeights.add(newBoardPieceStateWeights);
         }
-        //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
         return possibleBoardStatesWeights;
     }
+
+    // gets a list of all the possible board weights for specific piece for all the possible board states List<PieceAndSquareTuple> nodePieceAndSquare type (i.e. WHITE_PAWN)
+    public List<Integer> getPossibleBoardStatesWeightsOfSpecificPieceHybrid(Side color, int diceRoll, State state) {
+        List<Integer> possibleBoardStatesWeights = new ArrayList<Integer>();
+
+        int depth = 2;
+
+        ArrayList<State> allPossibleStates = getPossibleBoardStatesOfSpecificPiece(new State(state), color, diceRoll);
+
+        for (State givenState : allPossibleStates) {
+            int weight = BoardStateEvaluator.getEvalOfQL(new State(givenState), depth); // the location of this causes too much time
+            possibleBoardStatesWeights.add(weight);
+        }
+
+//        } else {
+//            List<List<PieceAndSquareTuple>> possibleBoardStates = getPossibleBoardStates(nodePieceAndSquare, color, diceRoll, state);
+//
+//            for (List<PieceAndSquareTuple> boardState : possibleBoardStates) {
+//                int newBoardPieceStateWeights = BoardStateEvaluator.getBoardEvaluationNumber(boardState, color, state.getCumulativeTurn());
+//                //System.out.println("newBoardPieceStateWeights: " + newBoardPieceStateWeights);
+//                possibleBoardStatesWeights.add(newBoardPieceStateWeights);
+//            }
+//            //printPossibleBoardStatesWeights(possibleBoardStatesWeights);
+//        }
+        return possibleBoardStatesWeights;
+    }
+    
 
     public void printPossibleBoardStatesWeights(List<Integer> possibleBoardStatesWeights) {
         // System.out.println("newBoardPieceStateWeights: ");

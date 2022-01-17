@@ -16,30 +16,38 @@ public class ExpectiMiniMaxNode {
     private List<ExpectiMiniMaxNode> children;
     private int chanceDivider; // i.e. number of pieces that can move at a given state List<PieceAndSquareTuple>
     private boolean isMaxPlayer;
-    private State previousState; // to get origin square of piece, which you can get from dice roll in state
+    private State state; // to get origin square of piece, which you can get from dice roll in state, best state for non-root nodes
     private int nodeValue;
     private Piece piece;
 
     // root
-    public ExpectiMiniMaxNode(boolean isMaxPlayer, State previousState) {
+    public ExpectiMiniMaxNode(boolean isMaxPlayer, State state) {
         this.isMaxPlayer = isMaxPlayer;
-        this.previousState = previousState;
+        this.state = state;
         this.children = new ArrayList<>();
         this.chanceDivider = 0;
     }
 
     // children
     public ExpectiMiniMaxNode(boolean isMaxPlayer, List<List<PieceAndSquareTuple>> possibleBoardStatesForGivenPiece, List<Integer> boardEvaluationNumbersForGivenPiece,
-                              int chanceDivider, int nodeValue, State previousState, List<Move> possibleMovesGivenStateForGivenPiece, Piece piece) {
+                              int chanceDivider, int nodeValue, State state, List<Move> possibleMovesGivenStateForGivenPiece, Piece piece) {
         this.isMaxPlayer = isMaxPlayer;
         this.possibleBoardStatesForGivenPiece = possibleBoardStatesForGivenPiece;
         this.boardEvaluationNumbersForGivenPiece = boardEvaluationNumbersForGivenPiece;
         this.chanceDivider = chanceDivider;
-        this.previousState = previousState;
+        this.state = state;
         this.nodeValue = nodeValue;
         this.children = new ArrayList<>();
         this.possibleMovesGivenStateForGivenPiece = possibleMovesGivenStateForGivenPiece;
         this.piece = piece;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void setMaxPlayer(boolean maxPlayer) {
+        isMaxPlayer = maxPlayer;
     }
 
     public Piece getPiece() {
@@ -62,20 +70,12 @@ public class ExpectiMiniMaxNode {
         return children;
     }
 
-    public void setChildren(List<ExpectiMiniMaxNode> children) {
-        this.children = children;
-    }
-
     public List<Integer> getBoardEvaluationNumbersForGivenPiece() {
         return boardEvaluationNumbersForGivenPiece;
     }
 
-    public List<Move> getPossibleMovesForGivenPiece() {
-        return possibleMovesGivenStateForGivenPiece;
-    }
-
-    public State getPreviousState() {
-        return previousState;
+    public State getState() {
+        return state;
     }
 
     public int getNodeValue() {

@@ -1,5 +1,6 @@
 package logic.player;
 
+import logic.LegalMoveEvaluator;
 import logic.Move;
 import logic.State;
 import logic.enums.Side;
@@ -12,6 +13,8 @@ import java.util.Random;
 public class RandomMovesPlayer extends AIPlayer {
 
     private final static Random randomly = new Random();
+    private long timeNeeded;
+    private final LegalMoveEvaluator evaluator = new LegalMoveEvaluator();
 
     public RandomMovesPlayer(Side color) {
         super(color);
@@ -25,12 +28,22 @@ public class RandomMovesPlayer extends AIPlayer {
         long end = System.nanoTime();
         // System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
         // state.printPieceAndSquare();
+        timeNeeded = end - start;
+
+        //System.out.println("RandomMovesPlayer: Elapsed Time to generate tree and find optimal move: " + (end - start));
+        //System.out.println("BasicAIPlayer: Color: " + this.color.toString() + " Next optimal Move: " + chosenMove);
+        //evaluator.isLegalMove(chosenMove, state, true, true);
         return chosenMove;
     }
 
     @Override
     public String getNameAi() {
         return "Random AI";
+    }
+
+    @Override
+    public long getTimeNeeded() {
+        return timeNeeded;
     }
 
 }

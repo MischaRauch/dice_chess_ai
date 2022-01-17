@@ -14,6 +14,8 @@ public abstract class Board {
 
     public abstract boolean isEmpty(Square square);
 
+    public abstract boolean isFree(Square square);
+
     //this is kinda only relevant for 0x88 i think
     public abstract boolean isOffBoard(int squareNumber);
 
@@ -69,7 +71,11 @@ public abstract class Board {
         return FEN;
     }
 
+    public abstract String createFENFromBoard();
+
     public void setFEN(String FEN) {
         this.FEN = FEN;
     }
+
+    public abstract boolean occupied(Square captureTarget);
 }

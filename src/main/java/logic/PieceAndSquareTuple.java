@@ -1,7 +1,5 @@
 package logic;
 
-import logic.enums.Side;
-
 public class PieceAndSquareTuple<Piece, Square> {
     private final Piece piece;
     private final Square square;

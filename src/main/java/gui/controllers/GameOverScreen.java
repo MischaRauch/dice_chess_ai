@@ -43,8 +43,6 @@ public class GameOverScreen extends AnchorPane {
     @FXML
     private Label resultLabel;
 
-    @FXML
-    private Button playAgainButton;
 
     @FXML
     private Button quitButton;
@@ -54,26 +52,6 @@ public class GameOverScreen extends AnchorPane {
         Platform.exit();
     }
 
-    @FXML
-    void restart(ActionEvent event) throws IOException {
-        /// TODO re-enable play again button
-//        Stage stage = (Stage) playAgainButton.getScene().getWindow();
-//        Parent root = new MainContainerController(MainContainerController.getInstance().type);
-//        Scene scene = new Scene(root);
-//        stage.setScene(scene);
-    }
 
-    @FXML
-    private Button historyButton;
-    @FXML
-    void historyButtonAction(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/viewData.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(((Node)event.getSource()).getScene().getWindow());
-        stage.show();
-    }
 
 }

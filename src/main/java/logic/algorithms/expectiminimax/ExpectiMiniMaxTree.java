@@ -2,9 +2,10 @@ package logic.algorithms.expectiminimax;
 
 public class ExpectiMiniMaxTree {
 
-    public ExpectiMiniMaxTree() {}
-
     ExpectiMiniMaxNode root;
+
+    public ExpectiMiniMaxTree() {
+    }
 
     public ExpectiMiniMaxNode getRoot() {
         return root;

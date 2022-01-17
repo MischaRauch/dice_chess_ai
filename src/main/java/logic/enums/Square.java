@@ -31,12 +31,26 @@ public enum Square {
         return 112 - ((ordinal() >> 3) << 4) + (ordinal() & 7); //112 - (ordinal() / 8) * 16 + ordinal() % 8
     }
 
+    public int getDiff(Square b) {
+        return 0x77 + (squareNumber - b.squareNumber);
+    }
+
+    public static int[] getManDis = new int[240];
+
     static {
         for (Square s : Square.values()) {
             squareMap.put(s.squareNumber, s);
             boardIndexMap.put(s.boardIndex, s);
         }
+        Square[] squares = Square.values();
+        for (int i = 0; i < squares.length - 1; i++) {
+            for (int j = 0; i < squares.length - 1; i++) {
+                getManDis[squares[i].getDiff(squares[j])] = manhattanDistance(squares[i], squares[j]);
+                getManDis[squares[j].getDiff(squares[i])] = manhattanDistance(squares[j], squares[i]);
+            }
+        }
     }
+
 
     final int squareNumber;
     final int boardIndex;
@@ -65,9 +79,12 @@ public enum Square {
         return boardIndexMap.getOrDefault(squareNumber, INVALID);
     }
 
+    public Square getOffSetSquare(int offset) {
+        return squareMap.getOrDefault(squareNumber + offset, INVALID);
+    }
 
-    // todo optimize these lmao
     // 1 indexed
+    //there are 0x88 bitwise methods for these below that don't make you look through a bunch of loops
     public static int getSquareRank(Square s) {
         int index = 0;
         for (int j = 0; j < 128; j++) {
@@ -109,6 +126,10 @@ public enum Square {
         return file;
     }
 
+    public static int manhattanDistance(Square from, Square to) {
+        return Math.abs(from.getRank() - to.getRank()) + Math.abs(from.getFile_18() - to.getFile_18());
+    }
+
     /**
      * Gets the file of the square, where file_a = 0 and file_h = 7;
      *
@@ -119,12 +140,34 @@ public enum Square {
     }
 
     /**
+     * returns file of square indexed from 1-8
+     * e.g.: a = 1, b = 2, etc
+     *
+     * @return
+     */
+    public int getFile_18() {
+        return (squareNumber & 7) + 1;
+    }
+
+
+    /**
      * Gets the rank of the square, not 0-indexed (rank_1 = 1, rank_8 = 8)
+     * e.g.: rank 1 = 1, rank 2 = 2, etc
      *
      * @return integer corresponding to square rank
      */
     public int getRank() {
         return (squareNumber >> 4) + 1; //to make this 0-indexed, subtract 1
+    }
+
+    /**
+     * Get's the rank 0 indexed, in case you are using a 8x8 board matrix or something
+     * e.g. : rank 1 = 0, ...,  rank 8 = 7
+     *
+     * @return
+     */
+    public int getRank_07() {
+        return (squareNumber >> 4);
     }
 
     public static Map<Integer, Square> getSquareMap() {
@@ -221,15 +264,6 @@ public enum Square {
         }
         Collections.sort(rightDiagonals);
         return rightDiagonals;
-    }
-
-
-    //not really sure how to interpret what this returns
-    //okay, so basically I think adding 0x77 (119) to the square difference ensures that the result is non-negative
-    //so that you can use it as an index in some sort of attack table, which lets you know which pieces can attack a
-    //certain square, not really sure what such a table looks like tho. Definitely more research needed
-    public int getDiff(Square b) {
-        return 0x77 + squareNumber - b.squareNumber;
     }
 
 }

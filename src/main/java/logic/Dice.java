@@ -32,9 +32,8 @@ public class Dice {
         for (int i = 0; i < diceToPiece.length; i++)
             if (canMove(diceToPiece[i].getColoredPiece(side), state))
                 validRolls.add(i + 1); //valid dice rolls are in range 1-6, and i starts at 0
-
+        if (validRolls.size() == 0) return -1;
         return validRolls.get((int) (Math.random() * validRolls.size()));
-
     }
 
     //TODO: method originally copy-pasted from AIPlayer class, however it is out of date and lacks most special move types
@@ -56,15 +55,11 @@ public class Dice {
             if (p == piece) {
                 switch (piece.getType()) {
                     case PAWN -> {
-                        //boolean canMove = false;
-
                         //check if a pawn can do a quiet move
                         Square naturalMove = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[0]);
                         if (naturalMove != Square.INVALID && board.isEmpty(naturalMove)) {
                             return true;
-                            //canMove = true;
                         }
-
                         //check if pawns can capture
                         for (int k = 1; k < 3; k++) {
                             Square validTarget = Square.getSquare(location.getSquareNumber() + piece.getOffsets()[k]);
@@ -72,8 +67,7 @@ public class Dice {
                                 return true;
                             }
                         }
-
-                        return false;
+//                        return false; TODO: I think this was a bug? it would return false if the first pawn encountered was blocke
                     }
 
                     case KNIGHT, BISHOP, ROOK, QUEEN, KING -> {
@@ -83,13 +77,11 @@ public class Dice {
                                 if (board.isEmpty(target) || !board.getPieceAt(target).isFriendly(piece.getColor()))
                                     return true;
                             }
-
                         }
                     }
                 }
             }
         }
-
         return false;
     }
 

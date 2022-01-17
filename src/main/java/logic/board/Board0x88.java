@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static logic.enums.Piece.EMPTY;
+import static logic.enums.Piece.OFF_BOARD;
+import static logic.enums.Square.INVALID;
+
 public class Board0x88 extends Board {
 
     static Map<Integer, Integer> boardIndexMap = new HashMap<>();
@@ -21,8 +25,8 @@ public class Board0x88 extends Board {
     }
 
     private final Piece[] board;
-    public Piece[] getBoard() {return board;}
 
+    public Piece[] getBoard() {return board;}
 
     public Piece[] getBoardArray() {
         return board;
@@ -43,6 +47,7 @@ public class Board0x88 extends Board {
         this();
         loadFromFEN(FEN);
         this.setFEN(FEN);
+        //System.out.println("FEN board 0x88: " + FEN);
     }
 
     //easy cloning of logic.board
@@ -77,9 +82,20 @@ public class Board0x88 extends Board {
         return this;
     }
 
+    public boolean occupied(Square square) {
+        return square != INVALID && getPieceAt(square) != EMPTY;
+    }
+
     @Override
     public boolean isEmpty(Square square) {
-        return getPieceAt(square) == Piece.EMPTY;
+
+        return square != INVALID && getPieceAt(square) == EMPTY;
+    }
+
+    @Override
+    public boolean isFree(Square square) {
+
+        return (square != INVALID) && getPieceAt(square) == EMPTY;
     }
 
     @Override
@@ -107,7 +123,10 @@ public class Board0x88 extends Board {
         Board0x88 boardAfterMove = new Board0x88(board);
 
         boardAfterMove.board[destination.getBoardIndex()] = boardAfterMove.board[origin.getBoardIndex()];
-        boardAfterMove.board[origin.getBoardIndex()] = Piece.EMPTY;
+        boardAfterMove.board[origin.getBoardIndex()] = EMPTY;
+
+        //TODO: sorry if this breaks functionality somewhere, but this is an expensive operation
+        //boardAfterMove.setFEN(boardAfterMove.createFENFromBoard());
 
         return boardAfterMove;
     }
@@ -135,6 +154,37 @@ public class Board0x88 extends Board {
         }
 
         System.out.println(files + "\n");
+    }
+
+    @Override
+    public String createFENFromBoard() {
+        String fen = "";
+        Piece prev = OFF_BOARD;
+        int emptySpaces = 0;
+
+        for (int i = 0; i < board.length; i++) {
+            Piece p = board[i];
+            if (prev == OFF_BOARD && p == OFF_BOARD && i < 116) {
+                fen += "/"; //reached end of rank
+                i += 6;     //skip forward over off-board pieces to next rank
+                emptySpaces = 0;   //reset empty spaces
+            }
+
+            if (p == EMPTY)
+                emptySpaces++;
+
+            if (prev == EMPTY && p != EMPTY)
+                fen += emptySpaces + "";   //reached end of empty spaces, print amount
+
+            if (p != EMPTY && p != OFF_BOARD) {
+                fen += p.getCharType();     //non-empty piece
+                emptySpaces = 0;            //reset empty spaces counter
+            }
+
+            prev = p;
+        }
+
+        return fen;
     }
 
 }
