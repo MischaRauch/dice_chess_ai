@@ -1,7 +1,8 @@
 package logic.mcts;
 
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
+import logic.player.Hybrid_ExpectiQL;
+import logic.player.QLPlayer;
 
 import static logic.enums.Side.BLACK;
 import static logic.enums.Side.WHITE;
@@ -21,14 +22,17 @@ public class ExperimentFactory {
         //so this class is pretty much just necessary for specificy the Agent configuration
         //and also which data to track
 
+
         AIPlayer white = MCTSAgent.create(WHITE, 2000)
                 .useStrategy(strategy);
 
 //        AIPlayer white = new MCTSAgent(WHITE, 2000);
         //AIPlayer black = new MiniMaxPlayer(7, BLACK);
         //AIPlayer black = new ExpectiMiniMaxPlayer(11, BLACK);
-        AIPlayer black = new BasicAIPlayer(BLACK);
+        //IPlayer black = new BasicAIPlayer(BLACK);
         //AIPlayer black = new RandomMovesPlayer(BLACK);
+        AIPlayer blackk = new Hybrid_ExpectiQL(2, BLACK);
+        AIPlayer black = new QLPlayer(2, BLACK);
 
 
 //        GameSimulator ssg = new GameSimulator(white, black)
@@ -41,7 +45,7 @@ public class ExperimentFactory {
 //        ssg.start();
 
 
-        SimulationFactory sim = SimulationFactory.create(white, black, 50)
+        SimulationFactory sim = SimulationFactory.create(white, black, 200)
                 .trackWinner()
                 .trackWinRate()
 //                .trackWinTotal()

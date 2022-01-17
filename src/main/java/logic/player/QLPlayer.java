@@ -31,11 +31,11 @@ public class QLPlayer extends AIPlayer {
         // TODO make evalautor not update moves (Phase 3)
         evaluator.isLegalMove(bestMove, state, true, true);
         timeNeeded = end - start;
-        System.out.println("QLPlayer: Color: " + this.color.toString() + " Next optimal Move: " + bestMove);
+        //System.out.println("QLPlayer: Color: " + this.color.toString() + " Next optimal Move: " + bestMove);
         long endTime = System.currentTimeMillis();
-        System.out.println("That took " + (endTime - startTime) + " milliseconds");
+        //System.out.println("That took " + (endTime - startTime) + " milliseconds");
         avgTime.add((int) (endTime - startTime));
-        System.out.println("Currently avg time taken" + getAvg(avgTime));
+        //System.out.println("Currently avg time taken" + getAvg(avgTime));
         return bestMove;
     }
 

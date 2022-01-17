@@ -56,6 +56,30 @@ public class InputParser {
 
     }
 
+    public static void logMultiGameData(String[] input, String[] header, String title) {
+        try {
+            File file = new File(title + ".csv");
+            FileWriter writer;
+            CSVWriter csvWriter;
+
+            if (file.createNewFile()) {
+                writer = new FileWriter(file);
+                csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+                csvWriter.writeNext(header);
+                csvWriter.writeNext(input);
+            } else {
+                writer = new FileWriter(file, true);
+                csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+                csvWriter.writeNext(input);
+            }
+
+            csvWriter.close();
+        } catch (IOException e) {
+            System.out.println("what");
+            e.printStackTrace();
+        }
+    }
+
     public static void csvWriter(String[] input) {
 
         try {

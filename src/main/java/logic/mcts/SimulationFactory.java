@@ -1,7 +1,7 @@
 package logic.mcts;
 
 import logic.player.AIPlayer;
-import logic.player.BasicAIPlayer;
+import logic.player.QLPlayer;
 import org.jfree.data.xy.XYSeries;
 
 import java.util.LinkedList;
@@ -53,7 +53,11 @@ public class SimulationFactory {
     }
 
     public void start() {
-        double c = 0.55;
+        String[] header = {"game", "result", "MCTS Win Rate", "" + black.getNameAi() + " Win Rate", "WTotal", "BTotal", "C"};
+        double c = 0.7;
+        double c2 = 0.75;
+        double c3 = 0.8;
+        double c4 = 0.85;
         XYSeries exploitationWeight = new XYSeries("C");
         XYSeries localCwinRate = new XYSeries("C WR");
         XYSeries blackWinRate = new XYSeries("Black WR");
@@ -61,20 +65,36 @@ public class SimulationFactory {
         double localI = 1;
         //timeNeededNormalized = new XYSeries("Time Needed x Tree Size");
         for (int i = 1; i <= numSimulations; i++, localI++) {
-            if (i % 30 == 0) {
-                localWR = 0;
+//            if (i % 50 == 0) {
+//                localWR = 0;
+//                localI = 1;
+//                c += 0.5;
+//            }
+            if (i > 150) {
+                c = c4;
                 localI = 1;
-                c += 0.15;
+                localWR = 0;
+            } else if (i > 100) {
+                c = c3;
+                localI = 1;
+                localWR = 0;
+            } else if (i > 50) {
+                c = c2;
+                localI = 1;
+                localWR = 0;
             }
-            //localI++;
+
             //c = 1.4;
-            c = 0.8;
+            //c = 0.8;
+            //c = 2.2;
             exploitationWeight.add(i, c);
             white = new MCTSAgent(WHITE, 2000);
             //black = new ExpectiMiniMaxPlayer(11, BLACK);
-//            black = new MiniMaxPlayer(7, BLACK);
+            //black = new MiniMaxPlayer(7, BLACK);
             //black = new RandomMovesPlayer(BLACK);
-            black = new BasicAIPlayer(BLACK);
+            //black = new BasicAIPlayer(BLACK);
+            black = new QLPlayer(2, BLACK);
+            //black = new Hybrid_ExpectiQL(2,BLACK);
             GameSimulator sim = GameSimulator.StateSimulationFactory(white, black)
 //                        .trackExpectedValue();
 //                        .trackDepth()
@@ -109,10 +129,15 @@ public class SimulationFactory {
             gameResult.add(i, (sim.victor == WHITE) ? 1 : -1);
             //uct.add(i, sim.actionValue);
 //
+
             String progress = "Game " + i + " winner: " + sim.victor.asChar() + " --- WHITE (wins: " + (int) whiteWinTotal + ", WR: " + Math.floor(whiteWinTotal * 100 / i) / 100 + ") - BLACK (wins: " + (int) blackWinTotal + ", WR: " + Math.floor(blackWinTotal * 100 / i) / 100 + ") - " + (int) (i * 100 / numSimulations) + "% complete ";
             System.out.print("\r" + progress);
 
             //sim.plot();
+
+            String[] data = {i + "", (sim.victor == WHITE) ? 1 + "" : 0 + "", winRate.getY(i - 1) + "", blackWinRate.getY(i - 1) + "", (int) whiteWinTotal + "", (int) blackWinTotal + "", "" + c};
+            String title = "MCTS_v_" + black.getNameAi() + "_" + ((MCTSAgent) white).strategy;
+            InputParser.logMultiGameData(data, header, title);
 
             if (sim.debug) {
                 System.out.println("--------------");

@@ -126,7 +126,7 @@ public class Board0x88 extends Board {
         boardAfterMove.board[origin.getBoardIndex()] = EMPTY;
 
         //TODO: sorry if this breaks functionality somewhere, but this is an expensive operation
-        //boardAfterMove.setFEN(boardAfterMove.createFENFromBoard());
+        boardAfterMove.setFEN(boardAfterMove.createFENFromBoard());
 
         return boardAfterMove;
     }
