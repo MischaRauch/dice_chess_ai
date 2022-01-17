@@ -10,11 +10,12 @@ import java.util.*;
 
 import static logic.mcts.Action.ActionType.WIN;
 import static logic.mcts.MCTSAgent.Strategy.CHANCE_PENALTY;
+import static logic.mcts.MCTSAgent.Strategy.NEURAL_NETWORK;
 import static logic.mcts.Node.NodeType.*;
 
 public class MCTSAgent extends AIPlayer {
 
-    enum Strategy {DEFAULT, CHANCE_PENALTY, ALTERNATING, ALTERNATING_CHANCE_PENALTY, ALTERNATING_DEFAULT}
+    enum Strategy {DEFAULT, CHANCE_PENALTY, ALTERNATING, ALTERNATING_CHANCE_PENALTY, ALTERNATING_DEFAULT, NEURAL_NETWORK}
 
     State currentState;
     GameTree tree = new GameTree();
@@ -267,6 +268,25 @@ public class MCTSAgent extends AIPlayer {
 
     public void simulate(Node leaf) {
         TreeState given = new TreeState(new Board0x88(leaf.state.board.getBoard()), leaf.state.playerToMove, leaf.state.depth);
+
+        //TODO: NN
+        /*
+
+         */
+        if (strategy == NEURAL_NETWORK) {
+            int[] inputArray = InputParser.getInputBoard(given.board, given.playerToMove, given.diceRoll);
+            //TODO: pass input array to NN
+            /*
+            double winProbability = NeuralNetwork.getEvaluation(inputArray)
+            if given.playerToMove == player && winProbability > someThreshold
+                backup(leaf, 1, player)
+            else
+                backup(leaf, 0, given.playerToMove)
+             */
+            return;
+        }
+
+
         for (int j = 0; j < 100; j++) {
             if (!given.terminal) {
                 ArrayList<Integer> rolls = given.getRolls();
