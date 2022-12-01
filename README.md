@@ -1,8 +1,11 @@
-# Group04_2021
+# Maastricht University Project - 2nd year | 1st Semester
+During the Bachelor Data Science and Artificial Intelligence
 
-## Dice Chess!
+## Group04_2021
 
-### How to run:
+### Dice Chess!
+
+#### How to run:
 
 1. Unzip the source code project folder.
 2. Navigate to the project root folder ``BestDiceChess``on the command line.
