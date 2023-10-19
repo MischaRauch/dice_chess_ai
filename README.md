@@ -5,6 +5,8 @@ During the Bachelor Data Science and Artificial Intelligence
 
 ### Dice Chess!
 
+Dice Chess takes the age-old game of chess and adds an exciting twist by introducing dice rolls as a game mechanic. You can play this dynamic and unpredictable version of chess against another human player, or you can challenge our sophisticated AI opponents, each powered by a different strategy.
+
 #### How to run:
 
 1. Unzip the source code project folder.
